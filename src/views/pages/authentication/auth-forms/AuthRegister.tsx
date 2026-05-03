@@ -108,7 +108,7 @@ const JWTRegister = ({ ...others }) => {
                     })
                 );
                 setTimeout(() => {
-                    navigate('/verify-email', {
+                    navigate('/pages/code-verification', {
                         replace: true,
                         state: { email: values.email }
                     });
