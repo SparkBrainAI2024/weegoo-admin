@@ -26,7 +26,7 @@ const AuthCodeVerification = () => {
                 <OtpInput
                     value={otp}
                     onChange={(otpNumber: string) => setOtp(otpNumber)}
-                    numInputs={4}
+                    numInputs={5}
                     containerStyle={{ justifyContent: 'space-between' }}
                     inputStyle={{
                         width: '100%',
