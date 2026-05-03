@@ -1,6 +1,6 @@
 // project imports
 import Specification from './Specification';
-import Accordion from 'ui-component/extended/Accordion';
+import Accordion from 'components/ui-component/extended/Accordion';
 
 // accordion data
 const descriptionData = [

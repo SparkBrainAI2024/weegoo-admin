@@ -22,9 +22,9 @@ import Toolbar from './Toolbar';
 import AddEventForm from './AddEventForm';
 import CalendarStyled from './CalendarStyled';
 
-import Loader from 'ui-component/Loader';
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
+import Loader from 'components/ui-component/Loader';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 
 import { dispatch, useSelector } from 'store';
 import { getEvents, addEvent, updateEvent, removeEvent } from 'store/slices/calendar';

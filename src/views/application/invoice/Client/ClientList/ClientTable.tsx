@@ -17,7 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 // project imports
 import ClientTableHeader from './ClientTableHeader';
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 

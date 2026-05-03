@@ -19,11 +19,11 @@ import Gallery from './Gallery';
 import FriendRequest from './FriendRequest';
 import useAuth from 'hooks/useAuth';
 import useConfig from 'hooks/useConfig';
-import Avatar from 'ui-component/extended/Avatar';
-import Chip from 'ui-component/extended/Chip';
-import MainCard from 'ui-component/cards/MainCard';
-import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
-import ImagePlaceholder from 'ui-component/cards/Skeleton/ImagePlaceholder';
+import Avatar from 'components/ui-component/extended/Avatar';
+import Chip from 'components/ui-component/extended/Chip';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Breadcrumbs from 'components/ui-component/extended/Breadcrumbs';
+import ImagePlaceholder from 'components/ui-component/cards/Skeleton/ImagePlaceholder';
 import { gridSpacing } from 'store/constant';
 import { DASHBOARD_PATH } from 'config';
 

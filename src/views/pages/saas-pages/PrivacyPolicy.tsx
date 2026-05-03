@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 // project imports
-import AppBar from 'ui-component/extended/AppBar';
-import MainCard from 'ui-component/cards/MainCard';
+import AppBar from 'components/ui-component/extended/AppBar';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // assets

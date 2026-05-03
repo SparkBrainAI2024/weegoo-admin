@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import { gridSpacing } from 'store/constant';
-import InputLabel from 'ui-component/extended/Form/InputLabel';
+import InputLabel from 'components/ui-component/extended/Form/InputLabel';
 
 // types
 import { Products } from 'types/e-commerce';

@@ -13,10 +13,10 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
-import UploadAvatar from 'ui-component/third-party/dropzone/Avatar';
-import UploadSingleFile from 'ui-component/third-party/dropzone/SingleFile';
-import UploadMultiFile from 'ui-component/third-party/dropzone/MultiFile';
+import MainCard from 'components/ui-component/cards/MainCard';
+import UploadAvatar from 'components/ui-component/third-party/dropzone/Avatar';
+import UploadSingleFile from 'components/ui-component/third-party/dropzone/SingleFile';
+import UploadMultiFile from 'components/ui-component/third-party/dropzone/MultiFile';
 import { gridSpacing } from 'store/constant';
 
 // assets

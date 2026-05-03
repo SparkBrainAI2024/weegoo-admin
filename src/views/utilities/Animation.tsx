@@ -11,9 +11,9 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
-import Transitions from 'ui-component/extended/Transitions';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Transitions from 'components/ui-component/extended/Transitions';
 
 // types
 import { Direction } from 'types';

@@ -16,10 +16,10 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import BillCard from 'ui-component/cards/BillCard';
-import SubCard from 'ui-component/cards/SubCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import Chip from 'ui-component/extended/Chip';
+import BillCard from 'components/ui-component/cards/BillCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
+import Chip from 'components/ui-component/extended/Chip';
 import { gridSpacing } from 'store/constant';
 
 // assets

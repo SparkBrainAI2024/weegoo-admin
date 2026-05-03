@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import LeadDrawer from './LeadDrawer';
 import LeadTable from './LeadTable';
 import Filter from './Filter';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { dispatch, useSelector } from 'store';
 import { getOrders } from 'store/slices/customer';

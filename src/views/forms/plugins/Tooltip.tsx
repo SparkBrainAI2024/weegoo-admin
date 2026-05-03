@@ -13,7 +13,7 @@ import Zoom from '@mui/material/Zoom';
 import MuiTooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // assets

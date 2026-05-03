@@ -10,7 +10,7 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 
 // project imports
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 
 // types
 import { ThemeMode } from 'types/config';

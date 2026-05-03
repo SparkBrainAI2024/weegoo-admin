@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { CardProps } from '@mui/material/Card';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // assets
 import CloseIcon from '@mui/icons-material/Close';

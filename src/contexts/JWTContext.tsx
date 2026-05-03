@@ -9,12 +9,15 @@ import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 
 // project imports
-import Loader from 'ui-component/Loader';
+import Loader from 'components/ui-component/Loader';
 import axios from 'utils/axios';
 
 // types
 import { KeyedObject } from 'types';
-import { InitialLoginContextProps, JWTContextType } from 'types/auth';
+import { InitialLoginContextProps, JWTContextType, SignUpResponse } from 'types/auth';
+import client from 'lib/apolloClient';
+import { Gender } from 'types/enum';
+import { SIGN_UP } from 'graphql/mutations/auth.mutations';
 
 const chance = new Chance();
 
@@ -95,34 +98,29 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
             }
         });
     };
+const register = async (
+    email: string,
+    fullName: string,
+    phone: string,
+    gender: Gender
+): Promise<SignUpResponse> => {
+    const { data } = await client.mutate<{ signUp: SignUpResponse }>({
+        mutation: SIGN_UP,
+        variables: {
+            input: { email, fullName, phone, gender },
+        },
+    });
 
-    const register = async (email: string, password: string, firstName: string, lastName: string) => {
-        // todo: this flow need to be recode as it not verified
-        const id = chance.bb_pin();
-        const response = await axios.post('/api/account/register', {
-            id,
-            email,
-            password,
-            firstName,
-            lastName
-        });
-        let users = response.data;
+    if (!data?.signUp) {
+        throw new Error('Signup failed');
+    }
 
-        if (window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null) {
-            const localUsers = window.localStorage.getItem('users');
-            users = [
-                ...JSON.parse(localUsers!),
-                {
-                    id,
-                    email,
-                    password,
-                    name: `${firstName} ${lastName}`
-                }
-            ];
-        }
+    if (data.signUp.userToken) {
+        setSession(data.signUp.userToken);
+    }
 
-        window.localStorage.setItem('users', JSON.stringify(users));
-    };
+    return data.signUp;
+};
 
     const logout = () => {
         setSession(null);

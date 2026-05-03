@@ -8,8 +8,8 @@ import CardMedia from '@mui/material/CardMedia';
 
 // project imports
 import FadeInWhenVisible from './Animation';
-import SubCard from 'ui-component/cards/SubCard';
-import Avatar from 'ui-component/extended/Avatar';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Avatar from 'components/ui-component/extended/Avatar';
 
 // assets
 import Offer1 from 'assets/images/landing/offer/offer-1.png';

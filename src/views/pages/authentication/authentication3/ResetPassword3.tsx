@@ -10,9 +10,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
-import Logo from 'ui-component/Logo';
+import Logo from 'components/ui-component/Logo';
 import AuthResetPassword from '../auth-forms/AuthResetPassword';
-import AuthFooter from 'ui-component/cards/AuthFooter';
+import AuthFooter from 'components/ui-component/cards/AuthFooter';
 
 // assets
 

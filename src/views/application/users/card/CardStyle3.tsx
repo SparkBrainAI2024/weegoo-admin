@@ -11,8 +11,8 @@ import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import UserProfileCard from 'ui-component/cards/UserProfileCard';
-import MainCard from 'ui-component/cards/MainCard';
+import UserProfileCard from 'components/ui-component/cards/UserProfileCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { dispatch, useSelector } from 'store';
 import { getProfileCards, filterProfileCards } from 'store/slices/user';

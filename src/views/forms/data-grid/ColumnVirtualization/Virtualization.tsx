@@ -6,8 +6,8 @@ import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
-import CardSecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import CardSecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { CSVExport } from 'views/forms/tables/TableExports';
 
 export interface DataRowModel {

@@ -10,8 +10,8 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import Avatar from 'ui-component/extended/Avatar';
-import MainCard from 'ui-component/cards/MainCard';
+import Avatar from 'components/ui-component/extended/Avatar';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // assets

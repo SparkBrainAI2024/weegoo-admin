@@ -12,7 +12,7 @@ import Profile from './Profile';
 import Billing from './Billing';
 import Security from './Security';
 import Notifications from './Notifications';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // types
 import { ThemeMode } from 'types/config';

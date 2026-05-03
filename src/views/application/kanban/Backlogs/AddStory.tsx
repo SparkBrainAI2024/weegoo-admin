@@ -23,8 +23,8 @@ import { Chance } from 'chance';
 import { useFormik } from 'formik';
 
 // project imports
-import UploadMultiFile from 'ui-component/third-party/dropzone/MultiFile';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import UploadMultiFile from 'components/ui-component/third-party/dropzone/MultiFile';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useDispatch, useSelector } from 'store';
 import { addStory } from 'store/slices/kanban';

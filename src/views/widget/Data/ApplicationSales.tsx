@@ -11,7 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // table data
 function createData(name: string, designation: string, product: string, date?: string, badgeText?: string, badgeType?: string) {

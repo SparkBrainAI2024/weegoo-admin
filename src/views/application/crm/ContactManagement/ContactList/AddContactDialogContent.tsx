@@ -25,7 +25,7 @@ import { Chance } from 'chance';
 import dayjs, { Dayjs } from 'dayjs';
 
 // project imports
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 
 // assets

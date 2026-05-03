@@ -5,7 +5,7 @@ import Map from 'react-map-gl';
 
 // project-imports
 import ControlPanel from './control-panel';
-import MapControl from 'ui-component/third-party/map/MapControl';
+import MapControl from 'components/ui-component/third-party/map/MapControl';
 
 // types
 import { MapBoxProps } from 'types/map';

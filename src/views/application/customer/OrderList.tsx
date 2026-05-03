@@ -23,8 +23,8 @@ import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 
 // project imports
-import Chip from 'ui-component/extended/Chip';
-import MainCard from 'ui-component/cards/MainCard';
+import Chip from 'components/ui-component/extended/Chip';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { Order } from 'types/customer';
 import { dispatch, useSelector } from 'store';
 import { getOrders } from 'store/slices/customer';

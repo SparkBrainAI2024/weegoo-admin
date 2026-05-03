@@ -28,8 +28,8 @@ import { useFormik, Form, FormikProvider, useField, FieldHookConfig } from 'form
 import * as yup from 'yup';
 
 // project imports
-import Chip from 'ui-component/extended/Chip';
-import Avatar from 'ui-component/extended/Avatar';
+import Chip from 'components/ui-component/extended/Chip';
+import Avatar from 'components/ui-component/extended/Avatar';
 import ColorOptions from '../ColorOptions';
 import { ColorsOptionsProps, Products } from 'types/e-commerce';
 import { openSnackbar } from 'store/slices/snackbar';

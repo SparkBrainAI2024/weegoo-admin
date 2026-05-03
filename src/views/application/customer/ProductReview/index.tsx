@@ -25,8 +25,8 @@ import { visuallyHidden } from '@mui/utils';
 
 // project imports
 import ReviewEdit from './ReviewEdit';
-import MainCard from 'ui-component/cards/MainCard';
-import Chip from 'ui-component/extended/Chip';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Chip from 'components/ui-component/extended/Chip';
 import { ProductReview } from 'types/customer';
 import { dispatch, useSelector } from 'store';
 import { getProductReviews } from 'store/slices/customer';

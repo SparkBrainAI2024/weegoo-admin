@@ -14,9 +14,9 @@ import Tooltip from '@mui/material/Tooltip';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
-import SubCard from 'ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 

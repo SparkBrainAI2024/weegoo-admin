@@ -9,7 +9,7 @@ import ComplexGrid from './ComplexGrid';
 import AutoGrid from './AutoGrid';
 import ColumnsGrid from './ColumnsGrid';
 import NestedGrid from './NestedGrid';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // ===============================|| GRID SYSTEM||=============================== //

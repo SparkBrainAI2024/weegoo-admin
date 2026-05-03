@@ -15,7 +15,7 @@ import TableRow from '@mui/material/TableRow';
 import Stack from '@mui/material/Stack';
 
 // project imports
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 import { gridSpacing } from 'store/constant';
 import { UserProfileStyle2 } from 'types/user';
 import { dispatch, useSelector } from 'store';

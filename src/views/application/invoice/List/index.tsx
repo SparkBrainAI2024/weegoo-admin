@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 // project imports
 import InvoiceFilter from './InvoiceFilter';
 import InvoiceTable from './InvoiceTable';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { dispatch, useSelector } from 'store';
 import { getInvoice } from 'store/slices/customer';

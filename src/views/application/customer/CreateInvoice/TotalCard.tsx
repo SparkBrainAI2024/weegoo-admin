@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 
 // types
 import { ThemeMode } from 'types/config';

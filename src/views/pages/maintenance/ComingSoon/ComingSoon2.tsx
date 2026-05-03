@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { useTimer } from 'react-timer-hook';
 
 // project imports
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 
 // assets

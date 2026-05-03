@@ -14,7 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // assets
 import Flag1 from 'assets/images/widget/australia.jpg';

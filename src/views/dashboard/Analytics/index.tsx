@@ -7,9 +7,9 @@ import Typography from '@mui/material/Typography';
 import MarketShareAreaChartCard from './MarketShareAreaChartCard';
 import TotalRevenueCard from './TotalRevenueCard';
 import LatestCustomerTableCard from './LatestCustomerTableCard';
-import MainCard from 'ui-component/cards/MainCard';
-import RevenueCard from 'ui-component/cards/RevenueCard';
-import UserCountCard from 'ui-component/cards/UserCountCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import RevenueCard from 'components/ui-component/cards/RevenueCard';
+import UserCountCard from 'components/ui-component/cards/UserCountCard';
 
 import { gridSpacing } from 'store/constant';
 

@@ -7,8 +7,8 @@ import Stack from '@mui/material/Stack';
 
 // project imports
 import FadeInWhenVisible from './Animation';
-import SubCard from 'ui-component/cards/SubCard';
-import Avatar from 'ui-component/extended/Avatar';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Avatar from 'components/ui-component/extended/Avatar';
 
 // assets
 import GridViewIcon from '@mui/icons-material/GridView';

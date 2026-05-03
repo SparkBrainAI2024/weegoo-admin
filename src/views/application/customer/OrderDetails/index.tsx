@@ -11,7 +11,7 @@ import Tabs from '@mui/material/Tabs';
 import Details from './Details';
 import Invoice from './Invoice';
 import Status from './Status';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // assets
 import DescriptionTwoToneIcon from '@mui/icons-material/DescriptionTwoTone';

@@ -24,7 +24,7 @@ import CartDiscount from './CartDiscount';
 import ColorOptions from '../ColorOptions';
 import OrderSummary from './OrderSummary';
 import { CartCheckoutStateProps, CartProductStateProps } from 'types/cart';
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 import { gridSpacing } from 'store/constant';
 
 // assets

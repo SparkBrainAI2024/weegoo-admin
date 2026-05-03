@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { format } from 'date-fns';
 
 // project-import
-import ControlPanelStyled from 'ui-component/third-party/map/ControlPanelStyled';
+import ControlPanelStyled from 'components/ui-component/third-party/map/ControlPanelStyled';
 
 type Props = {
     startTime: number;

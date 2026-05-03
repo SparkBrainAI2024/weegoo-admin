@@ -26,9 +26,9 @@ import ProductEmpty from './ProductEmpty';
 import ProductFilter from './ProductFilter';
 import ProductFilterView from './ProductFilterView';
 
-import ProductCard from 'ui-component/cards/ProductCard';
-import FloatingCart from 'ui-component/cards/FloatingCart';
-import SkeletonProductPlaceholder from 'ui-component/cards/Skeleton/ProductPlaceholder';
+import ProductCard from 'components/ui-component/cards/ProductCard';
+import FloatingCart from 'components/ui-component/cards/FloatingCart';
+import SkeletonProductPlaceholder from 'components/ui-component/cards/Skeleton/ProductPlaceholder';
 
 import useConfig from 'hooks/useConfig';
 import { resetCart } from 'store/slices/cart';

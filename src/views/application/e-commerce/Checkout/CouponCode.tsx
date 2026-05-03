@@ -16,11 +16,11 @@ import Zoom, { ZoomProps } from '@mui/material/Zoom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
-import Avatar from 'ui-component/extended/Avatar';
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import Transitions from 'ui-component/extended/Transitions';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Avatar from 'components/ui-component/extended/Avatar';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
+import Transitions from 'components/ui-component/extended/Transitions';
 import { gridSpacing } from 'store/constant';
 
 // assets

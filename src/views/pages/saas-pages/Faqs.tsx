@@ -5,9 +5,9 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import AppBar from 'ui-component/extended/AppBar';
-import MainCard from 'ui-component/cards/MainCard';
-import Accordion from 'ui-component/extended/Accordion';
+import AppBar from 'components/ui-component/extended/AppBar';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Accordion from 'components/ui-component/extended/Accordion';
 import { gridSpacing } from 'store/constant';
 
 // assets

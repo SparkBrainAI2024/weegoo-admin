@@ -12,9 +12,9 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import Posts from 'ui-component/cards/Post';
-import MainCard from 'ui-component/cards/MainCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
+import Posts from 'components/ui-component/cards/Post';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { PostDataType, Reply } from 'types/user-profile';
 import { dispatch, useSelector } from 'store';

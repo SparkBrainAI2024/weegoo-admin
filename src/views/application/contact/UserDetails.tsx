@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { gridSpacing } from 'store/constant';
 import { UserProfile } from 'types/user-profile';
 import { getImageUrl, ImagePath } from 'utils/getImageUrl';

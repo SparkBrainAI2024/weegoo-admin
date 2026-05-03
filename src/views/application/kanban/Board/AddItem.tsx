@@ -13,7 +13,7 @@ import { Chance } from 'chance';
 
 // project imports
 import { openSnackbar } from 'store/slices/snackbar';
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { useDispatch, useSelector } from 'store';
 import { addItem } from 'store/slices/kanban';
 

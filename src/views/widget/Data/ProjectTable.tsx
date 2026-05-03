@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import Chip from 'ui-component/extended/Chip';
+import Chip from 'components/ui-component/extended/Chip';
 
 // assets
 import Avatar1 from 'assets/images/users/avatar-1.png';

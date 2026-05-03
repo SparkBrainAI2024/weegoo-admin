@@ -21,9 +21,9 @@ import {
 import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { CSVExport } from 'views/forms/tables/TableExports';
-import CardSecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import CardSecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 
 // assets
 import AddIcon from '@mui/icons-material/Add';

@@ -9,8 +9,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 // project import
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
-import Avatar from 'ui-component/extended/Avatar';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Avatar from 'components/ui-component/extended/Avatar';
 import { Products } from 'types/e-commerce';
 import { gridSpacing } from 'store/constant';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';

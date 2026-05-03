@@ -13,7 +13,7 @@ import Zoom, { ZoomProps } from '@mui/material/Zoom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // third-party

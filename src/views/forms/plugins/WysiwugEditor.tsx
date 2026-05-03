@@ -8,8 +8,8 @@ import Typography from '@mui/material/Typography';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 
 // assets

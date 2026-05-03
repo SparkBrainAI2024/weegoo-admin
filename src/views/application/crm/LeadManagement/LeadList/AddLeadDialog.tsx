@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import AddLeadDialogBody from './AddLeadDialogBody';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 
 // assets
 import CancelTwoToneIcon from '@mui/icons-material/CancelTwoTone';

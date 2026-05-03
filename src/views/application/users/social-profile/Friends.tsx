@@ -7,8 +7,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import FriendsCard from 'ui-component/cards/FriendsCard';
-import MainCard from 'ui-component/cards/MainCard';
+import FriendsCard from 'components/ui-component/cards/FriendsCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { dispatch, useSelector } from 'store';
 import { getFriends, filterFriends } from 'store/slices/user';

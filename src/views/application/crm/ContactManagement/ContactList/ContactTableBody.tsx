@@ -20,7 +20,7 @@ import { random } from 'lodash-es';
 // project imports
 import AddContactDialog from './AddContactDialog';
 import ContactNewMessage from './NewMessage';
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 
 // assets

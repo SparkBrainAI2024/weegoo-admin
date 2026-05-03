@@ -20,7 +20,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { gridSpacing } from 'store/constant';
 import User1 from 'assets/images/users/avatar-1.png';
 import { UserProfile } from 'types/user-profile';

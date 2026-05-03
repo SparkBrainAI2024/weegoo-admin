@@ -10,8 +10,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SkeletonPopularCard from 'components/ui-component/cards/Skeleton/PopularCard';
 
 // assets
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';

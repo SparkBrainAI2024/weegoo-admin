@@ -18,7 +18,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import useConfig from 'hooks/useConfig';
 import ComposeDialog from './ComposeDialog';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { appDrawerWidth as drawerWidth, gridSpacing } from 'store/constant';
 import { MailDrawerProps } from 'types/mail';
 

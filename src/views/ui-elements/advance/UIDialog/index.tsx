@@ -14,9 +14,9 @@ import DraggableDialog from './DraggableDialog';
 import ScrollDialog from './ScrollDialog';
 import ConfirmationDialog from './ConfirmationDialog';
 
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 
 // ===============================|| UI DIALOG ||=============================== //

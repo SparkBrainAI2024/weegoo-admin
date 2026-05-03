@@ -21,7 +21,7 @@ import UserList from './UserList';
 import AvatarStatus from './AvatarStatus';
 import UserAvatar from './UserAvatar';
 import useAuth from 'hooks/useAuth';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { appDrawerWidth as drawerWidth, gridSpacing } from 'store/constant';
 import { UserProfile } from 'types/user-profile';
 

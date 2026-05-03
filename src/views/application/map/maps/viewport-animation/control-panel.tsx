@@ -6,7 +6,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
 // project-import
-import ControlPanelStyled from 'ui-component/third-party/map/ControlPanelStyled';
+import ControlPanelStyled from 'components/ui-component/third-party/map/ControlPanelStyled';
 
 // ==============================|| VIEWPORT ANIMATION - CONTROL ||============================== //
 

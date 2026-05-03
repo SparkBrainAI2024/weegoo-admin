@@ -25,7 +25,7 @@ import { visuallyHidden } from '@mui/utils';
 
 // project imports
 import ProductAdd from './ProductAdd';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { Product } from 'types/customer';
 import { dispatch, useSelector } from 'store';
 import { getProducts } from 'store/slices/customer';

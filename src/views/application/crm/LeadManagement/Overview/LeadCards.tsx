@@ -2,8 +2,8 @@
 import Grid from '@mui/material/Grid';
 
 // project imports
-import TotalIncomeDarkCard from 'ui-component/cards/TotalIncomeDarkCard';
-import TotalIncomeLightCard from 'ui-component/cards/TotalIncomeLightCard';
+import TotalIncomeDarkCard from 'components/ui-component/cards/TotalIncomeDarkCard';
+import TotalIncomeLightCard from 'components/ui-component/cards/TotalIncomeLightCard';
 
 import { gridSpacing } from 'store/constant';
 

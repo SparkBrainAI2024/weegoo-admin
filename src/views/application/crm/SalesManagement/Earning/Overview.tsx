@@ -13,9 +13,9 @@ import Chart, { Props as ChartProps } from 'react-apexcharts';
 
 // project import
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
-import SkeletonTotalGrowthBarChart from 'ui-component/cards/Skeleton/TotalGrowthBarChart';
-import SubCard from 'ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SkeletonTotalGrowthBarChart from 'components/ui-component/cards/Skeleton/TotalGrowthBarChart';
+import SubCard from 'components/ui-component/cards/SubCard';
 
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';

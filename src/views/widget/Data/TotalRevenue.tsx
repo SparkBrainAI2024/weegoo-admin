@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // assets
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';

@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Filter from './Filter';
 import FollowupTableBody from './FollowupTableBody';
 import FollowupTableHeader from './FollowupTableHeader';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { dispatch, useSelector } from 'store';
 import { getOrders } from 'store/slices/customer';

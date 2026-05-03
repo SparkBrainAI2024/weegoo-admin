@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Slider from 'react-slick';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 
 // assets
 import Angular from 'assets/images/landing/frameworks/angular.svg';

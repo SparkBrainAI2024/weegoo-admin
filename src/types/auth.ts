@@ -3,6 +3,7 @@ import firebase from 'firebase/compat/app';
 
 // project imports
 import { UserProfile } from 'types/user-profile';
+import { Gender } from './enum';
 
 export type FirebaseContextType = {
     isLoggedIn: boolean;
@@ -37,7 +38,7 @@ export type JWTContextType = {
     user?: UserProfile | null | undefined;
     logout: () => void;
     login: (email: string, password: string) => Promise<void>;
-    register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+    register: (email: string, fullName: string, phone: string, gender: Gender) => Promise<SignUpResponse>;
     resetPassword: (email: string) => Promise<void>;
     updateProfile: VoidFunction;
 };
@@ -58,4 +59,10 @@ export interface InitialLoginContextProps {
     isLoggedIn: boolean;
     isInitialized?: boolean;
     user?: UserProfile | null | undefined;
+}
+
+export interface SignUpResponse {
+  message: string;
+  success: boolean;
+  userToken: string;
 }

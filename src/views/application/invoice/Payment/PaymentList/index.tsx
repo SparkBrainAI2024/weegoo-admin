@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import Overview from './Overview';
 import PaymentFilter from './PaymentFilter';
 import PaymentTable from './PaymentTable';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { dispatch, useSelector } from 'store';
 import { gridSpacing } from 'store/constant';

@@ -8,9 +8,9 @@ import Typography from '@mui/material/Typography';
 import Map from 'react-map-gl';
 
 // project-import
-import MapControl from 'ui-component/third-party/map/MapControl';
-import MapMarker from 'ui-component/third-party/map/MapMarker';
-import MapPopup from 'ui-component/third-party/map/MapPopup';
+import MapControl from 'components/ui-component/third-party/map/MapControl';
+import MapMarker from 'components/ui-component/third-party/map/MapMarker';
+import MapPopup from 'components/ui-component/third-party/map/MapPopup';
 
 // types
 import { MapBoxProps } from 'types/map';

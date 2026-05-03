@@ -3,8 +3,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // project import
-import Avatar from 'ui-component/extended/Avatar';
-import SubCard from 'ui-component/cards/SubCard';
+import Avatar from 'components/ui-component/extended/Avatar';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 
 // ==============================|| PEOPLE CARD ||============================== //

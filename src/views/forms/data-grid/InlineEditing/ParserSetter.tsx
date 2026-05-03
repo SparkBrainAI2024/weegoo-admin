@@ -4,8 +4,8 @@ import Stack from '@mui/material/Stack';
 import { DataGrid, GridColDef, GridValueGetterParams, GridValueSetterParams } from '@mui/x-data-grid';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
-import CardSecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import CardSecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { CSVExport } from 'views/forms/tables/TableExports';
 
 function getFullName(params: GridValueGetterParams) {

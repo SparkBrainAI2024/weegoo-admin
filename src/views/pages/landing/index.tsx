@@ -3,8 +3,8 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
 // project imports
-import Customization from 'layout/Customization';
-import AppBar from 'ui-component/extended/AppBar';
+import Customization from 'components/layout/Customization';
+import AppBar from 'components/ui-component/extended/AppBar';
 import HeaderSection from './HeaderSection';
 import CardSection from './CardSection';
 import FeatureSection from './FeatureSection';

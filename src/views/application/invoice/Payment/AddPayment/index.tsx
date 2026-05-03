@@ -30,8 +30,8 @@ import { useFormik } from 'formik';
 // project imports
 import PaymentTable from './PaymentTable';
 import AddClient from '../../Client/AddClient/index';
-import MainCard from 'ui-component/cards/MainCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import MainCard from 'components/ui-component/cards/MainCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 
 import { dispatch, useSelector } from 'store';
 import { gridSpacing } from 'store/constant';

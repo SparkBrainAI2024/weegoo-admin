@@ -14,7 +14,7 @@ import PersonalAccount from './PersonalAccount';
 import MyAccount from './MyAccount';
 import ChangePassword from './ChangePassword';
 import Settings from './Settings';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // assets

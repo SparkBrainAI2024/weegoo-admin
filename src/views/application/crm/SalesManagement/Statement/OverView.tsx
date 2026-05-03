@@ -2,7 +2,7 @@
 import Grid from '@mui/material/Grid';
 
 // project import
-import HoverDataCard from 'ui-component/cards/HoverDataCard';
+import HoverDataCard from 'components/ui-component/cards/HoverDataCard';
 
 // assets
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';

@@ -24,8 +24,8 @@ import { format } from 'date-fns';
 // project imports
 import MailEmpty from './MailEmpty';
 import MailListHeader from './MailListHeader';
-import Chip from 'ui-component/extended/Chip';
-import MainCard from 'ui-component/cards/MainCard';
+import Chip from 'components/ui-component/extended/Chip';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 
 // assets

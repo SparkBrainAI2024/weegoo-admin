@@ -14,7 +14,7 @@ import ReactApexChart, { Props as ChartProps } from 'react-apexcharts';
 
 // project import
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';

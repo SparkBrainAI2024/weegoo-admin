@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
-import MainCard from 'ui-component/cards/MainCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 
 // step options
 const steps = ['Shipping address', 'Payment details', 'Review your order'];

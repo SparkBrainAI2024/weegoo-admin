@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import AddAddress from './AddAddress';
 import OrderSummary from './OrderSummary';
 import AddressCard from './AddressCard';
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { gridSpacing } from 'store/constant';
 
 // assets

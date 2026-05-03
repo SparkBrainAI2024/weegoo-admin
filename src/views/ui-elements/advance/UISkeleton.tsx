@@ -2,13 +2,13 @@
 import Grid from '@mui/material/Grid';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
-import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
-import SkeletonTotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
-import SkeletonChartCard from 'ui-component/cards/Skeleton/TotalGrowthBarChart';
-import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
+import SkeletonEarningCard from 'components/ui-component/cards/Skeleton/EarningCard';
+import SkeletonTotalIncomeCard from 'components/ui-component/cards/Skeleton/TotalIncomeCard';
+import SkeletonChartCard from 'components/ui-component/cards/Skeleton/TotalGrowthBarChart';
+import SkeletonPopularCard from 'components/ui-component/cards/Skeleton/PopularCard';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| UI SKELETON ||============================== //

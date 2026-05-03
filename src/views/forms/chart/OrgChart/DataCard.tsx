@@ -16,8 +16,8 @@ import MeetIcon from './MeetIcon';
 import LinkedInIcon from './LinkedIn';
 
 // project imports
-import Avatar from 'ui-component/extended/Avatar';
-import MainCard from 'ui-component/cards/MainCard';
+import Avatar from 'components/ui-component/extended/Avatar';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // types
 import { ThemeMode } from 'types/config';

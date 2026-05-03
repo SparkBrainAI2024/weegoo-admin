@@ -7,7 +7,7 @@ import LoginRoutes from './LoginRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
 
 // project import
-import Loadable from 'ui-component/Loadable';
+import Loadable from 'components/ui-component/Loadable';
 
 const PagesLanding = Loadable(lazy(() => import('views/pages/landing')));
 

@@ -18,7 +18,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 // project imports
 import { gridSpacing } from 'store/constant';
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // assets
 import ToggleButton from '@mui/material/ToggleButton';

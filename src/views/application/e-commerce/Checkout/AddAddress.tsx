@@ -22,8 +22,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import MainCard from 'components/ui-component/cards/MainCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { Address } from 'types/e-commerce';
 import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';

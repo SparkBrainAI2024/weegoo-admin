@@ -5,8 +5,8 @@ import { GridColDef, GridRowsProp, DataGrid, GridCellEditStopParams, GridCellEdi
 import { randomCreatedDate, randomTraderName, randomUpdatedDate } from '@mui/x-data-grid-generator';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
-import CardSecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import CardSecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { CSVExport } from 'views/forms/tables/TableExports';
 
 // ==============================|| EDITING EVENTS DATA GRID ||============================== //

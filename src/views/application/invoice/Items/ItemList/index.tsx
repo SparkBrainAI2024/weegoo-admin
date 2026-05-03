@@ -12,7 +12,7 @@ import ItemDrawer from './ItemDrawer';
 import ItemFilter from './ItemFilter';
 
 // assets
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // types
 import { Products } from 'types/e-commerce';

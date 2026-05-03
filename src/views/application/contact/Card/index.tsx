@@ -14,8 +14,8 @@ import { isEmpty } from 'lodash-es';
 // project imports
 import UserDetails from '../UserDetails';
 import UserEdit from '../UserEdit';
-import ContactCard from 'ui-component/cards/ContactCard';
-import MainCard from 'ui-component/cards/MainCard';
+import ContactCard from 'components/ui-component/cards/ContactCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import User1 from 'assets/images/users/avatar-1.png';
 import { KeyedObject } from 'types';

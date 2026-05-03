@@ -2,7 +2,7 @@
 import Grid from '@mui/material/Grid';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // charts

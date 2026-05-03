@@ -9,7 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Slider, { Settings } from 'react-slick';
 
 // project imports
-import ProductCard from 'ui-component/cards/ProductCard';
+import ProductCard from 'components/ui-component/cards/ProductCard';
 import { getRelatedProducts } from 'api/products';
 
 // types

@@ -16,9 +16,9 @@ import TableRow from '@mui/material/TableRow';
 // project imports
 import { header } from './TableBasic';
 import { CSVExport } from './TableExports';
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 
 // assets
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

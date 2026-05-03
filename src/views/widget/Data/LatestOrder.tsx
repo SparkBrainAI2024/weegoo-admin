@@ -13,7 +13,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 // project imports
-import Chip from 'ui-component/extended/Chip';
+import Chip from 'components/ui-component/extended/Chip';
 import { gridSpacing } from 'store/constant';
 
 // assets
@@ -24,7 +24,7 @@ import Phone1 from 'assets/images/widget/phone-1.jpg';
 import Phone2 from 'assets/images/widget/phone-2.jpg';
 import Phone3 from 'assets/images/widget/phone-3.jpg';
 import Phone4 from 'assets/images/widget/phone-4.jpg';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // table data
 function createData(

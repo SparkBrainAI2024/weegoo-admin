@@ -26,9 +26,9 @@ import ChatDrawer from './ChatDrawer';
 import ChartHistory from './ChartHistory';
 import AvatarStatus from './AvatarStatus';
 
-import Loader from 'ui-component/Loader';
-import MainCard from 'ui-component/cards/MainCard';
-import Avatar from 'ui-component/extended/Avatar';
+import Loader from 'components/ui-component/Loader';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Avatar from 'components/ui-component/extended/Avatar';
 
 import { dispatch, useSelector } from 'store';
 import { getUser, getUserChats, insertChat } from 'store/slices/chat';

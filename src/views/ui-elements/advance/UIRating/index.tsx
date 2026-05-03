@@ -8,9 +8,9 @@ import SizeRating from './SizeRating';
 import HalfRating from './HalfRating';
 import HoverRating from './HoverRating';
 
-import SubCard from 'ui-component/cards/SubCard';
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import SubCard from 'components/ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 
 // ===============================|| UI RATING ||=============================== //

@@ -14,8 +14,8 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import MainCard from 'components/ui-component/cards/MainCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 
 // assets
 import CancelTwoToneIcon from '@mui/icons-material/CancelTwoTone';

@@ -3,8 +3,8 @@ import { useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
 // project-import
-import MainCard from 'ui-component/cards/MainCard';
-import MapContainerStyled from 'ui-component/third-party/map/MapContainerStyled';
+import MainCard from 'components/ui-component/cards/MainCard';
+import MapContainerStyled from 'components/ui-component/third-party/map/MapContainerStyled';
 
 import ClustersMap from './maps/clusters-map';
 import ChangeTheme from './maps/change-theme';

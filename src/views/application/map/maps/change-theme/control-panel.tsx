@@ -7,7 +7,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Typography from '@mui/material/Typography';
 
 // project-import
-import ControlPanelStyled from 'ui-component/third-party/map/ControlPanelStyled';
+import ControlPanelStyled from 'components/ui-component/third-party/map/ControlPanelStyled';
 
 // ==============================|| MAPBOX - THEME ||============================== //
 

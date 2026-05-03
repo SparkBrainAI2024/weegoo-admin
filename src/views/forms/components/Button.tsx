@@ -6,10 +6,10 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 
 // assets

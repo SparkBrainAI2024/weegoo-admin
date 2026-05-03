@@ -9,9 +9,9 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
 // project imports
-import Loader from 'ui-component/Loader';
-import MainCard from 'ui-component/cards/MainCard';
-import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
+import Loader from 'components/ui-component/Loader';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Breadcrumbs from 'components/ui-component/extended/Breadcrumbs';
 
 import { dispatch } from 'store';
 import { getUserStory, getUserStoryOrder, getProfiles, getComments, getItems, getColumns, getColumnsOrder } from 'store/slices/kanban';

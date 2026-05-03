@@ -18,8 +18,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 // project imports
 import Colors from './Colors';
-import MainCard from 'ui-component/cards/MainCard';
-import Accordion from 'ui-component/extended/Accordion';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Accordion from 'components/ui-component/extended/Accordion';
 import { gridSpacing } from 'store/constant';
 import { ProductsFilter } from 'types/e-commerce';
 import useConfig from 'hooks/useConfig';

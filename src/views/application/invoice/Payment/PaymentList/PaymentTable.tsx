@@ -21,7 +21,7 @@ import { random } from 'lodash-es';
 
 // project imports
 import PaymentTableHeader from './PaymentTableHeader';
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 
 // assets

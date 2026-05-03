@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 
 // project imports
 import QuickAdd from './QuickAdd';
-import SeoChartCard from 'ui-component/cards/SeoChartCard';
+import SeoChartCard from 'components/ui-component/cards/SeoChartCard';
 import { gridSpacing } from 'store/constant';
 import useConfig from 'hooks/useConfig';
 
@@ -14,7 +14,7 @@ import chartData from '../chart-data';
 import RevenueBarChart from './RevenueBarChart';
 import ClientInsights from './ClientInsights';
 import RecentActivity from './RecentActivity';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import SupportHelp from './SupportHelp';
 
 // types

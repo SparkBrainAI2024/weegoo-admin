@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import { Address } from 'types/e-commerce';
-import SubCard from 'ui-component/cards/SubCard';
-import Chip from 'ui-component/extended/Chip';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Chip from 'components/ui-component/extended/Chip';
 
 // assets
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';

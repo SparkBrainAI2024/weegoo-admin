@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import FilterLeadList from './FilterLeadList';
-import Chip from 'ui-component/extended/Chip';
+import Chip from 'components/ui-component/extended/Chip';
 
 // assets
 import CloseIcon from '@mui/icons-material/Close';

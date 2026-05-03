@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';

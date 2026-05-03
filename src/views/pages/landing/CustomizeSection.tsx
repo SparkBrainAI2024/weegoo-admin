@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // project import
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 
 // assets
 import { IconCircleCheck } from '@tabler/icons-react';

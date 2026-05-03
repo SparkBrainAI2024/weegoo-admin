@@ -5,8 +5,8 @@ import Map, { MarkerDragEvent, LngLat } from 'react-map-gl';
 
 // project-import
 import ControlPanel from './control-panel';
-import MapControl from 'ui-component/third-party/map/MapControl';
-import MapMarker from 'ui-component/third-party/map/MapMarker';
+import MapControl from 'components/ui-component/third-party/map/MapControl';
+import MapMarker from 'components/ui-component/third-party/map/MapMarker';
 
 // types
 import { MapBoxProps } from 'types/map';

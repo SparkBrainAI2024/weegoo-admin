@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import Avatar from 'ui-component/extended/Avatar';
+import Avatar from 'components/ui-component/extended/Avatar';
 import { UserProfile } from 'types/user-profile';
 import { dispatch, useSelector } from 'store';
 import { getUsersListStyle1 } from 'store/slices/user';

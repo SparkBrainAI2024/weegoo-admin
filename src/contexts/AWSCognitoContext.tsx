@@ -8,7 +8,7 @@ import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 
 // project imports
-import Loader from 'ui-component/Loader';
+import Loader from 'components/ui-component/Loader';
 
 // types
 import { AWSCognitoContextType, InitialLoginContextProps } from 'types/auth';

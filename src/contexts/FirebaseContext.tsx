@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 
 // project imports
-import Loader from 'ui-component/Loader';
+import Loader from 'components/ui-component/Loader';
 
 import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';

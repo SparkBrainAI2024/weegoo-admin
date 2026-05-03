@@ -18,8 +18,8 @@ import ContactDetail from './ContactDetail';
 import Address from './Address';
 import OtherDetail from './OtherDetail';
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import MainCard from 'components/ui-component/cards/MainCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 
 // assets

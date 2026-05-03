@@ -8,7 +8,7 @@ import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
 // project-import
-import ControlPanelStyled from 'ui-component/third-party/map/ControlPanelStyled';
+import ControlPanelStyled from 'components/ui-component/third-party/map/ControlPanelStyled';
 
 // types
 import { MapControlKeys, MapControlProps } from 'types/map';

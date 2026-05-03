@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import currency from 'currency.js';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { CartCheckoutStateProps } from 'types/cart';
 
 // ==============================|| CHECKOUT CART - ORDER SUMMARY ||============================== //

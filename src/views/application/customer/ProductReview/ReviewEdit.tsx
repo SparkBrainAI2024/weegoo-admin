@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import { gridSpacing } from 'store/constant';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 
 // review state options
 const reviewState = [

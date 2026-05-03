@@ -16,8 +16,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import ProductReview from 'ui-component/cards/ProductReview';
+import MainCard from 'components/ui-component/cards/MainCard';
+import ProductReview from 'components/ui-component/cards/ProductReview';
 import { Products, Reviews } from 'types/e-commerce';
 import { gridSpacing } from 'store/constant';
 import { getProductReviews } from 'api/products';

@@ -6,8 +6,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { DataGrid, GridRenderCellParams, GridColDef, useGridApiContext } from '@mui/x-data-grid';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
-import CardSecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import CardSecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { CSVExport } from 'views/forms/tables/TableExports';
 
 function SelectEditInputCell(props: GridRenderCellParams) {

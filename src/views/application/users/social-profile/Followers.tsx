@@ -7,8 +7,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import FollowerCard from 'ui-component/cards/FollowerCard';
-import MainCard from 'ui-component/cards/MainCard';
+import FollowerCard from 'components/ui-component/cards/FollowerCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import { dispatch, useSelector } from 'store';
 import { getFollowers, filterFollowers } from 'store/slices/user';

@@ -7,14 +7,14 @@ import CustomerSatisfactionCard from './CustomerSatisfactionCard';
 import IconGridCard from './IconGridCard';
 import WeatherCard from './WeatherCard';
 
-import RevenueCard from 'ui-component/cards/RevenueCard';
-import ReportCard from 'ui-component/cards/ReportCard';
-import IconNumberCard from 'ui-component/cards/IconNumberCard';
-import SideIconCard from 'ui-component/cards/SideIconCard';
-import HoverDataCard from 'ui-component/cards/HoverDataCard';
-import HoverSocialCard from 'ui-component/cards/HoverSocialCard';
-import RoundIconCard from 'ui-component/cards/RoundIconCard';
-import UserCountCard from 'ui-component/cards/UserCountCard';
+import RevenueCard from 'components/ui-component/cards/RevenueCard';
+import ReportCard from 'components/ui-component/cards/ReportCard';
+import IconNumberCard from 'components/ui-component/cards/IconNumberCard';
+import SideIconCard from 'components/ui-component/cards/SideIconCard';
+import HoverDataCard from 'components/ui-component/cards/HoverDataCard';
+import HoverSocialCard from 'components/ui-component/cards/HoverSocialCard';
+import RoundIconCard from 'components/ui-component/cards/RoundIconCard';
+import UserCountCard from 'components/ui-component/cards/UserCountCard';
 
 import { gridSpacing } from 'store/constant';
 

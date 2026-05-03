@@ -17,8 +17,8 @@ import ClientInfo from './ClientInfo';
 import ItemList from './ItemList';
 import AmountCard from './AmountCard';
 import SelectItem from './SelectItem';
-import InputLabel from 'ui-component/extended/Form/InputLabel';
-import MainCard from 'ui-component/cards/MainCard';
+import InputLabel from 'components/ui-component/extended/Form/InputLabel';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { useDispatch } from 'store';
 import { gridSpacing } from 'store/constant';

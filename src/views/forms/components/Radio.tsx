@@ -8,9 +8,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import SubCard from 'components/ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| RADIO ||============================== //

@@ -27,11 +27,11 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useFormik } from 'formik';
 
 // project imports
-import UploadMultiFile from 'ui-component/third-party/dropzone/MultiFile';
+import UploadMultiFile from 'components/ui-component/third-party/dropzone/MultiFile';
 import AddStoryComment from './AddStoryComment';
 import StoryComment from './StoryComment';
 import AlertStoryDelete from './AlertStoryDelete';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useDispatch, useSelector } from 'store';
 import { editStory, deleteStory } from 'store/slices/kanban';

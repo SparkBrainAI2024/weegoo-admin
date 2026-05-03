@@ -12,7 +12,7 @@ import Chart from 'react-apexcharts';
 
 // project imports
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import chartData from './chart-data/market-share-area-chart';
 
 // types

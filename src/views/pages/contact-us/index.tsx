@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 
 // project imports
 import ContactCard from './ContactCard';
-import AppBar from 'ui-component/extended/AppBar';
+import AppBar from 'components/ui-component/extended/AppBar';
 
 // assets
 import headerBackground from 'assets/images/landing/bg-header.jpg';

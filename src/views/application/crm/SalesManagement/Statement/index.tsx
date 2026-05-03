@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import Filter from './Filter';
 import OverView from './OverView';
 import StatementTable from './StatementTable';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { dispatch, useSelector } from 'store';
 import { gridSpacing } from 'store/constant';

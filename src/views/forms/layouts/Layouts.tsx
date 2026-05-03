@@ -9,8 +9,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import InputLabel from 'ui-component/extended/Form/InputLabel';
+import MainCard from 'components/ui-component/cards/MainCard';
+import InputLabel from 'components/ui-component/extended/Form/InputLabel';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| Layouts ||============================== //

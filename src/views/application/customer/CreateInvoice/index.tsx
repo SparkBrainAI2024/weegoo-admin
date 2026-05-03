@@ -21,8 +21,8 @@ import '@mui/lab';
 // project imports
 import AddItemPage from './AddItemPage';
 import { gridSpacing } from 'store/constant';
-import InputLabel from 'ui-component/extended/Form/InputLabel';
-import MainCard from 'ui-component/cards/MainCard';
+import InputLabel from 'components/ui-component/extended/Form/InputLabel';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // third-party
 import * as yup from 'yup';

@@ -1,8 +1,8 @@
 // project imports
 import SimpleModal from './SimpleModal';
 import ServerModal from './ServerModal';
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 
 // ==============================|| MODAL PAGE ||============================== //
 

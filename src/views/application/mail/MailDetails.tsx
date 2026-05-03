@@ -23,10 +23,10 @@ import 'react-quill/dist/quill.snow.css';
 
 // project imports
 import useConfig from 'hooks/useConfig';
-import MainCard from 'ui-component/cards/MainCard';
-import Avatar from 'ui-component/extended/Avatar';
-import AttachmentCard from 'ui-component/cards/AttachmentCard';
-import SubCard from 'ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Avatar from 'components/ui-component/extended/Avatar';
+import AttachmentCard from 'components/ui-component/cards/AttachmentCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { gridSpacing } from 'store/constant';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 

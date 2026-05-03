@@ -11,8 +11,8 @@ import Stack from '@mui/material/Stack';
 import { Chance } from 'chance';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useDispatch, useSelector } from 'store';
 import { addColumn } from 'store/slices/kanban';

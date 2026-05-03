@@ -4,10 +4,10 @@ import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 
 // project imports
-import Chip from 'ui-component/extended/Chip';
-import SubCard from 'ui-component/cards/SubCard';
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import Chip from 'components/ui-component/extended/Chip';
+import SubCard from 'components/ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 
 // assets

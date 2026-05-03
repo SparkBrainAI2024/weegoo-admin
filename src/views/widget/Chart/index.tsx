@@ -13,10 +13,10 @@ import RevenueChartCard from './RevenueChartCard';
 import ConversionsChartCard from './ConversionsChartCard';
 import SatisfactionChartCard from './SatisfactionChartCard';
 import useConfig from 'hooks/useConfig';
-import TotalLineChartCard from 'ui-component/cards/TotalLineChartCard';
-import SeoChartCard from 'ui-component/cards/SeoChartCard';
-import SalesLineChartCard from 'ui-component/cards/SalesLineChartCard';
-import AnalyticsChartCard from 'ui-component/cards/AnalyticsChartCard';
+import TotalLineChartCard from 'components/ui-component/cards/TotalLineChartCard';
+import SeoChartCard from 'components/ui-component/cards/SeoChartCard';
+import SalesLineChartCard from 'components/ui-component/cards/SalesLineChartCard';
+import AnalyticsChartCard from 'components/ui-component/cards/AnalyticsChartCard';
 import { gridSpacing } from 'store/constant';
 
 // chart data

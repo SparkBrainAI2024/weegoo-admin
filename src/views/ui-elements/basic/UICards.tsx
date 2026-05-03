@@ -11,15 +11,15 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import UserDetailsCard from 'ui-component/cards/UserDetailsCard';
-import UserProfileCard from 'ui-component/cards/UserProfileCard';
-import UserSimpleCard from 'ui-component/cards/UserSimpleCard';
-import FollowerCard from 'ui-component/cards/FollowerCard';
-import FriendsCard from 'ui-component/cards/FriendsCard';
+import UserDetailsCard from 'components/ui-component/cards/UserDetailsCard';
+import UserProfileCard from 'components/ui-component/cards/UserProfileCard';
+import UserSimpleCard from 'components/ui-component/cards/UserSimpleCard';
+import FollowerCard from 'components/ui-component/cards/FollowerCard';
+import FriendsCard from 'components/ui-component/cards/FriendsCard';
 
-import SubCard from 'ui-component/cards/SubCard';
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import SubCard from 'components/ui-component/cards/SubCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 
 // assets

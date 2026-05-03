@@ -17,7 +17,7 @@ import Avatar1 from 'assets/images/users/avatar-1.png';
 import Avatar2 from 'assets/images/users/avatar-2.png';
 import Avatar3 from 'assets/images/users/avatar-3.png';
 import Avatar4 from 'assets/images/users/avatar-4.png';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 // table data
 function createData(time: string, subTime: string, avatar: string, name: string, title: string, subtext: string) {

@@ -14,9 +14,9 @@ import { random } from 'lodash-es';
 
 // project imports
 import PaymentTable from './PaymentTable';
-import Avatar from 'ui-component/extended/Avatar';
-import MainCard from 'ui-component/cards/MainCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import Avatar from 'components/ui-component/extended/Avatar';
+import MainCard from 'components/ui-component/cards/MainCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 
 import { dispatch, useSelector } from 'store';
 import { gridSpacing } from 'store/constant';

@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import chartData from '../../chart-data';
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
-import SeoChartCard from 'ui-component/cards/SeoChartCard';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import SeoChartCard from 'components/ui-component/cards/SeoChartCard';
 import useConfig from 'hooks/useConfig';
 
 // types

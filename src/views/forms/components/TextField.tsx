@@ -3,11 +3,11 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import SubCard from 'ui-component/cards/SubCard';
-import FormControl from 'ui-component/extended/Form/FormControl';
-import FormControlSelect from 'ui-component/extended/Form/FormControlSelect';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SubCard from 'components/ui-component/cards/SubCard';
+import FormControl from 'components/ui-component/extended/Form/FormControl';
+import FormControlSelect from 'components/ui-component/extended/Form/FormControlSelect';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 
 // assets

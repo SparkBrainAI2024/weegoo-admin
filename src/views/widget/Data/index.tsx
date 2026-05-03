@@ -31,7 +31,7 @@ import TotalRevenue from './TotalRevenue';
 import NewCustomers from './NewCustomers';
 import RecentTickets from './RecentTickets';
 
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // ===========================|| WIDGET DATA ||=========================== //

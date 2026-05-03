@@ -14,8 +14,8 @@ import {
 } from '@mui/x-data-grid';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
-import CardSecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import CardSecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { CSVExport } from 'views/forms/tables/TableExports';
 
 function MenuCloseComponent(props: GridColumnMenuItemProps) {

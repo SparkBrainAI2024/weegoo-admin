@@ -10,8 +10,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Pagination from '@mui/material/Pagination';
 
 // project imports
-import ContactCard from 'ui-component/cards/ContactCard';
-import MainCard from 'ui-component/cards/MainCard';
+import ContactCard from 'components/ui-component/cards/ContactCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { dispatch, useSelector } from 'store';
 import { gridSpacing } from 'store/constant';

@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import ClientFilter from './ClientFilter';
 import ClientDrawer from './ClientDrawer';
 import ClientTable from './ClientTable';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 import { dispatch, useSelector } from 'store';
 import { getDetailCards } from 'store/slices/user';

@@ -22,7 +22,7 @@ import { random } from 'lodash-es';
 
 // project imports
 import InvoiceTableHeader from './InvoiceTableHeader';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { ImagePath, getImageUrl } from 'utils/getImageUrl';
 
 // assets

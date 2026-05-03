@@ -14,7 +14,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 // project imports
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import useScriptRef from 'hooks/useScriptRef';
 
 import { openSnackbar } from 'store/slices/snackbar';

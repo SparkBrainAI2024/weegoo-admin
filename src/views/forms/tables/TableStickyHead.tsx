@@ -14,8 +14,8 @@ import TableRow from '@mui/material/TableRow';
 import { KeyedObject } from 'types';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import SecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { CSVExport } from './TableExports';
 import { header } from './TableBasic';
 

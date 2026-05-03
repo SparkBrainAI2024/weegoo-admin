@@ -10,9 +10,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
-import Logo from 'ui-component/Logo';
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import AuthFooter from 'ui-component/cards/AuthFooter';
+import Logo from 'components/ui-component/Logo';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
+import AuthFooter from 'components/ui-component/cards/AuthFooter';
 
 // ==============================|| AUTH3 - CHECK MAIL ||============================== //
 

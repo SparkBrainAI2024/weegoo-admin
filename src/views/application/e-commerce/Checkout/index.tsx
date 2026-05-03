@@ -11,7 +11,7 @@ import CartEmpty from './CartEmpty';
 import Cart from './Cart';
 import BillingAddress from './BillingAddress';
 import Payment from './Payment';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 import { DefaultRootStateProps, TabsProps } from 'types';

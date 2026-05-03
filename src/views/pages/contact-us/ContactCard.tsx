@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 import { PatternFormat } from 'react-number-format';
 
 // project imports
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 
 import { gridSpacing } from 'store/constant';
 

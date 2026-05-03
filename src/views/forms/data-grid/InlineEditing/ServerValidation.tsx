@@ -7,8 +7,8 @@ import { DataGrid, GridRowModel, GridColDef, GridRowId, GridRowsProp } from '@mu
 import { randomCreatedDate, randomTraderName, randomUpdatedDate } from '@mui/x-data-grid-generator';
 
 // project import
-import MainCard from 'ui-component/cards/MainCard';
-import CardSecondaryAction from 'ui-component/cards/CardSecondaryAction';
+import MainCard from 'components/ui-component/cards/MainCard';
+import CardSecondaryAction from 'components/ui-component/cards/CardSecondaryAction';
 import { openSnackbar } from 'store/slices/snackbar';
 import { CSVExport } from 'views/forms/tables/TableExports';
 import { dispatch } from 'store';

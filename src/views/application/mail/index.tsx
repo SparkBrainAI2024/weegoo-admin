@@ -10,7 +10,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import MailDrawer from './MailDrawer';
 import MailDetails from './MailDetails';
 import MailList from './MailList';
-import Loader from 'ui-component/Loader';
+import Loader from 'components/ui-component/Loader';
 
 import { dispatch, useSelector } from 'store';
 import { appDrawerWidth as drawerWidth, gridSpacing } from 'store/constant';

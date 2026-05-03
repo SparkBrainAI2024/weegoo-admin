@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 // project imports
 import useConfig from 'hooks/useConfig';
 import { gridSpacing } from 'store/constant';
-import SubCard from 'ui-component/cards/SubCard';
+import SubCard from 'components/ui-component/cards/SubCard';
 
 // assets
 import PersonOutlineTwoToneIcon from '@mui/icons-material/PersonOutlineTwoTone';

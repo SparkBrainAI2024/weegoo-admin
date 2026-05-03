@@ -13,8 +13,8 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
-import Chip from 'ui-component/extended/Chip';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Chip from 'components/ui-component/extended/Chip';
 
 import { gridSpacing } from 'store/constant';
 

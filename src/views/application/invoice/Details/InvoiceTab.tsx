@@ -19,10 +19,10 @@ import Typography from '@mui/material/Typography';
 import ReactToPrint from 'react-to-print';
 
 // project imports
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import SubCard from 'ui-component/cards/SubCard';
-import Chip from 'ui-component/extended/Chip';
-import Logo from 'ui-component/Logo';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Chip from 'components/ui-component/extended/Chip';
+import Logo from 'components/ui-component/Logo';
 
 import { gridSpacing } from 'store/constant';
 

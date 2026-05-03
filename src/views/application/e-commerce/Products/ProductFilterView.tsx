@@ -9,9 +9,9 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
-import Chip from 'ui-component/extended/Chip';
-import Avatar from 'ui-component/extended/Avatar';
+import SubCard from 'components/ui-component/cards/SubCard';
+import Chip from 'components/ui-component/extended/Chip';
+import Avatar from 'components/ui-component/extended/Avatar';
 import ColorOptions from '../ColorOptions';
 import { gridSpacing } from 'store/constant';
 

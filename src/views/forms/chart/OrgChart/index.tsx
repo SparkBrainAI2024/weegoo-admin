@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Tree, TreeNode } from 'react-organizational-chart';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import DataCard from './DataCard';
 import Card from './Card';
 

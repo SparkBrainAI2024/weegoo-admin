@@ -16,9 +16,9 @@ import ProductDescription from './ProductDescription';
 import ProductReview from './ProductReview';
 import RelatedProducts from './RelatedProducts';
 
-import MainCard from 'ui-component/cards/MainCard';
-import Chip from 'ui-component/extended/Chip';
-import FloatingCart from 'ui-component/cards/FloatingCart';
+import MainCard from 'components/ui-component/cards/MainCard';
+import Chip from 'components/ui-component/extended/Chip';
+import FloatingCart from 'components/ui-component/cards/FloatingCart';
 
 import { dispatch, useSelector } from 'store';
 import { gridSpacing } from 'store/constant';

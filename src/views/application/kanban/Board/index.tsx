@@ -8,7 +8,7 @@ import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import Columns from './Columns';
 import AddColumn from './AddColumn';
 import ItemDetails from './ItemDetails';
-import MainCard from 'ui-component/cards/MainCard';
+import MainCard from 'components/ui-component/cards/MainCard';
 import { useDispatch, useSelector } from 'store';
 import { updateColumnOrder, updateColumnItemOrder } from 'store/slices/kanban';
 

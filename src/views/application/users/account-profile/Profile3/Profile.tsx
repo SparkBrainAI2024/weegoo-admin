@@ -8,8 +8,8 @@ import Typography from '@mui/material/Typography';
 
 // project imports
 import useAuth from 'hooks/useAuth';
-import SubCard from 'ui-component/cards/SubCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import SubCard from 'components/ui-component/cards/SubCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 
 // assets

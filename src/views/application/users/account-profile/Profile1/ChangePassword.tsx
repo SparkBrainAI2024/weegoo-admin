@@ -6,8 +6,8 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
 // project imports
-import SubCard from 'ui-component/cards/SubCard';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import SubCard from 'components/ui-component/cards/SubCard';
+import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| PROFILE 1 - CHANGE PASSWORD ||============================== //

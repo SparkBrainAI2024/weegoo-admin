@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
 
 // project import
-import Chip from 'ui-component/extended/Chip';
+import Chip from 'components/ui-component/extended/Chip';
 import { frameworks } from './FrameworkSection';
 
 // assets
