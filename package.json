@@ -132,9 +132,6 @@
       "last 1 safari version"
     ]
   },
-  "engines": {
-    "node": "20.x"
-  },
   "devDependencies": {
     "@babel/core": "^7.23.9",
     "@babel/eslint-parser": "^7.23.10",
