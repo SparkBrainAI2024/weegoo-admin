@@ -133,7 +133,7 @@
     ]
   },
   "engines": {
-    "node": "20.x""
+    "node": "20.x"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
