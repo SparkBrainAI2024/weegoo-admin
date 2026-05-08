@@ -12,14 +12,16 @@ import { useEffect } from 'react';
  * @param {PropTypes.node} children children element/node
  */
 const AuthGuard = ({ children }: GuardProps) => {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, isInitialized } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isLoggedIn) {
+        if (isInitialized && !isLoggedIn) {
             navigate('login', { replace: true });
         }
-    }, [isLoggedIn, navigate]);
+    }, [isLoggedIn, isInitialized, navigate]);
+
+    if (!isInitialized) return null; // wait
 
     return children;
 };

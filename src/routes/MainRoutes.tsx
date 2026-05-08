@@ -679,7 +679,7 @@ const MainRoutes = {
             element: <SamplePage />
         },
         {
-            path: '/dashboard/default',
+            path: '/',
             element: <DashboardDefault />
         },
         {

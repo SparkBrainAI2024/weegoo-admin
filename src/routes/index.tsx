@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // routes
 import MainRoutes from './MainRoutes';
@@ -8,12 +8,21 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 
 // project import
 import Loadable from 'components/ui-component/Loadable';
+import useAuth from 'hooks/useAuth';
 
-const PagesLanding = Loadable(lazy(() => import('views/pages/landing')));
 
-// ==============================|| ROUTING RENDER ||============================== //
-const router = createBrowserRouter([{ path: '/', element: <PagesLanding /> }, AuthenticationRoutes, LoginRoutes, MainRoutes], {
-    basename: import.meta.env.VITE_APP_BASE_NAME
-});
+const RootRedirect = () => {
+    const { isLoggedIn, isInitialized } = useAuth();
+    if (!isInitialized) return null;
+    return isLoggedIn 
+        ? <Navigate to="/" replace /> 
+        : <Navigate to="/login" replace />;
+};
 
+const router = createBrowserRouter([
+    { path: '/', element: <RootRedirect /> },
+    LoginRoutes,
+    MainRoutes,
+    AuthenticationRoutes
+], { basename: import.meta.env.VITE_APP_BASE_NAME });
 export default router;

@@ -56,32 +56,16 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     const [state, dispatch] = useReducer(accountReducer, initialState);
 
     useEffect(() => {
-        const init = async () => {
-            try {
-                const serviceToken = window.localStorage.getItem('serviceToken');
-                if (serviceToken && verifyToken(serviceToken)) {
-                    setSession(serviceToken);
-                    const response = await axios.get('/api/account/me');
-                    const { user } = response.data;
-                    dispatch({
-                        type: LOGIN,
-                        payload: {
-                            isLoggedIn: true,
-                            user
-                        }
-                    });
-                } else {
-                    dispatch({
-                        type: LOGOUT
-                    });
-                }
-            } catch (err) {
-                console.error(err);
-                dispatch({
-                    type: LOGOUT
-                });
-            }
-        };
+      const init = async () => {
+    const serviceToken = window.localStorage.getItem('serviceToken');
+    console.log('token:', serviceToken);
+    if (serviceToken && verifyToken(serviceToken)) {
+        dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: null } });
+    } else {
+        console.log('dispatching LOGOUT');
+        dispatch({ type: LOGOUT });
+    }
+};
 
         init();
     }, []);
@@ -132,7 +116,7 @@ const register = async (
     const updateProfile = () => {};
 
     if (state.isInitialized !== undefined && !state.isInitialized) {
-        return <Loader />;
+        return <>Loading</>;
     }
 
     return (
