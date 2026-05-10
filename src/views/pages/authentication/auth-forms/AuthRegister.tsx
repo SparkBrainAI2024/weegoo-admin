@@ -49,7 +49,6 @@ const JWTRegister = ({ ...others }) => {
 
     const [strength, setStrength] = React.useState(0);
     const [level, setLevel] = React.useState<StringColorProps>();
-    const { register } = useAuth();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -93,35 +92,7 @@ const JWTRegister = ({ ...others }) => {
         gender: Yup.string().oneOf([Gender.MALE, Gender.FEMALE]).required('Gender is required'),
     })}
     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-        try {
-            const res = await register(values.email, values.fullName, values.phone, values.gender);
-            if (scriptedRef.current) {
-                setStatus({ success: true });
-                setSubmitting(false);
-                dispatch(
-                    openSnackbar({
-                        open: true,
-                        message: res?.message || 'Registration successful. Please verify your email.',
-                        variant: 'alert',
-                        alert: { color: 'success' },
-                        close: false
-                    })
-                );
-                setTimeout(() => {
-                    navigate('/pages/code-verification', {
-                        replace: true,
-                        state: { email: values.email }
-                    });
-                }, 1500);
-            }
-        } catch (err: any) {
-            console.error(err);
-            if (scriptedRef.current) {
-                setStatus({ success: false });
-                setErrors({ submit: err.message });
-                setSubmitting(false);
-            }
-        }
+     
     }}
 >
     {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (

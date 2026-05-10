@@ -51,9 +51,9 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
     return (
         <Formik
             initialValues={{
-                email: 'info@codedthemes.com',
-                password: '123456',
-                submit: null
+                email: '',
+                password: '',
+                
             }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -71,7 +71,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                     console.error(err);
                     if (scriptedRef.current) {
                         setStatus({ success: false });
-                        setErrors({ submit: err.message });
+                        //todo setErrors({ submit: err.message });
                         setSubmitting(false);
                     }
                 }
@@ -140,7 +140,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                                         color="primary"
                                     />
                                 }
-                                label="Keep me logged in"
+                                label="Remember me"
                             />
                         </Grid>
                         <Grid item>
@@ -160,14 +160,14 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                         </Grid>
                     </Grid>
 
-                    {errors.submit && (
+                    {/*todo {errors.submit && (
                         <Box sx={{ mt: 3 }}>
                             <FormHelperText error>{errors.submit}</FormHelperText>
                         </Box>
-                    )}
+                    )} */}
                     <Box sx={{ mt: 2 }}>
                         <AnimateButton>
-                            <Button color="secondary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
+                            <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
                                 Sign In
                             </Button>
                         </AnimateButton>

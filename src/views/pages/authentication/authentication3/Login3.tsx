@@ -32,29 +32,25 @@ const Login = () => {
                         <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#" aria-label="logo">
-                                            <Logo />
-                                        </Link>
-                                    </Grid>
+                                    
                                     <Grid item xs={12}>
                                         <Grid
                                             container
                                             direction={{ xs: 'column-reverse', md: 'row' }}
-                                            alignItems="center"
+                                            alignItems="left"
                                             justifyContent="center"
                                         >
                                             <Grid item>
-                                                <Stack alignItems="center" justifyContent="center" spacing={1}>
-                                                    <Typography color="secondary.main" gutterBottom variant={downMD ? 'h3' : 'h2'}>
+                                                <Stack alignItems="left" justifyContent="left" spacing={1}>
+                                                    <Typography  gutterBottom variant={downMD ? 'h3' : 'h2'}>
                                                         Hi, Welcome Back
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
                                                         fontSize="16px"
-                                                        textAlign={{ xs: 'center', md: 'inherit' }}
+                                                        textAlign={{ xs: 'left', md: 'inherit' }}
                                                     >
-                                                        Enter your credentials to continue
+                                                        Login to your account
                                                     </Typography>
                                                 </Stack>
                                             </Grid>

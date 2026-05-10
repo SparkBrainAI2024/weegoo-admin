@@ -38,7 +38,6 @@ export type JWTContextType = {
     user?: UserProfile | null | undefined;
     logout: () => void;
     login: (email: string, password: string) => Promise<void>;
-    register: (email: string, fullName: string, phone: string, gender: Gender) => Promise<SignUpResponse>;
     resetPassword: (email: string) => Promise<void>;
     updateProfile: VoidFunction;
 };
@@ -65,4 +64,11 @@ export interface SignUpResponse {
   message: string;
   success: boolean;
   userToken: string;
+}
+
+export interface SignInResponse{
+    accessToken:string;
+    refreshToken:string;
+    userDetails:Record<string, any>;
+    user: Record<string, any>
 }
