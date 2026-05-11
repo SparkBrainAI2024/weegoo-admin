@@ -7,7 +7,7 @@ export const HORIZONTAL_MAX_ITEM = 7;
 const config: ConfigProps = {
     menuOrientation: MenuOrientation.VERTICAL,
     miniDrawer: false,
-    fontFamily: `'Roboto', sans-serif`,
+    fontFamily: `'Poppins', sans-serif`,
     borderRadius: 8,
     outlinedFilled: true,
     mode: ThemeMode.LIGHT,
