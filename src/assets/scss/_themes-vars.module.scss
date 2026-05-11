@@ -14,6 +14,7 @@ $secondaryMain:  #00aa6d;  // your green ✓
 $secondaryDark:  #00796b;  // darker green
 $secondary200:   #80cbc4;  // green-200
 $secondary800:   #004d40;  // green-900
+$secondary100:   #c8e6c9;
 
 // success Colors
 $successLight: #b9f6ca;
@@ -90,6 +91,7 @@ $darkTextSecondary: #8492c4;
 
     // secondary
     secondaryLight: $secondaryLight;
+    secondary100: $secondary100;
     secondary200: $secondary200;
     secondaryMain: $secondaryMain;
     secondaryDark: $secondaryDark;

@@ -73,11 +73,12 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
             color: theme.palette.grey[500],
             '&[data-shrink="false"]': {
                 top: 5
-            }
-        },
-        '&.Mui-focused': {
+            },
+             '&.Mui-focused': {
             color: '#4B5565',
         },
+        },
+        
         '& > div > input': {
             padding: '30.5px 14px 11.5px !important'
         },
