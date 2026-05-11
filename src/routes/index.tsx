@@ -15,7 +15,7 @@ const RootRedirect = () => {
     const { isLoggedIn, isInitialized } = useAuth();
     if (!isInitialized) return null;
     return isLoggedIn 
-        ? <Navigate to="/" replace /> 
+        ? <Navigate to="/dashboard/default" replace /> 
         : <Navigate to="/login" replace />;
 };
 

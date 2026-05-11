@@ -14,7 +14,7 @@ const AuthCheckMail = Loadable(lazy(() => import('views/pages/authentication/aut
 const GuestGuard = ({ children }: { children: React.ReactElement }) => {
     const { isLoggedIn, isInitialized } = useAuth();
     if (!isInitialized) return null;
-    if (isLoggedIn) return <Navigate to="/dashboard/default" replace />;
+    if (isLoggedIn) return <Navigate to="/" replace />;
     return children;
 };
 
