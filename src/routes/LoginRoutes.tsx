@@ -4,6 +4,7 @@ import MinimalLayout from 'components/layout/MinimalLayout';
 import NavMotion from 'components/layout/NavMotion';
 import Loadable from 'components/ui-component/Loadable';
 import useAuth from 'hooks/useAuth';
+import CodeVerification from 'views/pages/authentication/authentication3/CodeVerification3';
 
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 const AuthRegister = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));
@@ -25,6 +26,7 @@ const LoginRoutes = {
         { path: '/login', element: <GuestGuard><AuthLogin /></GuestGuard> },
         { path: '/register', element: <AuthRegister /> },
         { path: '/forgot', element: <AuthForgotPassword /> },
+        {path:'/verify-otp', element: <CodeVerification />},
         { path: '/reset-password', element: <AuthResetPassword /> },
         { path: '/check-mail', element: <AuthCheckMail /> }
     ]

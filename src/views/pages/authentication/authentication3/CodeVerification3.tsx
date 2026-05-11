@@ -30,11 +30,7 @@ const CodeVerification = () => {
                         <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#" aria-label="theme logo">
-                                            <Logo />
-                                        </Link>
-                                    </Grid>
+                                    
                                     <Grid item xs={12}>
                                         <Grid
                                             container
@@ -44,18 +40,16 @@ const CodeVerification = () => {
                                         >
                                             <Grid item>
                                                 <Stack alignItems="center" justifyContent="center" spacing={1}>
-                                                    <Typography color="secondary.main" gutterBottom variant={downMD ? 'h3' : 'h2'}>
-                                                        Enter Verification Code
+                                                    <Typography color="text.primary" gutterBottom variant={downMD ? 'h3' : 'h2'}>
+                                                        OTP Verification
                                                     </Typography>
-                                                    <Typography variant="subtitle1" fontSize="1rem">
-                                                        We send you on mail.
-                                                    </Typography>
+                                                    
                                                     <Typography
                                                         variant="caption"
                                                         fontSize="0.875rem"
                                                         textAlign={downMD ? 'center' : 'inherit'}
                                                     >
-                                                        We’ve send you code on jone.****@company.com
+                                                        Enter the code we sent to your email
                                                     </Typography>
                                                 </Stack>
                                             </Grid>
@@ -67,33 +61,7 @@ const CodeVerification = () => {
                                     <Grid item xs={12}>
                                         <Divider />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <Grid item container direction="column" alignItems="center" xs={12}>
-                                            <Typography
-                                                component={Link}
-                                                to="#"
-                                                variant="subtitle1"
-                                                sx={{ textDecoration: 'none' }}
-                                                textAlign={downMD ? 'center' : 'inherit'}
-                                            >
-                                                Did not receive the email? Check your spam filter, or
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <AnimateButton>
-                                            <Button
-                                                disableElevation
-                                                fullWidth
-                                                size="large"
-                                                type="submit"
-                                                variant="outlined"
-                                                color="secondary"
-                                            >
-                                                Resend Code
-                                            </Button>
-                                        </AnimateButton>
-                                    </Grid>
+                                 
                                 </Grid>
                             </AuthCardWrapper>
                         </Grid>

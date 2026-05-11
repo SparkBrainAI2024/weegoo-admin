@@ -58,7 +58,7 @@ const AuthForgotPassword = ({ ...others }) => {
                                 })
                             );
                             setTimeout(() => {
-                                navigate(isLoggedIn ? '/auth/check-mail' : '/check-mail', { replace: true });
+                                navigate( '/verify-otp', { replace: true });
                             }, 1500);
 
                             // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
