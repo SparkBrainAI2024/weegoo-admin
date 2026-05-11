@@ -75,6 +75,9 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
                 top: 5
             }
         },
+        '&.Mui-focused': {
+            color: '#4B5565',
+        },
         '& > div > input': {
             padding: '30.5px 14px 11.5px !important'
         },
