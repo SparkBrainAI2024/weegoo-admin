@@ -31,11 +31,7 @@ const FontFamilyPage = () => {
     };
 
     const fonts: FontProps[] = [
-        {
-            id: 'inter',
-            value: `'Inter', sans-serif`,
-            label: 'Inter'
-        },
+      
         {
             id: 'poppins',
             value: `'Poppins', sans-serif`,

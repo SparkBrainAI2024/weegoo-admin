@@ -2,18 +2,19 @@
 $paper: #ffffff;
 
 // primary
-$primaryLight: #e3f2fd;
-$primaryMain: #2196f3;
-$primaryDark: #1e88e5;
-$primary200: #90caf9;
-$primary800: #1565c0;
+$primaryLight: #fff9c4;   // yellow-50
+$primaryMain:  #fdd835;   // yellow-600 ✓
+$primaryDark:  #f9a825;   // yellow-800
+$primary200:   #fff176;   // yellow-200
+$primary800:   #f57f17;   // yellow-900
 
 // secondary
-$secondaryLight: #ede7f6;
-$secondaryMain: #673ab7;
-$secondaryDark: #5e35b1;
-$secondary200: #b39ddb;
-$secondary800: #4527a0;
+$secondaryLight: #e0f2f1;  // teal/green-50
+$secondaryMain:  #00aa6d;  // your green ✓
+$secondaryDark:  #00796b;  // darker green
+$secondary200:   #80cbc4;  // green-200
+$secondary800:   #004d40;  // green-900
+$secondary100:   #c8e6c9;
 
 // success Colors
 $successLight: #b9f6ca;
@@ -90,6 +91,7 @@ $darkTextSecondary: #8492c4;
 
     // secondary
     secondaryLight: $secondaryLight;
+    secondary100: $secondary100;
     secondary200: $secondary200;
     secondaryMain: $secondaryMain;
     secondaryDark: $secondaryDark;

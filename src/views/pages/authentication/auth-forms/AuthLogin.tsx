@@ -51,9 +51,9 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
     return (
         <Formik
             initialValues={{
-                email: 'info@codedthemes.com',
-                password: '123456',
-                submit: null
+                email: '',
+                password: '',
+                
             }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -71,16 +71,16 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                     console.error(err);
                     if (scriptedRef.current) {
                         setStatus({ success: false });
-                        setErrors({ submit: err.message });
+                        //todo setErrors({ submit: err.message });
                         setSubmitting(false);
                     }
                 }
             }}
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate onSubmit={handleSubmit} {...others}>
+                <form noValidate autoComplete="off"  onSubmit={handleSubmit} {...others}>
                     <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-email-login"
                             type="email"
@@ -140,7 +140,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                                         color="primary"
                                     />
                                 }
-                                label="Keep me logged in"
+                                label="Remember me"
                             />
                         </Grid>
                         <Grid item>
@@ -150,7 +150,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                                 to={
                                     loginProp
                                         ? `/pages/forgot-password/forgot-password${loginProp}`
-                                        : '/pages/forgot-password/forgot-password3'
+                                        : '/forgot'
                                 }
                                 color="secondary"
                                 sx={{ textDecoration: 'none' }}
@@ -160,14 +160,14 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                         </Grid>
                     </Grid>
 
-                    {errors.submit && (
+                    {/*todo {errors.submit && (
                         <Box sx={{ mt: 3 }}>
                             <FormHelperText error>{errors.submit}</FormHelperText>
                         </Box>
-                    )}
+                    )} */}
                     <Box sx={{ mt: 2 }}>
                         <AnimateButton>
-                            <Button color="secondary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
+                            <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
                                 Sign In
                             </Button>
                         </AnimateButton>

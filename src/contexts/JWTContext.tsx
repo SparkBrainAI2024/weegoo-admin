@@ -14,12 +14,10 @@ import axios from 'utils/axios';
 
 // types
 import { KeyedObject } from 'types';
-import { InitialLoginContextProps, JWTContextType, SignUpResponse } from 'types/auth';
+import { InitialLoginContextProps, JWTContextType, SignInResponse, SignUpResponse } from 'types/auth';
 import client from 'lib/apolloClient';
-import { Gender } from 'types/enum';
-import { SIGN_UP } from 'graphql/mutations/auth.mutations';
+import { SIGN_IN } from 'graphql/mutations/auth.mutations';
 
-const chance = new Chance();
 
 // constant
 const initialState: InitialLoginContextProps = {
@@ -56,40 +54,36 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     const [state, dispatch] = useReducer(accountReducer, initialState);
 
     useEffect(() => {
-        const init = async () => {
-            try {
-                const serviceToken = window.localStorage.getItem('serviceToken');
-                if (serviceToken && verifyToken(serviceToken)) {
-                    setSession(serviceToken);
-                    const response = await axios.get('/api/account/me');
-                    const { user } = response.data;
-                    dispatch({
-                        type: LOGIN,
-                        payload: {
-                            isLoggedIn: true,
-                            user
-                        }
-                    });
-                } else {
-                    dispatch({
-                        type: LOGOUT
-                    });
-                }
-            } catch (err) {
-                console.error(err);
-                dispatch({
-                    type: LOGOUT
-                });
-            }
-        };
+      const init = async () => {
+    const serviceToken = window.localStorage.getItem('serviceToken');
+    if (serviceToken && verifyToken(serviceToken)) {
+        dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: null } });
+    } else {
+        dispatch({ type: LOGOUT });
+    }
+};
 
         init();
     }, []);
 
     const login = async (email: string, password: string) => {
-        const response = await axios.post('/api/account/login', { email, password });
-        const { serviceToken, user } = response.data;
-        setSession(serviceToken);
+      
+          const { data } = await client.mutate<{ signIn: SignInResponse }>({
+        mutation: SIGN_IN,
+        variables: {
+            input: { email,password },
+        },
+    });
+        if (!data?.signIn) {
+        throw new Error('SignIn failed');
+    }
+
+      if (data.signIn.accessToken) {
+        setSession(data.signIn.accessToken);
+    }
+
+        const { accessToken, user } = data.signIn;
+        setSession(accessToken);
         dispatch({
             type: LOGIN,
             payload: {
@@ -98,29 +92,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
             }
         });
     };
-const register = async (
-    email: string,
-    fullName: string,
-    phone: string,
-    gender: Gender
-): Promise<SignUpResponse> => {
-    const { data } = await client.mutate<{ signUp: SignUpResponse }>({
-        mutation: SIGN_UP,
-        variables: {
-            input: { email, fullName, phone, gender },
-        },
-    });
 
-    if (!data?.signUp) {
-        throw new Error('Signup failed');
-    }
-
-    if (data.signUp.userToken) {
-        setSession(data.signUp.userToken);
-    }
-
-    return data.signUp;
-};
 
     const logout = () => {
         setSession(null);
@@ -132,11 +104,11 @@ const register = async (
     const updateProfile = () => {};
 
     if (state.isInitialized !== undefined && !state.isInitialized) {
-        return <Loader />;
+        return <>Loading</>;
     }
 
     return (
-        <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile }}>{children}</JWTContext.Provider>
+        <JWTContext.Provider value={{ ...state, login, logout, resetPassword, updateProfile }}>{children}</JWTContext.Provider>
     );
 };
 

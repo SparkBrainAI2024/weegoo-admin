@@ -39,7 +39,11 @@ export interface CustomTypography {
             '&[data-shrink="false"]': {
                 top: string;
             };
+              '&.Mui-focused': {
+            color: '#4B5565',
         };
+        };
+      
         '& > div > input': {
             padding: string;
         };

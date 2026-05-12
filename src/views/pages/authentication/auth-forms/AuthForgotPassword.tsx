@@ -58,7 +58,7 @@ const AuthForgotPassword = ({ ...others }) => {
                                 })
                             );
                             setTimeout(() => {
-                                navigate(isLoggedIn ? '/auth/check-mail' : '/check-mail', { replace: true });
+                                navigate( '/verify-otp', { replace: true });
                             }, 1500);
 
                             // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
@@ -85,7 +85,7 @@ const AuthForgotPassword = ({ ...others }) => {
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                 <form noValidate onSubmit={handleSubmit} {...others}>
                     <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-email-forgot">Email Address / Username</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-email-forgot">Email Address</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-email-forgot"
                             type="email"
@@ -118,7 +118,7 @@ const AuthForgotPassword = ({ ...others }) => {
                                 size="large"
                                 type="submit"
                                 variant="contained"
-                                color="secondary"
+                                color="primary"
                             >
                                 Send Mail
                             </Button>

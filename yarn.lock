@@ -4013,6 +4013,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/hoist-non-react-statics@npm:^3.3.7":
+  version: 3.3.7
+  resolution: "@types/hoist-non-react-statics@npm:3.3.7"
+  dependencies:
+    hoist-non-react-statics: "npm:^3.3.0"
+  peerDependencies:
+    "@types/react": "*"
+  checksum: 10c0/ed8f4e88338f7d021d0f956adf6089d2a12b2e254a03c05292324f2e986d2376eb9efdb8a4f04596823e8fca88c9d06361d20dab4a2a00dc935fb36ac911de55
+  languageName: node
+  linkType: hard
+
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0":
   version: 2.0.6
   resolution: "@types/istanbul-lib-coverage@npm:2.0.6"
@@ -5243,6 +5254,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-18-image-lightbox: "npm:^5.1.4"
     react-apexcharts: "npm:^1.4.1"
+    react-cookie: "npm:^8.1.2"
     react-copy-to-clipboard: "npm:^5.1.0"
     react-csv: "npm:^2.2.2"
     react-dom: "npm:^18.2.0"
@@ -6033,6 +6045,13 @@ __metadata:
   version: 2.0.0
   resolution: "convert-source-map@npm:2.0.0"
   checksum: 10c0/8f2f7a27a1a011cc6cc88cc4da2d7d0cfa5ee0369508baae3d98c260bb3ac520691464e5bbe4ae7cdf09860c1d69ecc6f70c63c6e7c7f7e3f18ec08484dc7d9b
+  languageName: node
+  linkType: hard
+
+"cookie@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "cookie@npm:1.1.1"
+  checksum: 10c0/79c4ddc0fcad9c4f045f826f42edf54bcc921a29586a4558b0898277fa89fb47be95bc384c2253f493af7b29500c830da28341274527328f18eba9f58afa112c
   languageName: node
   linkType: hard
 
@@ -11062,6 +11081,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-cookie@npm:^8.1.2":
+  version: 8.1.2
+  resolution: "react-cookie@npm:8.1.2"
+  dependencies:
+    "@types/hoist-non-react-statics": "npm:^3.3.7"
+    hoist-non-react-statics: "npm:^3.3.2"
+    universal-cookie: "npm:^8.0.0"
+  peerDependencies:
+    react: ">= 16.3.0"
+  checksum: 10c0/e523656c10de9f646380e5ce9195c0318b2ac4b00ef10a50989cb8c9cb81b22190c056925e8d95e87b7689e0de6b7ba0fe8866bdb30ad0aef52f3132bba0ab75
+  languageName: node
+  linkType: hard
+
 "react-copy-to-clipboard@npm:^5.1.0":
   version: 5.1.0
   resolution: "react-copy-to-clipboard@npm:5.1.0"
@@ -13218,6 +13250,15 @@ __metadata:
     unist-util-is: "npm:^6.0.0"
     unist-util-visit-parents: "npm:^6.0.0"
   checksum: 10c0/51434a1d80252c1540cce6271a90fd1a106dbe624997c09ed8879279667fb0b2d3a685e02e92bf66598dcbe6cdffa7a5f5fb363af8fdf90dda6c855449ae39a5
+  languageName: node
+  linkType: hard
+
+"universal-cookie@npm:^8.0.0":
+  version: 8.1.2
+  resolution: "universal-cookie@npm:8.1.2"
+  dependencies:
+    cookie: "npm:^1.1.1"
+  checksum: 10c0/b0d2df0268d0f99f78bfb68c7dc876310f58d226771bbd5ef844255247a4e7b79142c97fa237bb86063ec9e62e0d08de6be64803d29828b4588b94f57fc14f83
   languageName: node
   linkType: hard
 

@@ -46,14 +46,14 @@ const AuthCodeVerification = () => {
             </Grid>
             <Grid item xs={12}>
                 <Button disableElevation fullWidth size="large" type="submit" variant="contained">
-                    Continue
+                    Verify
                 </Button>
             </Grid>
             <Grid item xs={12}>
-                <Stack direction="row" justifyContent="space-between" alignItems="baseline">
-                    <Typography>Did not receive the email? Check your spam filter, or</Typography>
-                    <Typography variant="body1" sx={{ minWidth: 85, ml: 2, textDecoration: 'none', cursor: 'pointer' }} color="primary">
-                        Resend code
+                <Stack  justifyContent="space-between" alignItems="baseline">
+                    <Typography textAlign="center">Did not receive the code?</Typography>
+                    <Typography textAlign="center" variant="body1" sx={{ minWidth: 85, ml: 2, textDecoration: 'none', cursor: 'pointer' }} color="primary">
+                        Resend code in
                     </Typography>
                 </Stack>
             </Grid>

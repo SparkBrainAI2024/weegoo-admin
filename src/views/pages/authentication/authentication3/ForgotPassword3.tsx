@@ -14,6 +14,7 @@ import Logo from 'components/ui-component/Logo';
 import AuthForgotPassword from '../auth-forms/AuthForgotPassword';
 import AuthFooter from 'components/ui-component/cards/AuthFooter';
 import useAuth from 'hooks/useAuth';
+import { Box } from '@mui/material';
 
 // ============================|| AUTH3 - FORGOT PASSWORD ||============================ //
 
@@ -29,18 +30,25 @@ const ForgotPassword = () => {
                         <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#" aria-label="theme logo">
-                                            <Logo />
-                                        </Link>
-                                    </Grid>
+
                                     <Grid item xs={12}>
-                                        <Grid container alignItems="center" justifyContent="center" textAlign="center" spacing={2}>
+                                        <Grid container alignItems="center" justifyContent="center" textAlign="left" spacing={2}>
                                             <Grid item xs={12}>
-                                                <Typography color="secondary.main" gutterBottom variant={downMD ? 'h3' : 'h2'}>
-                                                    Forgot password?
-                                                </Typography>
+                                                <Box>
+                                                    <Typography color="text.primary" gutterBottom={false} variant={downMD ? 'h3' : 'h2'}>
+                                                        Forgot password?
+                                                    </Typography>
+                                                    <Typography
+                                                        color="text.secondary"
+                                                        variant={downMD ? 'subtitle1' : 'h5'}
+                                                        sx={{ mt: 0.5, fontWeight: 400 }}
+                                                    >
+                                                        Enter your credentials to continue
+                                                    </Typography>
+                                                </Box>
                                             </Grid>
+
+                                          
                                             <Grid item xs={12}>
                                                 <Typography variant="caption" fontSize="16px" textAlign="center">
                                                     Enter your email address below and we&apos;ll send you password reset OTP.
@@ -54,26 +62,13 @@ const ForgotPassword = () => {
                                     <Grid item xs={12}>
                                         <Divider />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <Grid item container direction="column" alignItems="center" xs={12}>
-                                            <Typography
-                                                component={Link}
-                                                to={isLoggedIn ? '/pages/login/login3' : '/login'}
-                                                variant="subtitle1"
-                                                sx={{ textDecoration: 'none' }}
-                                            >
-                                                Already have an account?
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
+                                   
                                 </Grid>
                             </AuthCardWrapper>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                    <AuthFooter />
-                </Grid>
+              
             </Grid>
         </AuthWrapper1>
     );
