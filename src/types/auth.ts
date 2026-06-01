@@ -61,14 +61,15 @@ export interface InitialLoginContextProps {
 }
 
 export interface SignUpResponse {
-  message: string;
-  success: boolean;
-  userToken: string;
+    message: string;
+    success: boolean;
+    userToken: string;
 }
 
-export interface SignInResponse{
-    accessToken:string;
-    refreshToken:string;
-    userDetails:Record<string, any>;
-    user: Record<string, any>
+export interface SignInResponse {
+    accessToken: string;
+    refreshToken: string;
+    admin: {
+        email: string;
+    }
 }

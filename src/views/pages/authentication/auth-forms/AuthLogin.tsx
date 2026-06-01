@@ -28,6 +28,7 @@ import useScriptRef from 'hooks/useScriptRef';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Divider } from '@mui/material';
 
 // ===============================|| JWT LOGIN ||=============================== //
 
@@ -78,8 +79,13 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
             }}
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate autoComplete="off"  onSubmit={handleSubmit} {...others}>
-                    <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
+                <form noValidate autoComplete="off"  onSubmit={handleSubmit}    style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: '24px',
+        width: '100%'
+    }} {...others}>
+                    <FormControl fullWidth error={Boolean(touched.email && errors.email)}  sx={{ ...theme.typography.customInput }}>
                         <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-email-login"
@@ -152,7 +158,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                                         ? `/pages/forgot-password/forgot-password${loginProp}`
                                         : '/forgot'
                                 }
-                                color="secondary"
+                                color="#43A048"
                                 sx={{ textDecoration: 'none' }}
                             >
                                 Forgot Password?
@@ -165,13 +171,14 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                             <FormHelperText error>{errors.submit}</FormHelperText>
                         </Box>
                     )} */}
-                    <Box sx={{ mt: 2 }}>
+                    
                         <AnimateButton>
                             <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
                                 Sign In
                             </Button>
                         </AnimateButton>
-                    </Box>
+                    
+                    <Divider />
                 </form>
             )}
         </Formik>

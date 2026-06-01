@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 // material-ui
 import { Theme } from '@mui/material/styles';
@@ -15,6 +15,7 @@ import AuthLogin from '../auth-forms/AuthLogin';
 import Logo from 'components/ui-component/Logo';
 import AuthFooter from 'components/ui-component/cards/AuthFooter';
 import useAuth from 'hooks/useAuth';
+import { Box } from '@mui/material';
 
 // assets
 
@@ -23,7 +24,7 @@ import useAuth from 'hooks/useAuth';
 const Login = () => {
     const { isLoggedIn } = useAuth();
     const downMD = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
-
+if (isLoggedIn) return <Navigate to="/dashboard/default" replace />;
     return (
         <AuthWrapper1>
             <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
@@ -31,39 +32,22 @@ const Login = () => {
                     <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
                         <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
                             <AuthCardWrapper>
-                                <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    
-                                    <Grid item xs={12}>
-                                        <Grid
-                                            container
-                                            direction={{ xs: 'column-reverse', md: 'row' }}
-                                            alignItems="left"
-                                            justifyContent="center"
-                                        >
-                                            <Grid item>
-                                                <Stack alignItems="left" justifyContent="left" spacing={1}>
-                                                    <Typography  gutterBottom variant={downMD ? 'h3' : 'h2'}>
-                                                        Hi, Welcome Back
-                                                    </Typography>
-                                                    <Typography
-                                                        variant="caption"
-                                                        fontSize="16px"
-                                                        textAlign={{ xs: 'left', md: 'inherit' }}
-                                                    >
-                                                        Login to your account
-                                                    </Typography>
-                                                </Stack>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <AuthLogin />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Divider />
-                                    </Grid>
-                                
-                                </Grid>
+                               <Stack
+                                direction="column"
+                                spacing="20px"
+                                width="100%"
+                               >
+                                    <Box>
+        <Box sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600, color: '#2A2A2A' }}>
+            Hi, Welcome Back
+        </Box>
+        <Box sx={{ fontSize: '16px', lineHeight: '24px', color: '#4B5565' }}>
+            Login to your account
+        </Box>
+    </Box>
+  <AuthLogin />
+
+                               </Stack>
                             </AuthCardWrapper>
                         </Grid>
                     </Grid>
