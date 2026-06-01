@@ -7,7 +7,7 @@ import { ThemeMode } from 'types/config';
 // ==============================|| AUTHENTICATION 1 WRAPPER ||============================== //
 
 const AuthWrapper1 = styled('div')(({ theme }) => ({
-    backgroundColor:  theme.palette.secondary[100] ,
+    backgroundColor:  "#CDE0C7" ,
     minHeight: '100vh'
 }));
 

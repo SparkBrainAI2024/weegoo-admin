@@ -9,17 +9,15 @@ import MainCard, { MainCardProps } from 'components/ui-component/cards/MainCard'
 const AuthCardWrapper = ({ children, ...other }: MainCardProps) => (
     <MainCard
         sx={{
-            maxWidth: { xs: 400, lg: 475 },
-            margin: { xs: 2.5, md: 3 },
-            '& > *': {
-                flexGrow: 1,
-                flexBasis: '50%'
-            }
+            width: { xs: '100%', md: 508 },
+            minWidth: 300,
+            height: { xs: 'auto', md: 598 }
+
         }}
         content={false}
         {...other}
     >
-        <Box sx={{ p: { xs: 2, sm: 3, xl: 5 } }}>{children}</Box>
+        <Box sx={{ p: { xs: 3, md: 5 } }}>{children}</Box>
     </MainCard>
 );
 

@@ -68,27 +68,27 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
 
     const login = async (email: string, password: string) => {
       
-          const { data } = await client.mutate<{ signIn: SignInResponse }>({
+          const { data } = await client.mutate<{ adminSignIn: SignInResponse }>({
         mutation: SIGN_IN,
         variables: {
             input: { email,password },
         },
     });
-        if (!data?.signIn) {
+        if (!data?.adminSignIn) {
         throw new Error('SignIn failed');
     }
 
-      if (data.signIn.accessToken) {
-        setSession(data.signIn.accessToken);
+      if (data.adminSignIn.accessToken) {
+        setSession(data.adminSignIn.accessToken);
     }
 
-        const { accessToken, user } = data.signIn;
+        const { accessToken, admin } = data.adminSignIn;
         setSession(accessToken);
         dispatch({
             type: LOGIN,
             payload: {
                 isLoggedIn: true,
-                user
+                user:admin
             }
         });
     };

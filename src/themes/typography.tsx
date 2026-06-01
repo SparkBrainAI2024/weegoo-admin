@@ -65,8 +65,7 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
         textTransform: 'capitalize'
     },
     customInput: {
-        marginTop: 1,
-        marginBottom: 1,
+   
         '& > label': {
             top: 23,
             left: 0,
@@ -75,7 +74,9 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
                 top: 5
             },
              '&.Mui-focused': {
-            color: '#4B5565',
+            color: theme.palette.text.secondary,
+            fontWeight:500,
+            fontsize:'10px'
         },
         },
         
