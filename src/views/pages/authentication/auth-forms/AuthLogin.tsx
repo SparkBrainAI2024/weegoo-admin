@@ -166,11 +166,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                         </Grid>
                     </Grid>
 
-                    {/*todo {errors.submit && (
-                        <Box sx={{ mt: 3 }}>
-                            <FormHelperText error>{errors.submit}</FormHelperText>
-                        </Box>
-                    )} */}
+                  
                     
                         <AnimateButton>
                             <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">

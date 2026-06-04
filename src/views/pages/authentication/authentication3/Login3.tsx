@@ -16,6 +16,7 @@ import Logo from 'components/ui-component/Logo';
 import AuthFooter from 'components/ui-component/cards/AuthFooter';
 import useAuth from 'hooks/useAuth';
 import { Box } from '@mui/material';
+import { PAGE_TOKEN } from 'constants/pages';
 
 // assets
 
@@ -31,12 +32,12 @@ if (isLoggedIn) return <Navigate to="/dashboard/default" replace />;
                 <Grid item xs={12}>
                     <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
                         <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
-                            <AuthCardWrapper>
-                               <Stack
-                                direction="column"
-                                spacing="20px"
-                                width="100%"
-                               >
+                            <AuthCardWrapper page={PAGE_TOKEN.LOGIN}>
+                                <Stack
+                                    direction="column"
+                                    spacing="20px"
+                                    width="100%"
+                                >
                                     <Box>
         <Box sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600, color: '#2A2A2A' }}>
             Hi, Welcome Back
