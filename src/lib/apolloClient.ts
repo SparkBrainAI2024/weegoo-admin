@@ -18,8 +18,10 @@ const errorLink = new ApolloLink((operation, forward) => {
         if (response?.errors) {
           response.errors.forEach((err) => {
             if ((err.extensions as any)?.statusCode === 401) {
-              localStorage.removeItem("serviceToken");
-              window.location.href = "/login";
+              if (window.location.pathname !== '/login') {
+                localStorage.removeItem("serviceToken");
+                window.location.href = "/login";
+              }
             }
           });
         }
@@ -36,7 +38,7 @@ const client = new ApolloClient({
   link: ApolloLink.from([
     errorLink,
     authLink,
-    new HttpLink({ uri: import.meta.env.VITE_GRAPHQL_URL  }),
+    new HttpLink({ uri: import.meta.env.VITE_GRAPHQL_URL }),
   ]),
   cache: new InMemoryCache(),
 });
