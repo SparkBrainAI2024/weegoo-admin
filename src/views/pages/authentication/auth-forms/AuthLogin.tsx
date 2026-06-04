@@ -15,6 +15,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Typography from '@mui/material/Typography';
+import { handleErrors } from 'lib/apiError';
 
 // third party
 import * as Yup from 'yup';
@@ -29,6 +30,7 @@ import useScriptRef from 'hooks/useScriptRef';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Divider } from '@mui/material';
+import { showErrorToast } from 'lib/utils/toast';
 
 // ===============================|| JWT LOGIN ||=============================== //
 
@@ -54,7 +56,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
             initialValues={{
                 email: '',
                 password: '',
-                
+
             }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -68,24 +70,22 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                         setStatus({ success: true });
                         setSubmitting(false);
                     }
-                } catch (err: any) {
-                    console.error(err);
-                    if (scriptedRef.current) {
-                        setStatus({ success: false });
-                        //todo setErrors({ submit: err.message });
-                        setSubmitting(false);
-                    }
+                }
+                catch (err: any) {
+
+                    setSubmitting(false);
+                    handleErrors(err, setErrors, showErrorToast);
                 }
             }}
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate autoComplete="off"  onSubmit={handleSubmit}    style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        gap: '24px',
-        width: '100%'
-    }} {...others}>
-                    <FormControl fullWidth error={Boolean(touched.email && errors.email)}  sx={{ ...theme.typography.customInput }}>
+                <form noValidate autoComplete="off" onSubmit={handleSubmit} style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '24px',
+                    width: '100%'
+                }} {...others}>
+                    <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
                         <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-email-login"
@@ -171,13 +171,13 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                             <FormHelperText error>{errors.submit}</FormHelperText>
                         </Box>
                     )} */}
-                    
-                        <AnimateButton>
-                            <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
-                                Sign In
-                            </Button>
-                        </AnimateButton>
-                    
+
+                    <AnimateButton>
+                        <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
+                            Sign In
+                        </Button>
+                    </AnimateButton>
+
                     <Divider />
                 </form>
             )}

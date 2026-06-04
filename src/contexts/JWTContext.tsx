@@ -54,33 +54,34 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     const [state, dispatch] = useReducer(accountReducer, initialState);
 
     useEffect(() => {
-      const init = async () => {
-    const serviceToken = window.localStorage.getItem('serviceToken');
-    if (serviceToken && verifyToken(serviceToken)) {
-        dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: null } });
-    } else {
-        dispatch({ type: LOGOUT });
-    }
-};
+        const init = async () => {
+            const serviceToken = window.localStorage.getItem('serviceToken');
+            if (serviceToken && verifyToken(serviceToken)) {
+                dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: null } });
+            } else {
+                dispatch({ type: LOGOUT });
+            }
+        };
 
         init();
     }, []);
 
     const login = async (email: string, password: string) => {
-      
-          const { data } = await client.mutate<{ adminSignIn: SignInResponse }>({
-        mutation: SIGN_IN,
-        variables: {
-            input: { email,password },
-        },
-    });
-        if (!data?.adminSignIn) {
-        throw new Error('SignIn failed');
-    }
 
-      if (data.adminSignIn.accessToken) {
-        setSession(data.adminSignIn.accessToken);
-    }
+        const { data } = await client.mutate<{ adminSignIn: SignInResponse }>({
+            mutation: SIGN_IN,
+            variables: {
+                input: { email, password },
+            },
+            errorPolicy: 'none', // this makes Apollo throw on GraphQL errors
+        });
+        if (!data?.adminSignIn) {
+            throw new Error('SignIn failed');
+        }
+
+        if (data.adminSignIn.accessToken) {
+            setSession(data.adminSignIn.accessToken);
+        }
 
         const { accessToken, admin } = data.adminSignIn;
         setSession(accessToken);
@@ -88,7 +89,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
             type: LOGIN,
             payload: {
                 isLoggedIn: true,
-                user:admin
+                user: admin
             }
         });
     };
@@ -99,9 +100,9 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         dispatch({ type: LOGOUT });
     };
 
-    const resetPassword = async (email: string) => {};
+    const resetPassword = async (email: string) => { };
 
-    const updateProfile = () => {};
+    const updateProfile = () => { };
 
     if (state.isInitialized !== undefined && !state.isInitialized) {
         return <>Loading</>;
