@@ -59,9 +59,11 @@ const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
                                 close: false
                             })
                         );
-                        setTimeout(() => {
-                            navigate('/verify-otp', { replace: true });
-                        }, 1500);
+                    
+                        navigate('/verify-otp', { 
+    state: { email: values.email },  // <- pass email here
+    replace: true 
+});
                     } else {
                         setStatus({ success: false });
                         setErrors({ submit: data?.adminForgotPassword?.message || 'Something went wrong' });
@@ -79,7 +81,7 @@ const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
             }}
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate onSubmit={handleSubmit} {...others} style={{ 
+                <form noValidate onSubmit={handleSubmit}  style={{ 
         display: 'flex', 
         flexDirection: 'column', 
         gap: '24px',

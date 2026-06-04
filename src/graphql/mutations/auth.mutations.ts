@@ -22,3 +22,14 @@ export const FORGOT_PASSWORD = gql`
     }
   }
 `;
+
+// graphql/mutations/auth.ts
+export const VERIFY_OTP = gql`
+  mutation adminVerifyOtp($input: AdminVerifyOtpInput!) {
+    adminVerifyOtp(input: $input) {
+      success
+      message
+      resetPasswordToken
+    }
+  }
+`;

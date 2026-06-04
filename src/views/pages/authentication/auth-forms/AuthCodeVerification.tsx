@@ -7,11 +7,17 @@ import Stack from '@mui/material/Stack';
 import OtpInput from 'react18-input-otp';
 import { ThemeMode } from 'types/config';
 import { Box } from '@mui/material';
+import { AUTH } from 'constants/auth';
+import { useMutation } from '@apollo/client/react';
+import { VERIFY_OTP } from 'graphql/mutations/auth.mutations';
+import { VerifyOtpResponse } from 'types/auth';
+import { useLocation, useNavigate } from 'react-router';
 
-const AuthCodeVerification = () => {
+const AuthCodeVerification = ({ email }: { email: string }) => {
     const theme = useTheme();
+    const navigate = useNavigate();
     const [otp, setOtp] = useState<string>();
-    const [timer, setTimer] = useState(5);
+    const [timer, setTimer] = useState(AUTH.RESEND_CODE_TIME);
     const [canResend, setCanResend] = useState(false);
     const borderColor = theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[200] : theme.palette.grey[300];
 
@@ -27,10 +33,33 @@ const AuthCodeVerification = () => {
     }, [timer]);
 
     const handleResend = () => {
-        setTimer(28);
+        setTimer(AUTH.RESEND_CODE_TIME);
         setCanResend(false);
         // call your resend API here
     };
+    const [verifyOtp, { loading }] = useMutation<VerifyOtpResponse>(VERIFY_OTP);
+
+    const handleVerify = async () => {
+        try {
+            const { data } = await verifyOtp({
+                variables: {
+                    input: {
+                        email,
+                        otp: Number(otp)  // Float in schema so convert from string
+                    }
+                }
+            });
+
+            if (data?.adminVerifyOtp?.success) {
+                navigate('/reset-password', {
+                    state: { resetPasswordToken: data.adminVerifyOtp.resetPasswordToken }
+                });
+            }
+        } catch (err: any) {
+            console.error(err);
+        }
+    };
+
 
     const formatTime = (seconds: number) => {
         const m = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -52,7 +81,9 @@ const AuthCodeVerification = () => {
                     }}
                     inputStyle={{
                         height: '54px',
+                        fontSize: '34px',
                         fontWeight: 400,
+                        lineHeight: '51px',
                         width: '100%',
                         border: `2px solid ${borderColor}`,
                         borderRadius: 4,
@@ -63,8 +94,16 @@ const AuthCodeVerification = () => {
                     }}
                 />
 
-                <Button disableElevation fullWidth size="large" type="submit" variant="contained" style={{ height: '46px', color: '#2A2A2A' }}>
-                    Verify
+                <Button
+                    disableElevation
+                    fullWidth
+                    size="large"
+                    variant="contained"
+                    disabled={!otp || otp.length < 5 || loading}
+                    onClick={handleVerify}
+                    style={{ height: '46px', color: '#2A2A2A' }}
+                >
+                    {loading ? 'Verifying...' : 'Verify'}
                 </Button>
             </Stack>
 

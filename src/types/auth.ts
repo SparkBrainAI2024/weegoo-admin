@@ -80,3 +80,11 @@ export interface ForgotPasswordResponse {
         message: string;
     };
 }
+
+export interface VerifyOtpResponse {
+    adminVerifyOtp: {
+        success: boolean;
+        message: string;
+        resetPasswordToken: string;
+    };
+}

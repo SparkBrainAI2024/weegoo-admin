@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // material-ui
 import { Theme } from '@mui/material/styles';
@@ -23,7 +23,10 @@ import { Box } from '@mui/material';
 
 const CodeVerification = () => {
     const downMD = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
-
+    const location = useLocation();
+    const email = (location.state as { email: string })?.email;
+    console.log(email,"email");
+    
     return (
         <AuthWrapper1>
             <Grid container direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
@@ -42,7 +45,7 @@ const CodeVerification = () => {
                                             Enter the 6-digit code we sent to your email
                                         </Box>
                                     </Box>
-                                   <AuthCodeVerification />
+                                   <AuthCodeVerification email={email} />
 
                                 </Stack>
 
