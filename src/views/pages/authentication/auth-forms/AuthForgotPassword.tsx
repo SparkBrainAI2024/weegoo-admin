@@ -20,6 +20,9 @@ import useScriptRef from 'hooks/useScriptRef';
 
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
+import { FORGOT_PASSWORD } from 'graphql/mutations/auth.mutations';
+import { useMutation } from '@apollo/client/react';
+import { ForgotPasswordResponse } from 'types/auth';
 
 // ========================|| FIREBASE - FORGOT PASSWORD ||======================== //
 
@@ -28,8 +31,7 @@ const AuthForgotPassword = ({ ...others }) => {
     const scriptedRef = useScriptRef();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const { isLoggedIn, resetPassword } = useAuth();
+const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
 
     return (
         <Formik
@@ -42,36 +44,30 @@ const AuthForgotPassword = ({ ...others }) => {
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                    await resetPassword(values.email).then(
-                        () => {
-                            setStatus({ success: true });
-                            setSubmitting(false);
-                            dispatch(
-                                openSnackbar({
-                                    open: true,
-                                    message: 'Check mail for reset password link',
-                                    variant: 'alert',
-                                    alert: {
-                                        color: 'success'
-                                    },
-                                    close: false
-                                })
-                            );
-                            setTimeout(() => {
-                                navigate( '/verify-otp', { replace: true });
-                            }, 1500);
-
-                            // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
-                            // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
-                            // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-                            // github issue: https://github.com/formium/formik/issues/2430
-                        },
-                        (err: any) => {
-                            setStatus({ success: false });
-                            setErrors({ submit: err.message });
-                            setSubmitting(false);
-                        }
-                    );
+                      const { data } = await forgotPassword({
+                        variables:{ input: { email: values.email } }
+                    });
+                       if (data?.forgotPassword?.success) {
+                        setStatus({ success: true });
+                        setSubmitting(false);
+                        dispatch(
+                            openSnackbar({
+                                open: true,
+                                message: data.forgotPassword.message || 'Check mail for reset password link',
+                                variant: 'alert',
+                                alert: { color: 'success' },
+                                close: false
+                            })
+                        );
+                        setTimeout(() => {
+                            navigate('/verify-otp', { replace: true });
+                        }, 1500);
+                    } else {
+                        setStatus({ success: false });
+                        setErrors({ submit: data?.forgotPassword?.message || 'Something went wrong' });
+                        setSubmitting(false);
+                    }
+                 
                 } catch (err: any) {
                     console.error(err);
                     if (scriptedRef.current) {

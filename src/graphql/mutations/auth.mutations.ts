@@ -13,3 +13,12 @@ export const SIGN_IN = gql`
   }
 `;
 
+
+export const FORGOT_PASSWORD = gql`
+  mutation adminForgotPassword($input: AdminForgotPasswordInput!) {
+    adminForgotPassword(input: $input) {
+      success
+      message
+    }
+  }
+`;

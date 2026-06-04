@@ -73,3 +73,10 @@ export interface SignInResponse {
         email: string;
     }
 }
+
+export interface ForgotPasswordResponse {
+    forgotPassword: {
+        success: boolean;
+        message: string;
+    };
+}
