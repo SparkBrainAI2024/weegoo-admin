@@ -10,7 +10,7 @@ import { PAGE_TOKEN } from 'constants/pages';
 const AuthCardWrapper = ({ children,page, ...other }: AuthCardWrapperProps) => (
     <MainCard
     sx={{
-        width: { xs: '100%', md: page === PAGE_TOKEN.LOGIN ? '508px' : (page === PAGE_TOKEN.FORGOT_PASSWORD ? '461px' : '300') },
+        width: {  xs: page === PAGE_TOKEN.LOGIN ? '508px' : (page === PAGE_TOKEN.FORGOT_PASSWORD || page === PAGE_TOKEN.VERIFY_OTP ? '461px' : '300') },
         height: { xs: 'auto', md: page === PAGE_TOKEN.LOGIN ? '598px' : (page === PAGE_TOKEN.FORGOT_PASSWORD ? '380px' : '300') },
         overflow: 'hidden'
     }}
@@ -19,7 +19,7 @@ const AuthCardWrapper = ({ children,page, ...other }: AuthCardWrapperProps) => (
         content={false}
         {...other}
     >
-        <Box sx={{ px: { xs: 3, md: 5 },py: { xs: 2, md: "23px" } }}>{children}</Box>
+        <Box sx={{ px: { xs: 3, md: 5 },py: { xs: 2, md: page=== PAGE_TOKEN.FORGOT_PASSWORD || page === PAGE_TOKEN.LOGIN ? '23px' : '31px' } }}>{children}</Box>
     </MainCard>
 );
 

@@ -75,7 +75,7 @@ export interface SignInResponse {
 }
 
 export interface ForgotPasswordResponse {
-    forgotPassword: {
+    adminForgotPassword: {
         success: boolean;
         message: string;
     };

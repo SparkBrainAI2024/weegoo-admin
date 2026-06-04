@@ -12,6 +12,7 @@ import OtpInput from 'react18-input-otp';
 
 // types
 import { ThemeMode } from 'types/config';
+import { Box } from '@mui/material';
 
 // ============================|| STATIC - CODE VERIFICATION ||============================ //
 
@@ -21,43 +22,50 @@ const AuthCodeVerification = () => {
     const borderColor = theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[200] : theme.palette.grey[300];
 
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={12}>
+        <Stack direction="column" alignItems="center" spacing={2} width="100%">
+        <Stack spacing={4}>
                 <OtpInput
-                    value={otp}
-                    onChange={(otpNumber: string) => setOtp(otpNumber)}
-                    numInputs={5}
-                    containerStyle={{ justifyContent: 'space-between' }}
-                    inputStyle={{
-                        width: '100%',
-                        margin: '8px',
-                        padding: '10px',
-                        border: `1px solid ${borderColor}`,
-                        borderRadius: 4,
-                        ':hover': {
-                            borderColor: theme.palette.primary.main
-                        }
-                    }}
-                    focusStyle={{
-                        outline: 'none',
-                        border: `2px solid ${theme.palette.primary.main}`
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Button disableElevation fullWidth size="large" type="submit" variant="contained">
+                value={otp}
+                onChange={(otpNumber: string) => setOtp(otpNumber)}
+                numInputs={5}
+                containerStyle={{
+                    justifyContent: 'space-between',
+                    width: '100%',        // ← fill parent width
+                    gap: '12px'           // ← gap between inputs instead of margin
+                }}
+                inputStyle={{
+                    height: '54px',
+                    fontWeight: 400,
+                    width: '100%',
+                    // padding: '10px',
+                    border: `2px solid ${borderColor}`,
+                    borderRadius: 4,
+                    ':hover': {
+                        borderColor: theme.palette.primary.main
+                    }
+                }}
+                focusStyle={{
+                    outline: 'none',
+                    border: `2px solid ${theme.palette.primary.main}`
+                }}
+            />
+     
+
+                <Button disableElevation fullWidth size="large" type="submit" variant="contained" style={{ height: "46px", color:"#2A2A2A" }}>
                     Verify
                 </Button>
-            </Grid>
-            <Grid item xs={12}>
-                <Stack  justifyContent="space-between" alignItems="baseline">
-                    <Typography textAlign="center">Did not receive the code?</Typography>
-                    <Typography textAlign="center" variant="body1" sx={{ minWidth: 85, ml: 2, textDecoration: 'none', cursor: 'pointer' }} color="primary">
-                        Resend code in
-                    </Typography>
-                </Stack>
-            </Grid>
-        </Grid>
+        </Stack>
+                <Box style={{ fontSize: "16px", fontWeight: 400, lineHeight: "24px",color: '#5B6570' }}>
+                    Did not receive the code?
+
+                </Box>
+                <Box style={{ fontSize: "14px", fontWeight: 400, lineHeight: "21px",color:"#5B6570" }}>
+                    Resend code in 00:28
+                </Box>
+
+            
+
+        </Stack>
     );
 };
 export default AuthCodeVerification;

@@ -47,13 +47,13 @@ const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
                       const { data } = await forgotPassword({
                         variables:{ input: { email: values.email } }
                     });
-                       if (data?.forgotPassword?.success) {
+                       if (data?.adminForgotPassword?.success) {
                         setStatus({ success: true });
                         setSubmitting(false);
                         dispatch(
                             openSnackbar({
                                 open: true,
-                                message: data.forgotPassword.message || 'Check mail for reset password link',
+                                message: data.adminForgotPassword.message || 'Check mail for reset password link',
                                 variant: 'alert',
                                 alert: { color: 'success' },
                                 close: false
@@ -64,7 +64,7 @@ const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
                         }, 1500);
                     } else {
                         setStatus({ success: false });
-                        setErrors({ submit: data?.forgotPassword?.message || 'Something went wrong' });
+                        setErrors({ submit: data?.adminForgotPassword?.message || 'Something went wrong' });
                         setSubmitting(false);
                     }
                  
