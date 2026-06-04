@@ -116,11 +116,17 @@ const AuthResetPassword = ({ ...others }) => {
             }}
         >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate onSubmit={handleSubmit} {...others}>
-                    <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-password-reset">Password</InputLabel>
+                <form noValidate onSubmit={handleSubmit} {...others} style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+    width: '100%'
+}}>
+                    <FormControl fullWidth error={Boolean(touched.password && errors.password)}>
+                        <Box sx={{ fontSize: '14px', fontWeight: 500, color: '##8B949E', mb: '8px' }}>
+                            New Password
+                        </Box>
                         <OutlinedInput
-                            id="outlined-adornment-password-reset"
                             type={showPassword ? 'text' : 'password'}
                             value={values.password}
                             name="password"
@@ -129,10 +135,12 @@ const AuthResetPassword = ({ ...others }) => {
                                 handleChange(e);
                                 changePassword(e.target.value);
                             }}
+                                                        placeholder="Enter new password"
+
+                            fullWidth
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
-                                        aria-label="toggle password visibility"
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDownPassword}
                                         edge="end"
@@ -142,8 +150,10 @@ const AuthResetPassword = ({ ...others }) => {
                                     </IconButton>
                                 </InputAdornment>
                             }
-                            inputProps={{}}
                         />
+                        {touched.password && errors.password && (
+                            <FormHelperText error>{errors.password}</FormHelperText>
+                        )}
                     </FormControl>
                     {touched.password && errors.password && (
                         <FormControl fullWidth>
@@ -176,22 +186,23 @@ const AuthResetPassword = ({ ...others }) => {
                         </FormControl>
                     )}
 
-                    <FormControl
-                        fullWidth
-                        error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-                        sx={{ ...theme.typography.customInput }}
-                    >
-                        <InputLabel htmlFor="outlined-adornment-confirm-password">Confirm Password</InputLabel>
+                    <FormControl fullWidth error={Boolean(touched.confirmPassword && errors.confirmPassword) }>
+                        <Box sx={{ fontSize: '14px', fontWeight: 500, color: '##8B949E', mb: '8px' }}>
+                            Confirm Password
+                        </Box>
                         <OutlinedInput
-                            id="outlined-adornment-confirm-password"
                             type="password"
                             value={values.confirmPassword}
                             name="confirmPassword"
-                            label="Confirm Password"
                             onBlur={handleBlur}
                             onChange={handleChange}
+                            placeholder="Re-enter password"
+                            fullWidth
                             inputProps={{}}
                         />
+                        {touched.confirmPassword && errors.confirmPassword && (
+                            <FormHelperText error>{errors.confirmPassword}</FormHelperText>
+                        )}
                     </FormControl>
 
                     {touched.confirmPassword && errors.confirmPassword && (
@@ -202,12 +213,11 @@ const AuthResetPassword = ({ ...others }) => {
                             </FormHelperText>
                         </FormControl>
                     )}
+                    <Box style={{ fontSize: '12px', color: '##98A2B3' }}>
+                        Must be at least 8 characters 
+                    </Box>
 
-                    {errors.submit && (
-                        <Box sx={{ mt: 3 }}>
-                            <FormHelperText error>{errors.submit}</FormHelperText>
-                        </Box>
-                    )}
+
                     <Box sx={{ mt: 1 }}>
                         <AnimateButton>
                             <Button
@@ -217,7 +227,7 @@ const AuthResetPassword = ({ ...others }) => {
                                 size="large"
                                 type="submit"
                                 variant="contained"
-                                color="secondary"
+                                color="primary"
                             >
                                 Reset Password
                             </Button>

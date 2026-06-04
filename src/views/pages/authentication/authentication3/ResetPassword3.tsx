@@ -13,6 +13,8 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import Logo from 'components/ui-component/Logo';
 import AuthResetPassword from '../auth-forms/AuthResetPassword';
 import AuthFooter from 'components/ui-component/cards/AuthFooter';
+import { Box, Divider } from '@mui/material';
+import { PAGE_TOKEN } from 'constants/pages';
 
 // assets
 
@@ -23,52 +25,30 @@ const ResetPassword = () => {
 
     return (
         <AuthWrapper1>
-            <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
-                <Grid item xs={12}>
-                    <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
-                        <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
-                            <AuthCardWrapper>
-                                <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#" aria-label="theme logo">
-                                            <Logo />
-                                        </Link>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Grid
-                                            container
-                                            direction={{ xs: 'column-reverse', md: 'row' }}
-                                            alignItems="center"
-                                            justifyContent="center"
-                                        >
-                                            <Grid item>
-                                                <Stack alignItems="center" justifyContent="center" spacing={1}>
-                                                    <Typography color="secondary.main" gutterBottom variant={downMD ? 'h3' : 'h2'}>
-                                                        Reset Password
-                                                    </Typography>
-                                                    <Typography
-                                                        variant="caption"
-                                                        fontSize="16px"
-                                                        textAlign={{ xs: 'center', md: 'inherit' }}
-                                                    >
-                                                        Please choose your new password
-                                                    </Typography>
-                                                </Stack>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <AuthResetPassword />
-                                    </Grid>
-                                </Grid>
-                            </AuthCardWrapper>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                    <AuthFooter />
+            <Grid container direction="column" sx={{ minHeight: '100vh' }} justifyContent="center" alignItems="center" >
+                <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
+                    <AuthCardWrapper page={PAGE_TOKEN.RESET_PASSWORD}>
+                        <Stack direction="column" spacing="10px" >
+                        <Box >
+                         
+                                <Box>
+                                    <Box sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600, color: '#2A2A2A' }}>
+                                        Update password
+                                    </Box>
+                                    <Box sx={{ fontSize: '16px', lineHeight: '24px', color: '#4B5565' }}>
+                                        Please enter your new password below                                 </Box>
+                                </Box>
+                            
+                        </Box>
+                                <Divider/>  
+                        <Box >
+                            <AuthResetPassword />
+                        </Box>
+                        </Stack>
+                    </AuthCardWrapper>
                 </Grid>
             </Grid>
+
         </AuthWrapper1>
     );
 };

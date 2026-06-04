@@ -10,8 +10,8 @@ import { PAGE_TOKEN } from 'constants/pages';
 const AuthCardWrapper = ({ children,page, ...other }: AuthCardWrapperProps) => (
     <MainCard
     sx={{
-        width: {  xs: page === PAGE_TOKEN.LOGIN ? '508px' : (page === PAGE_TOKEN.FORGOT_PASSWORD || page === PAGE_TOKEN.VERIFY_OTP ? '461px' : '300') },
-        height: { xs: 'auto', md: page === PAGE_TOKEN.LOGIN ? '598px' : (page === PAGE_TOKEN.FORGOT_PASSWORD ? '380px' : '300') },
+        width: {  xs: page === PAGE_TOKEN.LOGIN || page === PAGE_TOKEN.RESET_PASSWORD ? '508px' : (page === PAGE_TOKEN.FORGOT_PASSWORD || page === PAGE_TOKEN.VERIFY_OTP ? '461px' : '300') },
+        height: { xs: 'auto', md: page === PAGE_TOKEN.LOGIN ? '598px' : (page === PAGE_TOKEN.FORGOT_PASSWORD ? '380px' : (page === PAGE_TOKEN.RESET_PASSWORD ? '427px' : '300')) },
         overflow: 'hidden'
     }}
  
