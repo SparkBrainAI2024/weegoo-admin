@@ -36,7 +36,6 @@ export interface MainCardProps extends KeyedObject {
     shadow?: string;
     elevation?: number;
     title?: React.ReactNode | string;
-    page?: 'login' | 'forgot-password' | string;
 }
 
 export interface AuthCardWrapperProps extends MainCardProps {

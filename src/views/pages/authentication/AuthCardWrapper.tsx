@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 
 // project import
-import MainCard, { AuthCardWrapperProps, MainCardProps } from 'components/ui-component/cards/MainCard';
+import MainCard, { AuthCardWrapperProps } from 'components/ui-component/cards/MainCard';
 import { PAGE_TOKEN } from 'constants/pages';
 const AUTH_CARD_WIDTHS = {
     [PAGE_TOKEN.LOGIN]: '508px',
