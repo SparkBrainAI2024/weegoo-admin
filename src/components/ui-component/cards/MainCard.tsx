@@ -40,7 +40,7 @@ export interface MainCardProps extends KeyedObject {
 }
 
 export interface AuthCardWrapperProps extends MainCardProps {
-    page?: 'login' | 'forgot-password' | string;
+    page: 'login' | 'forgot-password' | 'reset-password' | 'verify-otp' | string;
 }
 
 

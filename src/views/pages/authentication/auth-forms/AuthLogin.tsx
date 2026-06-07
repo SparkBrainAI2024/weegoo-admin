@@ -174,7 +174,6 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                             </Button>
                         </AnimateButton>
                     
-                    <Divider />
                 </form>
             )}
         </Formik>
