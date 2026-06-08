@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import OtpInput from 'react18-input-otp';
 import { ThemeMode } from 'types/config';
-import { Box, Typography } from '@mui/material';
+import { Box, FormHelperText, Typography } from '@mui/material';
 import { AUTH } from 'constants/auth';
 import { useMutation } from '@apollo/client/react';
 import { VERIFY_OTP } from 'graphql/mutations/auth.mutations';
@@ -20,6 +20,7 @@ const AuthCodeVerification = ({ email }: { email: string }) => {
     const [otp, setOtp] = useState<string>();
     const [timer, setTimer] = useState(AUTH.RESEND_CODE_TIME);
     const [canResend, setCanResend] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (timer === 0) { setCanResend(true); return; }
@@ -38,8 +39,9 @@ const AuthCodeVerification = ({ email }: { email: string }) => {
                 navigate(ROUTES.RESET_PASSWORD, { state: { resetPasswordToken: data.adminVerifyOtp.resetPasswordToken } });
             }
         } catch (err: any) {
-            console.error(err);
-        }
+            console.log(err);
+            
+setError(err?.errors?.[0]?.message || err.message);      }
     };
 
     const formatTime = (seconds: number) => {
@@ -64,6 +66,7 @@ const AuthCodeVerification = ({ email }: { email: string }) => {
                     }}
                     focusStyle={{ outline: 'none', border: `2px solid ${theme.palette.primary.main}` }}
                 />
+                {error && <FormHelperText error sx={{ textAlign: 'center' }}>{error}</FormHelperText>}
 
                 <Button disableElevation fullWidth size="large" variant="contained" disabled={!otp || otp.length < 5 || loading} onClick={handleVerify}>
                     {loading ? 'Verifying...' : 'Verify'}
