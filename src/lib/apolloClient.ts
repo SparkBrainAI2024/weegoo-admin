@@ -1,7 +1,9 @@
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, Observable } from "@apollo/client";
+import { ROUTES } from "constants/routes";
+import LocalStorageService from "services/localStorage.service";
 
 const authLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem("serviceToken");
+  const token = LocalStorageService.get("serviceToken");
   operation.setContext({
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
@@ -18,8 +20,10 @@ const errorLink = new ApolloLink((operation, forward) => {
         if (response?.errors) {
           response.errors.forEach((err) => {
             if ((err.extensions as any)?.statusCode === 401) {
-              localStorage.removeItem("serviceToken");
-              window.location.href = "/login";
+              if (window.location.pathname !== ROUTES.LOGIN) {
+                LocalStorageService.remove("serviceToken");
+                window.location.href = ROUTES.LOGIN;
+              }
             }
           });
         }
@@ -36,7 +40,7 @@ const client = new ApolloClient({
   link: ApolloLink.from([
     errorLink,
     authLink,
-    new HttpLink({ uri: import.meta.env.VITE_GRAPHQL_URL  }),
+    new HttpLink({ uri: import.meta.env.VITE_GRAPHQL_URL }),
   ]),
   cache: new InMemoryCache(),
 });
