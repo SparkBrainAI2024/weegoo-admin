@@ -33,3 +33,12 @@ export const VERIFY_OTP = gql`
     }
   }
 `;
+
+export const RESET_PASSWORD = gql`
+  mutation adminResetPassword($input: AdminResetPasswordInput!) {
+    adminResetPassword(input: $input) {
+      success
+      message
+    }
+  }
+`;

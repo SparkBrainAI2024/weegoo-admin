@@ -3,8 +3,7 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { FormikValues, useFormikContext } from "formik";
 import { useState } from "react";
 
-export const PasswordField = <T extends FormikValues>({ name, label }: { name: keyof T, label: string }) => {
-  const formik = useFormikContext<T>();
+export const PasswordField = <T extends FormikValues>({ name, label, onChange }: { name: keyof T, label: string, onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {  const formik = useFormikContext<T>();
   const touched = formik.touched?.[name];
   const error = formik.errors?.[name];
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +16,7 @@ export const PasswordField = <T extends FormikValues>({ name, label }: { name: k
       label={label}
       type={showPassword ? 'text' : 'password'}
       value={formik.values[name]}
-      onChange={formik.handleChange}
+   onChange={onChange || formik.handleChange}
       onBlur={formik.handleBlur}
       error={touched && Boolean(error)}
       helperText={touched && error as string}

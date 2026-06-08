@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // material-ui
 import { Theme } from '@mui/material/styles';
@@ -21,6 +21,8 @@ import { PAGE_TOKEN } from 'constants/pages';
 // ============================|| AUTH3 - RESET PASSWORD ||============================ //
 
 const ResetPassword = () => {
+    const location = useLocation();
+    const resetPasswordToken = (location.state as { resetPasswordToken: string })?.resetPasswordToken;
     return (
         <AuthWrapper1>
             <AuthCardWrapper page={PAGE_TOKEN.RESET_PASSWORD}>
@@ -32,7 +34,7 @@ const ResetPassword = () => {
                         </Typography>
                     </Stack>
                     <Divider />
-                    <AuthResetPassword />
+                    <AuthResetPassword resetPasswordToken={resetPasswordToken} />
                 </Stack>
             </AuthCardWrapper>
         </AuthWrapper1>

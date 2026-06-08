@@ -88,3 +88,10 @@ export interface VerifyOtpResponse {
         resetPasswordToken: string;
     };
 }
+
+export interface ResetPasswordResponse {
+    adminResetPassword: {
+        success: boolean;
+        message: string;
+    };
+}

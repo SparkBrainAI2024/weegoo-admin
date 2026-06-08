@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // material-ui
@@ -33,27 +33,20 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 // types
 import { StringColorProps } from 'types';
+import { ResetPasswordResponse } from 'types/auth';
+import { useMutation } from '@apollo/client/react';
+import { RESET_PASSWORD } from 'graphql/mutations/auth.mutations';
+import { PasswordField } from 'components/ui-component/forms/PasswordField';
+import { Stack } from '@mui/material';
 
 // ========================|| FIREBASE - RESET PASSWORD ||======================== //
 
-const AuthResetPassword = ({ ...others }) => {
-    const theme = useTheme();
+const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string }) => {
     const navigate = useNavigate();
     const scriptedRef = useScriptRef();
-
-    const [showPassword, setShowPassword] = React.useState(false);
-    const [strength, setStrength] = React.useState(0);
-    const [level, setLevel] = React.useState<StringColorProps>();
-
-    const { isLoggedIn } = useAuth();
-
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const handleMouseDownPassword = (event: React.SyntheticEvent) => {
-        event.preventDefault();
-    };
+    const [resetPassword] = useMutation<ResetPasswordResponse>(RESET_PASSWORD);
+    const [strength, setStrength] = useState(0);
+    const [level, setLevel] = useState<StringColorProps>();
 
     const changePassword = (value: string) => {
         const temp = strengthIndicator(value);
@@ -61,52 +54,36 @@ const AuthResetPassword = ({ ...others }) => {
         setLevel(strengthColor(temp));
     };
 
-    useEffect(() => {
-        changePassword('');
-    }, []);
+    useEffect(() => { changePassword(''); }, []);
 
     return (
         <Formik
-            initialValues={{
-                password: '',
-                confirmPassword: '',
-                submit: null
-            }}
+            initialValues={{ password: '', confirmPassword: '', submit: null }}
             validationSchema={Yup.object().shape({
                 password: Yup.string().max(255).required('Password is required'),
                 confirmPassword: Yup.string()
                     .required('Confirm Password is required')
-                    .test(
-                        'confirmPassword',
-                        'Both Password must be match!',
-                        (confirmPassword, yup) => yup.parent.password === confirmPassword
-                    )
+                    .test('confirmPassword', 'Both Password must be match!', (confirmPassword, yup) => yup.parent.password === confirmPassword)
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                    // password reset
-                    if (scriptedRef.current) {
+                    const { data } = await resetPassword({
+                        variables: { input: { newPassword: values.password, resetPasswordToken } }
+                    });
+                    if (data?.adminResetPassword?.success) {
+                        console.log(data);
+                        
                         setStatus({ success: true });
                         setSubmitting(false);
-
-                        dispatch(
-                            openSnackbar({
-                                open: true,
-                                message: 'Successfuly reset password.',
-                                variant: 'alert',
-                                alert: {
-                                    color: 'success'
-                                },
-                                close: false
-                            })
-                        );
-
-                        setTimeout(() => {
-                            navigate(isLoggedIn ? '/auth/login' : '/login', { replace: true });
-                        }, 1500);
+                        dispatch(openSnackbar({ open: true, message: data.adminResetPassword.message || 'Successfully reset password.', variant: 'alert', alert: { color: 'success' }, close: false }));
+                        setTimeout(() => navigate('/login', { replace: true }), 1500);
+                    } else {
+                        setStatus({ success: false });
+                        setErrors({ submit: data?.adminResetPassword?.message || 'Something went wrong' });
+                        setSubmitting(false);
                     }
                 } catch (err: any) {
-                    console.error(err);
+                    console.log(err);
                     if (scriptedRef.current) {
                         setStatus({ success: false });
                         setErrors({ submit: err.message });
@@ -115,124 +92,30 @@ const AuthResetPassword = ({ ...others }) => {
                 }
             }}
         >
-            {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate onSubmit={handleSubmit} {...others} style={{
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
-    width: '100%'
-}}>
-                    <FormControl fullWidth error={Boolean(touched.password && errors.password)}>
-                        <Box sx={{ fontSize: '14px', fontWeight: 500, color: '##8B949E', mb: '8px' }}>
-                            New Password
-                        </Box>
-                        <OutlinedInput
-                            type={showPassword ? 'text' : 'password'}
-                            value={values.password}
-                            name="password"
-                            onBlur={handleBlur}
-                            onChange={(e) => {
-                                handleChange(e);
-                                changePassword(e.target.value);
-                            }}
-                                                        placeholder="Enter new password"
+            {({ errors, handleSubmit, isSubmitting, values, handleChange, handleBlur, touched }) => (
+                <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
 
-                            fullWidth
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                        size="large"
-                                    >
-                                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                        />
-                        {touched.password && errors.password && (
-                            <FormHelperText error>{errors.password}</FormHelperText>
-                        )}
-                    </FormControl>
-                    {touched.password && errors.password && (
-                        <FormControl fullWidth>
-                            <FormHelperText error id="standard-weight-helper-text-reset">
-                                {errors.password}
-                            </FormHelperText>
-                        </FormControl>
-                    )}
+                    <PasswordField name="password" label="New Password" onChange={(e) => { handleChange(e); changePassword(e.target.value); }} />
+
                     {strength !== 0 && (
-                        <FormControl fullWidth>
-                            <Box sx={{ mb: 2 }}>
-                                <Grid container spacing={2} alignItems="center">
-                                    <Grid item>
-                                        <Box
-                                            sx={{
-                                                width: 85,
-                                                height: 8,
-                                                borderRadius: '7px',
-                                                bgcolor: level?.color
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography variant="subtitle1" fontSize="0.75rem">
-                                            {level?.label}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </FormControl>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <Box sx={{ width: 85, height: 8, borderRadius: '7px', bgcolor: level?.color }} />
+                            <Typography variant="subtitle1" fontSize="0.75rem">{level?.label}</Typography>
+                        </Stack>
                     )}
 
-                    <FormControl fullWidth error={Boolean(touched.confirmPassword && errors.confirmPassword) }>
-                        <Box sx={{ fontSize: '14px', fontWeight: 500, color: '##8B949E', mb: '8px' }}>
-                            Confirm Password
-                        </Box>
-                        <OutlinedInput
-                            type="password"
-                            value={values.confirmPassword}
-                            name="confirmPassword"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            placeholder="Re-enter password"
-                            fullWidth
-                            inputProps={{}}
-                        />
-                        {touched.confirmPassword && errors.confirmPassword && (
-                            <FormHelperText error>{errors.confirmPassword}</FormHelperText>
-                        )}
-                    </FormControl>
+                    <PasswordField name="confirmPassword" label="Confirm Password" />
 
-                    {touched.confirmPassword && errors.confirmPassword && (
-                        <FormControl fullWidth>
-                            <FormHelperText error id="standard-weight-helper-text-confirm-password">
-                                {' '}
-                                {errors.confirmPassword}{' '}
-                            </FormHelperText>
-                        </FormControl>
-                    )}
-                    <Box style={{ fontSize: '12px', color: '##98A2B3' }}>
-                        Must be at least 8 characters 
-                    </Box>
+                    <Typography variant="caption" color="text.secondary">Must be at least 8 characters</Typography>
 
+                    {errors.submit && <FormHelperText error>{errors.submit}</FormHelperText>}
 
-                    <Box sx={{ mt: 1 }}>
-                        <AnimateButton>
-                            <Button
-                                disableElevation
-                                disabled={isSubmitting}
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                            >
-                                Reset Password
-                            </Button>
-                        </AnimateButton>
-                    </Box>
+                    <AnimateButton>
+                        <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                            Reset Password
+                        </Button>
+                    </AnimateButton>
+
                 </form>
             )}
         </Formik>
