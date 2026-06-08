@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { FormikValues, useFormikContext } from "formik";
 
-const InputField = <T extends FormikValues>({ name, label, type = 'text' }: { name: keyof T, label: string, type?: string }) => {
+export const InputField = <T extends FormikValues>({ name, label, type = 'text' }: { name: keyof T, label: string, type?: string }) => {
   const formik = useFormikContext<T>();
   const touched = formik.touched?.[name];
   const error = formik.errors?.[name];
