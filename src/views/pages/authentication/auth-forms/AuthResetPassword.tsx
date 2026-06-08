@@ -65,7 +65,7 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
         <Formik
             initialValues={{ password: '', confirmPassword: '', submit: null }}
             validationSchema={Yup.object().shape({
-                password: Yup.string().max(255).required('Password is required'),
+                password: Yup.string().max(255).required('Password is required').min(8, 'Password must be at least 8 characters'),
                 confirmPassword: Yup.string()
                     .required('Confirm Password is required')
                     .test('confirmPassword', 'Both Password must be match!', (confirmPassword, yup) => yup.parent.password === confirmPassword)
@@ -76,7 +76,7 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
                         variables: { input: { newPassword: values.password, resetPasswordToken } }
                     });
                     if (data?.adminResetPassword?.success) {
-                        
+
                         setStatus({ success: true });
                         setSubmitting(false);
                         showSuccess(data.adminResetPassword.message || 'Check mail for reset password link');
@@ -87,42 +87,43 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
                     }
                 } catch (err: any) {
                     if (scriptedRef.current) {
-                    
-                        setSubmitting(false);
-                                        showError(extractApiLevelError(err));
 
+                        setSubmitting(false);
+                        showError(extractApiLevelError(err));
+
+                    }
                 }
-            }}}
+            }}
         >
             {({ errors, handleSubmit, isSubmitting, values, handleChange, handleBlur, touched }) => (
-             <> <NotificationBanner
-                                     open={Boolean(notification.message)}
-                                     message={notification.message}
-                                     onClose={clearNotification}
-                                     severity={notification.severity}
-                                 />   <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
+                <> <NotificationBanner
+                    open={Boolean(notification.message)}
+                    message={notification.message}
+                    onClose={clearNotification}
+                    severity={notification.severity}
+                />   <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
 
-                    <PasswordField name="password" label="New Password" onChange={(e) => { handleChange(e); changePassword(e.target.value); }} />
+                        <PasswordField name="password" label="New Password" onChange={(e) => { handleChange(e); changePassword(e.target.value); }} />
 
-                    {strength !== 0 && (
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <Box sx={{ width: 85, height: 8, borderRadius: '7px', bgcolor: level?.color }} />
-                            <Typography variant="subtitle1" fontSize="0.75rem">{level?.label}</Typography>
-                        </Stack>
-                    )}
+                        {strength !== 0 && (
+                            <Stack direction="row" spacing={2} alignItems="center">
+                                <Box sx={{ width: 85, height: 8, borderRadius: '7px', bgcolor: level?.color }} />
+                                <Typography variant="subtitle1" fontSize="0.75rem">{level?.label}</Typography>
+                            </Stack>
+                        )}
 
-                    <PasswordField name="confirmPassword" label="Confirm Password" />
+                        <PasswordField name="confirmPassword" label="Confirm Password" />
 
-                    <Typography variant="caption" color="text.secondary">Must be at least 8 characters</Typography>
+                        <Typography variant="caption" color="text.secondary">Must be at least 8 characters</Typography>
 
 
-                    <AnimateButton>
-                        <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                            Reset Password
-                        </Button>
-                    </AnimateButton>
+                        <AnimateButton>
+                            <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                                Reset Password
+                            </Button>
+                        </AnimateButton>
 
-                </form></>
+                    </form></>
             )}
         </Formik>
     );
