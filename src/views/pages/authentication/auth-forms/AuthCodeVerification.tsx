@@ -12,6 +12,7 @@ import { useMutation } from '@apollo/client/react';
 import { VERIFY_OTP } from 'graphql/mutations/auth.mutations';
 import { VerifyOtpResponse } from 'types/auth';
 import { useLocation, useNavigate } from 'react-router';
+import { ROUTES } from 'constants/routes';
 
 const AuthCodeVerification = ({ email }: { email: string }) => {
     const theme = useTheme();
@@ -34,7 +35,7 @@ const AuthCodeVerification = ({ email }: { email: string }) => {
         try {
             const { data } = await verifyOtp({ variables: { input: { email, otp: Number(otp) } } });
             if (data?.adminVerifyOtp?.success) {
-                navigate('/reset-password', { state: { resetPasswordToken: data.adminVerifyOtp.resetPasswordToken } });
+                navigate(ROUTES.RESET_PASSWORD, { state: { resetPasswordToken: data.adminVerifyOtp.resetPasswordToken } });
             }
         } catch (err: any) {
             console.error(err);

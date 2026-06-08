@@ -24,6 +24,7 @@ import { FORGOT_PASSWORD } from 'graphql/mutations/auth.mutations';
 import { useMutation } from '@apollo/client/react';
 import { ForgotPasswordResponse } from 'types/auth';
 import { InputField } from 'components/ui-component/forms/InputField';
+import { ROUTES } from 'constants/routes';
 
 // ========================|| FIREBASE - FORGOT PASSWORD ||======================== //
 
@@ -48,7 +49,7 @@ const AuthForgotPassword = ({ ...others }) => {
                         setStatus({ success: true });
                         setSubmitting(false);
                         dispatch(openSnackbar({ open: true, message: data.adminForgotPassword.message || 'Check mail for reset password link', variant: 'alert', alert: { color: 'success' }, close: false }));
-                        navigate('/verify-otp', { state: { email: values.email }, replace: true });
+                        navigate(ROUTES.VERIFY_OTP, { state: { email: values.email }, replace: true });
                     } else {
                         setStatus({ success: false });
                         setErrors({ submit: data?.adminForgotPassword?.message || 'Something went wrong' });
