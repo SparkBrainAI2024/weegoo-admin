@@ -32,7 +32,7 @@ const CodeVerification = () => {
                     <Stack spacing={0.5}>
                         <Typography variant="h3">OTP Verification</Typography>
                         <Typography variant="body1" color="text.secondary">
-                            Enter the 6-digit code we sent to your email
+                            Enter the 5-digit code we sent to your email
                         </Typography>
                     </Stack>
                     <AuthCodeVerification email={email} />
