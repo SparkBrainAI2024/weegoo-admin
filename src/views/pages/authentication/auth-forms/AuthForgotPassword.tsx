@@ -23,55 +23,38 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { FORGOT_PASSWORD } from 'graphql/mutations/auth.mutations';
 import { useMutation } from '@apollo/client/react';
 import { ForgotPasswordResponse } from 'types/auth';
+import { InputField } from 'components/ui-component/forms/InputField';
 
 // ========================|| FIREBASE - FORGOT PASSWORD ||======================== //
 
 const AuthForgotPassword = ({ ...others }) => {
-    const theme = useTheme();
     const scriptedRef = useScriptRef();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
+    const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
 
     return (
         <Formik
-            initialValues={{
-                email: '',
-                submit: null
-            }}
+            initialValues={{ email: '', submit: null }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                      const { data } = await forgotPassword({
-                        variables:{ input: { email: values.email } }
+                    const { data } = await forgotPassword({
+                        variables: { input: { email: values.email } }
                     });
-                       if (data?.adminForgotPassword?.success) {
+                    if (data?.adminForgotPassword?.success) {
                         setStatus({ success: true });
                         setSubmitting(false);
-                        dispatch(
-                            openSnackbar({
-                                open: true,
-                                message: data.adminForgotPassword.message || 'Check mail for reset password link',
-                                variant: 'alert',
-                                alert: { color: 'success' },
-                                close: false
-                            })
-                        );
-                    
-                        navigate('/verify-otp', { 
-    state: { email: values.email },  // <- pass email here
-    replace: true 
-});
+                        dispatch(openSnackbar({ open: true, message: data.adminForgotPassword.message || 'Check mail for reset password link', variant: 'alert', alert: { color: 'success' }, close: false }));
+                        navigate('/verify-otp', { state: { email: values.email }, replace: true });
                     } else {
                         setStatus({ success: false });
                         setErrors({ submit: data?.adminForgotPassword?.message || 'Something went wrong' });
                         setSubmitting(false);
                     }
-                 
                 } catch (err: any) {
-                    console.error(err);
                     if (scriptedRef.current) {
                         setStatus({ success: false });
                         setErrors({ submit: err.message });
@@ -80,52 +63,19 @@ const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
                 }
             }}
         >
-            {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate onSubmit={handleSubmit}  style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        gap: '24px',
-        width: '100%'
-    }} {...others}>
-                    <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-email-forgot">Email Address</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-email-forgot"
-                            type="email"
-                            value={values.email}
-                            name="email"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            label="Email Address / Username"
-                            inputProps={{}}
-                        />
-                        {touched.email && errors.email && (
-                            <FormHelperText error id="standard-weight-helper-text-email-forgot">
-                                {errors.email}
-                            </FormHelperText>
-                        )}
-                    </FormControl>
+            {({ errors, handleSubmit, isSubmitting }) => (
+                <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }} {...others}>
+                    
+                    <InputField name="email" label="Email Address" type="email" />
 
-                    {errors.submit && (
-                        <Box sx={{ mt: 3 }}>
-                            <FormHelperText error>{errors.submit}</FormHelperText>
-                        </Box>
-                    )}
+                    {errors.submit && <FormHelperText error>{errors.submit}</FormHelperText>}
 
-                    <Box sx={{ mt: 2 }}>
-                        <AnimateButton>
-                            <Button
-                                disabled={isSubmitting}
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                            >
-                                Send 
-                            </Button>
-                        </AnimateButton>
-                    </Box>
+                    <AnimateButton>
+                        <Button disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                            Send
+                        </Button>
+                    </AnimateButton>
+
                 </form>
             )}
         </Formik>
