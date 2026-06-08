@@ -22,41 +22,22 @@ import { Box } from '@mui/material';
 // ===========================|| AUTH3 - CODE VERIFICATION ||=========================== //
 
 const CodeVerification = () => {
-    const downMD = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
     const location = useLocation();
     const email = (location.state as { email: string })?.email;
-    console.log(email,"email");
-    
+
     return (
         <AuthWrapper1>
-            <Grid container direction="column" justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
-                <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
-                    <AuthCardWrapper page={PAGE_TOKEN.VERIFY_OTP}>
-                        <Grid container spacing={2} alignItems="center" justifyContent="center">
-
-                            <Grid item>
-                                <Stack direction="column" spacing={4}>
-                                    <Box>
-                                        <Box sx={{ fontSize: '24px', lineHeight: '36px', fontWeight: 600, color: '#2A2A2A' }}>
-                                            OTP Verification
-                                        </Box>
-
-                                        <Box sx={{ fontSize: '16px', lineHeight: '24px', color: '#5B6570' }}>
-                                            Enter the 6-digit code we sent to your email
-                                        </Box>
-                                    </Box>
-                                   <AuthCodeVerification email={email} />
-
-                                </Stack>
-
-                            </Grid>
-
-
-
-                        </Grid>
-                    </AuthCardWrapper>
-                </Grid>
-            </Grid>
+            <AuthCardWrapper page={PAGE_TOKEN.VERIFY_OTP}>
+                <Stack spacing={3}>
+                    <Stack spacing={0.5}>
+                        <Typography variant="h3">OTP Verification</Typography>
+                        <Typography variant="body1" color="text.secondary">
+                            Enter the 6-digit code we sent to your email
+                        </Typography>
+                    </Stack>
+                    <AuthCodeVerification email={email} />
+                </Stack>
+            </AuthCardWrapper>
         </AuthWrapper1>
     );
 };
