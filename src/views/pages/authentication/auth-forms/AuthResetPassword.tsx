@@ -38,6 +38,7 @@ import { useMutation } from '@apollo/client/react';
 import { RESET_PASSWORD } from 'graphql/mutations/auth.mutations';
 import { PasswordField } from 'components/ui-component/forms/PasswordField';
 import { Stack } from '@mui/material';
+import { ROUTES } from 'constants/routes';
 
 // ========================|| FIREBASE - RESET PASSWORD ||======================== //
 
@@ -71,19 +72,17 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
                         variables: { input: { newPassword: values.password, resetPasswordToken } }
                     });
                     if (data?.adminResetPassword?.success) {
-                        console.log(data);
                         
                         setStatus({ success: true });
                         setSubmitting(false);
                         dispatch(openSnackbar({ open: true, message: data.adminResetPassword.message || 'Successfully reset password.', variant: 'alert', alert: { color: 'success' }, close: false }));
-                        setTimeout(() => navigate('/login', { replace: true }), 1500);
+                        setTimeout(() => navigate(ROUTES.LOGIN, { replace: true }), 1500);
                     } else {
                         setStatus({ success: false });
                         setErrors({ submit: data?.adminResetPassword?.message || 'Something went wrong' });
                         setSubmitting(false);
                     }
                 } catch (err: any) {
-                    console.log(err);
                     if (scriptedRef.current) {
                         setStatus({ success: false });
                         setErrors({ submit: err.message });

@@ -2,7 +2,6 @@ export const handleErrors = (error: any, setErrorCallback: (errors: any) => void
     const graphQLErrors = error?.graphQLErrors ?? error?.errors;
 
     if (graphQLErrors?.length > 0) {
-        console.log('showToast', showToast);
         showToast?.(graphQLErrors[0].message);
 
         return;
