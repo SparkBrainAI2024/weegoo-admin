@@ -7,7 +7,6 @@ import LoginRoutes from './LoginRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
 // project import
 import useAuth from 'hooks/useAuth';
-import { LoginTest } from 'views/pages/authentication/authentication3/LoginTest';
 
 
 const RootRedirect = () => {
@@ -20,7 +19,6 @@ const RootRedirect = () => {
 
 const router = createBrowserRouter([
     { path: '/', element: <RootRedirect /> },
-    {path:'/logintest', element: <LoginTest />},
     LoginRoutes,
     MainRoutes,
     AuthenticationRoutes
