@@ -8,6 +8,7 @@ interface NotificationProps {
     onClose: () => void;
 }
 
+
 export default function NotificationBanner({
     open,
     message,

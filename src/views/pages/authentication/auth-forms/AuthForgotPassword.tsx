@@ -27,16 +27,20 @@ import { InputField } from 'components/ui-component/forms/InputField';
 import { ROUTES } from 'constants/routes';
 import { useState } from 'react';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
+import { SeverityEnum } from 'types/enum';
+import useNotification from 'hooks/useNotification';
+import { extractApiLevelError } from 'lib/apiError';
 
 // ========================|| FIREBASE - FORGOT PASSWORD ||======================== //
 
 const AuthForgotPassword = ({ ...others }) => {
-    const scriptedRef = useScriptRef();
-    const dispatch = useDispatch();
+    const { notification, showSuccess, showError, clearNotification } = useNotification();
+
+
     const navigate = useNavigate();
     const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
 
-    const [errorMessage, setErrorMessage] = useState('');
+    const [responseObject, setResponseObject] = useState({ message: "", severity: SeverityEnum.INFO });
     return (
         <Formik
             initialValues={{ email: '', submit: null }}
@@ -51,34 +55,35 @@ const AuthForgotPassword = ({ ...others }) => {
                     if (data?.adminForgotPassword?.success) {
                         setStatus({ success: true });
                         setSubmitting(false);
-                        dispatch(openSnackbar({ open: true, message: data.adminForgotPassword.message || 'Check mail for reset password link', variant: 'alert', alert: { color: 'success' }, close: false }));
-                        navigate(ROUTES.VERIFY_OTP, { state: { email: values.email }, replace: true });
+                        showSuccess(data.adminForgotPassword.message || 'Check mail for reset password link');
+
+                        setTimeout(() => navigate(ROUTES.VERIFY_OTP, { state: { email: values.email }, replace: true }), 1500);
+
                     } else {
                         setStatus({ success: false });
                         setErrors({ submit: data?.adminForgotPassword?.message || 'Something went wrong' });
                         setSubmitting(false);
+
+
                     }
                 } catch (err: any) {
 
-                    if (scriptedRef.current) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
-                        setSubmitting(false);
-                    }
-                    
-                    const message = err.errors?.[0]?.message;
-                     
 
-                    setErrorMessage(message);
+                    setSubmitting(false);
+
+
+                    showError(extractApiLevelError(err));
+
                 }
             }}
         >
             {({ errors, handleSubmit, isSubmitting }) => (
                 <>
                     <NotificationBanner
-                        open={Boolean(errorMessage)}
-                        message={errorMessage}
-                        onClose={() => setErrorMessage('')}
+                        open={Boolean(notification.message)}
+                        message={notification.message}
+                        onClose={clearNotification}
+                        severity={notification.severity}
                     />
                     <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }} {...others}>
 

@@ -20,3 +20,10 @@ export const handleErrors = (error: any, setErrorCallback: (errors: any) => void
         }
     }
 };
+
+// utils/apiError.ts
+export const extractApiLevelError = (err: any): string =>
+    err?.errors?.[0]?.extensions?.message
+    || err?.graphQLErrors?.[0]?.message
+    || err?.networkError?.message
+    || 'Something went wrong';
