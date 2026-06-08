@@ -16,12 +16,12 @@ import * as Yup from "yup";
 
     return (
         <Formik
-            initialValues={{ email: '', password: '' }}
+            initialValues={{ email: '', password: '',submit: null }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                 password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={async (values, { setStatus, setSubmitting }) => {
+            onSubmit={async (values, { setStatus, setSubmitting, setErrors }) => {
                 try {
                     await login(values.email, values.password);
                     if (scriptedRef.current) {
@@ -33,6 +33,7 @@ import * as Yup from "yup";
                         setStatus({ success: false });
                         setSubmitting(false);
                     }
+                    setErrors({ submit: err.message });
                 }
             }}
         >
