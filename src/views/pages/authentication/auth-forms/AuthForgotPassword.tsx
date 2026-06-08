@@ -25,6 +25,8 @@ import { useMutation } from '@apollo/client/react';
 import { ForgotPasswordResponse } from 'types/auth';
 import { InputField } from 'components/ui-component/forms/InputField';
 import { ROUTES } from 'constants/routes';
+import { useState } from 'react';
+import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 
 // ========================|| FIREBASE - FORGOT PASSWORD ||======================== //
 
@@ -34,6 +36,7 @@ const AuthForgotPassword = ({ ...others }) => {
     const navigate = useNavigate();
     const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
 
+    const [errorMessage, setErrorMessage] = useState('');
     return (
         <Formik
             initialValues={{ email: '', submit: null }}
@@ -56,28 +59,39 @@ const AuthForgotPassword = ({ ...others }) => {
                         setSubmitting(false);
                     }
                 } catch (err: any) {
+
                     if (scriptedRef.current) {
                         setStatus({ success: false });
                         setErrors({ submit: err.message });
                         setSubmitting(false);
                     }
+                    
+                    const message = err.errors?.[0]?.message;
+                     
+
+                    setErrorMessage(message);
                 }
             }}
         >
             {({ errors, handleSubmit, isSubmitting }) => (
-                <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }} {...others}>
-                    
-                    <InputField name="email" label="Email Address" type="email" />
+                <>
+                    <NotificationBanner
+                        open={Boolean(errorMessage)}
+                        message={errorMessage}
+                        onClose={() => setErrorMessage('')}
+                    />
+                    <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }} {...others}>
 
-                    {errors.submit && <FormHelperText error>{errors.submit}</FormHelperText>}
+                        <InputField name="email" label="Email Address" type="email" />
 
-                    <AnimateButton>
-                        <Button disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                            Send
-                        </Button>
-                    </AnimateButton>
 
-                </form>
+                        <AnimateButton>
+                            <Button disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                                Send
+                            </Button>
+                        </AnimateButton>
+
+                    </form></>
             )}
         </Formik>
     );

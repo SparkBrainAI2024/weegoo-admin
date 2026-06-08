@@ -2,6 +2,7 @@ import { Button, Checkbox, FormControlLabel, FormHelperText, Grid, Stack, Typogr
 import AnimateButton from "components/ui-component/extended/AnimateButton";
 import { InputField } from "components/ui-component/forms/InputField";
 import { PasswordField } from "components/ui-component/forms/PasswordField";
+import NotificationBanner from "components/ui-component/snackbar/AppSnackBar";
 import { Formik } from "formik";
 import useAuth from "hooks/useAuth";
 import useScriptRef from "hooks/useScriptRef";
@@ -11,14 +12,15 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 
- const JWTLogin = ({ loginProp }: { loginProp?: number }) => {
+const JWTLogin = ({ loginProp }: { loginProp?: number }) => {
     const { login } = useAuth();
     const scriptedRef = useScriptRef();
     const [checked, setChecked] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
     return (
         <Formik
-            initialValues={{ email: '', password: '',submit: null }}
+            initialValues={{ email: '', password: '', submit: null }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                 password: Yup.string().max(255).required('Password is required')
@@ -35,14 +37,25 @@ import * as Yup from "yup";
                         setStatus({ success: false });
                         setSubmitting(false);
                     }
-                            setSubmitting(false);
-                    handleErrors(err, setErrors, showErrorToast);
-                
-                    setErrors({ submit: err.message });
+
+                    handleErrors(err, setErrors);
+
+                    const message =
+                        err?.response?.data?.message ||
+                        err?.message ||
+                        '';
+
+                    setErrorMessage(message);
                 }
             }}
         >
-            {({errors, handleSubmit, isSubmitting }) => (
+            {({ errors, handleSubmit, isSubmitting }) => (<>
+                <NotificationBanner
+                    open={Boolean(errorMessage)}
+                    message={errorMessage}
+                    onClose={() => setErrorMessage('')}
+                />
+
                 <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
 
                     <InputField name="email" label="Email Address" type="email" />
@@ -57,7 +70,6 @@ import * as Yup from "yup";
                             Forgot Password?
                         </Typography>
                     </Stack>
-                    {errors.submit && <FormHelperText error>{errors.submit}</FormHelperText>}
 
                     <AnimateButton>
                         <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
@@ -66,6 +78,7 @@ import * as Yup from "yup";
                     </AnimateButton>
 
                 </form>
+            </>
             )}
         </Formik>
     );
