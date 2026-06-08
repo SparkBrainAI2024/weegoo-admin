@@ -39,6 +39,9 @@ import { RESET_PASSWORD } from 'graphql/mutations/auth.mutations';
 import { PasswordField } from 'components/ui-component/forms/PasswordField';
 import { Stack } from '@mui/material';
 import { ROUTES } from 'constants/routes';
+import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
+import useNotification from 'hooks/useNotification';
+import { extractApiLevelError } from 'lib/apiError';
 
 // ========================|| FIREBASE - RESET PASSWORD ||======================== //
 
@@ -48,6 +51,7 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
     const [resetPassword] = useMutation<ResetPasswordResponse>(RESET_PASSWORD);
     const [strength, setStrength] = useState(0);
     const [level, setLevel] = useState<StringColorProps>();
+    const { notification, showSuccess, showError, clearNotification } = useNotification();
 
     const changePassword = (value: string) => {
         const temp = strengthIndicator(value);
@@ -75,24 +79,28 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
                         
                         setStatus({ success: true });
                         setSubmitting(false);
-                        dispatch(openSnackbar({ open: true, message: data.adminResetPassword.message || 'Successfully reset password.', variant: 'alert', alert: { color: 'success' }, close: false }));
+                        showSuccess(data.adminResetPassword.message || 'Check mail for reset password link');
                         setTimeout(() => navigate(ROUTES.LOGIN, { replace: true }), 1500);
                     } else {
                         setStatus({ success: false });
-                        setErrors({ submit: data?.adminResetPassword?.message || 'Something went wrong' });
                         setSubmitting(false);
                     }
                 } catch (err: any) {
                     if (scriptedRef.current) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
+                    
                         setSubmitting(false);
-                    }
+                                        showError(extractApiLevelError(err));
+
                 }
-            }}
+            }}}
         >
             {({ errors, handleSubmit, isSubmitting, values, handleChange, handleBlur, touched }) => (
-                <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
+             <> <NotificationBanner
+                                     open={Boolean(notification.message)}
+                                     message={notification.message}
+                                     onClose={clearNotification}
+                                     severity={notification.severity}
+                                 />   <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
 
                     <PasswordField name="password" label="New Password" onChange={(e) => { handleChange(e); changePassword(e.target.value); }} />
 
@@ -107,7 +115,6 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
 
                     <Typography variant="caption" color="text.secondary">Must be at least 8 characters</Typography>
 
-                    {errors.submit && <FormHelperText error>{errors.submit}</FormHelperText>}
 
                     <AnimateButton>
                         <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
@@ -115,7 +122,7 @@ const AuthResetPassword = ({ resetPasswordToken }: { resetPasswordToken: string 
                         </Button>
                     </AnimateButton>
 
-                </form>
+                </form></>
             )}
         </Formik>
     );

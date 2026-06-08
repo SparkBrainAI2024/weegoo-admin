@@ -40,7 +40,6 @@ const AuthForgotPassword = ({ ...others }) => {
     const navigate = useNavigate();
     const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
 
-    const [responseObject, setResponseObject] = useState({ message: "", severity: SeverityEnum.INFO });
     return (
         <Formik
             initialValues={{ email: '', submit: null }}
