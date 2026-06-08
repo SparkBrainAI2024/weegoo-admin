@@ -1,10 +1,12 @@
-import { Button, Checkbox, FormControlLabel, Grid, Stack, Typography } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, FormHelperText, Grid, Stack, Typography } from "@mui/material";
 import AnimateButton from "components/ui-component/extended/AnimateButton";
 import { InputField } from "components/ui-component/forms/InputField";
 import { PasswordField } from "components/ui-component/forms/PasswordField";
 import { Formik } from "formik";
 import useAuth from "hooks/useAuth";
 import useScriptRef from "hooks/useScriptRef";
+import { handleErrors } from "lib/apiError";
+import { showErrorToast } from "lib/utils/toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
@@ -33,11 +35,14 @@ import * as Yup from "yup";
                         setStatus({ success: false });
                         setSubmitting(false);
                     }
+                            setSubmitting(false);
+                    handleErrors(err, setErrors, showErrorToast);
+                
                     setErrors({ submit: err.message });
                 }
             }}
         >
-            {({ handleSubmit, isSubmitting }) => (
+            {({errors, handleSubmit, isSubmitting }) => (
                 <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
 
                     <InputField name="email" label="Email Address" type="email" />
@@ -52,6 +57,7 @@ import * as Yup from "yup";
                             Forgot Password?
                         </Typography>
                     </Stack>
+                    {errors.submit && <FormHelperText error>{errors.submit}</FormHelperText>}
 
                     <AnimateButton>
                         <Button color="primary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
