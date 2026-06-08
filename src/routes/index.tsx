@@ -5,10 +5,9 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainRoutes from './MainRoutes';
 import LoginRoutes from './LoginRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
-
 // project import
-import Loadable from 'components/ui-component/Loadable';
 import useAuth from 'hooks/useAuth';
+import { LoginTest } from 'views/pages/authentication/authentication3/LoginTest';
 
 
 const RootRedirect = () => {
@@ -21,6 +20,7 @@ const RootRedirect = () => {
 
 const router = createBrowserRouter([
     { path: '/', element: <RootRedirect /> },
+    {path:'/logintest', element: <LoginTest />},
     LoginRoutes,
     MainRoutes,
     AuthenticationRoutes

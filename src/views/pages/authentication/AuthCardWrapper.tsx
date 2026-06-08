@@ -26,8 +26,7 @@ const AuthCardWrapper = ({ children, page, ...other }: AuthCardWrapperProps) => 
             {...other}
         >
             <Box sx={{
-                px: { xs: 3, md: 5 },
-                py: { xs: 2, md: 4 }
+                p: { xs: 2, md: 5 },
             }}>
                 {children}
             </Box>

@@ -8,7 +8,10 @@ import { ThemeMode } from 'types/config';
 
 const AuthWrapper1 = styled('div')(({ theme }) => ({
     backgroundColor:  "#CDE0C7" ,
-    minHeight: '100vh'
+    minHeight: '100vh',
+    display: 'flex',
+alignItems: 'center',
+justifyContent: 'center',
 }));
 
 export default AuthWrapper1;
