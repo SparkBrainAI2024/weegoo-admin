@@ -9,10 +9,12 @@ import { ThemeMode } from 'types/config';
 import { Box, FormHelperText, Typography } from '@mui/material';
 import { AUTH } from 'constants/auth';
 import { useMutation } from '@apollo/client/react';
-import { VERIFY_OTP } from 'graphql/mutations/auth.mutations';
-import { VerifyOtpResponse } from 'types/auth';
+import { FORGOT_PASSWORD, VERIFY_OTP } from 'graphql/mutations/auth.mutations';
+import { ForgotPasswordResponse, VerifyOtpResponse } from 'types/auth';
 import { useLocation, useNavigate } from 'react-router';
 import { ROUTES } from 'constants/routes';
+import { useDispatch } from 'store';
+import { openSnackbar } from 'store/slices/snackbar';
 
 const AuthCodeVerification = ({ email }: { email: string }) => {
     const theme = useTheme();
@@ -21,6 +23,11 @@ const AuthCodeVerification = ({ email }: { email: string }) => {
     const [timer, setTimer] = useState(AUTH.RESEND_CODE_TIME);
     const [canResend, setCanResend] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch();
+
+
+    const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
+    const [verifyOtp, { loading }] = useMutation<VerifyOtpResponse>(VERIFY_OTP);
 
     useEffect(() => {
         if (timer === 0) { setCanResend(true); return; }
@@ -28,20 +35,36 @@ const AuthCodeVerification = ({ email }: { email: string }) => {
         return () => clearInterval(interval);
     }, [timer]);
 
-    const handleResend = () => { setTimer(AUTH.RESEND_CODE_TIME); setCanResend(false); };
+    const handleResend = async () => {
+        setTimer(AUTH.RESEND_CODE_TIME);
+        setCanResend(false);
+        try {
+            const { data } = await forgotPassword({ variables: { input: { email } } });
+            dispatch(openSnackbar({ open: true, message: data?.adminForgotPassword?.message || 'Check mail for reset password link', variant: 'alert', alert: { color: 'success' }, close: false }));
 
-    const [verifyOtp, { loading }] = useMutation<VerifyOtpResponse>(VERIFY_OTP);
+            if (!data?.adminForgotPassword?.success) {
+                setError(data?.adminForgotPassword?.message || 'Something went wrong');
+            }
+        } catch (err: any) {
+            setError(err?.errors?.[0]?.message || err.message);
+        }
+    };
 
     const handleVerify = async () => {
         try {
             const { data } = await verifyOtp({ variables: { input: { email, otp: Number(otp) } } });
             if (data?.adminVerifyOtp?.success) {
-                navigate(ROUTES.RESET_PASSWORD, { state: { resetPasswordToken: data.adminVerifyOtp.resetPasswordToken } });
+                dispatch(openSnackbar({ open: true, message: data?.adminVerifyOtp?.message, variant: 'alert', alert: { color: 'success' }, close: false }));
+
+                setTimeout(() => {
+                    navigate(ROUTES.RESET_PASSWORD, { state: { resetPasswordToken: data.adminVerifyOtp.resetPasswordToken } });
+                }, 1500);
+            } else {
+                setError(data?.adminVerifyOtp?.message || 'Something went wrong');
             }
         } catch (err: any) {
-            console.log(err);
-            
-setError(err?.errors?.[0]?.message || err.message);      }
+            setError(err?.graphQLErrors?.[0]?.message || err.message);
+        }
     };
 
     const formatTime = (seconds: number) => {
