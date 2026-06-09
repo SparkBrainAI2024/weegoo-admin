@@ -9,6 +9,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
+import logo from "../../../assets/images/logo.png"
 
 // project import
 import navigation from 'menu-items';
@@ -21,6 +22,7 @@ import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 
 // types
 import { NavItemType, OverrideIcon } from 'types';
+import { Stack } from '@mui/material';
 
 interface BreadcrumbLinkProps {
     title: string;
@@ -30,14 +32,17 @@ interface BreadcrumbLinkProps {
 
 // ==============================|| BREADCRUMBS TITLE ||============================== //
 
-const BTitle = ({ title }: { title: string }) => {
-    return (
-        <Grid item>
+const BTitle = ({ title, icon }: { title: string, icon?: any }) => {
+    const Icon = icon;
+    return <Grid item>
+        <Stack direction="row" alignItems="center" spacing={1}>
+            {Icon && <Icon stroke={1.5} size="24px" />}
             <Typography variant="h3" sx={{ fontWeight: 500 }}>
                 {title}
             </Typography>
-        </Grid>
-    );
+        </Stack>
+    </Grid>
+
 };
 
 // ==============================|| BREADCRUMBS ||============================== //
@@ -178,7 +183,7 @@ const Breadcrumbs = ({
                         alignItems={rightAlign ? 'center' : 'flex-start'}
                         spacing={1}
                     >
-                        {title && !titleBottom && <BTitle title={main.title as string} />}
+                        {title && !titleBottom && <BTitle title={main.title as string} icon={logo} />}
                         <Grid item>
                             <MuiBreadcrumbs
                                 aria-label="breadcrumb"
@@ -274,8 +279,8 @@ const Breadcrumbs = ({
                             alignItems={rightAlign ? 'center' : 'flex-start'}
                             spacing={1}
                         >
-                            {title && !titleBottom && <BTitle title={custom ? (heading as string) : (item?.title as string)} />}
-                            <Grid item>{tempContent}</Grid>
+
+                            {title && !titleBottom && <BTitle title={custom ? (heading as string) : (item?.title as string)} icon={item?.icon} />}                            <Grid item>{tempContent}</Grid>
                             {title && titleBottom && <BTitle title={custom ? (heading as string) : (item?.title as string)} />}
                         </Grid>
                     </Box>
