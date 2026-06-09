@@ -83,7 +83,7 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
         }
     };
 
-    const iconSelectedColor = mode === ThemeMode.DARK && drawerOpen ? 'text.primary' : '#ffffff';
+    const iconSelectedColor = mode === ThemeMode.DARK && drawerOpen ? 'text.primary' : '#E5E2E2';
 
     return (
         <>
@@ -103,14 +103,14 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                             level === 1 &&
                             mode !== ThemeMode.DARK && {
                             '&:hover': {
-                                color: '#ffffff',
+                                color: '#E5E2E2',
                                 bgcolor: '#4caf50'
                             },
                             '&.Mui-selected': {
                                 bgcolor: '#4caf50',
-                                color: '#ffffff',
+                                color: '#E5E2E2',
                                 '&:hover': {
-                                    color: '#ffffff',
+                                    color: '#E5E2E2',
                                     bgcolor: '#4caf50'
                                 }
                             }
@@ -118,15 +118,15 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                         ...((!drawerOpen || level !== 1) && {
                             py: level === 1 ? 0 : 1,
                             '&:hover': {
-                                color: '#ffffff',
+                                color: '#E5E2E2',
                                 bgcolor: '#4caf50'
                             },
                             '&.Mui-selected': {
                                 '&:hover': {
-                                    color: '#ffffff',
+                                    color: '#E5E2E2',
                                     bgcolor: '#4caf50'
                                 },
-                                color: '#ffffff',
+                                color: '#E5E2E2',
                                 bgcolor: '#4caf50'
                             }
                         })
@@ -141,7 +141,7 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                         <ListItemIcon
                             sx={{
                                 minWidth: level === 1 ? 36 : 18,
-                                color: isSelected ? iconSelectedColor : '#ffffff',
+                                color: isSelected ? iconSelectedColor : '#E5E2E2',
                                 ...(!drawerOpen &&
                                     level === 1 && {
                                     borderRadius: `${borderRadius}px`,
@@ -161,10 +161,10 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                                         }
                                     })
                                 }),
-                                 '& svg': {
-            color: '#ffffff'  // ← force icon color directly
-        },
-                                
+                                '& svg': {
+                                    color: '#E5E2E2'  // ← force icon color directly
+                                },
+
                             }}
                         >
 
@@ -187,7 +187,7 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                                         overflow="hidden"
                                         textOverflow="ellipsis"
                                         variant={isSelected ? 'h5' : 'body1'}
-                                        color="#ffffff"
+                                        color="#E5E2E2"
                                         width={102}
                                     >
                                         {item.title}

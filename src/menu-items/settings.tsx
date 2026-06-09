@@ -8,7 +8,7 @@ import { NavItemType } from 'types';
 
 const settings: NavItemType = {
     id: 'group-settings',
-    title: 'Settings',
+    title: 'SETTINGS',
     type: 'group',
     children: [
         {

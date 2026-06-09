@@ -8,7 +8,7 @@ import { NavItemType } from 'types';
 
 const users: NavItemType = {
     id: 'group-users',
-    title: 'Users',
+    title: 'USERS',
     type: 'group',
     children: [
         {

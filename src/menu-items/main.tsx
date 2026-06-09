@@ -8,7 +8,7 @@ import { NavItemType } from 'types';
 
 const main: NavItemType = {
     id: 'group-main',
-    title: 'Main',
+    title: 'MAIN',
     type: 'group',
     children: [
         {

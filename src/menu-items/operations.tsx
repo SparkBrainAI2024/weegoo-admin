@@ -8,7 +8,7 @@ import { NavItemType } from 'types';
 
 const operations: NavItemType = {
     id: 'group-operations',
-    title: 'Operations',
+    title: 'OPERATIONS',
     type: 'group',
     children: [
         {
