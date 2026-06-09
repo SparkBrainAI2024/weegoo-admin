@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // material-ui
 import { Theme } from '@mui/material/styles';
@@ -13,62 +13,30 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import Logo from 'components/ui-component/Logo';
 import AuthResetPassword from '../auth-forms/AuthResetPassword';
 import AuthFooter from 'components/ui-component/cards/AuthFooter';
+import { Box, Divider } from '@mui/material';
+import { PAGE_TOKEN } from 'constants/pages';
 
 // assets
 
 // ============================|| AUTH3 - RESET PASSWORD ||============================ //
 
 const ResetPassword = () => {
-    const downMD = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
-
+    const location = useLocation();
+    const resetPasswordToken = (location.state as { resetPasswordToken: string })?.resetPasswordToken;
     return (
         <AuthWrapper1>
-            <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
-                <Grid item xs={12}>
-                    <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
-                        <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
-                            <AuthCardWrapper>
-                                <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#" aria-label="theme logo">
-                                            <Logo />
-                                        </Link>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Grid
-                                            container
-                                            direction={{ xs: 'column-reverse', md: 'row' }}
-                                            alignItems="center"
-                                            justifyContent="center"
-                                        >
-                                            <Grid item>
-                                                <Stack alignItems="center" justifyContent="center" spacing={1}>
-                                                    <Typography color="secondary.main" gutterBottom variant={downMD ? 'h3' : 'h2'}>
-                                                        Reset Password
-                                                    </Typography>
-                                                    <Typography
-                                                        variant="caption"
-                                                        fontSize="16px"
-                                                        textAlign={{ xs: 'center', md: 'inherit' }}
-                                                    >
-                                                        Please choose your new password
-                                                    </Typography>
-                                                </Stack>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <AuthResetPassword />
-                                    </Grid>
-                                </Grid>
-                            </AuthCardWrapper>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                    <AuthFooter />
-                </Grid>
-            </Grid>
+            <AuthCardWrapper page={PAGE_TOKEN.RESET_PASSWORD}>
+                <Stack spacing={3}>
+                    <Stack spacing={0.5}>
+                        <Typography variant="h3">Update password</Typography>
+                        <Typography variant="body1" color="text.secondary">
+                            Please enter your new password below
+                        </Typography>
+                    </Stack>
+                    <Divider />
+                    <AuthResetPassword resetPasswordToken={resetPasswordToken} />
+                </Stack>
+            </AuthCardWrapper>
         </AuthWrapper1>
     );
 };

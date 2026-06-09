@@ -2,7 +2,6 @@ export const handleErrors = (error: any, setErrorCallback: (errors: any) => void
     const graphQLErrors = error?.graphQLErrors ?? error?.errors;
 
     if (graphQLErrors?.length > 0) {
-        console.log('showToast', showToast);
         showToast?.(graphQLErrors[0].message);
 
         return;
@@ -21,3 +20,10 @@ export const handleErrors = (error: any, setErrorCallback: (errors: any) => void
         }
     }
 };
+
+// utils/apiError.ts
+export const extractApiLevelError = (err: any): string =>
+    err?.errors?.[0]?.extensions?.message
+    || err?.graphQLErrors?.[0]?.message
+    || err?.networkError?.message
+    || 'Something went wrong';

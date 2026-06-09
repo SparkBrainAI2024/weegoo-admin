@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // material-ui
 import { Theme } from '@mui/material/styles';
@@ -16,61 +16,28 @@ import Logo from 'components/ui-component/Logo';
 import AnimateButton from 'components/ui-component/extended/AnimateButton';
 import AuthCodeVerification from '../auth-forms/AuthCodeVerification';
 import AuthFooter from 'components/ui-component/cards/AuthFooter';
+import { PAGE_TOKEN } from 'constants/pages';
+import { Box } from '@mui/material';
 
 // ===========================|| AUTH3 - CODE VERIFICATION ||=========================== //
 
 const CodeVerification = () => {
-    const downMD = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+    const location = useLocation();
+    const email = (location.state as { email: string })?.email;
 
     return (
         <AuthWrapper1>
-            <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
-                <Grid item xs={12}>
-                    <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
-                        <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
-                            <AuthCardWrapper>
-                                <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    
-                                    <Grid item xs={12}>
-                                        <Grid
-                                            container
-                                            direction={downMD ? 'column-reverse' : 'row'}
-                                            alignItems="center"
-                                            justifyContent="center"
-                                        >
-                                            <Grid item>
-                                                <Stack alignItems="center" justifyContent="center" spacing={1}>
-                                                    <Typography color="text.primary" gutterBottom variant={downMD ? 'h3' : 'h2'}>
-                                                        OTP Verification
-                                                    </Typography>
-                                                    
-                                                    <Typography
-                                                        variant="caption"
-                                                        fontSize="0.875rem"
-                                                        textAlign={downMD ? 'center' : 'inherit'}
-                                                    >
-                                                        Enter the code we sent to your email
-                                                    </Typography>
-                                                </Stack>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <AuthCodeVerification />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Divider />
-                                    </Grid>
-                                 
-                                </Grid>
-                            </AuthCardWrapper>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                    <AuthFooter />
-                </Grid>
-            </Grid>
+            <AuthCardWrapper page={PAGE_TOKEN.VERIFY_OTP}>
+                <Stack spacing={3}>
+                    <Stack spacing={0.5}>
+                        <Typography variant="h3">OTP Verification</Typography>
+                        <Typography variant="body1" color="text.secondary">
+                            Enter the 5-digit code we sent to your email
+                        </Typography>
+                    </Stack>
+                    <AuthCodeVerification email={email} />
+                </Stack>
+            </AuthCardWrapper>
         </AuthWrapper1>
     );
 };

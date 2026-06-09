@@ -2,23 +2,36 @@
 import Box from '@mui/material/Box';
 
 // project import
-import MainCard, { MainCardProps } from 'components/ui-component/cards/MainCard';
+import MainCard, { AuthCardWrapperProps } from 'components/ui-component/cards/MainCard';
+import { PAGE_TOKEN } from 'constants/pages';
+const AUTH_CARD_WIDTHS = {
+    [PAGE_TOKEN.LOGIN]: '508px',
+    [PAGE_TOKEN.RESET_PASSWORD]: '508px',
+    [PAGE_TOKEN.FORGOT_PASSWORD]: '461px',
+    [PAGE_TOKEN.VERIFY_OTP]: '461px',
+};
+
 
 // ==============================|| AUTHENTICATION CARD WRAPPER ||============================== //
 
-const AuthCardWrapper = ({ children, ...other }: MainCardProps) => (
-    <MainCard
-        sx={{
-            width: { xs: '100%', md: 508 },
-            minWidth: 300,
-            height: { xs: 'auto', md: 598 }
+const AuthCardWrapper = ({ children, page, ...other }: AuthCardWrapperProps) => {
+    const width = AUTH_CARD_WIDTHS[page] ?? '360px';
 
-        }}
-        content={false}
-        {...other}
-    >
-        <Box sx={{ p: { xs: 3, md: 5 } }}>{children}</Box>
-    </MainCard>
-);
+    return (
+        <MainCard
+            sx={{
+                width: { xs: '100%', sm: width },
+            }}
+            content={false}
+            {...other}
+        >
+            <Box sx={{
+                p: { xs: 2, md: 5 },
+            }}>
+                {children}
+            </Box>
+        </MainCard>
+    );
+};
 
 export default AuthCardWrapper;

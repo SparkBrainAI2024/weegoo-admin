@@ -20,111 +20,82 @@ import useScriptRef from 'hooks/useScriptRef';
 
 import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
+import { FORGOT_PASSWORD } from 'graphql/mutations/auth.mutations';
+import { useMutation } from '@apollo/client/react';
+import { ForgotPasswordResponse } from 'types/auth';
+import { InputField } from 'components/ui-component/forms/InputField';
+import { ROUTES } from 'constants/routes';
+import { useState } from 'react';
+import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
+import { SeverityEnum } from 'types/enum';
+import useNotification from 'hooks/useNotification';
+import { extractApiLevelError } from 'lib/apiError';
 
 // ========================|| FIREBASE - FORGOT PASSWORD ||======================== //
 
 const AuthForgotPassword = ({ ...others }) => {
-    const theme = useTheme();
-    const scriptedRef = useScriptRef();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const { notification, showSuccess, showError, clearNotification } = useNotification();
 
-    const { isLoggedIn, resetPassword } = useAuth();
+
+    const navigate = useNavigate();
+    const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
 
     return (
         <Formik
-            initialValues={{
-                email: '',
-                submit: null
-            }}
+            initialValues={{ email: '', submit: null }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
-                    await resetPassword(values.email).then(
-                        () => {
-                            setStatus({ success: true });
-                            setSubmitting(false);
-                            dispatch(
-                                openSnackbar({
-                                    open: true,
-                                    message: 'Check mail for reset password link',
-                                    variant: 'alert',
-                                    alert: {
-                                        color: 'success'
-                                    },
-                                    close: false
-                                })
-                            );
-                            setTimeout(() => {
-                                navigate( '/verify-otp', { replace: true });
-                            }, 1500);
-
-                            // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
-                            // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
-                            // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-                            // github issue: https://github.com/formium/formik/issues/2430
-                        },
-                        (err: any) => {
-                            setStatus({ success: false });
-                            setErrors({ submit: err.message });
-                            setSubmitting(false);
-                        }
-                    );
-                } catch (err: any) {
-                    console.error(err);
-                    if (scriptedRef.current) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
+                    const { data } = await forgotPassword({
+                        variables: { input: { email: values.email } }
+                    });
+                    if (data?.adminForgotPassword?.success) {
+                        setStatus({ success: true });
                         setSubmitting(false);
+                        showSuccess(data.adminForgotPassword.message || 'Check mail for reset password link');
+
+                        setTimeout(() => navigate(ROUTES.VERIFY_OTP, { state: { email: values.email }, replace: true }), 1500);
+
+                    } else {
+                        setStatus({ success: false });
+                        setErrors({ submit: data?.adminForgotPassword?.message || 'Something went wrong' });
+                        setSubmitting(false);
+
+
                     }
+                } catch (err: any) {
+
+
+                    setSubmitting(false);
+
+
+                    showError(extractApiLevelError(err));
+
                 }
             }}
         >
-            {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                <form noValidate onSubmit={handleSubmit} {...others}>
-                    <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                        <InputLabel htmlFor="outlined-adornment-email-forgot">Email Address</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-email-forgot"
-                            type="email"
-                            value={values.email}
-                            name="email"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            label="Email Address / Username"
-                            inputProps={{}}
-                        />
-                        {touched.email && errors.email && (
-                            <FormHelperText error id="standard-weight-helper-text-email-forgot">
-                                {errors.email}
-                            </FormHelperText>
-                        )}
-                    </FormControl>
+            {({ errors, handleSubmit, isSubmitting }) => (
+                <>
+                    <NotificationBanner
+                        open={Boolean(notification.message)}
+                        message={notification.message}
+                        onClose={clearNotification}
+                        severity={notification.severity}
+                    />
+                    <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }} {...others}>
 
-                    {errors.submit && (
-                        <Box sx={{ mt: 3 }}>
-                            <FormHelperText error>{errors.submit}</FormHelperText>
-                        </Box>
-                    )}
+                        <InputField name="email" label="Email Address" type="email" />
 
-                    <Box sx={{ mt: 2 }}>
+
                         <AnimateButton>
-                            <Button
-                                disableElevation
-                                disabled={isSubmitting}
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                            >
-                                Send Mail
+                            <Button disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                                Send
                             </Button>
                         </AnimateButton>
-                    </Box>
-                </form>
+
+                    </form></>
             )}
         </Formik>
     );

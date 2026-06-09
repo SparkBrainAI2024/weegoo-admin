@@ -73,3 +73,25 @@ export interface SignInResponse {
         email: string;
     }
 }
+
+export interface ForgotPasswordResponse {
+    adminForgotPassword: {
+        success: boolean;
+        message: string;
+    };
+}
+
+export interface VerifyOtpResponse {
+    adminVerifyOtp: {
+        success: boolean;
+        message: string;
+        resetPasswordToken: string;
+    };
+}
+
+export interface ResetPasswordResponse {
+    adminResetPassword: {
+        success: boolean;
+        message: string;
+    };
+}
