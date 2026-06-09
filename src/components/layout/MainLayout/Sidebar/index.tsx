@@ -49,9 +49,7 @@ const Sidebar = () => {
         const drawerContent = (
             <>
                 <MenuCard />
-                <Stack direction="row" justifyContent="center" sx={{ mb: 2 }}>
-                    <Chip label={import.meta.env.VITE_APP_VERSION} disabled chipcolor="secondary" size="small" sx={{ cursor: 'pointer' }} />
-                </Stack>
+            
             </>
         );
 
@@ -88,8 +86,8 @@ const Sidebar = () => {
                             mt: downMD ? 0 : 11,
                             zIndex: 1099,
                             width: drawerWidth,
-                            bgcolor: 'background.default',
-                            color: 'text.primary',
+                            bgcolor: '#414141',
+                            color: '#ffffff',
                             borderRight: 'none'
                         }
                     }}

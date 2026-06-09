@@ -83,7 +83,7 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
         }
     };
 
-    const iconSelectedColor = mode === ThemeMode.DARK && drawerOpen ? 'text.primary' : 'secondary.main';
+    const iconSelectedColor = mode === ThemeMode.DARK && drawerOpen ? 'text.primary' : '#ffffff';
 
     return (
         <>
@@ -102,60 +102,77 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                         ...(drawerOpen &&
                             level === 1 &&
                             mode !== ThemeMode.DARK && {
+                            '&:hover': {
+                                color: '#ffffff',
+                                bgcolor: '#4caf50'
+                            },
+                            '&.Mui-selected': {
+                                bgcolor: '#4caf50',
+                                color: '#ffffff',
                                 '&:hover': {
-                                    bgcolor: 'secondary.light'
-                                },
-                                '&.Mui-selected': {
-                                    bgcolor: 'secondary.light',
-                                    color: iconSelectedColor,
-                                    '&:hover': {
-                                        color: iconSelectedColor,
-                                        bgcolor: 'secondary.light'
-                                    }
+                                    color: '#ffffff',
+                                    bgcolor: '#4caf50'
                                 }
-                            }),
+                            }
+                        }),
                         ...((!drawerOpen || level !== 1) && {
                             py: level === 1 ? 0 : 1,
                             '&:hover': {
-                                bgcolor: 'transparent'
+                                color: '#ffffff',
+                                bgcolor: '#4caf50'
                             },
                             '&.Mui-selected': {
                                 '&:hover': {
-                                    bgcolor: 'transparent'
+                                    color: '#ffffff',
+                                    bgcolor: '#4caf50'
                                 },
-                                bgcolor: 'transparent'
+                                color: '#ffffff',
+                                bgcolor: '#4caf50'
                             }
                         })
                     }}
                     selected={isSelected}
                     onClick={() => itemHandler()}
                 >
-                    <ButtonBase aria-label="theme-icon" sx={{ borderRadius: `${borderRadius}px` }} disableRipple={drawerOpen}>
+                    <ButtonBase aria-label="theme-icon" sx={{
+                        borderRadius: `${borderRadius}px`,
+                        color: 'inherit'  // ← here
+                    }} disableRipple={drawerOpen}>
                         <ListItemIcon
                             sx={{
                                 minWidth: level === 1 ? 36 : 18,
-                                color: isSelected ? iconSelectedColor : 'text.primary',
+                                color: isSelected ? iconSelectedColor : '#ffffff',
                                 ...(!drawerOpen &&
                                     level === 1 && {
-                                        borderRadius: `${borderRadius}px`,
-                                        width: 46,
-                                        height: 46,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
+                                    borderRadius: `${borderRadius}px`,
+                                    width: 46,
+                                    height: 46,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    '&:hover': {
+                                        bgcolor: mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.25) : '#4caf50'
+                                    },
+                                    ...(isSelected && {
+                                        bgcolor:
+                                            mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.25) : '#4caf50',
                                         '&:hover': {
-                                            bgcolor: mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.25) : 'secondary.light'
-                                        },
-                                        ...(isSelected && {
                                             bgcolor:
-                                                mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.25) : 'secondary.light',
-                                            '&:hover': {
-                                                bgcolor:
-                                                    mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.3) : 'secondary.light'
-                                            }
-                                        })
+                                                mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.3) : '#4caf50'
+                                        }
                                     })
+                                }),
+                                 '& svg': {
+            color: '#ffffff'  // ← force icon color directly
+        },
+                                
                             }}
                         >
+
+
+
+
+
+
                             {itemIcon}
                         </ListItemIcon>
                     </ButtonBase>
@@ -170,7 +187,7 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                                         overflow="hidden"
                                         textOverflow="ellipsis"
                                         variant={isSelected ? 'h5' : 'body1'}
-                                        color="inherit"
+                                        color="#ffffff"
                                         width={102}
                                     >
                                         {item.title}
