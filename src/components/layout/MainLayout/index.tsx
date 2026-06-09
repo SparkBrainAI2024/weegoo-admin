@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
+import { drawerWidth } from 'store/constant';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -52,7 +53,23 @@ const MainLayout = () => {
     return (
         <Box sx={{ display: 'flex' }}>
             {/* header */}
-            <AppBar enableColorOnDark position="fixed" color="inherit" elevation={0} sx={{ bgcolor: 'background.default' }}>
+          <AppBar 
+    enableColorOnDark 
+    position="fixed" 
+    color="inherit" 
+    elevation={0} 
+    sx={{ 
+        width: `calc(100% - ${drawerOpen ? drawerWidth : 72}px)`,
+        ml: `${drawerOpen ? drawerWidth : 72}px`,
+        bgcolor: 'background.default',
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: drawerOpen 
+                ? theme.transitions.duration.enteringScreen 
+                : theme.transitions.duration.leavingScreen
+        })
+    }}
+>
                 <Toolbar sx={{ p: isHorizontal ? 1.25 : 2 }}>
                     <Header />
                 </Toolbar>

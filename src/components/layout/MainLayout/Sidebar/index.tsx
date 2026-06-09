@@ -24,6 +24,7 @@ import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 
 // types
 import { MenuOrientation } from 'types/config';
+import { Typography } from '@mui/material';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -37,8 +38,9 @@ const Sidebar = () => {
 
     const logo = useMemo(
         () => (
-            <Box sx={{ display: 'flex', p: 2 }}>
+            <Box sx={{ display: 'flex', gap:'16px',p: 2 , background:"#414141"}}>
                 <LogoSection />
+                <Typography variant='h2' color="#ffffff">WEEGOO</Typography>
             </Box>
         ),
         []
@@ -46,31 +48,24 @@ const Sidebar = () => {
 
     const drawer = useMemo(() => {
         const isVerticalOpen = menuOrientation === MenuOrientation.VERTICAL && drawerOpen;
-        const drawerContent = (
-            <>
-                <MenuCard />
-            
-            </>
-        );
+
 
         let drawerSX = { paddingLeft: '0px', paddingRight: '0px', marginTop: '20px' };
         if (drawerOpen) drawerSX = { paddingLeft: '16px', paddingRight: '16px', marginTop: '0px' };
 
-        return (
-            <>
-                {downMD ? (
-                    <Box sx={drawerSX}>
-                        <MenuList />
-                        {isVerticalOpen && drawerContent}
-                    </Box>
-                ) : (
-                    <PerfectScrollbar style={{ height: 'calc(100vh - 88px)', ...drawerSX }}>
-                        <MenuList />
-                        {isVerticalOpen && drawerContent}
-                    </PerfectScrollbar>
-                )}
-            </>
-        );
+     return (
+    <>
+        {downMD ? (
+            <Box sx={drawerSX}>
+                <MenuList />
+            </Box>
+        ) : (
+            <PerfectScrollbar style={{ height: 'calc(100vh - 88px)', ...drawerSX }}>
+                <MenuList />
+            </PerfectScrollbar>
+        )}
+    </>
+);
     }, [downMD, drawerOpen, menuOrientation]);
 
     return (
