@@ -17,7 +17,7 @@ const settings: NavItemType = {
             type: 'item',
             url: '/settings',
             icon: IconSettings,
-            breadcrumbs: false
+            breadcrumbs: true
         }
     ]
 };

@@ -171,6 +171,16 @@ const UtilsGrid = Loadable(lazy(() => import('views/utilities/Grid')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const RidesPage = Loadable(lazy(() => import('views/pages/rides')));
+
+const DriversPage = Loadable(lazy(() => import('views/pages/drivers')));
+const RidersPage = Loadable(lazy(() => import('views/pages/riders')));
+const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
+const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
+const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
+const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
+
+const DashboardPage = Loadable(lazy(() => import('views/pages/dashboard')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -182,6 +192,39 @@ const MainRoutes = {
         </AuthGuard>
     ),
     children: [
+          {
+            path: '/dashboard/default',
+            element: <DashboardPage />
+        },
+          {
+            path: '/rides',
+            element: <RidesPage />
+        },
+          {
+            path: '/drivers',
+            element: <DriversPage />
+        },
+          {
+            path: '/riders',
+            element: <RidersPage />
+        },
+          {
+            path: '/payments',
+            element: <PaymentsPage />
+        },
+          {
+            path: '/offers',
+            element: <OffersPage />
+        },
+          {
+            path: '/reports',
+            element: <ReportsPage />
+        },
+         {
+            path: '/settings',
+            element: <SettingsPage />
+        },
+
         {
             path: '/widget/statistics',
             element: <WidgetStatistics />
@@ -678,10 +721,7 @@ const MainRoutes = {
             path: '/sample-page',
             element: <SamplePage />
         },
-        {
-            path: '/dashboard/default',
-            element: <DashboardDefault />
-        },
+       
         {
             path: '/dashboard/analytics',
             element: <DashboardAnalytics />

@@ -17,7 +17,7 @@ const operations: NavItemType = {
             type: 'item',
             url: '/payments',
             icon: IconCreditCard,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'offers',
@@ -25,7 +25,7 @@ const operations: NavItemType = {
             type: 'item',
             url: '/offers',
             icon: IconGift,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'reports',
@@ -33,7 +33,7 @@ const operations: NavItemType = {
             type: 'item',
             url: '/reports',
             icon: IconChartBar,
-            breadcrumbs: false
+            breadcrumbs: true
         }
     ]
 };

@@ -17,7 +17,7 @@ const users: NavItemType = {
             type: 'item',
             url: '/drivers',
             icon: IconUser,
-            breadcrumbs: false
+            breadcrumbs: true
             // chip prop can be added here for the red badge (e.g. pending driver approvals)
             // chip: { color: 'error', label: '2' }
         },
@@ -27,7 +27,7 @@ const users: NavItemType = {
             type: 'item',
             url: '/riders',
             icon: IconUsers,
-            breadcrumbs: false
+            breadcrumbs: true
         }
     ]
 };

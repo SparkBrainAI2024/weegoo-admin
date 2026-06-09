@@ -15,9 +15,9 @@ const main: NavItemType = {
             id: 'dashboard',
             title: 'Dashboard',
             type: 'item',
-            url: '/dashboard',
+            url: '/dashboard/default',
             icon: IconLayoutDashboard,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'rides',
@@ -25,8 +25,9 @@ const main: NavItemType = {
             type: 'item',
             url: '/rides',
             icon: IconCar,
-            breadcrumbs: false
-        }
+            breadcrumbs: true
+        },
+        
     ]
 };
 
