@@ -34,28 +34,10 @@ const MenuList = () => {
     const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downMD;
 
     const [selectedID, setSelectedID] = useState<string | undefined>('');
-    const [menuItems, setMenuItems] = useState<{ items: NavItemType[] }>({ items: [] });
 
-    let widgetMenu = Menu();
-
-    useLayoutEffect(() => {
-        const isFound = menuItem.items.some((element) => {
-            if (element.id === 'group-widget') {
-                return true;
-            }
-            return false;
-        });
-        if (menuLoading) {
-            menuItem.items.splice(1, 0, widgetMenu);
-            setMenuItems({ items: [...menuItem.items] });
-        } else if (!menuLoading && widgetMenu?.id !== undefined && !isFound) {
-            menuItem.items.splice(1, 1, widgetMenu);
-            setMenuItems({ items: [...menuItem.items] });
-        } else {
-            setMenuItems({ items: [...menuItem.items] });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [menuLoading]);
+    const [menuItems] = useState({ items: [...menuItem.items] });
+    
+    
 
     // last menu-item to show in horizontal menu bar
     const lastItem = isHorizontal ? HORIZONTAL_MAX_ITEM : null;

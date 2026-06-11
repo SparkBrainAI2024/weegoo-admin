@@ -1,18 +1,14 @@
-import dashboard from './dashboard';
-import application from './application';
-import forms from './forms';
-import elements from './elements';
-import samplePage from './sample-page';
-import pages from './pages';
-import utilities from './utilities';
-import support from './support';
-import other from './other';
 import { NavItemType } from 'types';
+import main from './main';
+import users from './users';
+import operations from './operations';
+import settings from './settings';
+
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems: { items: NavItemType[] } = {
-    items: [dashboard, application, forms, elements, samplePage, pages, utilities, support, other]
+    items: [main, users, operations, settings]
 };
 
 export default menuItems;
