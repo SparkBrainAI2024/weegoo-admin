@@ -1,53 +1,55 @@
-// material-ui
+import { useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
-// project imports
-import useConfig from 'hooks/useConfig';
-import LogoSection from '../LogoSection';
-import SearchSection from './SearchSection';
-import MobileSection from './MobileSection';
-import ProfileSection from './ProfileSection';
-import LocalizationSection from './LocalizationSection';
-import MegaMenuSection from './MegaMenuSection';
-import FullScreenSection from './FullScreenSection';
+import navigation from 'menu-items';
 import NotificationSection from './NotificationSection';
+import ProfileSection from './ProfileSection';
+import MobileSection from './MobileSection';
 
-import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
+import { NavItemType } from 'types';
 
-// assets
-import { IconMenu2 } from '@tabler/icons-react';
+// ==============================|| FIND CURRENT NAV ITEM ||============================== //
 
-// types
-import { MenuOrientation, ThemeMode } from 'types/config';
+const findNavItem = (items: NavItemType[], pathname: string): NavItemType | undefined => {
+    for (const item of items) {
+        if (item.url === pathname) return item;
+        if (item.children) {
+            const found = findNavItem(item.children, pathname);
+            if (found) return found;
+        }
+    }
+    return undefined;
+};
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = () => {
-    const theme = useTheme();
-    const downMD = useMediaQuery(theme.breakpoints.down('md'));
+    const location = useLocation();
 
-    const { mode, menuOrientation } = useConfig();
-    const { menuMaster } = useGetMenuMaster();
-    const drawerOpen = menuMaster.isDashboardDrawerOpened;
-    const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downMD;
+    const currentItem = findNavItem(navigation.items, location.pathname);
+    const Icon = currentItem?.icon;
+    const title = currentItem?.title;
 
     return (
         <>
-            {/* logo & toggler button */}
+            {/* Page Title */}
+            <Stack direction="row" alignItems="center" spacing={1.5}>
+                {Icon && <Icon stroke={1.5} size="24px" />}
+                <Typography variant="h3" fontWeight={600}>
+                    {title}
+                </Typography>
+            </Stack>
 
-
-            {/* header search */}
-            <SearchSection />
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ flexGrow: 1 }} />
 
-            {/* profile */}
+            {/* Right side */}
+            <NotificationSection />
             <ProfileSection />
 
-            {/* mobile header */}
+            {/* Mobile */}
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <MobileSection />
             </Box>
