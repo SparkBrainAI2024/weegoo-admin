@@ -1,5 +1,5 @@
 // assets
-import { IconSettings } from '@tabler/icons-react';
+import { IconFile, IconSettings } from '@tabler/icons-react';
 
 // types
 import { NavItemType } from 'types';
@@ -17,6 +17,14 @@ const settings: NavItemType = {
             type: 'item',
             url: '/settings',
             icon: IconSettings,
+            breadcrumbs: true
+        },
+         {
+            id: 'content',
+            title: 'Content',
+            type: 'item',
+            url: '/content',
+            icon: IconFile,
             breadcrumbs: true
         }
     ]

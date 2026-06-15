@@ -81,6 +81,8 @@ export interface ForgotPasswordResponse {
     };
 }
 
+
+
 export interface VerifyOtpResponse {
     adminVerifyOtp: {
         success: boolean;

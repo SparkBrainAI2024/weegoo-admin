@@ -176,6 +176,7 @@ const RidesPage = Loadable(lazy(() => import('views/pages/rides')));
 const DriversPage = Loadable(lazy(() => import('views/pages/drivers')));
 const RidersPage = Loadable(lazy(() => import('views/pages/riders')));
 const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
+const ContentPage = Loadable(lazy(()=>import('views/pages/content')))
 const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
 const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
@@ -223,6 +224,10 @@ const MainRoutes = {
          {
             path: '/settings',
             element: <SettingsPage />
+        },
+        {
+            path: '/content',
+            element: <ContentPage />
         },
 
         {

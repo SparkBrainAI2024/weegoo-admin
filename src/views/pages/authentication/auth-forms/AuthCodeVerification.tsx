@@ -7,7 +7,7 @@ import { Box, FormHelperText, Typography } from '@mui/material';
 import { AUTH } from 'constants/auth';
 import { useMutation } from '@apollo/client/react';
 import { FORGOT_PASSWORD, VERIFY_OTP } from 'graphql/mutations/auth.mutations';
-import { ForgotPasswordResponse, VerifyOtpResponse } from 'types/auth';
+import { ForgotPasswordResponse, VerifyOtpResponse } from 'types/auth.response';
 import { useNavigate } from 'react-router';
 import { ROUTES } from 'constants/routes';
 import useNotification from 'hooks/useNotification';
