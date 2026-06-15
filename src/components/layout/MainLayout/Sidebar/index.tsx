@@ -24,82 +24,59 @@ import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 
 // types
 import { MenuOrientation } from 'types/config';
-import { Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
+import { Menu } from "@mui/icons-material";
+
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
 const Sidebar = () => {
-    const downMD = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
-
     const { menuMaster } = useGetMenuMaster();
     const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
-    const { menuOrientation, miniDrawer } = useConfig();
-
     const logo = useMemo(
         () => (
-            <Box sx={{ display: 'flex', gap:'16px',p: 2 , background:"#414141"}}>
-                <LogoSection />
-                <Typography variant='h2' color="#ffffff">WEEGOO</Typography>
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: drawerOpen ? 'space-between' : 'center',
+                p: 2,
+                background: '#414141'
+            }}>
+                {drawerOpen && (
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                        <LogoSection />
+                        <Typography variant="h2" color="#ffffff">WEEGOO</Typography>
+                    </Stack>
+                )}
+                <IconButton onClick={() => handlerDrawerOpen(!drawerOpen)} sx={{ color: '#ffffff' }}>
+                    <Menu sx={{ fontSize: { xs: 18, lg: 24 } }} />
+                </IconButton>
             </Box>
         ),
-        []
+        [drawerOpen]
     );
 
     const drawer = useMemo(() => {
-        const isVerticalOpen = menuOrientation === MenuOrientation.VERTICAL && drawerOpen;
-
-
         let drawerSX = { paddingLeft: '0px', paddingRight: '0px', marginTop: '20px' };
         if (drawerOpen) drawerSX = { paddingLeft: '16px', paddingRight: '16px', marginTop: '0px' };
 
-     return (
-    <>
-        {downMD ? (
-            <Box sx={drawerSX}>
-                <MenuList />
-            </Box>
-        ) : (
+        return (
             <PerfectScrollbar style={{ height: 'calc(100vh - 88px)', ...drawerSX }}>
                 <MenuList />
             </PerfectScrollbar>
-        )}
-    </>
-);
-    }, [downMD, drawerOpen, menuOrientation]);
+        );
+    }, [drawerOpen]);
 
     return (
-        <Box component="nav" sx={{ flexShrink: { md: 0 }, width: { xs: 'auto', md: drawerWidth } }} aria-label="mailbox folders">
-            {downMD || (miniDrawer && drawerOpen) ? (
-                <Drawer
-                    variant={downMD ? 'temporary' : 'persistent'}
-                    anchor="left"
-                    open={drawerOpen}
-                    onClose={() => handlerDrawerOpen(!drawerOpen)}
-                    sx={{
-                        '& .MuiDrawer-paper': {
-                            mt: downMD ? 0 : 11,
-                            zIndex: 1099,
-                            width: drawerWidth,
-                            bgcolor: '#414141',
-                            color: '#ffffff',
-                            borderRight: 'none'
-                        }
-                    }}
-                    ModalProps={{ keepMounted: true }}
-                    color="inherit"
-                >
-                    {downMD && logo}
-                    {drawer}
-                </Drawer>
-            ) : (
-                <MiniDrawerStyled variant="permanent" open={drawerOpen}>
-                    {logo}
-                    {drawer}
-                </MiniDrawerStyled>
-            )}
+        <Box component="nav" sx={{ flexShrink: 0 }}>
+            <MiniDrawerStyled variant="permanent" open={drawerOpen}>
+                {logo}
+                {drawer}
+            </MiniDrawerStyled>
         </Box>
     );
 };
 
 export default memo(Sidebar);
+

@@ -134,10 +134,7 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                     selected={isSelected}
                     onClick={() => itemHandler()}
                 >
-                    <ButtonBase aria-label="theme-icon" sx={{
-                        borderRadius: `${borderRadius}px`,
-                        color: 'inherit'  // ← here
-                    }} disableRipple={drawerOpen}>
+            
                         <ListItemIcon
                             sx={{
                                 minWidth: level === 1 ? 36 : 18,
@@ -175,7 +172,6 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
 
                             {itemIcon}
                         </ListItemIcon>
-                    </ButtonBase>
 
                     {(drawerOpen || (!drawerOpen && level !== 1)) && (
                         <Tooltip title={item.title} disableHoverListener={!hoverStatus}>

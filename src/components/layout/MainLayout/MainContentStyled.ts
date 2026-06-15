@@ -30,17 +30,17 @@ const MainContentStyled = styled('main', {
     borderRadius: `${borderRadius}px`,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    ...(!open && {
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.shorter + 200
-        }),
-        [theme.breakpoints.up('md')]: {
-            marginLeft: menuOrientation === MenuOrientation.VERTICAL ? -(drawerWidth - 72) : 20,
-            width: `calc(100% - ${drawerWidth}px)`,
-            marginTop: menuOrientation === MenuOrientation.HORIZONTAL ? 135 : 88
-        }
+ ...(!open && {
+    transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.shorter + 200
     }),
+    [theme.breakpoints.up('md')]: {
+        marginLeft: 0,
+        width: `calc(100% - 72px)`,
+        marginTop: menuOrientation === MenuOrientation.HORIZONTAL ? 135 : 88
+    }
+}),
     ...(open && {
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.easeOut,
@@ -53,18 +53,16 @@ const MainContentStyled = styled('main', {
             marginTop: menuOrientation === MenuOrientation.HORIZONTAL ? 135 : 88
         }
     }),
-    [theme.breakpoints.down('md')]: {
-        marginLeft: 20,
-        padding: 16,
-        marginTop: 88,
-        ...(!open && {
-            width: `calc(100% - ${drawerWidth}px)`
-        })
-    },
-    [theme.breakpoints.down('sm')]: {
-        marginLeft: 10,
-        marginRight: 10
-    }
+   [theme.breakpoints.down('md')]: {
+    marginLeft: '92px !important',
+    padding: 16,
+    marginTop: 88,
+    width: 'calc(100% - 92px) !important'
+},
+[theme.breakpoints.down('sm')]: {
+    marginLeft: '82px !important',
+    marginRight: 10
+}
 }));
 
 export default MainContentStyled;
