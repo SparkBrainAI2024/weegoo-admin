@@ -182,9 +182,12 @@ const Content = () => {
             </Box>
 
             {/* Table */}
-            <Box sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid', borderColor: 'grey.100' }}>
+            <Box sx={{ borderRadius: 2, border: '1px solid', borderColor: 'grey.100' }}>
 
-                <TableHeader />
+             <Box sx={{ overflowX: 'auto' }}>
+                 <Box sx={{minWidth:1500}}>
+
+                      <TableHeader />
 
                 <Stack spacing={1} sx={{ p: 1 }}>
                     {loading ? (
@@ -201,7 +204,9 @@ const Content = () => {
                         ))
                     )}
                 </Stack>
+                 </Box>
 
+             </Box>
                 {/* Pagination */}
                 <TablePagination
                     component="div"
