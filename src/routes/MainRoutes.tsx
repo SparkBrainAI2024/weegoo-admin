@@ -181,6 +181,7 @@ const PageManagementPage = Loadable(lazy(()=>import('views/pages/page-list')))
 const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
 const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
+const OffersDetailsPage = Loadable(lazy(()=>import('views/pages/offers-detail')));
 
 const DashboardPage = Loadable(lazy(() => import('views/pages/dashboard')));
 
@@ -217,6 +218,10 @@ const MainRoutes = {
           {
             path: '/offers',
             element: <OffersPage />
+        },
+        {
+            path:'/offers/:id',
+            element:<OffersDetailsPage/>
         },
           {
             path: '/reports',

@@ -17,7 +17,7 @@ import { GET_PROMO_CODE } from 'graphql/queries/promoCode.queries';
 
 // ==============================|| TYPES ||============================== //
 
-type PromoStatus = 'ACTIVE' | 'DISABLED' | 'EXPIRED';
+type PromoStatus = 'ACTIVE' | 'DISABLED' | 'EXPIRED' | 'DRAFT';
 
 interface PromoCode {
     _id: string;
@@ -40,6 +40,7 @@ interface PromoCode {
 // ==============================|| HELPERS ||============================== //
 
 const STATUS_COLORS: Record<PromoStatus, { bg: string; text: string }> = {
+    DRAFT: { bg: '#FFF8E1', text: '#F9A825' },
     ACTIVE: { bg: '#BFE6C4', text: '#30B010' },
     DISABLED: { bg: '#E0E0E0', text: '#616161' },
     EXPIRED: { bg: '#E0E0E0', text: '#616161' }
