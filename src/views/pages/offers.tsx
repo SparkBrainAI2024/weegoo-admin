@@ -26,7 +26,7 @@ import { GET_PROMO_CODES } from 'graphql/queries/promoCode.queries';
 
 // ==============================|| TYPES ||============================== //
 
-type PromoStatus = 'ACTIVE' | 'DISABLED' | 'EXPIRED';
+type PromoStatus = 'ACTIVE' | 'DISABLED' | 'EXPIRED' | 'DRAFT';
 
 interface PromoCode {
     _id: string;
@@ -62,6 +62,7 @@ interface PromoCodesResponse {
 // ==============================|| HELPERS ||============================== //
 
 const STATUS_COLORS: Record<PromoStatus, { bg: string; text: string }> = {
+    DRAFT: { bg: '#FFF8E1', text: '#F9A825' },
     ACTIVE: { bg: '#BFE6C4', text: '#30B010' },
     DISABLED: { bg: '#E0E0E0', text: '#616161' },
     EXPIRED: { bg: '#E0E0E0', text: '#616161' }
@@ -112,7 +113,7 @@ const StatCard = ({ label, value, chip }: { label: string; value: string; chip?:
 
 const OfferRow = ({ offer }: { offer: PromoCode }) => {
     const navigate = useNavigate();
-    const colors = STATUS_COLORS[offer.status];
+const colors = STATUS_COLORS[offer.status] ?? { bg: '#454545', text: '#394950' };console.log(colors,"colors");
 
     return (
         <Card
@@ -148,7 +149,7 @@ const OfferRow = ({ offer }: { offer: PromoCode }) => {
                     <Chip
                         label={formatStatus(offer.status)}
                         size="small"
-                        sx={{ bgcolor: "#fff222", color: "#335544", fontWeight: 500, borderRadius: '20px' }}
+                        sx={{ bgcolor: "#454545", color: "#394950", fontWeight: 500, borderRadius: '20px' }}
                     />
                 </Grid>
                 <Grid item xs={1}>
@@ -176,7 +177,6 @@ const OfferList = ({ onCreateClick, showCreateButton }: { onCreateClick: () => v
             }
         }
     });
-console.log(data,"data");
 
     const offers = data?.promoCodes?.data || [];
     const total = data?.promoCodes?.pagination?.total || 0;
