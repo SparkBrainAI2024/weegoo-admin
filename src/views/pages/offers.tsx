@@ -148,7 +148,7 @@ const OfferRow = ({ offer }: { offer: PromoCode }) => {
                     <Chip
                         label={formatStatus(offer.status)}
                         size="small"
-                        sx={{ bgcolor: colors.bg, color: colors.text, fontWeight: 500, borderRadius: '20px' }}
+                        sx={{ bgcolor: "#fff222", color: "#335544", fontWeight: 500, borderRadius: '20px' }}
                     />
                 </Grid>
                 <Grid item xs={1}>
@@ -176,6 +176,7 @@ const OfferList = ({ onCreateClick, showCreateButton }: { onCreateClick: () => v
             }
         }
     });
+console.log(data,"data");
 
     const offers = data?.promoCodes?.data || [];
     const total = data?.promoCodes?.pagination?.total || 0;

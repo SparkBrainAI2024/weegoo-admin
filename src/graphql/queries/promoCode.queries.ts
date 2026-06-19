@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_PROMO_CODES = gql`
-  query PromoCodes($paginationInput: PaginationInputOnly!) {
+  query PromoCodes($paginationInput: PromoCodeFindAllInput!) {
     promoCodes(paginationInput: $paginationInput) {
       data {
         _id
