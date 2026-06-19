@@ -20,10 +20,10 @@ const settings: NavItemType = {
             breadcrumbs: true
         },
          {
-            id: 'content',
-            title: 'Content',
+            id: 'page-management',
+            title: 'Page Management',
             type: 'item',
-            url: '/content',
+            url: '/page-management',
             icon: IconFile,
             breadcrumbs: true
         }

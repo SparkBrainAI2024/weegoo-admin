@@ -20,10 +20,12 @@ import { Page, PagesResponse } from 'types/pages.response';
 
 // ==============================|| STATUS BADGE ||============================== //
 
-const STATUS_COLORS: Record<string, 'success' | 'default' | 'warning'> = {
-    PUBLISHED: 'success',
-    DRAFT: 'default',
-};
+const STATUS_COLORS = {
+    PUBLISHED: { bg: '#BFE6C4', text: '#30B010' },
+    DRAFT: { bg: '#E0E0E0', text: '#616161' },
+}
+
+
 
 // ==============================|| HEADER ROW ||============================== //
 
@@ -108,9 +110,11 @@ const PageRow = ({ page }: { page: Page }) => {
                 <Grid item xs={2}>
                     <Chip
                         label={page.status.charAt(0) + page.status.slice(1).toLowerCase()}
-                        color={STATUS_COLORS[page.status]}
                         size="small"
-                        sx={{ borderRadius: '20px' }}
+                        sx={{
+                            borderRadius: '20px', p: 2, backgroundColor: STATUS_COLORS[page.status].bg,
+                            color: STATUS_COLORS[page.status].text,
+                        }}
                     />
                 </Grid>
                 <Grid item xs={2}>
