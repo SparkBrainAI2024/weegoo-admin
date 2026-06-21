@@ -23,6 +23,8 @@ import { IconPlus, IconX } from '@tabler/icons-react';
 // graphql
 import { useQuery } from '@apollo/client/react';
 import { GET_PROMO_CODES } from 'graphql/queries/promoCode.queries';
+import { OccasionResponse } from 'types/occasion.response';
+import { GET_OCCASIONS } from 'graphql/queries/occasion.queries';
 
 // ==============================|| TYPES ||============================== //
 
@@ -119,7 +121,9 @@ const StatCard = ({ label, value, chip }: { label: string; value: string; chip?:
 
 const OfferRow = ({ offer }: { offer: PromoCode }) => {
     const navigate = useNavigate();
-const colors = STATUS_COLORS[offer.status] ?? { bg: '#454545', text: '#394950' };console.log(colors,"colors");
+    console.log(offer.status,"offerstatus");
+    
+const colors = STATUS_COLORS[offer.status] ;
 
     return (
         <Card
@@ -155,7 +159,7 @@ const colors = STATUS_COLORS[offer.status] ?? { bg: '#454545', text: '#394950' }
                     <Chip
                         label={formatStatus(offer.status)}
                         size="small"
-                        sx={{ bgcolor: "#454545", color: "#394950", fontWeight: 500, borderRadius: '20px' }}
+                        sx={{ bgcolor:STATUS_COLORS[offer.status].bg, color: STATUS_COLORS[offer.status].text,fontWeight: 500, borderRadius: '20px' }}
                     />
                 </Grid>
                 <Grid item xs={1}>
@@ -294,8 +298,19 @@ const OfferList = ({ onCreateClick, showCreateButton }: { onCreateClick: () => v
 
 // ==============================|| CREATE OFFER FORM ||============================== //
 
-const CreateOfferForm = ({ onClose }: { onClose: () => void }) => (
-    <Card sx={{ boxShadow: 'none', border: '1px solid', borderColor: 'grey.100', height: '100%' }}>
+const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
+     const { data: occasionData, loading: occasionLoading } = useQuery<OccasionResponse>(GET_OCCASIONS, {
+        variables: {
+            paginationInput: { page: 0, limit: 50 }
+        }
+    });
+console.log(occasionData,"data");
+
+    const occasions = occasionData?.occasion || [];
+    if(occasionLoading){
+        return <>Loading...</>
+    }
+ return   <Card sx={{ boxShadow: 'none', border: '1px solid', borderColor: 'grey.100', height: '100%' }}>
         <Box sx={{ p: 2.5 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Stack spacing={0.25}>
@@ -321,16 +336,30 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => (
                             <TextField fullWidth size="small" placeholder="WELCOME10" />
                         </Stack>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Stack spacing={1}>
-                            <Typography variant="body2" fontWeight={500}>Occasion</Typography>
-                            <TextField select fullWidth size="small" defaultValue="Dashain">
-                                <MenuItem value="Dashain">Dashain</MenuItem>
-                                <MenuItem value="Tihar">Tihar</MenuItem>
-                                <MenuItem value="New Year">New Year</MenuItem>
-                            </TextField>
-                        </Stack>
-                    </Grid>
+                     <Grid item xs={12} sm={6}>
+                            <Stack spacing={1}>
+                                <Typography variant="body2" fontWeight={500}>Occasion</Typography>
+                           <TextField
+    select
+    fullWidth
+    size="small"
+    defaultValue=""
+    disabled={occasionLoading}
+    SelectProps={{
+        displayEmpty: true,
+    }}
+>
+    <MenuItem value="">
+        <em>Choose occasion</em>
+    </MenuItem>
+    {occasions.map((o) => (
+        <MenuItem key={o._id} value={o._id}>
+            {o.occasionName}
+        </MenuItem>
+    ))}
+</TextField>
+                            </Stack>
+                        </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <Stack spacing={1}>
@@ -414,8 +443,8 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => (
                 </Stack>
             </Stack>
         </Box>
-    </Card>
-);
+    </Card>}
+
 
 // ==============================|| OFFERS PAGE ||============================== //
 

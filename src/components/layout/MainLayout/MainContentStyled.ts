@@ -54,13 +54,13 @@ const MainContentStyled = styled('main', {
         }
     }),
    [theme.breakpoints.down('md')]: {
-    marginLeft: '92px !important',
+    marginLeft: '0px !important',
     padding: 16,
     marginTop: 88,
     width: 'calc(100% - 92px) !important'
 },
 [theme.breakpoints.down('sm')]: {
-    marginLeft: '82px !important',
+    marginLeft: '0px !important',
     marginRight: 10
 }
 }));
