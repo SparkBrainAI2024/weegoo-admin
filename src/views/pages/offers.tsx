@@ -88,25 +88,31 @@ const FILTERS = ['All', 'Active', 'Disabled', 'Expired'];
 // ==============================|| STAT CARD ||============================== //
 
 const StatCard = ({ label, value, chip }: { label: string; value: string; chip?: string }) => (
-    <Card sx={{ p: 2.5, boxShadow: 'none', border: '1px solid', borderColor: 'grey.100' }}>
-        <Stack spacing={1}>
-            <Typography variant="body2" color="text.secondary">
-                {label}
+<Card
+    sx={{
+        p: 2.5,
+        borderRadius: '12px',
+        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+    }}
+>
+    <Stack spacing={1}>
+        <Typography variant="body2" color="text.secondary">
+            {label}
+        </Typography>
+        <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography variant="h3" fontWeight={600}>
+                {value}
             </Typography>
-            <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography variant="h3" fontWeight={600}>
-                    {value}
-                </Typography>
-                {chip && (
-                    <Chip
-                        label={chip}
-                        size="small"
-                        sx={{ bgcolor: STATUS_COLORS.ACTIVE.bg, color: STATUS_COLORS.ACTIVE.text, fontWeight: 500 }}
-                    />
-                )}
-            </Stack>
+            {chip && (
+                <Chip
+                    label={chip}
+                    size="small"
+                    sx={{ bgcolor: STATUS_COLORS.ACTIVE.bg, color: STATUS_COLORS.ACTIVE.text, fontWeight: 500 }}
+                />
+            )}
         </Stack>
-    </Card>
+    </Stack>
+</Card>
 );
 
 // ==============================|| OFFER ROW ||============================== //
