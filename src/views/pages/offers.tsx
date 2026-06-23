@@ -95,45 +95,43 @@ const FILTERS = ['All', 'Active', 'Disabled', 'Expired'];
 // ==============================|| STAT CARD ||============================== //
 
 const StatCard = ({ label, value, chip }: { label: string; value: string; chip?: string }) => (
-<Card
-    sx={{
-        p: 2.5,
-        borderRadius: '12px',
-        boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
-    }}
->
-    <Stack spacing={1}>
-        <Typography variant="body2" color="text.secondary">
-            {label}
-        </Typography>
-        <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="h3" fontWeight={600}>
-                {value}
+    <Card
+        sx={{
+            p: 2.5,
+            borderRadius: '12px',
+            boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'
+        }}
+    >
+        <Stack spacing={1}>
+            <Typography variant="body2" color="text.secondary">
+                {label}
             </Typography>
-            {chip && (
-                <Chip
-                    label={chip}
-                    size="small"
-                    sx={{ bgcolor: STATUS_COLORS.ACTIVE.bg, color: STATUS_COLORS.ACTIVE.text, fontWeight: 500 }}
-                />
-            )}
+            <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography variant="h3" fontWeight={600}>
+                    {value}
+                </Typography>
+                {chip && (
+                    <Chip
+                        label={chip}
+                        size="small"
+                        sx={{ bgcolor: STATUS_COLORS.ACTIVE.bg, color: STATUS_COLORS.ACTIVE.text, fontWeight: 500 }}
+                    />
+                )}
+            </Stack>
         </Stack>
-    </Stack>
-</Card>
+    </Card>
 );
 
 // ==============================|| OFFER ROW ||============================== //
 
 const OfferRow = ({ offer }: { offer: PromoCode }) => {
     const navigate = useNavigate();
-    console.log(offer.status,"offerstatus");
-    
-const colors = STATUS_COLORS[offer.status] ;
+    console.log(offer.status, 'offerstatus');
+
+    const colors = STATUS_COLORS[offer.status];
 
     return (
-        <Card
-            sx={{ px: 2.5, py: 1.75, borderRadius: 0, boxShadow: 'none', borderBottom: '1px solid', borderColor: 'grey.100' }}
-        >
+        <Card sx={{ px: 2.5, py: 1.75, borderRadius: 0, boxShadow: 'none', borderBottom: '1px solid', borderColor: 'grey.100' }}>
             <Grid container alignItems="center">
                 <Grid item xs={3}>
                     <Typography variant="subtitle1" fontWeight={500}>
@@ -164,7 +162,12 @@ const colors = STATUS_COLORS[offer.status] ;
                     <Chip
                         label={formatStatus(offer.status)}
                         size="small"
-                        sx={{ bgcolor:STATUS_COLORS[offer.status].bg, color: STATUS_COLORS[offer.status].text,fontWeight: 500, borderRadius: '20px' }}
+                        sx={{
+                            bgcolor: STATUS_COLORS[offer.status].bg,
+                            color: STATUS_COLORS[offer.status].text,
+                            fontWeight: 500,
+                            borderRadius: '20px'
+                        }}
                     />
                 </Grid>
                 <Grid item xs={1}>
@@ -196,8 +199,7 @@ const OfferList = ({ onCreateClick, showCreateButton }: { onCreateClick: () => v
     const offers = data?.promoCodes?.data || [];
     const total = data?.promoCodes?.pagination?.total || 0;
 
-    const filteredOffers =
-        filter === 'All' ? offers : offers.filter((o) => formatStatus(o.status) === filter);
+    const filteredOffers = filter === 'All' ? offers : offers.filter((o) => formatStatus(o.status) === filter);
 
     return (
         <Card sx={{ boxShadow: 'none', border: '1px solid', borderColor: 'grey.100' }}>
@@ -248,25 +250,39 @@ const OfferList = ({ onCreateClick, showCreateButton }: { onCreateClick: () => v
                     <Box sx={{ bgcolor: '#EDEDED', px: 2.5, py: 1.25 }}>
                         <Grid container alignItems="center">
                             <Grid item xs={3}>
-                                <Typography variant="subtitle2" color="text.secondary">Code</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Code
+                                </Typography>
                             </Grid>
                             <Grid item xs={3}>
-                                <Typography variant="subtitle2" color="text.secondary">Discount</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Discount
+                                </Typography>
                             </Grid>
                             <Grid item xs={2}>
-                                <Typography variant="subtitle2" color="text.secondary">Expiry</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Expiry
+                                </Typography>
                             </Grid>
                             <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">Limit</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Limit
+                                </Typography>
                             </Grid>
                             <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">Used</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Used
+                                </Typography>
                             </Grid>
                             <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">Status</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Status
+                                </Typography>
                             </Grid>
                             <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">Action</Typography>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    Action
+                                </Typography>
                             </Grid>
                         </Grid>
                     </Box>
@@ -332,49 +348,34 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
             }}
             onSubmit={async (values, { setSubmitting, setStatus }) => {
                 try {
-                    console.log(values,"values");
-                    
+                    console.log(values, 'values');
+
                     const isPercentage = values.discountType === 'PERCENTAGE';
-                  const response =  await createPromoCode({
+                    const response = await createPromoCode({
                         variables: {
                             input: {
-                                  "appliedTo":"ALL_RIDES",
-    "discountType":"FLAT",
-    "expiryDateTime": "2026-08-08",
-    "flatAmount": 3,
-    "maxDiscount": 30,
-    "minimumFare": 300,
-    "name": "rainyi",
-    "occasionId": "6a295a2b88971b824a7dafa4",
-    "perUserLimit": 3,
-    "percentageAmount": 3,
-    "startDateTime": "2026-08-08",
-    "totalUsageLimit": 3
-                                // name: values.name,
-                                // discountType: values.discountType as 'PERCENTAGE' | 'FLAT',
-                                // ...(isPercentage
-                                //     ? { percentageAmount: Number(values.value) }
-                                //     : { flatAmount: Number(values.value) }
-                                // ),
-                                // maxDiscount: values.maxDiscount ? Number(values.maxDiscount) : undefined,
-                                // minimumFare: Number(values.minimumFare),
-                                // appliedTo: values.appliedTo as 'ALL_RIDES' | 'FIRST_RIDE',
-                                // totalUsageLimit: Number(values.totalUsageLimit),
-                                // perUserLimit: Number(values.perUserLimit),
-                                // startDateTime: values.startDateTime,
-                                // expiryDateTime: values.expiryDateTime,
-                                // occasionId: values.occasionId
+                                name: values.name,
+                                discountType: values.discountType as 'PERCENTAGE' | 'FLAT',
+                                ...(isPercentage ? { percentageAmount: Number(values.value) } : { flatAmount: Number(values.value) }),
+                                maxDiscount: values.maxDiscount ? Number(values.maxDiscount) : undefined,
+                                minimumFare: Number(values.minimumFare),
+                                appliedTo: values.appliedTo as 'ALL_RIDES' | 'FIRST_RIDE',
+                                totalUsageLimit: Number(values.totalUsageLimit),
+                                perUserLimit: Number(values.perUserLimit),
+                                startDateTime: values.startDateTime,
+                                expiryDateTime: values.expiryDateTime,
+                                occasionId: values.occasionId
                             }
                         }
                     });
-                    console.log(response,"resp");
-                    
+                    console.log(response, 'resp');
+
                     setStatus({ success: true });
                     showSuccess('Promo code created successfully');
                     onClose();
                 } catch (err: any) {
-                    console.log(err,"err");
-                    
+                    console.log(err, 'err');
+
                     setStatus({ success: false });
                     // handleErrors(err, )
                     showError(extractApiLevelError(err));
@@ -397,8 +398,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
                             <Box sx={{ p: 2.5 }}>
                                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                                     <Stack spacing={0.25}>
-                                        <Typography variant="h4" fontWeight={600}>Create Offer</Typography>
-                                        <Typography variant="body2" color="text.secondary">Promo code for mobile app</Typography>
+                                        <Typography variant="h4" fontWeight={600}>
+                                            Create Offer
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Promo code for mobile app
+                                        </Typography>
                                     </Stack>
                                     <IconButton onClick={onClose} sx={{ display: { xs: 'inline-flex', lg: 'none' } }}>
                                         <IconX size={20} />
@@ -409,12 +414,14 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
                             <Box sx={{ px: 2.5, pb: 2.5 }}>
                                 <Stack spacing={2.5}>
                                     <Grid container spacing={2}>
-
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Promo Code</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Promo Code
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     name="name"
                                                     placeholder="WELCOME10"
                                                     value={values.name}
@@ -425,18 +432,26 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Occasion</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Occasion
+                                                </Typography>
                                                 <TextField
-                                                    select fullWidth size="small"
+                                                    select
+                                                    fullWidth
+                                                    size="small"
                                                     name="occasionId"
                                                     value={values.occasionId}
                                                     onChange={handleChange}
                                                     disabled={occasionLoading}
                                                     SelectProps={{ displayEmpty: true }}
                                                 >
-                                                    <MenuItem value=""><em>Choose occasion</em></MenuItem>
+                                                    <MenuItem value="">
+                                                        <em>Choose occasion</em>
+                                                    </MenuItem>
                                                     {occasions.map((o) => (
-                                                        <MenuItem key={o._id} value={o._id}>{o.occasionName}</MenuItem>
+                                                        <MenuItem key={o._id} value={o._id}>
+                                                            {o.occasionName}
+                                                        </MenuItem>
                                                     ))}
                                                 </TextField>
                                             </Stack>
@@ -444,9 +459,13 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Discount Type</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Discount Type
+                                                </Typography>
                                                 <TextField
-                                                    select fullWidth size="small"
+                                                    select
+                                                    fullWidth
+                                                    size="small"
                                                     name="discountType"
                                                     value={values.discountType}
                                                     onChange={handleChange}
@@ -459,9 +478,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Value</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Value
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     name="value"
                                                     placeholder={values.discountType === 'PERCENTAGE' ? '10%' : 'Rs 100'}
                                                     value={values.value}
@@ -472,9 +494,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Max Discount (optional)</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Max Discount (optional)
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     name="maxDiscount"
                                                     placeholder="e.g. Rs 100"
                                                     value={values.maxDiscount}
@@ -485,9 +510,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Minimum Fare</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Minimum Fare
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     name="minimumFare"
                                                     placeholder="Rs 200"
                                                     value={values.minimumFare}
@@ -498,9 +526,13 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Applies To</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Applies To
+                                                </Typography>
                                                 <TextField
-                                                    select fullWidth size="small"
+                                                    select
+                                                    fullWidth
+                                                    size="small"
                                                     name="appliedTo"
                                                     value={values.appliedTo}
                                                     onChange={handleChange}
@@ -513,9 +545,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Total Usage Limit</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Total Usage Limit
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     name="totalUsageLimit"
                                                     placeholder="500"
                                                     value={values.totalUsageLimit}
@@ -526,9 +561,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Per User Limit</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Per User Limit
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     name="perUserLimit"
                                                     placeholder="1"
                                                     value={values.perUserLimit}
@@ -539,9 +577,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Start Date & Time</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Start Date & Time
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     type="datetime-local"
                                                     name="startDateTime"
                                                     value={values.startDateTime}
@@ -552,9 +593,12 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>Expiry Date & Time</Typography>
+                                                <Typography variant="body2" fontWeight={500}>
+                                                    Expiry Date & Time
+                                                </Typography>
                                                 <TextField
-                                                    fullWidth size="small"
+                                                    fullWidth
+                                                    size="small"
                                                     type="datetime-local"
                                                     name="expiryDateTime"
                                                     value={values.expiryDateTime}
@@ -562,7 +606,6 @@ const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
                                                 />
                                             </Stack>
                                         </Grid>
-
                                     </Grid>
 
                                     <Box sx={{ bgcolor: 'grey.50', borderRadius: 1, p: 1.5 }}>
@@ -597,7 +640,6 @@ const Offers = () => {
 
     return (
         <Stack spacing={2.5}>
-
             {/* Stat cards */}
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={3}>
@@ -638,7 +680,6 @@ const Offers = () => {
                     <CreateOfferForm onClose={() => setCreateOpen(false)} />
                 </Box>
             </Drawer>
-
         </Stack>
     );
 };
