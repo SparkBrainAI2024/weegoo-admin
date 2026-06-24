@@ -158,6 +158,7 @@ const OfferList = ({
             }
         }
     });
+    console.log(data, 'data');
 
     const offers = data?.promoCodes?.data || [];
     const total = data?.promoCodes?.pagination?.total || 0;

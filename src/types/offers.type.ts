@@ -1,4 +1,4 @@
-import { PromoStatus } from 'constants/enum';
+import { appliedTo, discountType, PromoStatus } from 'constants/enum';
 
 export interface CreatePromoCodeResponse {
     createPromoCode: {
@@ -10,12 +10,12 @@ export interface CreatePromoCodeResponse {
 
 export interface CreatePromoCodeInput {
     name: string;
-    discountType: 'PERCENTAGE' | 'FLAT';
+    discountType: discountType;
     percentageAmount?: number;
     flatAmount?: number;
     maxDiscount?: number;
     minimumFare: number;
-    appliedTo: 'ALL_RIDES' | 'FIRST_RIDE';
+    appliedTo: appliedTo;
     totalUsageLimit: number;
     perUserLimit: number;
     startDateTime: string;
@@ -26,7 +26,7 @@ export interface CreatePromoCodeInput {
 export interface PromoCode {
     _id: string;
     name: string;
-    discountType: 'FLAT' | 'PERCENTAGE';
+    discountType: discountType;
     percentageAmount: number | null;
     flatAmount: number | null;
     maxDiscount: number | null;
@@ -38,6 +38,10 @@ export interface PromoCode {
     expiryDateTime: string;
     status: PromoStatus;
     promoCodeUsedCount: number;
+    occasion: {
+        _id: string;
+        occasionName: string;
+    };
 }
 
 export interface PromoCodesResponse {

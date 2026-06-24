@@ -29,6 +29,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
     const occasions = occasionData?.occasion || [];
 
     if (occasionLoading) return <>Loading...</>;
+    console.log('initialData', initialData);
+    console.log('occasion', initialData?.occasion);
 
     return (
         <Formik
@@ -46,7 +48,7 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                 perUserLimit: String(initialData?.perUserLimit || ''),
                 startDateTime: initialData?.startDateTime || '',
                 expiryDateTime: initialData?.expiryDateTime || '',
-                occasionId: ''
+                occasionId: initialData?.occasion?._id || ''
             }}
             onSubmit={async (values, { setSubmitting, setStatus }) => {
                 const isPercentage = values.discountType === 'PERCENTAGE';
@@ -123,7 +125,7 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                                     <Stack spacing={0.25}>
                                         <Typography variant="h4" fontWeight={600}>
-                                            Create Offer
+                                            {isEdit ? 'Edit Offer' : 'Create Offer'}{' '}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
                                             Promo code for mobile app
