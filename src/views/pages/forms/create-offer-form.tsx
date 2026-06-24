@@ -8,19 +8,23 @@ import Typography from '@mui/material/Typography';
 import { IconX } from '@tabler/icons-react';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import { Formik } from 'formik';
-import { CREATE_PROMO_CODE } from 'graphql/mutations/offers.mutations';
+import { CREATE_PROMO_CODE, UPDATE_PROMO_CODE } from 'graphql/mutations/offers.mutations';
 import { GET_OCCASIONS } from 'graphql/queries/occasion.queries';
 import useNotification from 'hooks/useNotification';
 import { extractApiLevelError } from 'lib/apiError';
 import { OccasionResponse } from 'types/occasion.response';
+import { CreatePromoCodeInput, CreatePromoCodeResponse, PromoCode } from 'types/offers.type';
 
-export const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
+const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initialData?: PromoCode | null }) => {
+    const isEdit = Boolean(initialData);
     const { data: occasionData, loading: occasionLoading } = useQuery<OccasionResponse>(GET_OCCASIONS, {
         variables: { paginationInput: { page: 0, limit: 50 } }
     });
 
     const [createPromoCode] = useMutation<CreatePromoCodeResponse, { input: CreatePromoCodeInput }>(CREATE_PROMO_CODE);
     const { notification, showError, showSuccess, clearNotification } = useNotification();
+
+    const [updatePromoCode] = useMutation(UPDATE_PROMO_CODE);
 
     const occasions = occasionData?.occasion || [];
 
@@ -29,45 +33,70 @@ export const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
     return (
         <Formik
             initialValues={{
-                name: '',
-                discountType: 'PERCENTAGE',
-                value: '',
-                maxDiscount: '',
-                minimumFare: '',
-                appliedTo: 'ALL_RIDES',
-                totalUsageLimit: '',
-                perUserLimit: '',
-                startDateTime: '',
-                expiryDateTime: '',
+                name: initialData?.name || '',
+                discountType: initialData?.discountType || 'PERCENTAGE',
+                value:
+                    initialData?.discountType === 'PERCENTAGE'
+                        ? String(initialData?.percentageAmount || '')
+                        : String(initialData?.flatAmount || ''),
+                maxDiscount: String(initialData?.maxDiscount || ''),
+                minimumFare: String(initialData?.minimumFare || ''),
+                appliedTo: initialData?.appliedTo || 'ALL_RIDES',
+                totalUsageLimit: String(initialData?.totalUsageLimit || ''),
+                perUserLimit: String(initialData?.perUserLimit || ''),
+                startDateTime: initialData?.startDateTime || '',
+                expiryDateTime: initialData?.expiryDateTime || '',
                 occasionId: ''
             }}
             onSubmit={async (values, { setSubmitting, setStatus }) => {
+                const isPercentage = values.discountType === 'PERCENTAGE';
+
                 try {
-                    console.log(values, 'values');
-
-                    const isPercentage = values.discountType === 'PERCENTAGE';
-                    const response = await createPromoCode({
-                        variables: {
-                            input: {
-                                name: values.name,
-                                discountType: values.discountType as 'PERCENTAGE' | 'FLAT',
-                                ...(isPercentage ? { percentageAmount: Number(values.value) } : { flatAmount: Number(values.value) }),
-                                maxDiscount: values.maxDiscount ? Number(values.maxDiscount) : undefined,
-                                minimumFare: Number(values.minimumFare),
-                                appliedTo: values.appliedTo as 'ALL_RIDES' | 'FIRST_RIDE',
-                                totalUsageLimit: Number(values.totalUsageLimit),
-                                perUserLimit: Number(values.perUserLimit),
-                                startDateTime: values.startDateTime,
-                                expiryDateTime: values.expiryDateTime,
-                                occasionId: values.occasionId
+                    if (isEdit) {
+                        await updatePromoCode({
+                            variables: {
+                                updatePromoCodeId: initialData!._id,
+                                input: {
+                                    name: values.name,
+                                    discountType: values.discountType as 'PERCENTAGE' | 'FLAT',
+                                    ...(isPercentage ? { percentageAmount: Number(values.value) } : { flatAmount: Number(values.value) }),
+                                    maxDiscount: values.maxDiscount ? Number(values.maxDiscount) : undefined,
+                                    minimumFare: Number(values.minimumFare),
+                                    appliedTo: values.appliedTo as 'ALL_RIDES' | 'FIRST_RIDE',
+                                    totalUsageLimit: Number(values.totalUsageLimit),
+                                    perUserLimit: Number(values.perUserLimit),
+                                    startDateTime: values.startDateTime,
+                                    expiryDateTime: values.expiryDateTime,
+                                    occasionId: values.occasionId
+                                }
                             }
-                        }
-                    });
-                    console.log(response, 'resp');
+                        });
+                    } else {
+                        console.log(values, 'values');
 
-                    setStatus({ success: true });
-                    showSuccess('Promo code created successfully');
-                    onClose();
+                        const response = await createPromoCode({
+                            variables: {
+                                input: {
+                                    name: values.name,
+                                    discountType: values.discountType as 'PERCENTAGE' | 'FLAT',
+                                    ...(isPercentage ? { percentageAmount: Number(values.value) } : { flatAmount: Number(values.value) }),
+                                    maxDiscount: values.maxDiscount ? Number(values.maxDiscount) : undefined,
+                                    minimumFare: Number(values.minimumFare),
+                                    appliedTo: values.appliedTo as 'ALL_RIDES' | 'FIRST_RIDE',
+                                    totalUsageLimit: Number(values.totalUsageLimit),
+                                    perUserLimit: Number(values.perUserLimit),
+                                    startDateTime: values.startDateTime,
+                                    expiryDateTime: values.expiryDateTime,
+                                    occasionId: values.occasionId
+                                }
+                            }
+                        });
+                        console.log(response, 'resp');
+
+                        setStatus({ success: true });
+                        showSuccess('Promo code created successfully');
+                        onClose();
+                    }
                 } catch (err: any) {
                     console.log(err, 'err');
 
@@ -313,8 +342,8 @@ export const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
                                         <Button fullWidth variant="outlined" color="inherit" onClick={onClose}>
                                             Cancel
                                         </Button>
-                                        <Button fullWidth variant="contained" color="success" type="submit" disabled={isSubmitting}>
-                                            Create Offer
+                                        <Button type="submit" color="success">
+                                            {isEdit ? 'Save Changes' : 'Create Offer'}
                                         </Button>
                                     </Stack>
                                 </Stack>
@@ -326,3 +355,5 @@ export const CreateOfferForm = ({ onClose }: { onClose: () => void }) => {
         </Formik>
     );
 };
+
+export default CreateOfferForm;

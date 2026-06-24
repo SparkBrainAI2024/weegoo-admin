@@ -71,7 +71,7 @@ export interface SignInResponse {
     refreshToken: string;
     admin: {
         email: string;
-    }
+    };
 }
 
 export interface ForgotPasswordResponse {
@@ -80,8 +80,6 @@ export interface ForgotPasswordResponse {
         message: string;
     };
 }
-
-
 
 export interface VerifyOtpResponse {
     adminVerifyOtp: {

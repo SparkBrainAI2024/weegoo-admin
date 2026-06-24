@@ -16,55 +16,16 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 // assets
-import { IconPlus } from '@tabler/icons-react';
+import { IconEdit, IconEye, IconPlus } from '@tabler/icons-react';
 
 // graphql
 import { GET_PROMO_CODES } from 'graphql/queries/promoCode.queries';
 import { PromoStatus } from 'constants/enum';
 import { useQuery } from '@apollo/client/react';
-import { CreateOfferForm } from './forms/create-offer-form';
+import CreateOfferForm from './forms/create-offer-form';
+import { PromoCode, PromoCodesResponse, STATUS_COLORS } from 'types/offers.type';
 
 // ==============================|| TYPES ||============================== //
-
-interface PromoCode {
-    _id: string;
-    name: string;
-    discountType: 'FLAT' | 'PERCENTAGE';
-    percentageAmount: number | null;
-    flatAmount: number | null;
-    maxDiscount: number | null;
-    minimumFare: number;
-    appliedTo: string;
-    totalUsageLimit: number;
-    perUserLimit: number;
-    startDateTime: string;
-    expiryDateTime: string;
-    status: PromoStatus;
-    promoCodeUsedCount: number;
-}
-
-interface PromoCodesResponse {
-    promoCodes: {
-        data: PromoCode[];
-        message: string | null;
-        pagination: {
-            hasNextPage: boolean;
-            hasPreviousPage: boolean;
-            limit: number;
-            total: number;
-            page: number;
-        };
-    };
-}
-
-// ==============================|| HELPERS ||============================== //
-
-const STATUS_COLORS: Record<PromoStatus, { bg: string; text: string }> = {
-    DRAFT: { bg: '#FFF8E1', text: '#F9A825' },
-    ACTIVE: { bg: '#BFE6C4', text: '#30B010' },
-    DISABLED: { bg: '#E0E0E0', text: '#616161' },
-    EXPIRED: { bg: '#E0E0E0', text: '#616161' }
-};
 
 const formatDiscount = (offer: PromoCode) =>
     offer.discountType === 'PERCENTAGE'
@@ -115,9 +76,9 @@ const StatCard = ({ label, value, chip }: { label: string; value: string; chip?:
 
 // ==============================|| OFFER ROW ||============================== //
 
-const OfferRow = ({ offer }: { offer: PromoCode }) => {
+const OfferRow = ({ offer, onEditClick }: { offer: PromoCode; onEditClick: (offer: PromoCode) => void }) => {
     const navigate = useNavigate();
-    console.log(offer.status, 'offerstatus');
+    // in Offers component
 
     return (
         <Card sx={{ px: 2.5, py: 1.75, borderRadius: 0, boxShadow: 'none', borderBottom: '1px solid', borderColor: 'grey.100' }}>
@@ -160,9 +121,14 @@ const OfferRow = ({ offer }: { offer: PromoCode }) => {
                     />
                 </Grid>
                 <Grid item xs={1}>
-                    <Button size="small" variant="outlined" onClick={() => navigate(`/offers/${offer._id}`)}>
-                        View
-                    </Button>
+                    <Stack direction="row" spacing={0.5}>
+                        <IconButton size="small" onClick={() => navigate(`/offers/${offer._id}`)}>
+                            <IconEye size={16} />
+                        </IconButton>
+                        <IconButton size="small" color="warning" onClick={() => onEditClick(offer)}>
+                            <IconEdit size={16} />
+                        </IconButton>
+                    </Stack>
                 </Grid>
             </Grid>
         </Card>
@@ -171,7 +137,15 @@ const OfferRow = ({ offer }: { offer: PromoCode }) => {
 
 // ==============================|| OFFER LIST ||============================== //
 
-const OfferList = ({ onCreateClick, showCreateButton }: { onCreateClick: () => void; showCreateButton: boolean }) => {
+const OfferList = ({
+    onCreateClick,
+    onEditClick,
+    showCreateButton
+}: {
+    onCreateClick: () => void;
+    onEditClick: (offer: PromoCode) => void; // ← add this
+    showCreateButton: boolean;
+}) => {
     const [filter, setFilter] = useState('All');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -285,7 +259,9 @@ const OfferList = ({ onCreateClick, showCreateButton }: { onCreateClick: () => v
                             No offers found.
                         </Typography>
                     ) : (
-                        filteredOffers.map((offer) => <OfferRow key={offer._id} offer={offer} />)
+                        filteredOffers.map(
+                            (offer) => <OfferRow key={offer._id} offer={offer} onEditClick={onEditClick} /> // ← pass down
+                        )
                     )}
                 </Box>
             </Box>
@@ -314,6 +290,12 @@ const Offers = () => {
     const theme = useTheme();
     const downLG = useMediaQuery(theme.breakpoints.down('lg'));
     const [createOpen, setCreateOpen] = useState(false);
+    const [selectedOffer, setSelectedOffer] = useState<PromoCode | null>(null);
+
+    const handleEditClick = (offer: PromoCode) => {
+        setSelectedOffer(offer);
+        setCreateOpen(true);
+    };
 
     return (
         <Stack spacing={2.5}>
@@ -336,12 +318,26 @@ const Offers = () => {
             {/* List + Create form */}
             <Grid container spacing={2.5}>
                 <Grid item xs={12} lg={8}>
-                    <OfferList onCreateClick={() => setCreateOpen(true)} showCreateButton={downLG} />
+                    <OfferList
+                        onCreateClick={() => {
+                            setSelectedOffer(null);
+                            setCreateOpen(true);
+                        }}
+                        onEditClick={handleEditClick}
+                        showCreateButton={downLG}
+                    />
                 </Grid>
 
                 {!downLG && (
                     <Grid item xs={12} lg={4}>
-                        <CreateOfferForm onClose={() => setCreateOpen(false)} />
+                        <CreateOfferForm
+                            key={selectedOffer?._id || 'create'} // ← this is the fix
+                            initialData={selectedOffer}
+                            onClose={() => {
+                                setCreateOpen(false);
+                                setSelectedOffer(null);
+                            }}
+                        />
                     </Grid>
                 )}
             </Grid>
