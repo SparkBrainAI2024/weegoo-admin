@@ -14,6 +14,7 @@ import useNotification from 'hooks/useNotification';
 import { extractApiLevelError } from 'lib/apiError';
 import { OccasionResponse } from 'types/occasion.response';
 import { CreatePromoCodeInput, CreatePromoCodeResponse, PromoCode } from 'types/offers.type';
+import { toDateTimeLocal } from 'utils/date';
 
 const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initialData?: PromoCode | null }) => {
     const isEdit = Boolean(initialData);
@@ -46,8 +47,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                 appliedTo: initialData?.appliedTo || 'ALL_RIDES',
                 totalUsageLimit: String(initialData?.totalUsageLimit || ''),
                 perUserLimit: String(initialData?.perUserLimit || ''),
-                startDateTime: initialData?.startDateTime || '',
-                expiryDateTime: initialData?.expiryDateTime || '',
+                startDateTime: toDateTimeLocal(initialData?.startDateTime || ''),
+                expiryDateTime: toDateTimeLocal(initialData?.expiryDateTime || ''),
                 occasionId: initialData?.occasion?._id || ''
             }}
             onSubmit={async (values, { setSubmitting, setStatus }) => {
