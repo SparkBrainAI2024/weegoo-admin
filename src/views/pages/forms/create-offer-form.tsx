@@ -13,8 +13,9 @@ import { GET_OCCASIONS } from 'graphql/queries/occasion.queries';
 import useNotification from 'hooks/useNotification';
 import { extractApiLevelError } from 'lib/apiError';
 import { OccasionResponse } from 'types/occasion.response';
-import { CreatePromoCodeInput, CreatePromoCodeResponse, PromoCode } from 'types/offers.type';
+import { CreatePromoCodeInput, CreatePromoCodeResponse, PromoCode, UpdatePromoCodeInput, UpdatePromoCodeResponse } from 'types/offers.type';
 import { toDateTimeLocal } from 'utils/date';
+import { OffersMessages } from './offers.messages';
 
 const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initialData?: PromoCode | null }) => {
     const isEdit = Boolean(initialData);
@@ -25,13 +26,12 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
     const [createPromoCode] = useMutation<CreatePromoCodeResponse, { input: CreatePromoCodeInput }>(CREATE_PROMO_CODE);
     const { notification, showError, showSuccess, clearNotification } = useNotification();
 
-    const [updatePromoCode] = useMutation(UPDATE_PROMO_CODE);
-
+    const [updatePromoCode] = useMutation<UpdatePromoCodeResponse, { updatePromoCodeId: string; input: UpdatePromoCodeInput }>(
+        UPDATE_PROMO_CODE
+    );
     const occasions = occasionData?.occasion || [];
 
     if (occasionLoading) return <>Loading...</>;
-    console.log('initialData', initialData);
-    console.log('occasion', initialData?.occasion);
 
     return (
         <Formik
@@ -56,7 +56,7 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
 
                 try {
                     if (isEdit) {
-                        await updatePromoCode({
+                        const response = await updatePromoCode({
                             variables: {
                                 updatePromoCodeId: initialData!._id,
                                 input: {
@@ -74,9 +74,13 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                 }
                             }
                         });
-                    } else {
-                        console.log(values, 'values');
 
+                        setStatus({ success: true });
+                        console.log(response.data, 'datar');
+
+                        showSuccess(response.data?.updatePromoCode.message || OffersMessages.updated_successfully);
+                        setTimeout(() => onClose(), 1500);
+                    } else {
                         const response = await createPromoCode({
                             variables: {
                                 input: {
@@ -94,7 +98,6 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                 }
                             }
                         });
-                        console.log(response, 'resp');
 
                         setStatus({ success: true });
                         showSuccess('Promo code created successfully');

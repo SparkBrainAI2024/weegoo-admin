@@ -11,11 +11,15 @@ export const CREATE_PROMO_CODE = gql`
 `;
 
 export const UPDATE_PROMO_CODE = gql`
-    mutation UpdatePromoCode($updatePromoCodeId: ID!, $input: UpdatePromoCodeInput!) {
+    mutation updatePromoCode($updatePromoCodeId: ID!, $input: UpdatePromoCodeInput!) {
         updatePromoCode(id: $updatePromoCodeId, input: $input) {
-            _id
-            name
-            status
+            success
+            message
+            promocode {
+                _id
+                name
+                discountType
+            }
         }
     }
 `;

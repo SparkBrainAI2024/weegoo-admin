@@ -8,7 +8,30 @@ export interface CreatePromoCodeResponse {
     };
 }
 
+export interface UpdatePromoCodeResponse {
+    updatePromoCode: {
+        promocode: PromoCode;
+        success: boolean;
+        message: string;
+    };
+}
+
 export interface CreatePromoCodeInput {
+    name: string;
+    discountType: discountType;
+    percentageAmount?: number;
+    flatAmount?: number;
+    maxDiscount?: number;
+    minimumFare: number;
+    appliedTo: appliedTo;
+    totalUsageLimit: number;
+    perUserLimit: number;
+    startDateTime: string;
+    expiryDateTime: string;
+    occasionId: string;
+}
+
+export interface UpdatePromoCodeInput {
     name: string;
     discountType: discountType;
     percentageAmount?: number;
