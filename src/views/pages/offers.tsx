@@ -158,7 +158,6 @@ const OfferList = ({
             }
         }
     });
-    console.log(data, 'data');
 
     const offers = data?.promoCodes?.data || [];
     const total = data?.promoCodes?.pagination?.total || 0;
@@ -351,7 +350,11 @@ const Offers = () => {
                 sx={{ '& .MuiDrawer-paper': { width: { xs: '100%', sm: 420 } } }}
             >
                 <Box sx={{ overflowY: 'auto', height: '100%' }}>
-                    <CreateOfferForm onClose={() => setCreateOpen(false)} />
+                    <CreateOfferForm
+                        key={selectedOffer?._id || 'create'} // ← this is the fix
+                        initialData={selectedOffer}
+                        onClose={() => setCreateOpen(false)}
+                    />
                 </Box>
             </Drawer>
         </Stack>
