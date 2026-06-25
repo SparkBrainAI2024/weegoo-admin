@@ -16,6 +16,21 @@ import { OccasionResponse } from 'types/occasion.response';
 import { CreatePromoCodeInput, CreatePromoCodeResponse, PromoCode, UpdatePromoCodeInput, UpdatePromoCodeResponse } from 'types/offers.type';
 import { toDateTimeLocal } from 'utils/date';
 import { OffersMessages } from './offers.messages';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+    name: Yup.string().required('Promo code is required'),
+    discountType: Yup.string().required('Discount type is required'),
+    value: Yup.number().typeError('Value must be a number').required('Value is required').min(0, 'Value must be at least 0'),
+    minimumFare: Yup.number().typeError('Minimum fare must be a number').required('Minimum fare is required').min(0),
+    appliedTo: Yup.string().required('Applied to is required'),
+    totalUsageLimit: Yup.number().typeError('Must be a number').required('Total usage limit is required').min(1),
+    perUserLimit: Yup.number().typeError('Must be a number').required('Per user limit is required').min(1),
+    startDateTime: Yup.string().required('Start date is required'),
+    expiryDateTime: Yup.string().required('Expiry date is required'),
+    occasionId: Yup.string().required('Occasion is required'),
+    maxDiscount: Yup.number().typeError('Must be a number').optional()
+});
 
 const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initialData?: PromoCode | null }) => {
     const isEdit = Boolean(initialData);
@@ -29,6 +44,7 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
     const [updatePromoCode] = useMutation<UpdatePromoCodeResponse, { updatePromoCodeId: string; input: UpdatePromoCodeInput }>(
         UPDATE_PROMO_CODE
     );
+
     const occasions = occasionData?.occasion || [];
 
     if (occasionLoading) return <>Loading...</>;
@@ -51,6 +67,7 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                 expiryDateTime: toDateTimeLocal(initialData?.expiryDateTime || ''),
                 occasionId: initialData?.occasion?._id || ''
             }}
+            validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting, setStatus }) => {
                 const isPercentage = values.discountType === 'PERCENTAGE';
 
@@ -76,8 +93,6 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                         });
 
                         setStatus({ success: true });
-                        console.log(response.data, 'datar');
-
                         showSuccess(response.data?.updatePromoCode.message || OffersMessages.updated_successfully);
                         setTimeout(() => onClose(), 1500);
                     } else {
@@ -100,21 +115,18 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                         });
 
                         setStatus({ success: true });
-                        showSuccess('Promo code created successfully');
+                        showSuccess(response.data?.createPromoCode.message || OffersMessages.created_successfully);
                         onClose();
                     }
                 } catch (err: any) {
-                    console.log(err, 'err');
-
                     setStatus({ success: false });
-                    // handleErrors(err, )
                     showError(extractApiLevelError(err));
                 } finally {
                     setSubmitting(false);
                 }
             }}
         >
-            {({ handleSubmit, values, handleChange, isSubmitting }) => (
+            {({ handleSubmit, values, handleChange, isSubmitting, errors, touched }) => (
                 <>
                     <NotificationBanner
                         open={Boolean(notification.message)}
@@ -129,7 +141,7 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                                     <Stack spacing={0.25}>
                                         <Typography variant="h4" fontWeight={600}>
-                                            {isEdit ? 'Edit Offer' : 'Create Offer'}{' '}
+                                            {isEdit ? 'Edit Offer' : 'Create Offer'}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
                                             Promo code for mobile app
@@ -156,6 +168,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     placeholder="WELCOME10"
                                                     value={values.name}
                                                     onChange={handleChange}
+                                                    error={touched.name && Boolean(errors.name)}
+                                                    helperText={touched.name && errors.name}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -174,6 +188,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     onChange={handleChange}
                                                     disabled={occasionLoading}
                                                     SelectProps={{ displayEmpty: true }}
+                                                    error={touched.occasionId && Boolean(errors.occasionId)}
+                                                    helperText={touched.occasionId && errors.occasionId}
                                                 >
                                                     <MenuItem value="">
                                                         <em>Choose occasion</em>
@@ -199,6 +215,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     name="discountType"
                                                     value={values.discountType}
                                                     onChange={handleChange}
+                                                    error={touched.discountType && Boolean(errors.discountType)}
+                                                    helperText={touched.discountType && errors.discountType}
                                                 >
                                                     <MenuItem value="PERCENTAGE">Percentage</MenuItem>
                                                     <MenuItem value="FLAT">Flat</MenuItem>
@@ -218,6 +236,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     placeholder={values.discountType === 'PERCENTAGE' ? '10%' : 'Rs 100'}
                                                     value={values.value}
                                                     onChange={handleChange}
+                                                    error={touched.value && Boolean(errors.value)}
+                                                    helperText={touched.value && errors.value}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -234,6 +254,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     placeholder="e.g. Rs 100"
                                                     value={values.maxDiscount}
                                                     onChange={handleChange}
+                                                    error={touched.maxDiscount && Boolean(errors.maxDiscount)}
+                                                    helperText={touched.maxDiscount && errors.maxDiscount}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -250,6 +272,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     placeholder="Rs 200"
                                                     value={values.minimumFare}
                                                     onChange={handleChange}
+                                                    error={touched.minimumFare && Boolean(errors.minimumFare)}
+                                                    helperText={touched.minimumFare && errors.minimumFare}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -266,6 +290,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     name="appliedTo"
                                                     value={values.appliedTo}
                                                     onChange={handleChange}
+                                                    error={touched.appliedTo && Boolean(errors.appliedTo)}
+                                                    helperText={touched.appliedTo && errors.appliedTo}
                                                 >
                                                     <MenuItem value="ALL_RIDES">All rides</MenuItem>
                                                     <MenuItem value="FIRST_RIDE">First ride</MenuItem>
@@ -285,6 +311,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     placeholder="500"
                                                     value={values.totalUsageLimit}
                                                     onChange={handleChange}
+                                                    error={touched.totalUsageLimit && Boolean(errors.totalUsageLimit)}
+                                                    helperText={touched.totalUsageLimit && errors.totalUsageLimit}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -301,6 +329,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     placeholder="1"
                                                     value={values.perUserLimit}
                                                     onChange={handleChange}
+                                                    error={touched.perUserLimit && Boolean(errors.perUserLimit)}
+                                                    helperText={touched.perUserLimit && errors.perUserLimit}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -317,6 +347,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     name="startDateTime"
                                                     value={values.startDateTime}
                                                     onChange={handleChange}
+                                                    error={touched.startDateTime && Boolean(errors.startDateTime)}
+                                                    helperText={touched.startDateTime && errors.startDateTime}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -333,6 +365,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     name="expiryDateTime"
                                                     value={values.expiryDateTime}
                                                     onChange={handleChange}
+                                                    error={touched.expiryDateTime && Boolean(errors.expiryDateTime)}
+                                                    helperText={touched.expiryDateTime && errors.expiryDateTime}
                                                 />
                                             </Stack>
                                         </Grid>
@@ -348,8 +382,8 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                         <Button fullWidth variant="outlined" color="inherit" onClick={onClose}>
                                             Cancel
                                         </Button>
-                                        <Button type="submit" color="success">
-                                            {isEdit ? 'Save Changes' : 'Create Offer'}
+                                        <Button type="submit" fullWidth variant="contained" color="success" disabled={isSubmitting}>
+                                            {isSubmitting ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Offer'}
                                         </Button>
                                     </Stack>
                                 </Stack>

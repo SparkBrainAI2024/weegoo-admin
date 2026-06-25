@@ -2,9 +2,9 @@ import { appliedTo, discountType, PromoStatus } from 'constants/enum';
 
 export interface CreatePromoCodeResponse {
     createPromoCode: {
-        _id: string;
-        name: string;
-        status: string;
+        promocode: PromoCode;
+        success: boolean;
+        message: string;
     };
 }
 
