@@ -14,7 +14,7 @@ import axios from 'utils/axios';
 
 // types
 import { KeyedObject } from 'types';
-import { InitialLoginContextProps, JWTContextType, SignInResponse, SignUpResponse } from 'types/auth';
+import { InitialLoginContextProps, JWTContextType, SignInResponse, SignUpResponse } from 'types/auth.response';
 import client from 'lib/apolloClient';
 import { SIGN_IN } from 'graphql/mutations/auth.mutations';
 

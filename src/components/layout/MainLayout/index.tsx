@@ -17,7 +17,6 @@ import HorizontalBar from './HorizontalBar';
 import MainContentStyled from './MainContentStyled';
 import Customization from '../Customization';
 import Loader from 'components/ui-component/Loader';
-import Breadcrumbs from 'components/ui-component/extended/Breadcrumbs';
 
 import useConfig from 'hooks/useConfig';
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
@@ -81,8 +80,6 @@ const MainLayout = () => {
             {/* main content */}
             <MainContentStyled {...{ borderRadius, menuOrientation, open: drawerOpen, theme }}>
                 <Container maxWidth={container ? 'lg' : false} {...(!container && { sx: { px: { xs: 0 } } })}>
-                    {/* breadcrumb */}
-                    <Breadcrumbs />
                     <Outlet />
                 </Container>
             </MainContentStyled>

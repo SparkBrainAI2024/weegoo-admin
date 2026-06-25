@@ -21,12 +21,23 @@ const GuestGuard = ({ children }: { children: React.ReactElement }) => {
 
 const LoginRoutes = {
     path: '/',
-    element: <NavMotion><MinimalLayout /></NavMotion>,
+    element: (
+        <NavMotion>
+            <MinimalLayout />
+        </NavMotion>
+    ),
     children: [
-        { path: '/login', element: <GuestGuard><AuthLogin /></GuestGuard> },
+        {
+            path: '/login',
+            element: (
+                <GuestGuard>
+                    <AuthLogin />
+                </GuestGuard>
+            )
+        },
         { path: '/register', element: <AuthRegister /> },
         { path: '/forgot', element: <AuthForgotPassword /> },
-        {path:'/verify-otp', element: <CodeVerification />},
+        { path: '/verify-otp', element: <CodeVerification /> },
         { path: '/reset-password', element: <AuthResetPassword /> },
         { path: '/check-mail', element: <AuthCheckMail /> }
     ]

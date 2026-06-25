@@ -7,6 +7,7 @@ import Loadable from 'components/ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 import { loader as productsLoader, productLoader } from 'api/products';
+import NewPage from 'views/pages/create-new-page';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -176,9 +177,11 @@ const RidesPage = Loadable(lazy(() => import('views/pages/rides')));
 const DriversPage = Loadable(lazy(() => import('views/pages/drivers')));
 const RidersPage = Loadable(lazy(() => import('views/pages/riders')));
 const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
+const PageManagementPage = Loadable(lazy(()=>import('views/pages/page-list')))
 const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
 const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
+const OffersDetailsPage = Loadable(lazy(()=>import('views/pages/offers-detail')));
 
 const DashboardPage = Loadable(lazy(() => import('views/pages/dashboard')));
 
@@ -216,6 +219,10 @@ const MainRoutes = {
             path: '/offers',
             element: <OffersPage />
         },
+        {
+            path:'/offers/:id',
+            element:<OffersDetailsPage/>
+        },
           {
             path: '/reports',
             element: <ReportsPage />
@@ -223,6 +230,14 @@ const MainRoutes = {
          {
             path: '/settings',
             element: <SettingsPage />
+        },
+        {
+            path: '/page-management',
+            element: <PageManagementPage />
+        },
+        {
+            path:'/page-management/new',
+            element:<NewPage/>
         },
 
         {

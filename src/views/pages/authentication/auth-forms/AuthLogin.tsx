@@ -23,7 +23,7 @@ const JWTLogin = ({ loginProp }: { loginProp?: number }) => {
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                 password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={async (values, { setStatus, setSubmitting }) => {
+        onSubmit={async (values, { setStatus, setSubmitting }) => {
                 try {
                     await login(values.email, values.password);
                     setStatus({ success: true });

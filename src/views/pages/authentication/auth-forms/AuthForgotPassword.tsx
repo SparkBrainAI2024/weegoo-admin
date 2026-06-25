@@ -22,7 +22,7 @@ import { useDispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { FORGOT_PASSWORD } from 'graphql/mutations/auth.mutations';
 import { useMutation } from '@apollo/client/react';
-import { ForgotPasswordResponse } from 'types/auth';
+import { ForgotPasswordResponse } from 'types/auth.response';
 import { InputField } from 'components/ui-component/forms/InputField';
 import { ROUTES } from 'constants/routes';
 import { useState } from 'react';

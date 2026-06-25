@@ -11,7 +11,7 @@ import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 
 // types
-import { FirebaseContextType, InitialLoginContextProps } from 'types/auth';
+import { FirebaseContextType, InitialLoginContextProps } from 'types/auth.response';
 
 // firebase initialize
 if (!firebase.apps.length) {

@@ -33,7 +33,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 // types
 import { StringColorProps } from 'types';
-import { ResetPasswordResponse } from 'types/auth';
+import { ResetPasswordResponse } from 'types/auth.response';
 import { useMutation } from '@apollo/client/react';
 import { RESET_PASSWORD } from 'graphql/mutations/auth.mutations';
 import { PasswordField } from 'components/ui-component/forms/PasswordField';

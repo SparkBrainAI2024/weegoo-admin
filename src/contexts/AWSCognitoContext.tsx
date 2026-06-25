@@ -11,7 +11,7 @@ import accountReducer from 'store/accountReducer';
 import Loader from 'components/ui-component/Loader';
 
 // types
-import { AWSCognitoContextType, InitialLoginContextProps } from 'types/auth';
+import { AWSCognitoContextType, InitialLoginContextProps } from 'types/auth.response';
 
 // constant
 const initialState: InitialLoginContextProps = {

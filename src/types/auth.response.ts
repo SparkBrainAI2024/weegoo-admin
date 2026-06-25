@@ -71,7 +71,7 @@ export interface SignInResponse {
     refreshToken: string;
     admin: {
         email: string;
-    }
+    };
 }
 
 export interface ForgotPasswordResponse {

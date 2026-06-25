@@ -12,7 +12,7 @@ import Loader from 'components/ui-component/Loader';
 
 // types
 import { KeyedObject } from 'types';
-import { Auth0ContextType, InitialLoginContextProps } from 'types/auth';
+import { Auth0ContextType, InitialLoginContextProps } from 'types/auth.response';
 
 // constant
 let auth0Client: Auth0Client;
