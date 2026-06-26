@@ -28,3 +28,19 @@ export const UPDATE_PAGE = gql`
         }
     }
 `;
+
+export const PUBLISH_PAGE = gql`
+    mutation PublishPage($publishPageId: ID!) {
+        publishPage(id: $publishPageId) {
+            _id
+            title
+            slug
+            type
+            content
+            status
+            publishedAt
+            createdAt
+            updatedAt
+        }
+    }
+`;

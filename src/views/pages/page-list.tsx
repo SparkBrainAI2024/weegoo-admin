@@ -15,13 +15,9 @@ import TablePagination from '@mui/material/TablePagination';
 import { GET_PAGES } from 'graphql/queries/pages.queries';
 import { useQuery } from '@apollo/client/react';
 import { Page, PagesResponse } from 'types/pages.response';
+import { PAGE_STATUS_COLORS } from 'constants/pages';
 
 // ==============================|| STATUS BADGE ||============================== //
-
-const STATUS_COLORS = {
-    PUBLISHED: { bg: '#BFE6C4', text: '#30B010' },
-    DRAFT: { bg: '#E0E0E0', text: '#616161' }
-};
 
 // ==============================|| HEADER ROW ||============================== //
 
@@ -112,8 +108,8 @@ const PageRow = ({ page }: { page: Page }) => {
                         sx={{
                             borderRadius: '20px',
                             p: 2,
-                            backgroundColor: STATUS_COLORS[page.status].bg,
-                            color: STATUS_COLORS[page.status].text
+                            backgroundColor: PAGE_STATUS_COLORS[page.status].bg,
+                            color: PAGE_STATUS_COLORS[page.status].text
                         }}
                     />
                 </Grid>

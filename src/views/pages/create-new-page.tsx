@@ -1,4 +1,4 @@
-import { Button, Box, Grid, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Button, Box, Grid, Typography, MenuItem, Select, FormControl, InputLabel, Chip } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { InputField } from 'components/ui-component/forms/InputField';
@@ -7,13 +7,14 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { CREATE_PAGE, UPDATE_PAGE } from 'graphql/mutations/page.mutations';
+import { CREATE_PAGE, PUBLISH_PAGE, UPDATE_PAGE } from 'graphql/mutations/page.mutations';
 import { CreatePageResponse, PageBySlugResponse } from 'types/pages.response';
 import useNotification from 'hooks/useNotification';
 import { extractApiLevelError } from 'lib/apiError';
 import { useEffect, useState } from 'react';
 import { GET_PAGE_BY_SLUG, GET_PAGES } from 'graphql/queries/pages.queries';
 import { PageType } from 'types/enum';
+import { PAGE_STATUS_COLORS } from 'constants/pages';
 
 interface PageData {
     _id: string;
@@ -30,6 +31,8 @@ const NewPage = () => {
     const { showError, showSuccess } = useNotification();
     const { slug } = useParams();
     const isEditMode = Boolean(slug);
+
+    const [publishPage] = useMutation(PUBLISH_PAGE);
 
     const [pageData, setPageData] = useState<PageData | null>(null);
     const { data: pageQueryData } = useQuery<PageBySlugResponse>(GET_PAGE_BY_SLUG, {
@@ -133,13 +136,21 @@ const NewPage = () => {
                             </Grid>
 
                             <Grid item xs={3}>
-                                <FormControl fullWidth>
-                                    <InputLabel>Status</InputLabel>
-                                    <Select name="status" value={values.status} onChange={handleChange} label="Status">
-                                        <MenuItem value="PUBLISHED">Published</MenuItem>
-                                        <MenuItem value="DRAFT">Draft</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <Box sx={{ mt: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary">
+                                        Status
+                                    </Typography>{' '}
+                                    <Chip
+                                        label={values.status.charAt(0) + values.status.slice(1).toLowerCase()}
+                                        size="small"
+                                        sx={{
+                                            borderRadius: '20px',
+                                            p: 2,
+                                            backgroundColor: PAGE_STATUS_COLORS[values.status as keyof typeof PAGE_STATUS_COLORS]?.bg,
+                                            color: PAGE_STATUS_COLORS[values.status as keyof typeof PAGE_STATUS_COLORS]?.text
+                                        }}
+                                    />
+                                </Box>
                             </Grid>
 
                             <Grid item xs={3}>
@@ -173,9 +184,25 @@ const NewPage = () => {
                             <Button variant="outlined" onClick={() => navigate('/page-management')}>
                                 Cancel
                             </Button>
-                            <Button variant="contained" color="inherit">
-                                Preview
-                            </Button>
+                            {isEditMode && (
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    onClick={async () => {
+                                        try {
+                                            await publishPage({
+                                                variables: { publishPageId: pageData?._id },
+                                                refetchQueries: ['GET_PAGES', 'PageBySlug']
+                                            });
+                                            showSuccess('Page published successfully');
+                                        } catch (err: any) {
+                                            showError(extractApiLevelError(err));
+                                        }
+                                    }}
+                                >
+                                    Publish
+                                </Button>
+                            )}
                             <Button variant="contained" color="warning" type="submit">
                                 Save Changes
                             </Button>
