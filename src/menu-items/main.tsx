@@ -26,8 +26,7 @@ const main: NavItemType = {
             url: '/rides',
             icon: IconCar,
             breadcrumbs: true
-        },
-        
+        }
     ]
 };
 

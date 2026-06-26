@@ -1,69 +1,102 @@
-import { Button, Box, Grid, Typography, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { InputField } from "components/ui-component/forms/InputField";
-import Breadcrumbs from "components/ui-component/extended/Breadcrumbs";
+import { Button, Box, Grid, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { InputField } from 'components/ui-component/forms/InputField';
+import Breadcrumbs from 'components/ui-component/extended/Breadcrumbs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useNavigate } from "react-router";
-import { useMutation } from "@apollo/client/react";
-import { CREATE_PAGE } from "graphql/mutations/page.mutations";
-import { CreatePageResponse } from "types/pages.response";
-import useNotification from "hooks/useNotification";
-import { extractApiLevelError } from "lib/apiError";
+import { useNavigate, useParams } from 'react-router';
+import { useMutation } from '@apollo/client/react';
+import { CREATE_PAGE } from 'graphql/mutations/page.mutations';
+import { CreatePageResponse } from 'types/pages.response';
+import useNotification from 'hooks/useNotification';
+import { extractApiLevelError } from 'lib/apiError';
+import { useEffect, useState } from 'react';
 
+interface PageData {
+    title: string;
+    status: string;
+    content: string;
+}
 
 const NewPage = () => {
-      const navigate = useNavigate();
+    const navigate = useNavigate();
     const [createPage] = useMutation<CreatePageResponse>(CREATE_PAGE);
     const { notification, showError, showSuccess, clearNotification } = useNotification();
+    const [pageData, setPageData] = useState<PageData | null>(null);
+    const { slug } = useParams();
+    const [pageTitle, setPageTitle] = useState('');
+    const isEditMode = Boolean(slug);
+    useEffect(() => {
+        if (!isEditMode) return; // skip fetch on create
+
+        const fetchPage = async () => {
+            const data = {
+                title: 'privacy policy',
+                status: 'DRAFT',
+                content: 'This is privacy policy content'
+            }; // your query id
+            setPageData(data);
+        };
+        fetchPage();
+    }, [slug, isEditMode]);
+
+    useEffect(() => {
+        // fetch page data
+        // const data = await getPageById(id);
+        const data = {
+            title: 'privacy policy',
+            status: 'DRAFT',
+            content: 'This is privacy policy content'
+        };
+        setPageTitle(data.title); // set once, don't bind to form field
+    }, [slug]);
 
     return (
         <>
             <Breadcrumbs
                 custom
+                rightAlign={false}
                 heading="Page Management"
-                links={[
-                    { title: 'Content', to: '/content' },
-                    { title: 'Page Management' }
-                ]}
+                heading={isEditMode ? pageData?.title ?? '...' : 'Add Page'} // ← this becomes BTitle
+                links={[{ title: 'Page Management', to: '/page-management' }, { title: pageTitle }]}
+                card={false}
+                rightAlign={false}
             />
+            <Breadcrumbs />
 
             <Formik
+                enableReinitialize // ← critical! allows form to repopulate when pageData loads
                 initialValues={{
-                    title: '',
-                    status: 'DRAFT',
-                    content: ''
+                    title: pageData?.title ?? '',
+                    status: pageData?.status ?? 'DRAFT',
+                    content: pageData?.content ?? ''
                 }}
                 validationSchema={Yup.object().shape({
                     title: Yup.string().required('Title is required'),
                     status: Yup.string().required('Status is required'),
+                    content: Yup.string().required().min(50)
                 })}
-                onSubmit={async (values, { setStatus, setSubmitting }) => {
-     try{   const result = await createPage({
-            variables: {
-                input: {
-                    title: values.title,
-                    content: values.content,
-                    status: values.status,
-                    type: 'STATIC'
-                }
-            }
-        });
-        setStatus({ success: true });
-        setSubmitting(false);
-        showSuccess('Page created successfully');
-        navigate('/content');
-    } catch (err: any) {
-        setStatus({ success: false });
-        setSubmitting(false);
-        showError(extractApiLevelError(err));
-    }                }}
+                onSubmit={async (values, { setSubmitting, setStatus }) => {
+                    try {
+                        if (isEditMode) {
+                            // await updatePage({ variables: { id, input: { ...values } } });
+                            // showSuccess('Page updated successfully');
+                        } else {
+                            await createPage({ variables: { input: { ...values, type: 'STATIC' } } });
+                            showSuccess('Page created successfully');
+                        }
+                        navigate('/content/page-management');
+                    } catch (err: any) {
+                        setStatus({ success: false });
+                        setSubmitting(false);
+                        showError(extractApiLevelError(err));
+                    }
+                }}
             >
                 {({ handleSubmit, values, handleChange, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-
                             {/* Page Title */}
                             <Grid item xs={6}>
                                 <InputField name="title" label="Page Title" />
@@ -82,28 +115,30 @@ const NewPage = () => {
 
                             {/* Last Updated */}
                             <Grid item xs={3}>
-                                <Typography variant="caption" color="text.secondary">Last Updated</Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    Last Updated
+                                </Typography>
                                 <Typography variant="body1">Feb 08, 2026 • 12:45 PM</Typography>
                             </Grid>
-                                                    <Grid item xs={12}>
-
-
-<ReactQuill
-    value={values.content}
-    onChange={(val) => setFieldValue('content', val)}
-    theme="snow"
-     style={{ height: '300px', marginBottom: '42px' }}
-/>
-                                                    </Grid>
-
-
+                            <Grid item xs={12}>
+                                <ReactQuill
+                                    value={values.content}
+                                    onChange={(val) => setFieldValue('content', val)}
+                                    theme="snow"
+                                    style={{ height: '300px', marginBottom: '42px' }}
+                                />
+                            </Grid>
                         </Grid>
 
                         {/* Action Buttons */}
                         <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
                             <Button variant="outlined">Cancel</Button>
-                            <Button variant="contained" color="inherit">Preview</Button>
-                            <Button variant="contained" color="warning" type="submit">Save Changes</Button>
+                            <Button variant="contained" color="inherit">
+                                Preview
+                            </Button>
+                            <Button variant="contained" color="warning" type="submit">
+                                Save Changes
+                            </Button>
                         </Box>
                     </form>
                 )}
