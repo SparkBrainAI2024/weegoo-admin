@@ -6,12 +6,13 @@ import Breadcrumbs from 'components/ui-component/extended/Breadcrumbs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router';
-import { useMutation } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_PAGE } from 'graphql/mutations/page.mutations';
 import { CreatePageResponse } from 'types/pages.response';
 import useNotification from 'hooks/useNotification';
 import { extractApiLevelError } from 'lib/apiError';
 import { useEffect, useState } from 'react';
+import { GET_PAGE_BY_SLUG } from 'graphql/queries/pages.queries';
 
 interface PageData {
     title: string;
@@ -25,7 +26,6 @@ const NewPage = () => {
     const { notification, showError, showSuccess, clearNotification } = useNotification();
     const [pageData, setPageData] = useState<PageData | null>(null);
     const { slug } = useParams();
-    const [pageTitle, setPageTitle] = useState('');
     const isEditMode = Boolean(slug);
     useEffect(() => {
         if (!isEditMode) return; // skip fetch on create
@@ -41,16 +41,16 @@ const NewPage = () => {
         fetchPage();
     }, [slug, isEditMode]);
 
+    const { data: pageQueryData, loading } = useQuery(GET_PAGE_BY_SLUG, {
+        variables: { slug },
+        skip: !isEditMode
+    });
+
     useEffect(() => {
-        // fetch page data
-        // const data = await getPageById(id);
-        const data = {
-            title: 'privacy policy',
-            status: 'DRAFT',
-            content: 'This is privacy policy content'
-        };
-        setPageTitle(data.title); // set once, don't bind to form field
-    }, [slug]);
+        if (pageQueryData?.pageBySlug) {
+            setPageData(pageQueryData.pageBySlug);
+        }
+    }, [pageQueryData]);
 
     return (
         <>

@@ -7,8 +7,8 @@ export interface PagesResponse {
 }
 
 export const enum PAGE_STATUS {
-  PUBLISHED = 'PUBLISHED',
-  DRAFT = 'DRAFT',
+    PUBLISHED = 'PUBLISHED',
+    DRAFT = 'DRAFT'
 }
 
 export interface Page {
@@ -16,8 +16,8 @@ export interface Page {
     title: string;
     content: string;
     type: string;
-    slug:string;
-    updatedAt:string;
+    slug: string;
+    updatedAt: string;
 }
 
 export interface Pagination {
@@ -41,5 +41,5 @@ export interface CreatePageResponse {
         publishedAt: string;
         createdAt: string;
         updatedAt: string;
-    }
+    };
 }
