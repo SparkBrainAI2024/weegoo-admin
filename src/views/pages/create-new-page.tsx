@@ -1,4 +1,4 @@
-import { Button, Box, Grid, Typography, MenuItem, Select, FormControl, InputLabel, Chip } from '@mui/material';
+import { Button, Box, Grid, Typography, Chip } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { InputField } from 'components/ui-component/forms/InputField';
@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { GET_PAGE_BY_SLUG, GET_PAGES } from 'graphql/queries/pages.queries';
 import { PageType } from 'types/enum';
 import { PAGE_STATUS_COLORS } from 'constants/pages';
+import PagePreviewModal from 'components/ui-component/PagePreviewModal';
 
 interface PageData {
     _id: string;
@@ -31,7 +32,7 @@ const NewPage = () => {
     const { showError, showSuccess } = useNotification();
     const { slug } = useParams();
     const isEditMode = Boolean(slug);
-
+    const [previewOpen, setPreviewOpen] = useState(false);
     const [publishPage] = useMutation(PUBLISH_PAGE);
 
     const [pageData, setPageData] = useState<PageData | null>(null);
@@ -129,85 +130,94 @@ const NewPage = () => {
                 }}
             >
                 {({ handleSubmit, values, handleChange, setFieldValue }) => (
-                    <form onSubmit={handleSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <InputField name="title" label="Page Title" />
-                            </Grid>
+                    <>
+                        {' '}
+                        <form onSubmit={handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <InputField name="title" label="Page Title" />
+                                </Grid>
 
-                            <Grid item xs={3}>
-                                <Box sx={{ mt: 0.5 }}>
+                                <Grid item xs={3}>
+                                    <Box sx={{ mt: 0.5 }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                            Status
+                                        </Typography>{' '}
+                                        <Chip
+                                            label={values.status.charAt(0) + values.status.slice(1).toLowerCase()}
+                                            size="small"
+                                            sx={{
+                                                borderRadius: '20px',
+                                                p: 2,
+                                                backgroundColor: PAGE_STATUS_COLORS[values.status as keyof typeof PAGE_STATUS_COLORS]?.bg,
+                                                color: PAGE_STATUS_COLORS[values.status as keyof typeof PAGE_STATUS_COLORS]?.text
+                                            }}
+                                        />
+                                    </Box>
+                                </Grid>
+
+                                <Grid item xs={3}>
                                     <Typography variant="caption" color="text.secondary">
-                                        Status
-                                    </Typography>{' '}
-                                    <Chip
-                                        label={values.status.charAt(0) + values.status.slice(1).toLowerCase()}
-                                        size="small"
-                                        sx={{
-                                            borderRadius: '20px',
-                                            p: 2,
-                                            backgroundColor: PAGE_STATUS_COLORS[values.status as keyof typeof PAGE_STATUS_COLORS]?.bg,
-                                            color: PAGE_STATUS_COLORS[values.status as keyof typeof PAGE_STATUS_COLORS]?.text
-                                        }}
+                                        Last Updated
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {pageData?.updatedAt
+                                            ? new Date(pageData.updatedAt).toLocaleString('en-US', {
+                                                  month: 'short',
+                                                  day: '2-digit',
+                                                  year: 'numeric',
+                                                  hour: '2-digit',
+                                                  minute: '2-digit'
+                                              })
+                                            : '—'}
+                                    </Typography>
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <ReactQuill
+                                        value={values.content}
+                                        onChange={(val) => setFieldValue('content', val)}
+                                        theme="snow"
+                                        style={{ height: '300px', marginBottom: '42px' }}
                                     />
-                                </Box>
+                                </Grid>
                             </Grid>
 
-                            <Grid item xs={3}>
-                                <Typography variant="caption" color="text.secondary">
-                                    Last Updated
-                                </Typography>
-                                <Typography variant="body1">
-                                    {pageData?.updatedAt
-                                        ? new Date(pageData.updatedAt).toLocaleString('en-US', {
-                                              month: 'short',
-                                              day: '2-digit',
-                                              year: 'numeric',
-                                              hour: '2-digit',
-                                              minute: '2-digit'
-                                          })
-                                        : '—'}
-                                </Typography>
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <ReactQuill
-                                    value={values.content}
-                                    onChange={(val) => setFieldValue('content', val)}
-                                    theme="snow"
-                                    style={{ height: '300px', marginBottom: '42px' }}
-                                />
-                            </Grid>
-                        </Grid>
-
-                        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-                            <Button variant="outlined" onClick={() => navigate('/page-management')}>
-                                Cancel
-                            </Button>
-                            {isEditMode && (
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    onClick={async () => {
-                                        try {
-                                            await publishPage({
-                                                variables: { publishPageId: pageData?._id },
-                                                refetchQueries: ['GET_PAGES', 'PageBySlug']
-                                            });
-                                            showSuccess('Page published successfully');
-                                        } catch (err: any) {
-                                            showError(extractApiLevelError(err));
-                                        }
-                                    }}
-                                >
-                                    Publish
+                            <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+                                <Button variant="contained" color="inherit" onClick={() => setPreviewOpen(true)}>
+                                    Preview
                                 </Button>
-                            )}
-                            <Button variant="contained" color="warning" type="submit">
-                                Save Changes
-                            </Button>
-                        </Box>
-                    </form>
+                                {isEditMode && (
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        onClick={async () => {
+                                            try {
+                                                await publishPage({
+                                                    variables: { publishPageId: pageData?._id },
+                                                    refetchQueries: ['GET_PAGES', 'PageBySlug']
+                                                });
+                                                showSuccess('Page published successfully');
+                                            } catch (err: any) {
+                                                showError(extractApiLevelError(err));
+                                            }
+                                        }}
+                                    >
+                                        Publish
+                                    </Button>
+                                )}
+                                <Button variant="contained" color="warning" type="submit">
+                                    Save Changes
+                                </Button>
+                            </Box>
+                        </form>
+                        <PagePreviewModal
+                            open={previewOpen}
+                            onClose={() => setPreviewOpen(false)}
+                            title={values.title}
+                            content={values.content}
+                        />
+                    </>
                 )}
             </Formik>
         </>

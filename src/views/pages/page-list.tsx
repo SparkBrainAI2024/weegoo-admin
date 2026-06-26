@@ -16,6 +16,7 @@ import { GET_PAGES } from 'graphql/queries/pages.queries';
 import { useQuery } from '@apollo/client/react';
 import { Page, PagesResponse } from 'types/pages.response';
 import { PAGE_STATUS_COLORS } from 'constants/pages';
+import PagePreviewModal from 'components/ui-component/PagePreviewModal';
 
 // ==============================|| STATUS BADGE ||============================== //
 
@@ -69,71 +70,76 @@ const TableHeader = () => (
 
 const PageRow = ({ page }: { page: Page }) => {
     const navigate = useNavigate();
+    const [previewOpen, setPreviewOpen] = useState(false);
 
     return (
-        <Card
-            sx={{
-                px: 3,
-                py: 2,
-                borderRadius: 1,
-                boxShadow: 'none',
-                border: '1px solid',
-                borderColor: 'grey.100',
-                '&:hover': { bgcolor: 'grey.50' }
-            }}
-        >
-            <Grid container alignItems="center">
-                <Grid item xs={3}>
-                    <Stack spacing={0.5}>
-                        <Typography variant="subtitle1" fontWeight={500}>
-                            {page.title}
+        <>
+            {' '}
+            <Card
+                sx={{
+                    px: 3,
+                    py: 2,
+                    borderRadius: 1,
+                    boxShadow: 'none',
+                    border: '1px solid',
+                    borderColor: 'grey.100',
+                    '&:hover': { bgcolor: 'grey.50' }
+                }}
+            >
+                <Grid container alignItems="center">
+                    <Grid item xs={3}>
+                        <Stack spacing={0.5}>
+                            <Typography variant="subtitle1" fontWeight={500}>
+                                {page.title}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                                {page.title.toLowerCase()}
+                            </Typography>
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Typography variant="body2" color="text.secondary">
+                            {page.slug}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                            {page.title.toLowerCase()}
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Typography variant="body2">{page.type.charAt(0) + page.type.slice(1).toLowerCase()}</Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Chip
+                            label={page.status.charAt(0) + page.status.slice(1).toLowerCase()}
+                            size="small"
+                            sx={{
+                                borderRadius: '20px',
+                                p: 2,
+                                backgroundColor: PAGE_STATUS_COLORS[page.status].bg,
+                                color: PAGE_STATUS_COLORS[page.status].text
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Typography variant="body2" color="text.secondary">
+                            {new Date(page.updatedAt).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: '2-digit',
+                                year: 'numeric'
+                            })}
                         </Typography>
-                    </Stack>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Stack direction="row" spacing={1}>
+                            <Button size="small" variant="outlined" onClick={() => navigate(`/page-management/${page.slug}`)}>
+                                View
+                            </Button>
+                            <Button size="small" variant="contained" onClick={() => navigate(`/page-management/${page.slug}/edit`)}>
+                                Edit
+                            </Button>
+                        </Stack>
+                    </Grid>
                 </Grid>
-                <Grid item xs={2}>
-                    <Typography variant="body2" color="text.secondary">
-                        {page.slug}
-                    </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                    <Typography variant="body2">{page.type.charAt(0) + page.type.slice(1).toLowerCase()}</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                    <Chip
-                        label={page.status.charAt(0) + page.status.slice(1).toLowerCase()}
-                        size="small"
-                        sx={{
-                            borderRadius: '20px',
-                            p: 2,
-                            backgroundColor: PAGE_STATUS_COLORS[page.status].bg,
-                            color: PAGE_STATUS_COLORS[page.status].text
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    <Typography variant="body2" color="text.secondary">
-                        {new Date(page.updatedAt).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: '2-digit',
-                            year: 'numeric'
-                        })}
-                    </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                    <Stack direction="row" spacing={1}>
-                        <Button size="small" variant="outlined" onClick={() => navigate(`/page-management/${page.slug}`)}>
-                            View
-                        </Button>
-                        <Button size="small" variant="contained" onClick={() => navigate(`/page-management/${page.slug}/edit`)}>
-                            Edit
-                        </Button>
-                    </Stack>
-                </Grid>
-            </Grid>
-        </Card>
+            </Card>
+            <PagePreviewModal open={previewOpen} onClose={() => setPreviewOpen(false)} title={page.title} content={page.content} />
+        </>
     );
 };
 
