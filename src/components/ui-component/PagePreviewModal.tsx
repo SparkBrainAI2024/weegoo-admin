@@ -1,8 +1,9 @@
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { IconButton } from '@mui/material';
+import { IconX } from '@tabler/icons-react';
 
 interface Props {
     open: boolean;
@@ -13,34 +14,36 @@ interface Props {
 
 const PagePreviewModal = ({ open, onClose, title, content }: Props) => {
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-            <DialogContent sx={{ p: 0 }}>
-                {/* mobile frame */}
-                <Box
-                    sx={{
-                        mx: 'auto',
-                        my: 2,
-                        width: 320,
-                        minHeight: 560,
-                        border: '8px solid #222',
-                        borderRadius: '36px',
-                        overflow: 'hidden',
-                        boxShadow: '0 0 0 2px #555',
-                        bgcolor: '#fff',
-                        position: 'relative'
-                    }}
-                >
-                    {/* mobile status bar */}
-                    <Box sx={{ bgcolor: '#f5f5f5', px: 2, py: 1, borderBottom: '1px solid #eee' }}>
-                        <Typography variant="subtitle2" fontWeight={600}>
-                            {title}
-                        </Typography>
-                    </Box>
+        <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth PaperProps={{ sx: { bgcolor: 'transparent', boxShadow: 'none' } }}>
+            <Box
+                sx={{
+                    mx: 'auto',
+                    my: 2,
+                    width: 320,
+                    minHeight: 560,
+                    border: '8px solid #222',
+                    borderRadius: '36px',
+                    overflow: 'hidden',
+                    boxShadow: '0 0 0 2px #555',
+                    bgcolor: '#fff',
+                    position: 'relative'
+                }}
+            >
+                {/* close button */}
+                <IconButton onClick={onClose} size="small" sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
+                    <IconX size={18} />
+                </IconButton>
 
-                    {/* content */}
-                    <Box sx={{ p: 2, overflowY: 'auto', maxHeight: 480, fontSize: '13px' }} dangerouslySetInnerHTML={{ __html: content }} />
+                {/* mobile status bar */}
+                <Box sx={{ bgcolor: '#f5f5f5', px: 2, py: 1, borderBottom: '1px solid #eee' }}>
+                    <Typography variant="subtitle2" fontWeight={600}>
+                        {title}
+                    </Typography>
                 </Box>
-            </DialogContent>
+
+                {/* content */}
+                <Box sx={{ p: 2, overflowY: 'auto', maxHeight: 480, fontSize: '13px' }} dangerouslySetInnerHTML={{ __html: content }} />
+            </Box>
         </Dialog>
     );
 };
