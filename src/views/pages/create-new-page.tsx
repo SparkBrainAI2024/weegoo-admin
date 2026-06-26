@@ -56,10 +56,11 @@ const NewPage = () => {
         <>
             <Breadcrumbs
                 custom
-                rightAlign={false}
-                heading="Page Management"
-                heading={isEditMode ? pageData?.title ?? '...' : 'Add Page'} // ← this becomes BTitle
-                links={[{ title: 'Page Management', to: '/page-management' }, { title: pageTitle }]}
+                title={false}
+                links={[
+                    { title: 'Page Management', to: '/page-management' },
+                    { title: isEditMode ? pageData?.title ?? '...' : 'Add Page' }
+                ]}
                 card={false}
                 rightAlign={false}
             />
