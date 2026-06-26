@@ -7,41 +7,32 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { CREATE_PAGE } from 'graphql/mutations/page.mutations';
-import { CreatePageResponse } from 'types/pages.response';
+import { CREATE_PAGE, UPDATE_PAGE } from 'graphql/mutations/page.mutations';
+import { CreatePageResponse, PageBySlugResponse } from 'types/pages.response';
 import useNotification from 'hooks/useNotification';
 import { extractApiLevelError } from 'lib/apiError';
 import { useEffect, useState } from 'react';
-import { GET_PAGE_BY_SLUG } from 'graphql/queries/pages.queries';
+import { GET_PAGE_BY_SLUG, GET_PAGES } from 'graphql/queries/pages.queries';
+import { PageType } from 'types/enum';
 
 interface PageData {
+    _id: string;
     title: string;
     status: string;
     content: string;
+    updatedAt?: string;
 }
 
 const NewPage = () => {
     const navigate = useNavigate();
     const [createPage] = useMutation<CreatePageResponse>(CREATE_PAGE);
-    const { notification, showError, showSuccess, clearNotification } = useNotification();
-    const [pageData, setPageData] = useState<PageData | null>(null);
+    const [updatePage] = useMutation(UPDATE_PAGE);
+    const { showError, showSuccess } = useNotification();
     const { slug } = useParams();
     const isEditMode = Boolean(slug);
-    useEffect(() => {
-        if (!isEditMode) return; // skip fetch on create
 
-        const fetchPage = async () => {
-            const data = {
-                title: 'privacy policy',
-                status: 'DRAFT',
-                content: 'This is privacy policy content'
-            }; // your query id
-            setPageData(data);
-        };
-        fetchPage();
-    }, [slug, isEditMode]);
-
-    const { data: pageQueryData, loading } = useQuery(GET_PAGE_BY_SLUG, {
+    const [pageData, setPageData] = useState<PageData | null>(null);
+    const { data: pageQueryData } = useQuery<PageBySlugResponse>(GET_PAGE_BY_SLUG, {
         variables: { slug },
         skip: !isEditMode
     });
@@ -51,7 +42,6 @@ const NewPage = () => {
             setPageData(pageQueryData.pageBySlug);
         }
     }, [pageQueryData]);
-
     return (
         <>
             <Breadcrumbs
@@ -64,10 +54,9 @@ const NewPage = () => {
                 card={false}
                 rightAlign={false}
             />
-            <Breadcrumbs />
 
             <Formik
-                enableReinitialize // ← critical! allows form to repopulate when pageData loads
+                enableReinitialize
                 initialValues={{
                     title: pageData?.title ?? '',
                     status: pageData?.status ?? 'DRAFT',
@@ -76,18 +65,59 @@ const NewPage = () => {
                 validationSchema={Yup.object().shape({
                     title: Yup.string().required('Title is required'),
                     status: Yup.string().required('Status is required'),
-                    content: Yup.string().required().min(50)
+                    content: Yup.string().required().min(5)
                 })}
                 onSubmit={async (values, { setSubmitting, setStatus }) => {
+                    console.log('isEditMode:', isEditMode);
+                    console.log('pageData:', pageData);
                     try {
                         if (isEditMode) {
-                            // await updatePage({ variables: { id, input: { ...values } } });
-                            // showSuccess('Page updated successfully');
+                            await updatePage({
+                                variables: {
+                                    updatePageId: pageData?._id,
+                                    input: {
+                                        title: values.title,
+                                        content: values.content,
+                                        type: PageType.INFO
+                                    }
+                                },
+                                refetchQueries: [
+                                    {
+                                        query: GET_PAGES,
+                                        variables: {
+                                            paginationInput: {
+                                                page: 0,
+                                                limit: 10
+                                            }
+                                        }
+                                    }
+                                ]
+                            });
+                            showSuccess('Page updated successfully');
                         } else {
-                            await createPage({ variables: { input: { ...values, type: 'STATIC' } } });
+                            await createPage({
+                                variables: {
+                                    input: {
+                                        title: values.title,
+                                        content: values.content,
+                                        type: PageType.INFO
+                                    }
+                                },
+                                refetchQueries: [
+                                    {
+                                        query: GET_PAGES,
+                                        variables: {
+                                            paginationInput: {
+                                                page: 0,
+                                                limit: 10
+                                            }
+                                        }
+                                    }
+                                ]
+                            });
                             showSuccess('Page created successfully');
                         }
-                        navigate('/content/page-management');
+                        navigate('/page-management');
                     } catch (err: any) {
                         setStatus({ success: false });
                         setSubmitting(false);
@@ -98,12 +128,10 @@ const NewPage = () => {
                 {({ handleSubmit, values, handleChange, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            {/* Page Title */}
                             <Grid item xs={6}>
                                 <InputField name="title" label="Page Title" />
                             </Grid>
 
-                            {/* Status */}
                             <Grid item xs={3}>
                                 <FormControl fullWidth>
                                     <InputLabel>Status</InputLabel>
@@ -114,13 +142,23 @@ const NewPage = () => {
                                 </FormControl>
                             </Grid>
 
-                            {/* Last Updated */}
                             <Grid item xs={3}>
                                 <Typography variant="caption" color="text.secondary">
                                     Last Updated
                                 </Typography>
-                                <Typography variant="body1">Feb 08, 2026 • 12:45 PM</Typography>
+                                <Typography variant="body1">
+                                    {pageData?.updatedAt
+                                        ? new Date(pageData.updatedAt).toLocaleString('en-US', {
+                                              month: 'short',
+                                              day: '2-digit',
+                                              year: 'numeric',
+                                              hour: '2-digit',
+                                              minute: '2-digit'
+                                          })
+                                        : '—'}
+                                </Typography>
                             </Grid>
+
                             <Grid item xs={12}>
                                 <ReactQuill
                                     value={values.content}
@@ -131,9 +169,10 @@ const NewPage = () => {
                             </Grid>
                         </Grid>
 
-                        {/* Action Buttons */}
                         <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-                            <Button variant="outlined">Cancel</Button>
+                            <Button variant="outlined" onClick={() => navigate('/page-management')}>
+                                Cancel
+                            </Button>
                             <Button variant="contained" color="inherit">
                                 Preview
                             </Button>

@@ -6,12 +6,17 @@ export interface PagesResponse {
     };
 }
 
+export interface PageBySlugResponse {
+    pageBySlug: Page;
+}
+
 export const enum PAGE_STATUS {
     PUBLISHED = 'PUBLISHED',
     DRAFT = 'DRAFT'
 }
 
 export interface Page {
+    _id: string;
     status: PAGE_STATUS;
     title: string;
     content: string;
