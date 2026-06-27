@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
-import logo from "../../../assets/images/logo.png"
+import logo from '../../../assets/images/logo.png';
 
 // project import
 import navigation from 'menu-items';
@@ -32,17 +32,18 @@ interface BreadcrumbLinkProps {
 
 // ==============================|| BREADCRUMBS TITLE ||============================== //
 
-const BTitle = ({ title, icon }: { title: string, icon?: any }) => {
+const BTitle = ({ title, icon }: { title: string; icon?: any }) => {
     const Icon = icon;
-    return <Grid item>
-        <Stack direction="row" alignItems="center" spacing={1}>
-            {Icon && <Icon stroke={1.5} size="24px" />}
-            <Typography variant="h3" sx={{ fontWeight: 500 }}>
-                {title}
-            </Typography>
-        </Stack>
-    </Grid>
-
+    return (
+        <Grid item>
+            <Stack direction="row" alignItems="center" spacing={1}>
+                {Icon && <Icon stroke={1.5} size="24px" />}
+                <Typography variant="h3" sx={{ fontWeight: 500 }}>
+                    {title}
+                </Typography>
+            </Stack>
+        </Grid>
+    );
 };
 
 // ==============================|| BREADCRUMBS ||============================== //
@@ -279,8 +280,10 @@ const Breadcrumbs = ({
                             alignItems={rightAlign ? 'center' : 'flex-start'}
                             spacing={1}
                         >
-
-                            {title && !titleBottom && <BTitle title={custom ? (heading as string) : (item?.title as string)} icon={item?.icon} />}                            <Grid item>{tempContent}</Grid>
+                            {title && !titleBottom && (
+                                <BTitle title={custom ? (heading as string) : (item?.title as string)} icon={item?.icon} />
+                            )}{' '}
+                            <Grid item>{tempContent}</Grid>
                             {title && titleBottom && <BTitle title={custom ? (heading as string) : (item?.title as string)} />}
                         </Grid>
                     </Box>

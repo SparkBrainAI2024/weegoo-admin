@@ -177,11 +177,11 @@ const RidesPage = Loadable(lazy(() => import('views/pages/rides')));
 const DriversPage = Loadable(lazy(() => import('views/pages/drivers')));
 const RidersPage = Loadable(lazy(() => import('views/pages/riders')));
 const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
-const PageManagementPage = Loadable(lazy(()=>import('views/pages/page-list')))
+const PageManagementPage = Loadable(lazy(() => import('views/pages/page-list')));
 const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
 const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
-const OffersDetailsPage = Loadable(lazy(()=>import('views/pages/offers-detail')));
+const OffersDetailsPage = Loadable(lazy(() => import('views/pages/offers-detail')));
 
 const DashboardPage = Loadable(lazy(() => import('views/pages/dashboard')));
 
@@ -195,39 +195,39 @@ const MainRoutes = {
         </AuthGuard>
     ),
     children: [
-          {
+        {
             path: '/dashboard/default',
             element: <DashboardPage />
         },
-          {
+        {
             path: '/rides',
             element: <RidesPage />
         },
-          {
+        {
             path: '/drivers',
             element: <DriversPage />
         },
-          {
+        {
             path: '/riders',
             element: <RidersPage />
         },
-          {
+        {
             path: '/payments',
             element: <PaymentsPage />
         },
-          {
+        {
             path: '/offers',
             element: <OffersPage />
         },
         {
-            path:'/offers/:id',
-            element:<OffersDetailsPage/>
+            path: '/offers/:id',
+            element: <OffersDetailsPage />
         },
-          {
+        {
             path: '/reports',
             element: <ReportsPage />
         },
-         {
+        {
             path: '/settings',
             element: <SettingsPage />
         },
@@ -236,8 +236,12 @@ const MainRoutes = {
             element: <PageManagementPage />
         },
         {
-            path:'/page-management/new',
-            element:<NewPage/>
+            path: '/page-management/:slug/edit',
+            element: <NewPage />
+        },
+        {
+            path: '/page-management/add',
+            element: <NewPage />
         },
 
         {
@@ -736,7 +740,7 @@ const MainRoutes = {
             path: '/sample-page',
             element: <SamplePage />
         },
-       
+
         {
             path: '/dashboard/analytics',
             element: <DashboardAnalytics />

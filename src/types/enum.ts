@@ -9,3 +9,8 @@ export enum SeverityEnum {
     SUCCESS = 'success',
     WARNING = 'warning'
 }
+
+export enum PageType {
+    INFO = 'INFO',
+    LEGAL = 'LEGAL'
+}

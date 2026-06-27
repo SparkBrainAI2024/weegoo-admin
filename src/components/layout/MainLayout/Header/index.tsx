@@ -16,6 +16,7 @@ import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics } fr
 
 // types
 import { NavItemType, OverrideIcon } from 'types';
+import { IconFileText } from '@tabler/icons-react';
 
 // ==============================|| FIND CURRENT NAV ITEM ||============================== //
 
@@ -45,11 +46,12 @@ const DETAIL_ROUTES: DetailRoute[] = [
     { pattern: '/drivers/:id', title: 'Driver Detail', icon: IconUser },
     { pattern: '/riders/:id', title: 'Rider Detail', icon: IconUsers },
     { pattern: '/payments/:id', title: 'Payment Detail', icon: IconCreditCard },
-    { pattern: '/reports/:id', title: 'Report Detail', icon: IconReportAnalytics }
+    { pattern: '/reports/:id', title: 'Report Detail', icon: IconReportAnalytics },
+    { pattern: '/page-management/add', title: 'Page Management', icon: IconFileText },
+    { pattern: '/page-management/:slug/edit', title: 'Page Management', icon: IconFileText }
 ];
 
-const findDetailRoute = (pathname: string): DetailRoute | undefined =>
-    DETAIL_ROUTES.find((route) => matchPath(route.pattern, pathname));
+const findDetailRoute = (pathname: string): DetailRoute | undefined => DETAIL_ROUTES.find((route) => matchPath(route.pattern, pathname));
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
