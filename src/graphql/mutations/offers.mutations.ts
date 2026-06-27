@@ -27,3 +27,12 @@ export const UPDATE_PROMO_CODE = gql`
         }
     }
 `;
+
+export const ACTIVATE_PROMO_CODE = gql`
+    mutation ActivatePromoCode($activatePromoCodeId: ID!) {
+        activatePromoCode(id: $activatePromoCodeId) {
+            _id
+            status
+        }
+    }
+`;

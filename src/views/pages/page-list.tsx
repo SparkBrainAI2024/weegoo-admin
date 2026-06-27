@@ -74,7 +74,7 @@ const PageRow = ({ page }: { page: Page }) => {
 
     return (
         <>
-            {' '}
+            <PagePreviewModal open={previewOpen} onClose={() => setPreviewOpen(false)} title={page.title} content={page.content} />{' '}
             <Card
                 sx={{
                     px: 3,
@@ -128,7 +128,7 @@ const PageRow = ({ page }: { page: Page }) => {
                     </Grid>
                     <Grid item xs={1}>
                         <Stack direction="row" spacing={1}>
-                            <Button size="small" variant="outlined" onClick={() => navigate(`/page-management/${page.slug}`)}>
+                            <Button size="small" variant="outlined" onClick={() => setPreviewOpen(true)}>
                                 View
                             </Button>
                             <Button size="small" variant="contained" onClick={() => navigate(`/page-management/${page.slug}/edit`)}>

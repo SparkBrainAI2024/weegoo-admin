@@ -12,8 +12,12 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // graphql
-import { useQuery } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_PROMO_CODE } from 'graphql/queries/promoCode.queries';
+import { ACTIVATE_PROMO_CODE } from 'graphql/mutations/offers.mutations';
+import { OffersMessages } from './forms/offers.messages';
+import { extractApiLevelError } from 'lib/apiError';
+import useNotification from 'hooks/useNotification';
 
 // ==============================|| TYPES ||============================== //
 
@@ -92,10 +96,12 @@ const OfferDetail = () => {
     const theme = useTheme();
     const navigate = useNavigate();
     const { id } = useParams();
+    const { notification, showError, showSuccess, clearNotification } = useNotification();
 
     const { data, loading } = useQuery<{ promoCode: PromoCode }>(GET_PROMO_CODE, {
         variables: { promoCodeId: id }
     });
+    const [activatePromoCode, { loading: activating }] = useMutation(ACTIVATE_PROMO_CODE);
 
     if (loading) {
         return (
@@ -104,7 +110,18 @@ const OfferDetail = () => {
             </Typography>
         );
     }
+    const handleEnable = async () => {
+        try {
+            const response = await activatePromoCode({
+                variables: { activatePromoCodeId: id },
+                refetchQueries: ['PromoCode', 'PromoCodes']
+            });
 
+            showSuccess(OffersMessages.updated_successfully);
+        } catch (err: any) {
+            showError(extractApiLevelError(err));
+        }
+    };
     const offer = data?.promoCode;
 
     if (!offer) {
@@ -118,12 +135,10 @@ const OfferDetail = () => {
     const colors = STATUS_COLORS[offer.status];
     const usagePercent = offer.totalUsageLimit > 0 ? (offer.promoCodeUsedCount / offer.totalUsageLimit) * 100 : 0;
 
-    const discountValue =
-        offer.discountType === 'PERCENTAGE' ? `${offer.percentageAmount}%` : `Rs ${offer.flatAmount}`;
+    const discountValue = offer.discountType === 'PERCENTAGE' ? `${offer.percentageAmount}%` : `Rs ${offer.flatAmount}`;
 
     return (
         <Stack spacing={2.5}>
-
             {/* Breadcrumb row */}
             <Stack
                 direction={{ xs: 'column', sm: 'row' }}
@@ -132,12 +147,7 @@ const OfferDetail = () => {
                 spacing={2}
             >
                 <Stack direction="row" alignItems="center" spacing={1.5} flexWrap="wrap">
-                    <Button
-                        size="small"
-                        variant="outlined"
-                        color="inherit"
-                        onClick={() => navigate('/offers')}
-                    >
+                    <Button size="small" variant="outlined" color="inherit" onClick={() => navigate('/offers')}>
                         ← Back
                     </Button>
                     <Typography variant="body1" color="text.secondary">
@@ -158,8 +168,10 @@ const OfferDetail = () => {
                         <Button
                             variant="contained"
                             color={offer.status === 'ACTIVE' ? 'success' : 'inherit'}
+                            onClick={offer.status !== 'ACTIVE' ? handleEnable : undefined}
+                            disabled={activating}
                         >
-                            {offer.status === 'ACTIVE' ? 'Disable' : 'Enable'}
+                            {activating ? 'Enabling...' : offer.status === 'ACTIVE' ? 'Disable' : 'Enable'}
                         </Button>
                     )}
                     <Button variant="outlined" color="error">
@@ -186,15 +198,6 @@ const OfferDetail = () => {
                         <Typography variant="body2" color="text.secondary">
                             Used in mobile app during ride booking (discount applies if valid &amp; within limits)
                         </Typography>
-                    </Stack>
-
-                    <Stack direction="row" spacing={1.5}>
-                        <Button variant="outlined" color="inherit">
-                            Copy
-                        </Button>
-                        <Button variant="contained" color="inherit" sx={{ bgcolor: '#1A1A1A', '&:hover': { bgcolor: '#000' } }}>
-                            Share
-                        </Button>
                     </Stack>
                 </Stack>
             </Card>
@@ -309,7 +312,6 @@ const OfferDetail = () => {
             <Typography variant="caption" color="text.secondary">
                 Tip: Disable offer if code leaks publicly. Expired/limit-reached codes won't apply in mobile app.
             </Typography>
-
         </Stack>
     );
 };

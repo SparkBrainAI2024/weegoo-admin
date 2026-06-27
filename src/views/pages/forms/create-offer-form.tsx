@@ -17,6 +17,7 @@ import { CreatePromoCodeInput, CreatePromoCodeResponse, PromoCode, UpdatePromoCo
 import { toDateTimeLocal } from 'utils/date';
 import { OffersMessages } from './offers.messages';
 import * as Yup from 'yup';
+import { GET_PROMO_CODES } from 'graphql/queries/promoCode.queries';
 
 const validationSchema = Yup.object({
     name: Yup.string().required('Promo code is required'),
@@ -89,7 +90,18 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                     expiryDateTime: values.expiryDateTime,
                                     occasionId: values.occasionId
                                 }
-                            }
+                            },
+                            refetchQueries: [
+                                {
+                                    query: GET_PROMO_CODES,
+                                    variables: {
+                                        paginationInput: {
+                                            page: 0,
+                                            limit: 10
+                                        }
+                                    }
+                                }
+                            ]
                         });
 
                         setStatus({ success: true });
@@ -111,7 +123,18 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                     expiryDateTime: values.expiryDateTime,
                                     occasionId: values.occasionId
                                 }
-                            }
+                            },
+                            refetchQueries: [
+                                {
+                                    query: GET_PROMO_CODES,
+                                    variables: {
+                                        paginationInput: {
+                                            page: 0,
+                                            limit: 10
+                                        }
+                                    }
+                                }
+                            ]
                         });
 
                         setStatus({ success: true });
