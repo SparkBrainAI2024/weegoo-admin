@@ -4,5 +4,6 @@ export const ROUTES = {
     VERIFY_OTP: '/verify-otp',
     RESET_PASSWORD: '/reset-password',
     FORGOT_PASSWORD: '/forgot-password',
-    PAGE_MANAGEMENT: '/page-management'
+    PAGE_MANAGEMENT: '/page-management',
+    OFFERS: '/offers'
 };

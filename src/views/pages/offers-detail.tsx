@@ -11,15 +11,15 @@ import Typography from '@mui/material/Typography';
 
 // graphql
 import { useMutation, useQuery } from '@apollo/client/react';
-import { GET_PROMO_CODE } from 'graphql/queries/promoCode.queries';
-import { ACTIVATE_PROMO_CODE } from 'graphql/mutations/offers.mutations';
+import { GET_PROMO_CODE, GET_PROMO_CODES } from 'graphql/queries/promoCode.queries';
+import { ACTIVATE_PROMO_CODE, REMOVE_PROMO_CODE } from 'graphql/mutations/offers.mutations';
 import { OffersMessages } from './forms/offers.messages';
 import { extractApiLevelError } from 'lib/apiError';
 import useNotification from 'hooks/useNotification';
+import { PromoStatus } from 'constants/enum';
+import { ROUTES } from 'constants/routes';
 
 // ==============================|| TYPES ||============================== //
-
-type PromoStatus = 'ACTIVE' | 'DISABLED' | 'EXPIRED' | 'DRAFT';
 
 interface PromoCode {
     _id: string;
@@ -99,6 +99,7 @@ const OfferDetail = () => {
         variables: { promoCodeId: id }
     });
     const [activatePromoCode, { loading: activating }] = useMutation(ACTIVATE_PROMO_CODE);
+    const [removePromoCode, { loading: deactivating }] = useMutation(REMOVE_PROMO_CODE);
 
     if (loading) {
         return (
@@ -115,6 +116,32 @@ const OfferDetail = () => {
             });
 
             showSuccess(OffersMessages.updated_successfully);
+        } catch (err: any) {
+            showError(extractApiLevelError(err));
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            await removePromoCode({
+                variables: { removePromoCodeId: id },
+                refetchQueries: [
+                    {
+                        query: GET_PROMO_CODES,
+                        variables: {
+                            paginationInput: {
+                                page: 0,
+                                limit: 10
+                            }
+                        }
+                    }
+                ]
+            });
+
+            showSuccess(OffersMessages.deleted_successfully);
+            setTimeout(() => {
+                navigate(ROUTES.OFFERS);
+            }, 500);
         } catch (err: any) {
             showError(extractApiLevelError(err));
         }
@@ -171,9 +198,11 @@ const OfferDetail = () => {
                             {activating ? 'Enabling...' : offer.status === 'ACTIVE' ? 'Disable' : 'Enable'}
                         </Button>
                     )}
-                    <Button variant="outlined" color="error">
-                        Delete Offer
-                    </Button>
+                    {offer.status === 'DRAFT' && (
+                        <Button variant="outlined" color="error" onClick={handleDelete}>
+                            {deactivating ? 'Deleting...' : 'Delete Offer'}
+                        </Button>
+                    )}
                 </Stack>
             </Stack>
 
