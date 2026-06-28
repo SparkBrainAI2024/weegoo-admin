@@ -200,18 +200,20 @@ const OfferList = ({
                 </Stack>
 
                 {/* Filter tabs */}
-                <Stack direction="row" spacing={1} sx={{ mt: 2, overflowX: 'auto', pb: 0.5 }}>
+                <Stack direction="row" spacing={1} sx={{ mt: 2, pb: 0.5, width: '80%' }}>
                     {FILTERS.map((f) => (
                         <Button
                             key={f}
-                            size="small"
                             onClick={() => handleFilterChange(f)}
                             variant={filter === f ? 'contained' : 'outlined'}
                             sx={{
+                                flex: 1,
+
                                 flexShrink: 0,
                                 bgcolor: filter === f ? '#1A1A1A' : 'transparent',
                                 color: filter === f ? '#fff' : 'text.secondary',
                                 borderColor: 'grey.200',
+                                borderRadius: 4,
                                 '&:hover': { bgcolor: filter === f ? '#1A1A1A' : 'grey.50' }
                             }}
                         >
