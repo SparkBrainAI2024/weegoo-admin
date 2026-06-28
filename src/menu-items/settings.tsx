@@ -1,5 +1,5 @@
 // assets
-import { IconFile, IconSettings } from '@tabler/icons-react';
+import { IconFileDescription, IconSettings } from '@tabler/icons-react';
 
 // types
 import { NavItemType } from 'types';
@@ -19,12 +19,12 @@ const settings: NavItemType = {
             icon: IconSettings,
             breadcrumbs: true
         },
-         {
+        {
             id: 'page-management',
             title: 'Page Management',
             type: 'item',
             url: '/page-management',
-            icon: IconFile,
+            icon: IconFileDescription,
             breadcrumbs: true
         }
     ]
