@@ -175,7 +175,6 @@ const OfferList = ({
     const offers = data?.promoCodes?.data || [];
     const total = data?.promoCodes?.pagination?.total || 0;
 
-    const filteredOffers = filter === 'All' ? offers : offers.filter((o) => formatStatus(o.status) === filter);
     return (
         <Card sx={{ boxShadow: 'none', border: '1px solid', borderColor: 'grey.100' }}>
             {/* Header */}
