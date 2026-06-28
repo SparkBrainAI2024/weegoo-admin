@@ -42,8 +42,6 @@ const formatExpiry = (value: string) =>
 
 const formatStatus = (status: PromoStatus) => status.charAt(0) + status.slice(1).toLowerCase();
 
-const FILTERS = ['All', 'Active', 'Disabled', 'Expired'];
-
 // ==============================|| STAT CARD ||============================== //
 
 const StatCard = ({ label, value, chip }: { label: string; value: string; chip?: string }) => (
@@ -135,6 +133,16 @@ const OfferRow = ({ offer, onEditClick }: { offer: PromoCode; onEditClick: (offe
     );
 };
 
+const FILTERS = ['All', 'DRAFT', 'ACTIVE', 'INACTIVE', 'EXPIRED'] as const;
+type Filter = (typeof FILTERS)[number];
+const FILTER_LABELS: Record<Filter, string> = {
+    All: 'All',
+    DRAFT: 'Draft',
+    ACTIVE: 'Active',
+    INACTIVE: 'Inactive',
+    EXPIRED: 'Expired'
+};
+
 // ==============================|| OFFER LIST ||============================== //
 
 const OfferList = ({
@@ -146,7 +154,7 @@ const OfferList = ({
     onEditClick: (offer: PromoCode) => void; // ← add this
     showCreateButton: boolean;
 }) => {
-    const [filter, setFilter] = useState('All');
+    const [filter, setFilter] = useState(FILTER_LABELS.All);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -154,18 +162,23 @@ const OfferList = ({
         variables: {
             paginationInput: {
                 page,
-                limit: rowsPerPage
+                limit: rowsPerPage,
+                ...(filter !== FILTERS[0] && { filter: { status: filter } })
             }
         }
     });
 
+    const handleFilterChange = (newFilter: Filter) => {
+        setFilter(newFilter);
+        setPage(0); // reset to first page on filter change
+    };
     const offers = data?.promoCodes?.data || [];
     const total = data?.promoCodes?.pagination?.total || 0;
 
     const filteredOffers = filter === 'All' ? offers : offers.filter((o) => formatStatus(o.status) === filter);
-
     return (
         <Card sx={{ boxShadow: 'none', border: '1px solid', borderColor: 'grey.100' }}>
+            {/* Header */}
             <Box sx={{ p: 2.5, pb: 2 }}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
                     <Stack spacing={0.25}>
@@ -187,12 +200,13 @@ const OfferList = ({
                     )}
                 </Stack>
 
+                {/* Filter tabs */}
                 <Stack direction="row" spacing={1} sx={{ mt: 2, overflowX: 'auto', pb: 0.5 }}>
                     {FILTERS.map((f) => (
                         <Button
                             key={f}
                             size="small"
-                            onClick={() => setFilter(f)}
+                            onClick={() => handleFilterChange(f)}
                             variant={filter === f ? 'contained' : 'outlined'}
                             sx={{
                                 flexShrink: 0,
@@ -202,14 +216,16 @@ const OfferList = ({
                                 '&:hover': { bgcolor: filter === f ? '#1A1A1A' : 'grey.50' }
                             }}
                         >
-                            {f}
+                            {FILTER_LABELS[f]}
                         </Button>
                     ))}
                 </Stack>
             </Box>
 
+            {/* Table */}
             <Box sx={{ overflowX: 'auto' }}>
                 <Box sx={{ minWidth: 700 }}>
+                    {/* Table header */}
                     <Box sx={{ bgcolor: '#EDEDED', px: 2.5, py: 1.25 }}>
                         <Grid container alignItems="center">
                             <Grid item xs={3}>
@@ -250,22 +266,22 @@ const OfferList = ({
                         </Grid>
                     </Box>
 
+                    {/* Table rows */}
                     {loading ? (
                         <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
                             Loading...
                         </Typography>
-                    ) : filteredOffers.length === 0 ? (
+                    ) : offers.length === 0 ? (
                         <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
                             No offers found.
                         </Typography>
                     ) : (
-                        filteredOffers.map(
-                            (offer) => <OfferRow key={offer._id} offer={offer} onEditClick={onEditClick} /> // ← pass down
-                        )
+                        offers.map((offer) => <OfferRow key={offer._id} offer={offer} onEditClick={onEditClick} />)
                     )}
                 </Box>
             </Box>
 
+            {/* Pagination */}
             <TablePagination
                 component="div"
                 count={total}
