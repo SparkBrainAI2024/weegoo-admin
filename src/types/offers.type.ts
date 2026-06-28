@@ -86,6 +86,6 @@ export interface PromoCodesResponse {
 export const STATUS_COLORS: Record<PromoStatus, { bg: string; text: string }> = {
     DRAFT: { bg: '#FFF8E1', text: '#F9A825' },
     ACTIVE: { bg: '#BFE6C4', text: '#30B010' },
-    DISABLED: { bg: '#E0E0E0', text: '#616161' },
+    INACTIVE: { bg: '#E0E0E0', text: '#616161' },
     EXPIRED: { bg: '#E0E0E0', text: '#616161' }
 };

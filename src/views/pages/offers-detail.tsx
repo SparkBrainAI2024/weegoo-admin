@@ -12,12 +12,13 @@ import Typography from '@mui/material/Typography';
 // graphql
 import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_PROMO_CODE, GET_PROMO_CODES } from 'graphql/queries/promoCode.queries';
-import { ACTIVATE_PROMO_CODE, REMOVE_PROMO_CODE } from 'graphql/mutations/offers.mutations';
+import { ACTIVATE_PROMO_CODE, DEACTIVATE_PROMO_CODE, REMOVE_PROMO_CODE } from 'graphql/mutations/offers.mutations';
 import { OffersMessages } from './forms/offers.messages';
 import { extractApiLevelError } from 'lib/apiError';
 import useNotification from 'hooks/useNotification';
-import { PromoStatus } from 'constants/enum';
+import { PromoStatus, PromoStatusEnum } from 'constants/enum';
 import { ROUTES } from 'constants/routes';
+import { STATUS_COLORS } from 'types/offers.type';
 
 // ==============================|| TYPES ||============================== //
 
@@ -40,13 +41,6 @@ interface PromoCode {
 }
 
 // ==============================|| HELPERS ||============================== //
-
-const STATUS_COLORS: Record<PromoStatus, { bg: string; text: string }> = {
-    DRAFT: { bg: '#FFF8E1', text: '#F9A825' },
-    ACTIVE: { bg: '#BFE6C4', text: '#30B010' },
-    DISABLED: { bg: '#E0E0E0', text: '#616161' },
-    EXPIRED: { bg: '#E0E0E0', text: '#616161' }
-};
 
 const formatAppliedTo = (value: string) =>
     value
@@ -99,7 +93,9 @@ const OfferDetail = () => {
         variables: { promoCodeId: id }
     });
     const [activatePromoCode, { loading: activating }] = useMutation(ACTIVATE_PROMO_CODE);
-    const [removePromoCode, { loading: deactivating }] = useMutation(REMOVE_PROMO_CODE);
+
+    const [deactivatePromoCode, { loading: deactivating }] = useMutation(DEACTIVATE_PROMO_CODE);
+    const [removePromoCode, { loading: deleting }] = useMutation(REMOVE_PROMO_CODE);
 
     if (loading) {
         return (
@@ -112,7 +108,34 @@ const OfferDetail = () => {
         try {
             await activatePromoCode({
                 variables: { activatePromoCodeId: id },
-                refetchQueries: ['PromoCode', 'PromoCodes']
+                refetchQueries: [
+                    {
+                        query: GET_PROMO_CODE,
+                        variables: {
+                            promoCodeId: id
+                        }
+                    }
+                ]
+            });
+
+            showSuccess(OffersMessages.updated_successfully);
+        } catch (err: any) {
+            showError(extractApiLevelError(err));
+        }
+    };
+
+    const handleDisable = async () => {
+        try {
+            await deactivatePromoCode({
+                variables: { deactivatePromoCodeId: id },
+                refetchQueries: [
+                    {
+                        query: GET_PROMO_CODE,
+                        variables: {
+                            promoCodeId: id
+                        }
+                    }
+                ]
             });
 
             showSuccess(OffersMessages.updated_successfully);
@@ -188,19 +211,24 @@ const OfferDetail = () => {
                 </Stack>
 
                 <Stack direction="row" spacing={1.5}>
-                    {offer.status !== 'EXPIRED' && (
-                        <Button
-                            variant="contained"
-                            color={offer.status === 'ACTIVE' ? 'success' : 'inherit'}
-                            onClick={offer.status !== 'ACTIVE' ? handleEnable : undefined}
-                            disabled={activating}
-                        >
-                            {activating ? 'Enabling...' : offer.status === 'ACTIVE' ? 'Disable' : 'Enable'}
+                    {/* Only ACTIVE can be disabled */}
+                    {offer.status === PromoStatusEnum.ACTIVE && (
+                        <Button variant="contained" color="error" onClick={handleDisable} disabled={deactivating}>
+                            {deactivating ? 'Disabling...' : 'Disable'}
                         </Button>
                     )}
-                    {offer.status === 'DRAFT' && (
-                        <Button variant="outlined" color="error" onClick={handleDelete}>
-                            {deactivating ? 'Deleting...' : 'Delete Offer'}
+
+                    {/* DRAFT and INACTIVE can be enabled */}
+                    {(offer.status === PromoStatusEnum.DRAFT || offer.status === PromoStatusEnum.INACTIVE) && (
+                        <Button variant="contained" color="success" onClick={handleEnable} disabled={activating}>
+                            {activating ? 'Enabling...' : 'Enable'}
+                        </Button>
+                    )}
+
+                    {/* Only DRAFT can be deleted */}
+                    {offer.status === PromoStatusEnum.DRAFT && (
+                        <Button variant="outlined" color="error" onClick={handleDelete} disabled={deleting}>
+                            {deleting ? 'Deleting...' : 'Delete Offer'}
                         </Button>
                     )}
                 </Stack>
