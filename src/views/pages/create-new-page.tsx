@@ -16,7 +16,6 @@ import { GET_PAGE_BY_SLUG, GET_PAGES } from 'graphql/queries/pages.queries';
 import { PageType } from 'types/enum';
 import { PAGE_STATUS_COLORS } from 'constants/pages';
 import PagePreviewModal from 'components/ui-component/PagePreviewModal';
-import { useTheme } from '@emotion/react';
 import { ROUTES } from 'constants/routes';
 
 interface PageData {
@@ -42,7 +41,6 @@ const NewPage = () => {
         variables: { slug },
         skip: !isEditMode
     });
-    const theme = useTheme();
     useEffect(() => {
         if (pageQueryData?.pageBySlug) {
             setPageData(pageQueryData.pageBySlug);

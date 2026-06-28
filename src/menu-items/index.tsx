@@ -4,7 +4,6 @@ import users from './users';
 import operations from './operations';
 import settings from './settings';
 
-
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems: { items: NavItemType[] } = {

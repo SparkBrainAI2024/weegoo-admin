@@ -1,8 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
@@ -93,10 +91,9 @@ const SectionCard = ({ title, children }: { title: string; children: React.React
 // ==============================|| OFFER DETAIL PAGE ||============================== //
 
 const OfferDetail = () => {
-    const theme = useTheme();
     const navigate = useNavigate();
     const { id } = useParams();
-    const { notification, showError, showSuccess, clearNotification } = useNotification();
+    const { showError, showSuccess } = useNotification();
 
     const { data, loading } = useQuery<{ promoCode: PromoCode }>(GET_PROMO_CODE, {
         variables: { promoCodeId: id }
@@ -112,7 +109,7 @@ const OfferDetail = () => {
     }
     const handleEnable = async () => {
         try {
-            const response = await activatePromoCode({
+            await activatePromoCode({
                 variables: { activatePromoCodeId: id },
                 refetchQueries: ['PromoCode', 'PromoCodes']
             });
