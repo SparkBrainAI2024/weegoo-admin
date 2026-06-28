@@ -10,7 +10,6 @@ import { loader as productsLoader, productLoader } from 'api/products';
 import NewPage from 'views/pages/create-new-page';
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const DashboardAnalytics = Loadable(lazy(() => import('views/dashboard/Analytics')));
 
 // widget routing

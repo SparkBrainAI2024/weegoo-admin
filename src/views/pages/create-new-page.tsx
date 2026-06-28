@@ -16,6 +16,7 @@ import { GET_PAGE_BY_SLUG, GET_PAGES } from 'graphql/queries/pages.queries';
 import { PageType } from 'types/enum';
 import { PAGE_STATUS_COLORS } from 'constants/pages';
 import PagePreviewModal from 'components/ui-component/PagePreviewModal';
+import { ROUTES } from 'constants/routes';
 
 interface PageData {
     _id: string;
@@ -40,7 +41,6 @@ const NewPage = () => {
         variables: { slug },
         skip: !isEditMode
     });
-
     useEffect(() => {
         if (pageQueryData?.pageBySlug) {
             setPageData(pageQueryData.pageBySlug);
@@ -184,13 +184,22 @@ const NewPage = () => {
                             </Grid>
 
                             <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-                                <Button variant="contained" color="inherit" onClick={() => setPreviewOpen(true)}>
+                                <Button variant="contained" color="inherit" onClick={() => navigate(ROUTES.PAGE_MANAGEMENT)}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="inherit"
+                                    onClick={() => setPreviewOpen(true)}
+                                    sx={{ bgcolor: 'black', color: 'white' }}
+                                >
                                     Preview
                                 </Button>
                                 {isEditMode && (
                                     <Button
                                         variant="contained"
                                         color="success"
+                                        sx={{ bgcolor: 'primary.main' }}
                                         onClick={async () => {
                                             try {
                                                 await publishPage({

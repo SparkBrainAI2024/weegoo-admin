@@ -29,10 +29,25 @@ export const UPDATE_PROMO_CODE = gql`
 `;
 
 export const ACTIVATE_PROMO_CODE = gql`
-    mutation ActivatePromoCode($activatePromoCodeId: ID!) {
+    mutation activatePromoCode($activatePromoCodeId: ID!) {
         activatePromoCode(id: $activatePromoCodeId) {
             _id
             status
         }
+    }
+`;
+
+export const DEACTIVATE_PROMO_CODE = gql`
+    mutation deactivatePromoCode($deactivatePromoCodeId: ID!) {
+        deactivatePromoCode(id: $deactivatePromoCodeId) {
+            _id
+            status
+        }
+    }
+`;
+
+export const REMOVE_PROMO_CODE = gql`
+    mutation removePromoCode($removePromoCodeId: ID!) {
+        removePromoCode(id: $removePromoCodeId)
     }
 `;

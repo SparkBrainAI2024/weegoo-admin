@@ -63,7 +63,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
                 800: mode === ThemeMode.DARK ? colors.darkSecondary800 : colors.secondary800,
                 100: mode === ThemeMode.DARK ? colors.darkSecondary100 : colors.secondary100
             },
-            
+
             error: {
                 light: colors.errorLight,
                 main: colors.errorMain,
