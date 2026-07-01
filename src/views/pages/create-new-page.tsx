@@ -173,7 +173,15 @@ const NewPage = () => {
                                     </Typography>
                                 </Grid>
 
-                                <Grid item xs={12}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    onKeyDownCapture={(e) => {
+                                        if (e.code === 'Enter' && e.shiftKey) {
+                                            e.preventDefault();
+                                        }
+                                    }}
+                                >
                                     <ReactQuill
                                         value={values.content}
                                         onChange={(val) => setFieldValue('content', val)}
