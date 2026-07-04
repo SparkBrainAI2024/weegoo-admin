@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { InputField } from 'components/ui-component/forms/InputField';
 import Breadcrumbs from 'components/ui-component/extended/Breadcrumbs';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams } from 'react-router';
 import { useMutation, useQuery } from '@apollo/client/react';
@@ -26,6 +26,47 @@ interface PageData {
     updatedAt?: string;
 }
 
+const Embed = Quill.import('blots/embed') as any;
+const Delta = Quill.import('delta') as any;
+class SmartBreak extends Embed {
+    static blotName = 'smartBreak';
+    static tagName = 'BR';
+}
+
+Quill.register(SmartBreak);
+
+function matchSmartBreak() {
+    return new Delta().insert({ smartBreak: true });
+}
+
+const quillModules = {
+    toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image'],
+        ['clean']
+    ],
+    clipboard: {
+        matchVisual: false, // stop Quill injecting extra empty <p><br></p>
+        matchers: [['BR', matchSmartBreak]]
+    },
+    keyboard: {
+        bindings: {
+            smartBreak: {
+                key: 'Enter',
+                shiftKey: true,
+                handler(range: { index: number }) {
+                    // @ts-ignore
+                    this.quill.insertEmbed(range.index, 'smartBreak', true, 'user');
+                    // @ts-ignore
+                    this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
+                    return false;
+                }
+            }
+        }
+    }
+};
 const NewPage = () => {
     const navigate = useNavigate();
     const [createPage] = useMutation<CreatePageResponse>(CREATE_PAGE);
@@ -173,19 +214,12 @@ const NewPage = () => {
                                     </Typography>
                                 </Grid>
 
-                                <Grid
-                                    item
-                                    xs={12}
-                                    onKeyDownCapture={(e) => {
-                                        if (e.code === 'Enter' && e.shiftKey) {
-                                            e.preventDefault();
-                                        }
-                                    }}
-                                >
+                                <Grid item xs={12}>
                                     <ReactQuill
                                         value={values.content}
                                         onChange={(val) => setFieldValue('content', val)}
                                         theme="snow"
+                                        modules={quillModules}
                                         style={{ height: '300px', marginBottom: '42px' }}
                                     />
                                 </Grid>
