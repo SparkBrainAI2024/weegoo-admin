@@ -31,10 +31,12 @@ import BlockIcon from '@mui/icons-material/Block';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { DriverListItem } from 'types/drivers.types';
 import { useDebounce } from 'hooks/useDebounce';
-import { useQuery } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_DRIVERS } from 'graphql/queries/drivers.queries';
 import { GetDriversQueryResult } from 'types/drivers-list.response';
 import { DriverStatusChip } from 'components/ui-component/drivers/DriverStatusChip';
+import { DeleteDriverDialog } from 'components/ui-component/extended/notistack/DeleteDriverDialog';
+import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -52,7 +54,45 @@ const DriverList = () => {
 
     const debouncedSearch = useDebounce(search, 400);
 
-    const { data, loading } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
+        onCompleted: () => {
+            setDeleteDialogOpen(false);
+            closeMenu();
+            refetch(); // re-pull the list so the row disappears
+        },
+        onError: (err) => {
+            console.log('💥 deleteDriver failed:', err.message);
+            // toast/snackbar here if you have one wired up
+        }
+        // refetchQueries: [
+        //     {
+        //         query: GET_DRIVERS,
+        //         variables: {
+        //             input: {
+        //                 page: 0, // preserve current page instead of hardcoding 0
+        //                 limit: 10,
+        //                 search: '', // preserve current filters
+        //                 status: ''
+        //             }
+        //         }
+        //     }
+        // ]
+    });
+
+    const handleDeleteClick = () => {
+        setDeleteDialogOpen(true);
+        // keep selectedDriver as-is, just close the ⋯ menu, keep the dialog open
+        setMenuAnchor(null);
+    };
+
+    const handleConfirmDelete = () => {
+        if (!selectedDriver) return;
+        deleteDriver({ variables: { input: { driverId: selectedDriver.id } } });
+    };
+
+    const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
         variables: {
             input: {
                 page,
@@ -60,8 +100,8 @@ const DriverList = () => {
                 status: tab,
                 search: debouncedSearch || undefined
             }
-        },
-        fetchPolicy: 'cache-and-network'
+        }
+        // fetchPolicy: 'cache-and-network'
     });
 
     const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
@@ -237,6 +277,16 @@ const DriverList = () => {
                 }}
                 rowsPerPageOptions={[10, 25, 50]}
             />
+            <DeleteDriverDialog
+                open={deleteDialogOpen}
+                driverName={selectedDriver?.fullName}
+                loading={deleting}
+                onClose={() => {
+                    setDeleteDialogOpen(false);
+                    setSelectedDriver(null);
+                }}
+                onConfirm={handleConfirmDelete}
+            />
 
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
                 <MenuItem onClick={closeMenu}>
@@ -245,7 +295,7 @@ const DriverList = () => {
                     </ListItemIcon>
                     <ListItemText>Block</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={closeMenu} sx={{ color: 'error.main' }}>
+                <MenuItem onClick={handleDeleteClick} sx={{ color: 'error.main' }}>
                     <ListItemIcon>
                         <DeleteOutlineIcon fontSize="small" color="error" />
                     </ListItemIcon>
