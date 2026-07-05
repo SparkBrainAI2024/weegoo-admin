@@ -42,7 +42,7 @@ const TABS = [
     { key: 'BLOCKED', label: 'Blocked' }
 ] as const;
 
-export const DriverList = () => {
+const DriverList = () => {
     const [tab, setTab] = useState<string>('ACTIVE');
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
@@ -255,3 +255,5 @@ export const DriverList = () => {
         </Card>
     );
 };
+
+export default DriverList;

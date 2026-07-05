@@ -173,7 +173,7 @@ const UtilsGrid = Loadable(lazy(() => import('views/utilities/Grid')));
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const RidesPage = Loadable(lazy(() => import('views/pages/rides')));
 
-const DriversPage = Loadable(lazy(() => import('views/pages/drivers')));
+const DriversPage = Loadable(lazy(() => import('views/pages/drivers-list')));
 const RidersPage = Loadable(lazy(() => import('views/pages/riders')));
 const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
 const PageManagementPage = Loadable(lazy(() => import('views/pages/page-list')));
