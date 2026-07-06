@@ -36,7 +36,8 @@ import { GET_DRIVERS } from 'graphql/queries/drivers.queries';
 import { GetDriversQueryResult } from 'types/drivers-list.response';
 import { DriverStatusChip } from 'components/ui-component/drivers/DriverStatusChip';
 import { DeleteDriverDialog } from 'components/ui-component/extended/notistack/DeleteDriverDialog';
-import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
+import { DELETE_DRIVER, TOGGLE_BLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
+import { BlockDriverDialog } from 'components/ui-component/block-driver-dialog';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -51,46 +52,10 @@ const DriverList = () => {
     const [limit, setLimit] = useState(10);
     const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
     const [selectedDriver, setSelectedDriver] = useState<DriverListItem | null>(null);
-
+    const [blockDialogOpen, setBlockDialogOpen] = useState(false);
     const debouncedSearch = useDebounce(search, 400);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-
-    const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
-        onCompleted: () => {
-            setDeleteDialogOpen(false);
-            closeMenu();
-            refetch(); // re-pull the list so the row disappears
-        },
-        onError: (err) => {
-            console.log('💥 deleteDriver failed:', err.message);
-            // toast/snackbar here if you have one wired up
-        }
-        // refetchQueries: [
-        //     {
-        //         query: GET_DRIVERS,
-        //         variables: {
-        //             input: {
-        //                 page: 0, // preserve current page instead of hardcoding 0
-        //                 limit: 10,
-        //                 search: '', // preserve current filters
-        //                 status: ''
-        //             }
-        //         }
-        //     }
-        // ]
-    });
-
-    const handleDeleteClick = () => {
-        setDeleteDialogOpen(true);
-        // keep selectedDriver as-is, just close the ⋯ menu, keep the dialog open
-        setMenuAnchor(null);
-    };
-
-    const handleConfirmDelete = () => {
-        if (!selectedDriver) return;
-        deleteDriver({ variables: { input: { driverId: selectedDriver.id } } });
-    };
 
     const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
         variables: {
@@ -101,8 +66,58 @@ const DriverList = () => {
                 search: debouncedSearch || undefined
             }
         }
-        // fetchPolicy: 'cache-and-network'
     });
+
+    const [toggleBlockDriver, { loading: togglingBlock }] = useMutation(TOGGLE_BLOCK_DRIVER, {
+        onCompleted: () => {
+            setBlockDialogOpen(false);
+            setSelectedDriver(null);
+            refetch();
+        },
+        onError: (err) => {
+            console.log('💥 toggleBlockDriver failed:', err.message);
+        }
+    });
+
+    const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
+        onCompleted: () => {
+            setDeleteDialogOpen(false);
+            setSelectedDriver(null);
+            refetch();
+        },
+        onError: (err) => {
+            console.log('💥 deleteDriver failed:', err.message);
+        }
+    });
+
+    // ---- Menu-item click handlers: ONLY open dialogs, never call mutations ----
+    const handleBlockClick = () => {
+        setBlockDialogOpen(true);
+        setMenuAnchor(null); // close menu, keep selectedDriver
+    };
+
+    const handleDeleteClick = () => {
+        setDeleteDialogOpen(true);
+        setMenuAnchor(null); // close menu, keep selectedDriver
+    };
+
+    // ---- Dialog-confirm handlers: this is where mutations actually fire ----
+    const handleConfirmDelete = () => {
+        if (!selectedDriver) return;
+        deleteDriver({ variables: { input: { driverId: selectedDriver.id } } });
+    };
+
+    const handleConfirmBlockToggle = () => {
+        if (!selectedDriver) return;
+        toggleBlockDriver({
+            variables: {
+                input: {
+                    id: selectedDriver.id,
+                    isBlocked: !selectedDriver.suspended
+                }
+            }
+        });
+    };
 
     const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
     const total = data?.getDrivers?.pagination?.total ?? 0;
@@ -119,7 +134,8 @@ const DriverList = () => {
 
     const closeMenu = () => {
         setMenuAnchor(null);
-        setSelectedDriver(null);
+        // NOTE: don't clear selectedDriver here — dialogs opened from this menu
+        // need it. selectedDriver is cleared explicitly in each dialog's onClose.
     };
 
     return (
@@ -180,9 +196,7 @@ const DriverList = () => {
                                                 px: 0.75,
                                                 fontSize: 12
                                             }}
-                                        >
-                                            {/* Replace with real per-status counts once available */}
-                                        </Badge>
+                                        />
                                     </Stack>
                                 )
                             }
@@ -277,6 +291,7 @@ const DriverList = () => {
                 }}
                 rowsPerPageOptions={[10, 25, 50]}
             />
+
             <DeleteDriverDialog
                 open={deleteDialogOpen}
                 driverName={selectedDriver?.fullName}
@@ -288,12 +303,25 @@ const DriverList = () => {
                 onConfirm={handleConfirmDelete}
             />
 
+            <BlockDriverDialog
+                open={blockDialogOpen}
+                driverName={selectedDriver?.fullName ?? ''}
+                isCurrentlyBlocked={selectedDriver?.suspended ?? false}
+                loading={togglingBlock}
+                onClose={() => {
+                    setBlockDialogOpen(false);
+                    setSelectedDriver(null);
+                }}
+                onConfirm={handleConfirmBlockToggle}
+            />
+
+            {/* Menu itself has NO onClick — only individual MenuItems trigger actions */}
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
-                <MenuItem onClick={closeMenu}>
+                <MenuItem onClick={handleBlockClick}>
                     <ListItemIcon>
                         <BlockIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Block</ListItemText>
+                    <ListItemText>{selectedDriver?.suspended ? 'Unblock' : 'Block'}</ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleDeleteClick} sx={{ color: 'error.main' }}>
                     <ListItemIcon>

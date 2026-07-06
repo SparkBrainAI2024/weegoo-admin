@@ -5,6 +5,7 @@ export interface DriverListItem {
     phone: string;
     profileImage?: string;
     status: 'ACTIVE' | 'PENDING' | 'BLOCKED';
+    suspended: boolean;
     totalRides: number;
     totalEarnings: number;
     rating: number;
