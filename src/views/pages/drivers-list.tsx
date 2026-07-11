@@ -65,7 +65,8 @@ const DriverList = () => {
                 status: tab,
                 search: debouncedSearch || undefined
             }
-        }
+        },
+        fetchPolicy: 'cache-and-network'
     });
     const closeDialog = () => {
         setBlockDialogOpen(false);
