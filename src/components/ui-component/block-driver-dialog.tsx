@@ -17,7 +17,7 @@ export function BlockUnblockDialog({ driver, onClose, refetch }: BlockUnblockDia
             refetch(); // re-runs the list query so the ACTIVE-tab filter excludes this row
         },
         onError: (err) => {
-            console.log('💥 blockDriver failed:', err.message);
+            console.log('BlockDriver failed:', err.message);
         }
     });
 
@@ -27,7 +27,7 @@ export function BlockUnblockDialog({ driver, onClose, refetch }: BlockUnblockDia
             refetch();
         },
         onError: (err) => {
-            console.log('💥 unblockDriver failed:', err.message);
+            console.log('UnblockDriver failed:', err.message);
         }
     });
 

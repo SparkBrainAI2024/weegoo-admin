@@ -67,7 +67,6 @@ const DriverList = () => {
             }
         }
     });
-    console.log(data, 'data');
     const closeDialog = () => {
         setBlockDialogOpen(false);
         setSelectedId(null);
@@ -80,7 +79,7 @@ const DriverList = () => {
             refetch();
         },
         onError: (err) => {
-            console.log('💥 deleteDriver failed:', err.message);
+            console.log('DeleteDriver failed:', err.message);
         }
     });
 
