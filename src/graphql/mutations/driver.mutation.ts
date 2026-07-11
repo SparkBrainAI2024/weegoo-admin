@@ -6,12 +6,20 @@ export const DELETE_DRIVER = gql`
     }
 `;
 
-export const TOGGLE_BLOCK_DRIVER = gql`
-    mutation ToggleBlockDriver($input: ToggleBlockDriverInput!) {
-        toggleBlockDriver(input: $input) {
+export const BLOCK_DRIVER = gql`
+    mutation BlockDriver($id: ID!) {
+        blockDriver(id: $id) {
+            id
             suspended
-            success
-            message
+        }
+    }
+`;
+
+export const UNBLOCK_DRIVER = gql`
+    mutation UnblockDriver($id: ID!) {
+        unblockDriver(id: $id) {
+            id
+            suspended
         }
     }
 `;

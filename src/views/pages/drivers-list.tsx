@@ -36,8 +36,8 @@ import { GET_DRIVERS } from 'graphql/queries/drivers.queries';
 import { GetDriversQueryResult } from 'types/drivers-list.response';
 import { DriverStatusChip } from 'components/ui-component/drivers/DriverStatusChip';
 import { DeleteDriverDialog } from 'components/ui-component/extended/notistack/DeleteDriverDialog';
-import { DELETE_DRIVER, TOGGLE_BLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
-import { BlockDriverDialog } from 'components/ui-component/block-driver-dialog';
+import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
+import { BlockUnblockDialog } from 'components/ui-component/block-driver-dialog';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -51,7 +51,7 @@ const DriverList = () => {
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(10);
     const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
-    const [selectedDriver, setSelectedDriver] = useState<DriverListItem | null>(null);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
     const [blockDialogOpen, setBlockDialogOpen] = useState(false);
     const debouncedSearch = useDebounce(search, 400);
 
@@ -67,22 +67,16 @@ const DriverList = () => {
             }
         }
     });
-
-    const [toggleBlockDriver, { loading: togglingBlock }] = useMutation(TOGGLE_BLOCK_DRIVER, {
-        onCompleted: () => {
-            setBlockDialogOpen(false);
-            setSelectedDriver(null);
-            refetch();
-        },
-        onError: (err) => {
-            console.log('💥 toggleBlockDriver failed:', err.message);
-        }
-    });
+    console.log(data, 'data');
+    const closeDialog = () => {
+        setBlockDialogOpen(false);
+        setSelectedId(null);
+    };
 
     const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
         onCompleted: () => {
             setDeleteDialogOpen(false);
-            setSelectedDriver(null);
+            setSelectedId(null);
             refetch();
         },
         onError: (err) => {
@@ -101,27 +95,20 @@ const DriverList = () => {
         setMenuAnchor(null); // close menu, keep selectedDriver
     };
 
-    // ---- Dialog-confirm handlers: this is where mutations actually fire ----
     const handleConfirmDelete = () => {
         if (!selectedDriver) return;
-        deleteDriver({ variables: { input: { driverId: selectedDriver.id } } });
-    };
 
-    const handleConfirmBlockToggle = () => {
-        if (!selectedDriver) return;
-        toggleBlockDriver({
+        deleteDriver({
             variables: {
                 input: {
-                    id: selectedDriver.id,
-                    isBlocked: !selectedDriver.suspended
+                    driverId: selectedDriver.id
                 }
             }
         });
     };
-
     const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
     const total = data?.getDrivers?.pagination?.total ?? 0;
-
+    const selectedDriver = drivers.find((d) => d.id === selectedId);
     const handleTabChange = (_: React.SyntheticEvent, value: string) => {
         setTab(value);
         setPage(0);
@@ -129,7 +116,7 @@ const DriverList = () => {
 
     const openMenu = (e: MouseEvent<HTMLElement>, driver: DriverListItem) => {
         setMenuAnchor(e.currentTarget);
-        setSelectedDriver(driver);
+        setSelectedId(driver.id);
     };
 
     const closeMenu = () => {
@@ -204,81 +191,83 @@ const DriverList = () => {
                     ))}
                 </Tabs>
             </Stack>
-
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Driver</TableCell>
-                        <TableCell>Phone</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Rides</TableCell>
-                        <TableCell>Rating</TableCell>
-                        <TableCell>Earnings</TableCell>
-                        <TableCell align="right" />
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {loading &&
-                        Array.from({ length: limit }).map((_, i) => (
-                            <TableRow key={i}>
-                                {Array.from({ length: 7 }).map((__, j) => (
-                                    <TableCell key={j}>
-                                        <Skeleton variant="text" />
-                                    </TableCell>
+            <Box sx={{ overflowX: 'auto' }}>
+                <Box sx={{ minWidth: 1500 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Driver</TableCell>
+                                <TableCell>Phone</TableCell>
+                                <TableCell>Status</TableCell>
+                                <TableCell>Rides</TableCell>
+                                <TableCell>Rating</TableCell>
+                                <TableCell>Earnings</TableCell>
+                                <TableCell align="right" />
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {loading &&
+                                Array.from({ length: limit }).map((_, i) => (
+                                    <TableRow key={i}>
+                                        {Array.from({ length: 7 }).map((__, j) => (
+                                            <TableCell key={j}>
+                                                <Skeleton variant="text" />
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
                                 ))}
-                            </TableRow>
-                        ))}
 
-                    {!loading &&
-                        drivers.map((driver) => (
-                            <TableRow key={driver.id} hover>
-                                <TableCell>
-                                    <Stack direction="row" spacing={1.5} alignItems="center">
-                                        <Avatar src={driver.profileImage} sx={{ width: 36, height: 36 }}>
-                                            {driver.fullName?.[0]}
-                                        </Avatar>
-                                        <Box>
-                                            <Typography variant="subtitle2">{driver.fullName}</Typography>
-                                            <Typography variant="caption" color="text.secondary">
-                                                ID · {driver.id.slice(-4)}
-                                            </Typography>
-                                        </Box>
-                                    </Stack>
-                                </TableCell>
-                                <TableCell>{driver.phone}</TableCell>
-                                <TableCell>
-                                    <DriverStatusChip status={driver.status} />
-                                </TableCell>
-                                <TableCell>{driver.totalRides || '—'}</TableCell>
-                                <TableCell>
-                                    {driver.rating ? (
-                                        <Stack direction="row" spacing={0.5} alignItems="center">
-                                            <Rating value={driver.rating} precision={0.1} readOnly size="small" />
-                                            <Typography variant="body2">{driver.rating.toFixed(1)}</Typography>
-                                        </Stack>
-                                    ) : (
-                                        '—'
-                                    )}
-                                </TableCell>
-                                <TableCell>
-                                    {driver.totalEarnings ? (
-                                        <Typography color="success.main" fontWeight={600}>
-                                            Rs. {driver.totalEarnings.toLocaleString()}
-                                        </Typography>
-                                    ) : (
-                                        '—'
-                                    )}
-                                </TableCell>
-                                <TableCell align="right">
-                                    <IconButton size="small" onClick={(e) => openMenu(e, driver)}>
-                                        <MoreHorizIcon fontSize="small" />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                </TableBody>
-            </Table>
-
+                            {!loading &&
+                                drivers.map((driver) => (
+                                    <TableRow key={driver.id} hover>
+                                        <TableCell>
+                                            <Stack direction="row" spacing={1.5} alignItems="center">
+                                                <Avatar src={driver.profileImage} sx={{ width: 36, height: 36 }}>
+                                                    {driver.fullName?.[0]}
+                                                </Avatar>
+                                                <Box>
+                                                    <Typography variant="subtitle2">{driver.fullName}</Typography>
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        ID · {driver.id.slice(-4)}
+                                                    </Typography>
+                                                </Box>
+                                            </Stack>
+                                        </TableCell>
+                                        <TableCell>{driver.phone}</TableCell>
+                                        <TableCell>
+                                            <DriverStatusChip status={driver.suspended ? 'BLOCKED' : driver.status} />
+                                        </TableCell>
+                                        <TableCell>{driver.totalRides || '—'}</TableCell>
+                                        <TableCell>
+                                            {driver.rating ? (
+                                                <Stack direction="row" spacing={0.5} alignItems="center">
+                                                    <Rating value={driver.rating} precision={0.1} readOnly size="small" />
+                                                    <Typography variant="body2">{driver.rating.toFixed(1)}</Typography>
+                                                </Stack>
+                                            ) : (
+                                                '—'
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {driver.totalEarnings ? (
+                                                <Typography color="success.main" fontWeight={600}>
+                                                    Rs. {driver.totalEarnings.toLocaleString()}
+                                                </Typography>
+                                            ) : (
+                                                '—'
+                                            )}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton size="small" onClick={(e) => openMenu(e, driver)}>
+                                                <MoreHorizIcon fontSize="small" />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </Box>
+            </Box>{' '}
             <TablePagination
                 component="div"
                 count={total}
@@ -291,30 +280,17 @@ const DriverList = () => {
                 }}
                 rowsPerPageOptions={[10, 25, 50]}
             />
-
             <DeleteDriverDialog
                 open={deleteDialogOpen}
                 driverName={selectedDriver?.fullName}
                 loading={deleting}
                 onClose={() => {
                     setDeleteDialogOpen(false);
-                    setSelectedDriver(null);
+                    setSelectedId(null);
                 }}
                 onConfirm={handleConfirmDelete}
             />
-
-            <BlockDriverDialog
-                open={blockDialogOpen}
-                driverName={selectedDriver?.fullName ?? ''}
-                isCurrentlyBlocked={selectedDriver?.suspended ?? false}
-                loading={togglingBlock}
-                onClose={() => {
-                    setBlockDialogOpen(false);
-                    setSelectedDriver(null);
-                }}
-                onConfirm={handleConfirmBlockToggle}
-            />
-
+            {blockDialogOpen && selectedDriver && <BlockUnblockDialog driver={selectedDriver} onClose={closeDialog} refetch={refetch} />}
             {/* Menu itself has NO onClick — only individual MenuItems trigger actions */}
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
                 <MenuItem onClick={handleBlockClick}>

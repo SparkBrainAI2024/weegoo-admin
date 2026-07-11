@@ -1,34 +1,75 @@
+import { useMutation } from '@apollo/client/react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, CircularProgress } from '@mui/material';
 
-interface BlockDriverDialogProps {
-    open: boolean;
-    driverName: string;
-    isCurrentlyBlocked: boolean;
-    loading: boolean;
+import { BLOCK_DRIVER, UNBLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
+import { DriverListItem } from 'types/drivers.types';
+
+interface BlockUnblockDialogProps {
+    driver: DriverListItem;
     onClose: () => void;
-    onConfirm: () => void;
+    refetch: () => void; // pass this down from the parent's useQuery
 }
 
-export const BlockDriverDialog = ({ open, driverName, isCurrentlyBlocked, loading, onClose, onConfirm }: BlockDriverDialogProps) => {
+export function BlockUnblockDialog({ driver, onClose, refetch }: BlockUnblockDialogProps) {
+    const [blockDriver, { loading: blocking }] = useMutation(BLOCK_DRIVER, {
+        onCompleted: () => {
+            onClose();
+            refetch(); // re-runs the list query so the ACTIVE-tab filter excludes this row
+        },
+        onError: (err) => {
+            console.log('💥 blockDriver failed:', err.message);
+        }
+    });
+
+    const [unblockDriver, { loading: unblocking }] = useMutation(UNBLOCK_DRIVER, {
+        onCompleted: () => {
+            onClose();
+            refetch();
+        },
+        onError: (err) => {
+            console.log('💥 unblockDriver failed:', err.message);
+        }
+    });
+
+    const loading = blocking || unblocking;
+
+    const isCurrentlyBlocked = driver.suspended;
     const actionLabel = isCurrentlyBlocked ? 'Unblock' : 'Block';
 
+    const handleConfirm = async () => {
+        try {
+            if (isCurrentlyBlocked) {
+                await unblockDriver({ variables: { id: driver.id } });
+            } else {
+                await blockDriver({ variables: { id: driver.id } });
+            }
+            // onClose + refetch now happen in onCompleted above,
+            // so they run only after the mutation actually succeeds
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+        <Dialog open onClose={loading ? undefined : onClose} maxWidth="xs" fullWidth>
             <DialogTitle>{actionLabel} Driver</DialogTitle>
+
             <DialogContent>
                 <DialogContentText>
-                    Are you sure you want to {actionLabel.toLowerCase()} <strong>{driverName}</strong>?
+                    Are you sure you want to <strong>{actionLabel.toLowerCase()}</strong> <strong>{driver.fullName}</strong>?
                     {!isCurrentlyBlocked && <> This driver will not be able to accept new rides while blocked.</>}
                 </DialogContentText>
             </DialogContent>
+
             <DialogActions>
                 <Button onClick={onClose} disabled={loading}>
                     Cancel
                 </Button>
+
                 <Button
-                    onClick={onConfirm}
-                    color={isCurrentlyBlocked ? 'success' : 'error'}
+                    onClick={handleConfirm}
                     variant="contained"
+                    color={isCurrentlyBlocked ? 'success' : 'error'}
                     disabled={loading}
                     startIcon={loading ? <CircularProgress size={16} color="inherit" /> : null}
                 >
@@ -37,4 +78,4 @@ export const BlockDriverDialog = ({ open, driverName, isCurrentlyBlocked, loadin
             </DialogActions>
         </Dialog>
     );
-};
+}
