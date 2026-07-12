@@ -3,7 +3,6 @@ import firebase from 'firebase/compat/app';
 
 // project imports
 import { UserProfile } from 'types/user-profile';
-import { Gender } from './enum';
 
 export type FirebaseContextType = {
     isLoggedIn: boolean;
