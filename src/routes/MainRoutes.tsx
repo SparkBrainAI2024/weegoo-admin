@@ -183,6 +183,8 @@ const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
 const OffersDetailsPage = Loadable(lazy(() => import('views/pages/offers-detail')));
 
+const DriverDetailsPage = Loadable(lazy(() => import('views/pages/driver-detail.page')));
+
 const DashboardPage = Loadable(lazy(() => import('views/pages/dashboard')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -222,6 +224,10 @@ const MainRoutes = {
         {
             path: '/offers/:id',
             element: <OffersDetailsPage />
+        },
+        {
+            path: '/drivers/:id',
+            element: <DriverDetailsPage />
         },
         {
             path: '/reports',

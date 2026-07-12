@@ -38,6 +38,7 @@ import { UserStatusChip } from 'components/ui-component/UserStatusChip';
 import { DeleteUserDialog } from 'components/ui-component/extended/notistack/DeleteUserDialog';
 import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
+import { useNavigate } from 'react-router';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -56,7 +57,7 @@ const DriverList = () => {
     const debouncedSearch = useDebounce(search, 400);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-
+    const navigate = useNavigate();
     const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
         variables: {
             input: {
@@ -71,6 +72,10 @@ const DriverList = () => {
     const closeDialog = () => {
         setBlockDialogOpen(false);
         setSelectedId(null);
+    };
+
+    const handleRowClick = (driverId: string) => {
+        navigate(`/drivers/${driverId}`);
     };
 
     const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
@@ -219,7 +224,7 @@ const DriverList = () => {
 
                             {!loading &&
                                 drivers.map((driver) => (
-                                    <TableRow key={driver.id} hover>
+                                    <TableRow key={driver.id} hover onClick={() => handleRowClick(driver.id)} sx={{ cursor: 'pointer' }}>
                                         <TableCell>
                                             <Stack direction="row" spacing={1.5} alignItems="center">
                                                 <Avatar src={driver.profileImage} sx={{ width: 36, height: 36 }}>
@@ -258,7 +263,13 @@ const DriverList = () => {
                                             )}
                                         </TableCell>
                                         <TableCell align="right">
-                                            <IconButton size="small" onClick={(e) => openMenu(e, driver)}>
+                                            <IconButton
+                                                size="small"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    openMenu(e, driver);
+                                                }}
+                                            >
                                                 <MoreHorizIcon fontSize="small" />
                                             </IconButton>
                                         </TableCell>
