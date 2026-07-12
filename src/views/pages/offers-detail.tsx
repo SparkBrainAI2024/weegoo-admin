@@ -350,7 +350,7 @@ const OfferDetail = () => {
                     <SectionCard title="Restrictions">
                         <Grid container spacing={2.5}>
                             <Grid item xs={12}>
-                                <InfoItem label="Eligible Users" value="All riders" />
+                                <InfoItem label="Eligible Users" value="All Passengers" />
                             </Grid>
                             <Grid item xs={12}>
                                 <InfoItem label="Payment Method" value="Wallet + Cash" />

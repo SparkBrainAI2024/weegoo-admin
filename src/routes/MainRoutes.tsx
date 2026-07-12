@@ -174,13 +174,16 @@ const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const RidesPage = Loadable(lazy(() => import('views/pages/rides')));
 
 const DriversPage = Loadable(lazy(() => import('views/pages/drivers-list')));
-const RidersPage = Loadable(lazy(() => import('views/pages/riders')));
+
+const PassengersPage = Loadable(lazy(() => import('views/pages/passengers-list')));
 const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
 const PageManagementPage = Loadable(lazy(() => import('views/pages/page-list')));
 const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
 const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
 const OffersDetailsPage = Loadable(lazy(() => import('views/pages/offers-detail')));
+
+const DriverDetailsPage = Loadable(lazy(() => import('views/pages/driver-detail.page')));
 
 const DashboardPage = Loadable(lazy(() => import('views/pages/dashboard')));
 
@@ -207,8 +210,8 @@ const MainRoutes = {
             element: <DriversPage />
         },
         {
-            path: '/riders',
-            element: <RidersPage />
+            path: '/passengers',
+            element: <PassengersPage />
         },
         {
             path: '/payments',
@@ -221,6 +224,10 @@ const MainRoutes = {
         {
             path: '/offers/:id',
             element: <OffersDetailsPage />
+        },
+        {
+            path: '/drivers/:id',
+            element: <DriverDetailsPage />
         },
         {
             path: '/reports',

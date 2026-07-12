@@ -22,10 +22,10 @@ const users: NavItemType = {
             // chip: { color: 'error', label: '2' }
         },
         {
-            id: 'riders',
-            title: 'Riders',
+            id: 'passengers',
+            title: 'Passengers',
             type: 'item',
-            url: '/riders',
+            url: '/passengers',
             icon: IconUsers,
             breadcrumbs: true
         }

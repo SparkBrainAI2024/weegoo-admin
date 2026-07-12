@@ -7,7 +7,7 @@ const statusConfig: Record<string, { label: string; color: 'success' | 'warning'
     BLOCKED: { label: 'Blocked', color: 'error' }
 };
 
-export const DriverStatusChip = ({ status }: { status: string }) => {
+export const UserStatusChip = ({ status }: { status: string }) => {
     const config = statusConfig[status] ?? statusConfig.PENDING;
     return <Chip label={config.label} color={config.color} size="small" sx={{ fontWeight: 500, borderRadius: '6px' }} />;
 };
