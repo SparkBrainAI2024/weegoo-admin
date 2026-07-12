@@ -1,4 +1,4 @@
-// components/drivers/PassengerList.tsx
+// components/passengers/PassengerList.tsx
 import { useState, MouseEvent } from 'react';
 import {
     Box,
@@ -100,7 +100,7 @@ const PassengerList = () => {
         deletePassenger({
             variables: {
                 input: {
-                    driverId: selectedPassenger.id
+                    passengerId: selectedPassenger.id
                 }
             }
         });
@@ -113,9 +113,9 @@ const PassengerList = () => {
         setPage(0);
     };
 
-    const openMenu = (e: MouseEvent<HTMLElement>, driver: PassengerListItem) => {
+    const openMenu = (e: MouseEvent<HTMLElement>, passenger: PassengerListItem) => {
         setMenuAnchor(e.currentTarget);
-        setSelectedId(driver.id);
+        setSelectedId(passenger.id);
     };
 
     const closeMenu = () => {
@@ -128,7 +128,7 @@ const PassengerList = () => {
         <Card sx={{ p: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
                 <TextField
-                    placeholder="Search driver..."
+                    placeholder="Search passenger..."
                     size="small"
                     value={search}
                     onChange={(e) => {
@@ -198,9 +198,9 @@ const PassengerList = () => {
                                 <TableCell>Passenger</TableCell>
                                 <TableCell>Phone</TableCell>
                                 <TableCell>Status</TableCell>
-                                <TableCell>Rides</TableCell>
+                                <TableCell>Trips</TableCell>
                                 <TableCell>Rating</TableCell>
-                                <TableCell>Earnings</TableCell>
+                                <TableCell>Spending</TableCell>
                                 <TableCell align="right" />
                             </TableRow>
                         </TableHead>
@@ -217,47 +217,47 @@ const PassengerList = () => {
                                 ))}
 
                             {!loading &&
-                                passengers.map((driver) => (
-                                    <TableRow key={driver.id} hover>
+                                passengers.map((passenger) => (
+                                    <TableRow key={passenger.id} hover>
                                         <TableCell>
                                             <Stack direction="row" spacing={1.5} alignItems="center">
-                                                <Avatar src={driver.profileImage} sx={{ width: 36, height: 36 }}>
-                                                    {driver.fullName?.[0]}
+                                                <Avatar src={passenger.profileImage} sx={{ width: 36, height: 36 }}>
+                                                    {passenger.fullName?.[0]}
                                                 </Avatar>
                                                 <Box>
-                                                    <Typography variant="subtitle2">{driver.fullName}</Typography>
+                                                    <Typography variant="subtitle2">{passenger.fullName}</Typography>
                                                     <Typography variant="caption" color="text.secondary">
-                                                        ID · {driver.id.slice(-4)}
+                                                        ID · {passenger.id.slice(-4)}
                                                     </Typography>
                                                 </Box>
                                             </Stack>
                                         </TableCell>
-                                        <TableCell>{driver.phone}</TableCell>
+                                        <TableCell>{passenger.phone}</TableCell>
                                         <TableCell>
-                                            <UserStatusChip status={driver.suspended ? 'BLOCKED' : driver.status} />
+                                            <UserStatusChip status={passenger.suspended ? 'BLOCKED' : passenger.status} />
                                         </TableCell>
-                                        <TableCell>{driver.totalTripsAsPassenger || '—'}</TableCell>
+                                        <TableCell>{passenger.totalTripsAsPassenger || '—'}</TableCell>
                                         <TableCell>
-                                            {driver.rating ? (
+                                            {passenger.rating ? (
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
-                                                    <Rating value={driver.rating} precision={0.1} readOnly size="small" />
-                                                    <Typography variant="body2">{driver.rating.toFixed(1)}</Typography>
+                                                    <Rating value={passenger.rating} precision={0.1} readOnly size="small" />
+                                                    <Typography variant="body2">{passenger.rating.toFixed(1)}</Typography>
                                                 </Stack>
                                             ) : (
                                                 '—'
                                             )}
                                         </TableCell>
                                         <TableCell>
-                                            {driver.totalSpendingOnRides ? (
+                                            {passenger.totalSpendingOnRides ? (
                                                 <Typography color="success.main" fontWeight={600}>
-                                                    Rs. {driver.totalSpendingOnRides.toLocaleString()}
+                                                    Rs. {passenger.totalSpendingOnRides.toLocaleString()}
                                                 </Typography>
                                             ) : (
                                                 '—'
                                             )}
                                         </TableCell>
                                         <TableCell align="right">
-                                            <IconButton size="small" onClick={(e) => openMenu(e, driver)}>
+                                            <IconButton size="small" onClick={(e) => openMenu(e, passenger)}>
                                                 <MoreHorizIcon fontSize="small" />
                                             </IconButton>
                                         </TableCell>

@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 import { PassengerListItem } from 'types/passengers.types';
 
 export const GET_PASSENGERS = gql`
-    query GetDrivers($input: PassengerListInput) {
-        getDrivers(input: $input) {
+    query GetPassengers($input: PassengerListInput) {
+        getPassengers(input: $input) {
             data {
                 id
                 fullName
