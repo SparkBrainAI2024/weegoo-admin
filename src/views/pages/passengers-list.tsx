@@ -1,4 +1,4 @@
-// components/drivers/DriverList.tsx
+// components/drivers/PassengerList.tsx
 import { useState, MouseEvent } from 'react';
 import {
     Box,
@@ -29,15 +29,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BlockIcon from '@mui/icons-material/Block';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { DriverListItem } from 'types/drivers.types';
 import { useDebounce } from 'hooks/useDebounce';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { GET_DRIVERS } from 'graphql/queries/drivers.queries';
-import { GetDriversQueryResult } from 'types/drivers-list.response';
+import { GET_PASSENGERS, GetPassengersQueryResult } from 'graphql/queries/passenger.queries';
 import { UserStatusChip } from 'components/ui-component/UserStatusChip';
 import { DeleteUserDialog } from 'components/ui-component/extended/notistack/DeleteUserDialog';
-import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
-import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
+import { DELETE_PASSENGER } from 'graphql/mutations/passenger.mutation';
+import { PassengerListItem } from 'types/passengers.types';
+import { BlockUnblockPassengerDialog } from 'components/ui-component/block-passenger.dialog';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -45,7 +44,7 @@ const TABS = [
     { key: 'BLOCKED', label: 'Blocked' }
 ] as const;
 
-const DriverList = () => {
+const PassengerList = () => {
     const [tab, setTab] = useState<string>('ACTIVE');
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
@@ -57,7 +56,7 @@ const DriverList = () => {
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-    const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
+    const { data, loading, refetch } = useQuery<GetPassengersQueryResult>(GET_PASSENGERS, {
         variables: {
             input: {
                 page,
@@ -73,56 +72,56 @@ const DriverList = () => {
         setSelectedId(null);
     };
 
-    const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
+    const [deletePassenger, { loading: deleting }] = useMutation(DELETE_PASSENGER, {
         onCompleted: () => {
             setDeleteDialogOpen(false);
             setSelectedId(null);
             refetch();
         },
         onError: (err) => {
-            console.log('DeleteDriver failed:', err.message);
+            console.log('DeletePassenger failed:', err.message);
         }
     });
 
     // ---- Menu-item click handlers: ONLY open dialogs, never call mutations ----
     const handleBlockClick = () => {
         setBlockDialogOpen(true);
-        setMenuAnchor(null); // close menu, keep selectedDriver
+        setMenuAnchor(null); // close menu, keep selectedPassenger
     };
 
     const handleDeleteClick = () => {
         setDeleteDialogOpen(true);
-        setMenuAnchor(null); // close menu, keep selectedDriver
+        setMenuAnchor(null); // close menu, keep selectedPassenger
     };
 
     const handleConfirmDelete = () => {
-        if (!selectedDriver) return;
+        if (!selectedPassenger) return;
 
-        deleteDriver({
+        deletePassenger({
             variables: {
                 input: {
-                    driverId: selectedDriver.id
+                    driverId: selectedPassenger.id
                 }
             }
         });
     };
-    const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
-    const total = data?.getDrivers?.pagination?.total ?? 0;
-    const selectedDriver = drivers.find((d) => d.id === selectedId);
+    const passengers: PassengerListItem[] = data?.getPassengers?.data ?? [];
+    const total = data?.getPassengers?.pagination?.total ?? 0;
+    const selectedPassenger = passengers.find((d) => d.id === selectedId);
     const handleTabChange = (_: React.SyntheticEvent, value: string) => {
         setTab(value);
         setPage(0);
     };
 
-    const openMenu = (e: MouseEvent<HTMLElement>, driver: DriverListItem) => {
+    const openMenu = (e: MouseEvent<HTMLElement>, driver: PassengerListItem) => {
         setMenuAnchor(e.currentTarget);
         setSelectedId(driver.id);
     };
 
     const closeMenu = () => {
         setMenuAnchor(null);
-        // NOTE: don't clear selectedDriver here — dialogs opened from this menu
-        // need it. selectedDriver is cleared explicitly in each dialog's onClose.
+        // NOTE: don't clear selectedPassenger here — dialogs opened from this menu
+        // need it. selectedPassenger is cleared explicitly in each dialog's onClose.
     };
 
     return (
@@ -196,7 +195,7 @@ const DriverList = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Driver</TableCell>
+                                <TableCell>Passenger</TableCell>
                                 <TableCell>Phone</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell>Rides</TableCell>
@@ -218,7 +217,7 @@ const DriverList = () => {
                                 ))}
 
                             {!loading &&
-                                drivers.map((driver) => (
+                                passengers.map((driver) => (
                                     <TableRow key={driver.id} hover>
                                         <TableCell>
                                             <Stack direction="row" spacing={1.5} alignItems="center">
@@ -237,7 +236,7 @@ const DriverList = () => {
                                         <TableCell>
                                             <UserStatusChip status={driver.suspended ? 'BLOCKED' : driver.status} />
                                         </TableCell>
-                                        <TableCell>{driver.totalRidesAsDriver || '—'}</TableCell>
+                                        <TableCell>{driver.totalTripsAsPassenger || '—'}</TableCell>
                                         <TableCell>
                                             {driver.rating ? (
                                                 <Stack direction="row" spacing={0.5} alignItems="center">
@@ -249,9 +248,9 @@ const DriverList = () => {
                                             )}
                                         </TableCell>
                                         <TableCell>
-                                            {driver.totalEarnings ? (
+                                            {driver.totalSpendingOnRides ? (
                                                 <Typography color="success.main" fontWeight={600}>
-                                                    Rs. {driver.totalEarnings.toLocaleString()}
+                                                    Rs. {driver.totalSpendingOnRides.toLocaleString()}
                                                 </Typography>
                                             ) : (
                                                 '—'
@@ -282,7 +281,7 @@ const DriverList = () => {
             />
             <DeleteUserDialog
                 open={deleteDialogOpen}
-                userName={selectedDriver?.fullName}
+                userName={selectedPassenger?.fullName}
                 loading={deleting}
                 onClose={() => {
                     setDeleteDialogOpen(false);
@@ -290,8 +289,8 @@ const DriverList = () => {
                 }}
                 onConfirm={handleConfirmDelete}
             />
-            {blockDialogOpen && selectedDriver && (
-                <BlockUnblockDriverDialog driver={selectedDriver} onClose={closeDialog} refetch={refetch} />
+            {blockDialogOpen && selectedPassenger && (
+                <BlockUnblockPassengerDialog passenger={selectedPassenger} onClose={closeDialog} refetch={refetch} />
             )}
             {/* Menu itself has NO onClick — only individual MenuItems trigger actions */}
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
@@ -299,7 +298,7 @@ const DriverList = () => {
                     <ListItemIcon>
                         <BlockIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>{selectedDriver?.suspended ? 'Unblock' : 'Block'}</ListItemText>
+                    <ListItemText>{selectedPassenger?.suspended ? 'Unblock' : 'Block'}</ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleDeleteClick} sx={{ color: 'error.main' }}>
                     <ListItemIcon>
@@ -312,4 +311,4 @@ const DriverList = () => {
     );
 };
 
-export default DriverList;
+export default PassengerList;

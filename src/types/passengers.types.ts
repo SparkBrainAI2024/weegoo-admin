@@ -1,18 +1,18 @@
 // types/driver.types.ts
-export interface DriverListItem {
+export interface PassengerListItem {
     id: string;
     fullName: string;
     phone: string;
     profileImage?: string;
     status: 'ACTIVE' | 'PENDING' | 'BLOCKED';
     suspended: boolean;
-    totalRidesAsDriver: number;
-    totalEarnings: number;
+    totalTripsAsPassenger: number;
+    totalSpendingOnRides: number;
     rating: number;
     joinedDate: string | null;
 }
 
-export interface DriverListInput {
+export interface PassengerListInput {
     page: number;
     limit: number;
     search?: string;

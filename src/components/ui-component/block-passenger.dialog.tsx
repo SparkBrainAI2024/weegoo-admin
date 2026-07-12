@@ -1,27 +1,27 @@
 import { useMutation } from '@apollo/client/react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, CircularProgress } from '@mui/material';
 
-import { BLOCK_DRIVER, UNBLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
-import { DriverListItem } from 'types/drivers.types';
+import { BLOCK_PASSENGER, UNBLOCK_PASSENGER } from 'graphql/mutations/passenger.mutation';
+import { PassengerListItem } from 'types/passengers.types';
 
-interface BlockUnblockDriverDialogProps {
-    driver: DriverListItem;
+interface BlockUnblockPassengerDialogProps {
+    passenger: PassengerListItem;
     onClose: () => void;
     refetch: () => void; // pass this down from the parent's useQuery
 }
 
-export function BlockUnblockDriverDialog({ driver, onClose, refetch }: BlockUnblockDriverDialogProps) {
-    const [blockDriver, { loading: blocking }] = useMutation(BLOCK_DRIVER, {
+export function BlockUnblockPassengerDialog({ passenger, onClose, refetch }: BlockUnblockPassengerDialogProps) {
+    const [blockPassenger, { loading: blocking }] = useMutation(BLOCK_PASSENGER, {
         onCompleted: () => {
             onClose();
             refetch(); // re-runs the list query so the ACTIVE-tab filter excludes this row
         },
         onError: (err) => {
-            console.log('BlockDriver failed:', err.message);
+            console.log('Block Passenger failed:', err.message);
         }
     });
 
-    const [unblockDriver, { loading: unblocking }] = useMutation(UNBLOCK_DRIVER, {
+    const [unblockPassenger, { loading: unblocking }] = useMutation(UNBLOCK_PASSENGER, {
         onCompleted: () => {
             onClose();
             refetch();
@@ -33,15 +33,15 @@ export function BlockUnblockDriverDialog({ driver, onClose, refetch }: BlockUnbl
 
     const loading = blocking || unblocking;
 
-    const isCurrentlyBlocked = driver.suspended;
+    const isCurrentlyBlocked = passenger.suspended;
     const actionLabel = isCurrentlyBlocked ? 'Unblock' : 'Block';
 
     const handleConfirm = async () => {
         try {
             if (isCurrentlyBlocked) {
-                await unblockDriver({ variables: { id: driver.id } });
+                await unblockPassenger({ variables: { id: passenger.id } });
             } else {
-                await blockDriver({ variables: { id: driver.id } });
+                await blockPassenger({ variables: { id: passenger.id } });
             }
             // onClose + refetch now happen in onCompleted above,
             // so they run only after the mutation actually succeeds
@@ -56,8 +56,8 @@ export function BlockUnblockDriverDialog({ driver, onClose, refetch }: BlockUnbl
 
             <DialogContent>
                 <DialogContentText>
-                    Are you sure you want to <strong>{actionLabel.toLowerCase()}</strong> <strong>{driver.fullName}</strong>?
-                    {!isCurrentlyBlocked && <> This driver will not be able to accept new rides while blocked.</>}
+                    Are you sure you want to <strong>{actionLabel.toLowerCase()}</strong> <strong>{passenger.fullName}</strong>?
+                    {!isCurrentlyBlocked && <> This passenger will not be able to accept new rides while blocked.</>}
                 </DialogContentText>
             </DialogContent>
 
