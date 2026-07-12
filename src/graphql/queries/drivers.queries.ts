@@ -201,7 +201,7 @@ export interface GetDriverDocumentsData {
 }
 
 export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, GetDriverVars> = gql`
-    query GetDriverDocuments($driverId: ID!) {
+    query GetDriverDocuments($driverId: String!) {
         getDriver(driverId: $driverId) {
             id
             documents {
@@ -226,6 +226,24 @@ export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, Get
     }
 `;
 
+export const GET_DRIVER_RIDE_HISTORY = gql`
+    query GetDriverRideHistory($driverId: ID!, $page: Int!, $limit: Int!) {
+        getDriverRideHistory(driverId: $driverId, page: $page, limit: $limit) {
+            totalCount
+            hasNextPage
+            rides {
+                id
+                riderName
+                pickupAddress
+                dropAddress
+                fare
+                status
+                startedAt
+                endedAt
+            }
+        }
+    }
+`;
 // ---------------------------------------------------------------------
 // VEHICLE SELECTION — small, but kept separate from overview so it's
 // easy to promote into the eager query later, or keep lazy, without

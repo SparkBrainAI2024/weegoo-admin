@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client/react';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
 
 import {
     Box,
@@ -15,16 +15,28 @@ import {
     TextField,
     Rating,
     CircularProgress,
-    Alert
+    Alert,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody
 } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventIcon from '@mui/icons-material/Event';
-import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
-import { BLOCK_DRIVER, DELETE_DRIVER, UNBLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
+import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW, GET_DRIVER_RIDE_HISTORY } from 'graphql/queries/drivers.queries';
+import { BLOCK_DRIVER, DELETE_DRIVER, REVIEW_DOCUMENT, UNBLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
 import { useParams } from 'react-router';
 
+interface SelectedFile {
+    documentId: string;
+    documentType: string;
+    side: string;
+    s3Key: string;
+    status: string;
+}
 // ---------------------------------------------------------------------------
 // Small status -> color maps, kept outside the component so they aren't
 // recreated on every render.
@@ -62,6 +74,8 @@ export default function DriverDetailsPage() {
         fetchPolicy: 'cache-and-network'
     });
 
+    const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
+
     // ---------------------------------------------------------------------
     // DOCUMENTS QUERY — useLazyQuery means this does NOT fire on mount.
     // We trigger it manually the first time the Documents tab is opened.
@@ -69,14 +83,7 @@ export default function DriverDetailsPage() {
     // decision: no point paying for this fetch if the admin never clicks
     // the tab.
     // ---------------------------------------------------------------------
-    const {
-        data: docsData,
-        loading: docsLoading,
-        error: docsError
-    } = useQuery(GET_DRIVER_DOCUMENTS, {
-        variables: { driverId: driverId! },
-        fetchPolicy: 'cache-and-network'
-    });
+    const [loadDocuments, docsResult] = useLazyQuery(GET_DRIVER_DOCUMENTS, { fetchPolicy: 'cache-and-network' });
     // ---------------------------------------------------------------------
     // RIDE HISTORY QUERY — same lazy pattern, plus its own pagination
     // state. Keeping this separate means a slow/expensive ride-history
@@ -84,22 +91,49 @@ export default function DriverDetailsPage() {
     // page render.
     // ---------------------------------------------------------------------
     const [page, setPage] = useState(0);
-    //TODO const [loadRideHistory, rideHistoryResult] = useQuery(GET_DRIVER_RIDE_HISTORY, {
-    //     variables: { driverId, page, limit: 10 },
-    //     fetchPolicy: 'cache-and-network'
-    // });
+    const [loadRideHistory, rideHistoryResult] = useLazyQuery(GET_DRIVER_RIDE_HISTORY, {
+        fetchPolicy: 'cache-and-network'
+    });
+    const statusChipColor: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
+        APPROVED: 'success',
+        PENDING: 'warning',
+        REJECTED: 'error'
+    };
+    function formatDocLabel(type: string, side: string) {
+        const typeLabel = type
+            .replace(/_/g, ' ')
+            .toLowerCase()
+            .replace(/\b\w/g, (c) => c.toUpperCase()); // "DRIVING_LICENSE" -> "Driving License"
+        return `${typeLabel} (${side.charAt(0)}${side.slice(1).toLowerCase()})`;
+    }
+
+    function formatDate(iso: string) {
+        return new Date(iso).toLocaleDateString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric'
+        });
+    }
+
+    function buildS3Url(s3Key: string) {
+        return `https://amazon-s3-pilot-testers.s3.eu-north-1.amazonaws.com/${s3Key}`;
+    }
+
+    const [reviewDocument, { loading: reviewing }] = useMutation(REVIEW_DOCUMENT);
 
     const handleTabChange = (_: React.SyntheticEvent, value: typeof activeTab) => {
-        // todo setActiveTab(value);
-        // // Fire the lazy query the FIRST time each tab is opened.
-        // // Apollo caches the result after that, so re-clicking the tab
-        // // is instant (and cache-and-network still quietly refreshes it).
-        // if (value === 'documents' && !docsResult.called) {
-        //     loadDocuments();
-        // }
-        // if (value === 'rides' && !rideHistoryResult.called) {
-        //     loadRideHistory();
-        // }
+        setActiveTab(value);
+        // Fire the lazy query the FIRST time each tab is opened.
+        // Apollo caches the result after that, so re-clicking the tab
+        // is instant (and cache-and-network still quietly refreshes it).
+        if (value === 'documents' && !docsResult.called) {
+            loadDocuments({
+                variables: { driverId: driverId! }
+            });
+        }
+        if (value === 'rides' && !rideHistoryResult.called) {
+            loadRideHistory({ variables: { driverId, page, limit: 10 } });
+        }
     };
 
     // ---------------------------------------------------------------------
@@ -329,6 +363,161 @@ export default function DriverDetailsPage() {
                         )} */}
                     </Paper>
                 </>
+            )}
+            {activeTab === 'documents' && (
+                <Grid container spacing={2}>
+                    {/* ---- Left: documents table ---- */}
+                    <Grid item xs={12} md={7}>
+                        <Paper sx={{ p: 3 }}>
+                            <Typography fontWeight={600}>KYC Documents</Typography>
+                            <Typography variant="body2" color="text.secondary" mb={2}>
+                                Review uploaded documents and update status
+                            </Typography>
+
+                            {docsResult.loading && !docsResult.data && <CircularProgress size={24} />}
+                            {docsResult.error && <Alert severity="error">{docsResult.error.message}</Alert>}
+
+                            {docsResult.data && (
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Document</TableCell>
+                                            <TableCell>Uploaded</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell align="right">Action</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {/* Flatten: one row per file, not per document.
+                  This is why we need the .flatMap — the screenshot's
+                  rows correspond to `files`, the query's top-level
+                  array is `documents`. */}
+                                        {docsResult.data.getDriver.documents.flatMap((doc) =>
+                                            doc.files.map((file) => {
+                                                const isSelected = selectedFile?.s3Key === file.s3Key;
+                                                return (
+                                                    <TableRow
+                                                        key={file.s3Key}
+                                                        hover
+                                                        selected={isSelected}
+                                                        onClick={() =>
+                                                            setSelectedFile({
+                                                                documentId: doc._id,
+                                                                documentType: doc.type,
+                                                                side: file.side,
+                                                                s3Key: file.s3Key,
+                                                                status: file.status
+                                                            })
+                                                        }
+                                                        sx={{ cursor: 'pointer' }}
+                                                    >
+                                                        <TableCell>{formatDocLabel(doc.type, file.side)}</TableCell>
+                                                        <TableCell>{formatDate(file.createdAt)}</TableCell>
+                                                        <TableCell>
+                                                            <Chip
+                                                                size="small"
+                                                                label={file.status}
+                                                                color={statusChipColor[file.status] ?? 'default'}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell align="right">
+                                                            <Button
+                                                                size="small"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation(); // don't also trigger row select
+                                                                    setSelectedFile({
+                                                                        documentId: doc._id,
+                                                                        documentType: doc.type,
+                                                                        side: file.side,
+                                                                        s3Key: file.s3Key,
+                                                                        status: file.status
+                                                                    });
+                                                                }}
+                                                            >
+                                                                Preview
+                                                            </Button>
+                                                            <Button size="small" sx={{ ml: 1 }}>
+                                                                Download
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            )}
+                        </Paper>
+                    </Grid>
+
+                    {/* ---- Right: preview + approve/reject ---- */}
+                    <Grid item xs={12} md={5}>
+                        <Paper sx={{ p: 3, height: '100%' }}>
+                            <Typography fontWeight={600}>Preview</Typography>
+                            <Typography variant="body2" color="text.secondary" mb={2}>
+                                {selectedFile
+                                    ? formatDocLabel(selectedFile.documentType, selectedFile.side)
+                                    : 'Select a document to review'}
+                            </Typography>
+
+                            <Box
+                                sx={{
+                                    height: 320,
+                                    bgcolor: '#f5f6f8',
+                                    borderRadius: 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                {selectedFile ? (
+                                    <img
+                                        src={buildS3Url(selectedFile.s3Key)}
+                                        alt="document preview"
+                                        style={{ maxWidth: '100%', maxHeight: '100%' }}
+                                    />
+                                ) : (
+                                    <Typography color="text.secondary">Document Preview Area</Typography>
+                                )}
+                            </Box>
+
+                            <Box display="flex" gap={2} mt={2}>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    disabled={!selectedFile || reviewing}
+                                    onClick={() =>
+                                        selectedFile &&
+                                        reviewDocument({
+                                            variables: {
+                                                documentId: selectedFile.documentId,
+                                                status: 'APPROVED'
+                                            }
+                                        })
+                                    }
+                                >
+                                    Approve
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="error"
+                                    disabled={!selectedFile || reviewing}
+                                    onClick={() =>
+                                        selectedFile &&
+                                        reviewDocument({
+                                            variables: {
+                                                documentId: selectedFile.documentId,
+                                                status: 'REJECTED'
+                                            }
+                                        })
+                                    }
+                                >
+                                    Reject
+                                </Button>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                </Grid>
             )}
         </Box>
     );
