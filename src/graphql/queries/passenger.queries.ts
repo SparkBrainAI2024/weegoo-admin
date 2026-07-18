@@ -79,7 +79,7 @@ export const GET_RIDER_TRIPS = gql`
                 total
                 page
                 limit
-                totalPages
+                total
             }
         }
     }
@@ -87,7 +87,7 @@ export const GET_RIDER_TRIPS = gql`
 
 export const GET_RIDER_RATINGS = gql`
     query GetRiderRatings($input: RiderRatingsInput!) {
-        getRiderRatings(input: $input) {
+        getPassengerRatings(input: $input) {
             averageRating
             totalReviews
             breakdown {
@@ -103,18 +103,18 @@ export const GET_RIDER_RATINGS = gql`
                 pickup
                 drop
                 fare
-                driverName
-                driverShortId
+                raterName
+                raterProfileImage
+                raterShortId
                 createdAt
                 rating
                 review
-                feedbackTags
+                feedbackTag
             }
             pagination {
                 total
                 page
                 limit
-                totalPages
             }
         }
     }

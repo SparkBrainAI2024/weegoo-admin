@@ -54,7 +54,6 @@ export interface Pagination {
     total: number;
     page: number;
     limit: number;
-    totalPages: number;
 }
 
 export interface GetRiderOverviewQueryResult {
@@ -83,16 +82,17 @@ export interface RatingListItem {
     pickup?: string;
     drop?: string;
     fare?: number;
-    driverName: string;
-    driverShortId?: string;
+    raterName: string;
+    raterProfileImage?: string;
+    raterShortId?: string;
     createdAt: string;
     rating: number;
     review?: string;
-    feedbackTags?: string[];
+    feedbackTag?: string;
 }
 
 export interface GetRiderRatingsQueryResult {
-    getRiderRatings: {
+    getPassengerRatings: {
         averageRating: number;
         totalReviews: number;
         breakdown: RatingBreakdown;

@@ -21,7 +21,7 @@ const RiderRatingsTab = ({ riderId }: Props) => {
         fetchRatings({ variables: { input: { riderId, page, limit } } });
     }, [riderId, page, limit, fetchRatings]);
 
-    const ratings = data?.getRiderRatings;
+    const ratings = data?.getPassengerRatings;
     const reviews = ratings?.data ?? [];
     const total = ratings?.pagination?.total ?? 0;
     const breakdown = ratings?.breakdown;
@@ -58,11 +58,13 @@ const RiderRatingsTab = ({ riderId }: Props) => {
             header: 'Driver',
             render: (row) => (
                 <Stack direction="row" spacing={1} alignItems="center">
-                    <Avatar sx={{ width: 28, height: 28, fontSize: 12 }}>{row.driverName?.[0]}</Avatar>
+                    <Avatar src={row.raterProfileImage} sx={{ width: 28, height: 28, fontSize: 12 }}>
+                        {row.raterName?.[0]}
+                    </Avatar>
                     <Box>
-                        <Typography variant="body2">{row.driverName}</Typography>
+                        <Typography variant="body2">{row.raterName}</Typography>
                         <Typography variant="caption" color="text.secondary">
-                            ID: {row.driverShortId}
+                            ID: {row.raterShortId}
                         </Typography>
                     </Box>
                 </Stack>
@@ -74,13 +76,7 @@ const RiderRatingsTab = ({ riderId }: Props) => {
         {
             key: 'feedback',
             header: 'Feedback',
-            render: (row) => (
-                <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                    {(row.feedbackTags ?? []).map((tag) => (
-                        <Chip key={tag} label={tag} size="small" variant="outlined" />
-                    ))}
-                </Stack>
-            )
+            render: (row) => <Chip key={row.feedbackTag} label={row.feedbackTag} size="small" variant="outlined" />
         }
     ];
 
