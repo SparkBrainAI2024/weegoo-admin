@@ -37,6 +37,7 @@ import { DeleteUserDialog } from 'components/ui-component/extended/notistack/Del
 import { DELETE_PASSENGER } from 'graphql/mutations/passenger.mutation';
 import { PassengerListItem } from 'types/passengers.types';
 import { BlockUnblockPassengerDialog } from 'components/ui-component/block-passenger.dialog';
+import { useNavigate } from 'react-router';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -47,13 +48,16 @@ const TABS = [
 const PassengerList = () => {
     const [tab, setTab] = useState<string>('ACTIVE');
     const [search, setSearch] = useState('');
+    const navigate = useNavigate();
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(10);
     const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [blockDialogOpen, setBlockDialogOpen] = useState(false);
     const debouncedSearch = useDebounce(search, 400);
-
+    const handleRowClick = (driverId: string) => {
+        navigate(`/passengers/${driverId}`);
+    };
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
     const { data, loading, refetch } = useQuery<GetPassengersQueryResult>(GET_PASSENGERS, {
@@ -218,7 +222,12 @@ const PassengerList = () => {
 
                             {!loading &&
                                 passengers.map((passenger) => (
-                                    <TableRow key={passenger.id} hover>
+                                    <TableRow
+                                        key={passenger.id}
+                                        hover
+                                        onClick={() => handleRowClick(passenger.id)}
+                                        sx={{ cursor: 'pointer' }}
+                                    >
                                         <TableCell>
                                             <Stack direction="row" spacing={1.5} alignItems="center">
                                                 <Avatar src={passenger.profileImage} sx={{ width: 36, height: 36 }}>

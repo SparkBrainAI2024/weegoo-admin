@@ -39,6 +39,7 @@ import { DeleteUserDialog } from 'components/ui-component/extended/notistack/Del
 import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
 import { useNavigate } from 'react-router';
+import { useUrlParams } from 'hooks/useSearchParams';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -46,18 +47,32 @@ const TABS = [
     { key: 'BLOCKED', label: 'Blocked' }
 ] as const;
 
+const DEFAULT_TAB = 'ACTIVE';
+const DEFAULT_LIMIT = 10;
+
 const DriverList = () => {
-    const [tab, setTab] = useState<string>('ACTIVE');
-    const [search, setSearch] = useState('');
-    const [page, setPage] = useState(0);
-    const [limit, setLimit] = useState(10);
+    const navigate = useNavigate();
+    const { getParam, updateParams } = useUrlParams();
+
+    // ---- URL is the single source of truth for filter/pagination state ----
+    const tab = getParam('status', DEFAULT_TAB);
+    const search = getParam('search', '');
+    const page = getParam('page', 0, Number);
+    const limit = getParam('limit', DEFAULT_LIMIT, Number);
+
+    // Local, non-URL UI state only
+    const [searchInput, setSearchInput] = useState(search);
     const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [blockDialogOpen, setBlockDialogOpen] = useState(false);
-    const debouncedSearch = useDebounce(search, 400);
-
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const navigate = useNavigate();
+    const debouncedSearch = useDebounce(searchInput, 400);
+
+    // Sync debounced search text -> URL (resets page on change)
+    if (debouncedSearch !== search) {
+        updateParams({ search: debouncedSearch || undefined }, { resetKeys: ['page'] });
+    }
+
     const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
         variables: {
             input: {
@@ -69,6 +84,7 @@ const DriverList = () => {
         },
         fetchPolicy: 'cache-and-network'
     });
+
     const closeDialog = () => {
         setBlockDialogOpen(false);
         setSelectedId(null);
@@ -111,12 +127,13 @@ const DriverList = () => {
             }
         });
     };
+
     const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
     const total = data?.getDrivers?.pagination?.total ?? 0;
     const selectedDriver = drivers.find((d) => d.id === selectedId);
+
     const handleTabChange = (_: React.SyntheticEvent, value: string) => {
-        setTab(value);
-        setPage(0);
+        updateParams({ status: value === DEFAULT_TAB ? undefined : value }, { resetKeys: ['page'] });
     };
 
     const openMenu = (e: MouseEvent<HTMLElement>, driver: DriverListItem) => {
@@ -136,11 +153,8 @@ const DriverList = () => {
                 <TextField
                     placeholder="Search driver..."
                     size="small"
-                    value={search}
-                    onChange={(e) => {
-                        setSearch(e.target.value);
-                        setPage(0);
-                    }}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
                     sx={{ width: 320 }}
                     InputProps={{
                         startAdornment: (
@@ -284,10 +298,10 @@ const DriverList = () => {
                 count={total}
                 page={page}
                 rowsPerPage={limit}
-                onPageChange={(_, newPage) => setPage(newPage)}
+                onPageChange={(_, newPage) => updateParams({ page: newPage || undefined })}
                 onRowsPerPageChange={(e) => {
-                    setLimit(parseInt(e.target.value, 10));
-                    setPage(0);
+                    const newLimit = parseInt(e.target.value, 10);
+                    updateParams({ limit: newLimit === DEFAULT_LIMIT ? undefined : newLimit }, { resetKeys: ['page'] });
                 }}
                 rowsPerPageOptions={[10, 25, 50]}
             />
