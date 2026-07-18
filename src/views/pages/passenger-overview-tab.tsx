@@ -1,5 +1,5 @@
 import { Avatar, Box, Card, Chip, Grid, Stack, Typography } from '@mui/material';
-import { RiderOverview } from 'types/rider.types';
+import { RiderOverview } from 'types/passengers.types';
 
 interface Props {
     rider: RiderOverview;

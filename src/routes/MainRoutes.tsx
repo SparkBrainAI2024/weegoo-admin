@@ -233,7 +233,7 @@ const MainRoutes = {
         },
 
         {
-            path: '/passengers/:id',
+            path: '/passengers/:riderId',
             element: <PassengerDetailsPage />
         },
         {
