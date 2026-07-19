@@ -167,6 +167,9 @@ const PassengerList = () => {
                             }
                         }
                     }}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    allowScrollButtonsMobile
                 >
                     {TABS.map((t) => (
                         <Tab
