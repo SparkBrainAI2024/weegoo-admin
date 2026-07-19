@@ -171,7 +171,7 @@ const UtilsGrid = Loadable(lazy(() => import('views/utilities/Grid')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
-const RidesPage = Loadable(lazy(() => import('views/pages/rides')));
+const RidesPage = Loadable(lazy(() => import('views/pages/rides-list')));
 
 const DriversPage = Loadable(lazy(() => import('views/pages/drivers-list')));
 
@@ -229,6 +229,10 @@ const MainRoutes = {
         },
         {
             path: '/drivers/:id',
+            element: <DriverDetailsPage />
+        },
+        {
+            path: '/rides/:id',
             element: <DriverDetailsPage />
         },
 

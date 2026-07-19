@@ -1,18 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-    Box,
-    Button,
-    Card,
-    Chip,
-    Grid,
-    InputAdornment,
-    MenuItem,
-    Select,
-    Stack,
-    TablePagination,
-    TextField,
-    Typography
-} from '@mui/material';
+import { Button, Card, Chip, Grid, InputAdornment, MenuItem, Select, Stack, TablePagination, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useLazyQuery } from '@apollo/client/react';
 
@@ -24,6 +11,7 @@ import { StatCard } from './offers';
 import { DualStatCard } from 'components/ui-component/stat-card';
 
 const STATUS_OPTIONS = ['All Status', 'COMPLETED', 'CANCELLED', 'ONGOING'];
+
 const DEFAULT_LIMIT = 10;
 
 interface Props {
@@ -81,76 +69,93 @@ const RiderTripsTab = ({ riderId }: Props) => {
 
     return (
         <Card sx={{ p: 3 }}>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard label="Total Trips" value={summary?.totalTrips.toString() ?? '-'} chip="Live" />
+            <Stack spacing={3}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <StatCard label="Total Trips" value={summary?.totalTrips.toString() ?? '-'} chip="Live" />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <StatCard label="Completed" value={summary?.completed.toString() ?? '-'} chip="Live" />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <StatCard label="Cancelled" value={summary?.cancelled.toString() ?? '-'} chip="Live" />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <DualStatCard
+                            firstLabel="Total Spend"
+                            firstValue={summary?.totalSpend.toString() ?? '-'}
+                            secondLabel="Avg Fare"
+                            secondValue={summary?.avgFare.toString() ?? '-'}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard label="Completed" value={summary?.completed.toString() ?? '-'} chip="Live" />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard label="Cancelled" value={summary?.cancelled.toString() ?? '-'} chip="Live" />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <DualStatCard
-                        firstLabel="Total Spend"
-                        firstValue={summary?.totalSpend.toString() ?? '-'}
-                        secondLabel="Avg Fare"
-                        secondValue={summary?.avgFare.toString() ?? '-'}
+
+                <Stack direction="row" spacing={2}>
+                    <TextField
+                        placeholder="Search trip id / route..."
+                        size="small"
+                        value={searchInput}
+                        onChange={(e) => {
+                            setSearchInput(e.target.value);
+                            setPage(0);
+                        }}
+                        sx={{ flex: 1 }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon fontSize="small" color="disabled" />
+                                </InputAdornment>
+                            )
+                        }}
                     />
-                </Grid>
-            </Grid>
+                    <Select
+                        size="small"
+                        value={status}
+                        onChange={(e) => {
+                            setStatus(e.target.value);
+                            setPage(0);
+                        }}
+                        sx={{ minWidth: 160 }}
+                    >
+                        {STATUS_OPTIONS.map((s) => (
+                            <MenuItem key={s} value={s}>
+                                {s}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <Select
+                        size="small"
+                        value={status}
+                        onChange={(e) => {
+                            setStatus(e.target.value);
+                            setPage(0);
+                        }}
+                        sx={{ minWidth: 160 }}
+                    >
+                        {STATUS_OPTIONS.map((s) => (
+                            <MenuItem key={s} value={s}>
+                                {s}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <Button variant="contained">Export Trips</Button>
+                </Stack>
 
-            <Stack direction="row" spacing={2} mb={2}>
-                <TextField
-                    placeholder="Search trip id / route..."
-                    size="small"
-                    value={searchInput}
-                    onChange={(e) => {
-                        setSearchInput(e.target.value);
+                <DataTable columns={columns} rows={trips} loading={loading} getRowKey={(row) => row.id} />
+
+                <TablePagination
+                    component="div"
+                    count={total}
+                    page={page}
+                    rowsPerPage={limit}
+                    onPageChange={(_, newPage) => setPage(newPage)}
+                    onRowsPerPageChange={(e) => {
+                        setLimit(parseInt(e.target.value, 10));
                         setPage(0);
                     }}
-                    sx={{ flex: 1 }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon fontSize="small" color="disabled" />
-                            </InputAdornment>
-                        )
-                    }}
+                    rowsPerPageOptions={[10, 25, 50]}
                 />
-                <Select
-                    size="small"
-                    value={status}
-                    onChange={(e) => {
-                        setStatus(e.target.value);
-                        setPage(0);
-                    }}
-                    sx={{ minWidth: 160 }}
-                >
-                    {STATUS_OPTIONS.map((s) => (
-                        <MenuItem key={s} value={s}>
-                            {s}
-                        </MenuItem>
-                    ))}
-                </Select>
-                <Button variant="contained">Export Trips</Button>
             </Stack>
-
-            <DataTable columns={columns} rows={trips} loading={loading} getRowKey={(row) => row.id} />
-
-            <TablePagination
-                component="div"
-                count={total}
-                page={page}
-                rowsPerPage={limit}
-                onPageChange={(_, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(e) => {
-                    setLimit(parseInt(e.target.value, 10));
-                    setPage(0);
-                }}
-                rowsPerPageOptions={[10, 25, 50]}
-            />
         </Card>
     );
 };

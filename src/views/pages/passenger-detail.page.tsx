@@ -8,8 +8,6 @@ import { GET_RIDER_OVERVIEW } from 'graphql/queries/passenger.queries';
 import RiderOverviewTab from './passenger-overview-tab';
 import RiderTripsTab from './passenger-trips-tab';
 import RiderRatingsTab from './passenger-ratings-tab';
-import { BlockUnblockPassengerDialog } from 'components/ui-component/block-passenger.dialog';
-
 const TABS = [
     { key: 'overview', label: 'Overview' },
     { key: 'trips', label: 'Trips' },
@@ -29,7 +27,7 @@ const PassengerDetailPage = () => {
     // doesn't re-fire every time the admin flips back to it
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set([DEFAULT_TAB]));
 
-    const { data, loading, refetch } = useQuery<GetRiderOverviewQueryResult>(GET_RIDER_OVERVIEW, {
+    const { data, loading } = useQuery<GetRiderOverviewQueryResult>(GET_RIDER_OVERVIEW, {
         variables: { riderId },
         skip: !riderId,
         fetchPolicy: 'cache-and-network'
