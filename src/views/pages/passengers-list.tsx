@@ -266,7 +266,13 @@ const PassengerList = () => {
                                             )}
                                         </TableCell>
                                         <TableCell align="right">
-                                            <IconButton size="small" onClick={(e) => openMenu(e, passenger)}>
+                                            <IconButton
+                                                size="small"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    openMenu(e, passenger);
+                                                }}
+                                            >
                                                 <MoreHorizIcon fontSize="small" />
                                             </IconButton>
                                         </TableCell>
