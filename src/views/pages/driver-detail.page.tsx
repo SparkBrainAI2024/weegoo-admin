@@ -436,7 +436,14 @@ export default function DriverDetailsPage() {
                                                             >
                                                                 Preview
                                                             </Button>
-                                                            <Button size="small" sx={{ ml: 1 }}>
+                                                            <Button
+                                                                size="small"
+                                                                sx={{ ml: 1 }}
+                                                                component="a"
+                                                                href={file.downloadUrl}
+                                                                download
+                                                                onClick={(e) => e.stopPropagation()} // don't also trigger row select
+                                                            >
                                                                 Download
                                                             </Button>
                                                         </TableCell>
@@ -471,11 +478,7 @@ export default function DriverDetailsPage() {
                                 }}
                             >
                                 {selectedFile ? (
-                                    <img
-                                        src={buildS3Url(selectedFile.s3Key)}
-                                        alt="document preview"
-                                        style={{ maxWidth: '100%', maxHeight: '100%' }}
-                                    />
+                                    <img src={selectedFile.s3Key} alt="document preview" style={{ maxWidth: '100%', maxHeight: '100%' }} />
                                 ) : (
                                     <Typography color="text.secondary">Document Preview Area</Typography>
                                 )}

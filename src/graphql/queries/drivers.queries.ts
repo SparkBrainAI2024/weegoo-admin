@@ -97,6 +97,7 @@ export interface DriverDocumentFile {
     s3Key: string;
     isActive: boolean;
     status: string;
+    downloadUrl: string;
     verifiedBy: string | null;
     verifiedAt: string | null;
     createdAt: string;
@@ -219,6 +220,7 @@ export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, Get
                     status
                     verifiedBy
                     verifiedAt
+                    downloadUrl
                     createdAt
                 }
             }
