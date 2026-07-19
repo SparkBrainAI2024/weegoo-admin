@@ -9,7 +9,6 @@ import {
     Badge,
     TextField,
     InputAdornment,
-    Table,
     TableHead,
     TableBody,
     TableRow,
@@ -38,6 +37,7 @@ import { DELETE_PASSENGER } from 'graphql/mutations/passenger.mutation';
 import { PassengerListItem } from 'types/passengers.types';
 import { BlockUnblockPassengerDialog } from 'components/ui-component/block-passenger.dialog';
 import { useNavigate } from 'react-router';
+import ResponsiveTableLayoutCustom from 'components/ui-component/responsive-layout';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -197,94 +197,86 @@ const PassengerList = () => {
                     ))}
                 </Tabs>
             </Stack>
-            <Box sx={{ overflowX: 'auto' }}>
-                <Box sx={{ minWidth: 1500 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Passenger</TableCell>
-                                <TableCell>Phone</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Trips</TableCell>
-                                <TableCell>Rating</TableCell>
-                                <TableCell>Spending</TableCell>
-                                <TableCell align="right" />
+            <ResponsiveTableLayoutCustom>
+                <TableHead>
+                    <TableRow>
+                        <TableCell sx={{ width: '28%' }}>Passenger</TableCell>
+                        <TableCell sx={{ width: '14%' }}>Phone</TableCell>
+                        <TableCell sx={{ width: '12%' }}>Status</TableCell>
+                        <TableCell sx={{ width: '10%' }}>Trips</TableCell>
+                        <TableCell sx={{ width: '16%' }}>Rating</TableCell>
+                        <TableCell sx={{ width: '14%' }}>Spending</TableCell>
+                        <TableCell sx={{ width: '6%' }} />
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {loading &&
+                        Array.from({ length: limit }).map((_, i) => (
+                            <TableRow key={i}>
+                                {Array.from({ length: 7 }).map((__, j) => (
+                                    <TableCell key={j}>
+                                        <Skeleton variant="text" />
+                                    </TableCell>
+                                ))}
                             </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {loading &&
-                                Array.from({ length: limit }).map((_, i) => (
-                                    <TableRow key={i}>
-                                        {Array.from({ length: 7 }).map((__, j) => (
-                                            <TableCell key={j}>
-                                                <Skeleton variant="text" />
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))}
+                        ))}
 
-                            {!loading &&
-                                passengers.map((passenger) => (
-                                    <TableRow
-                                        key={passenger.id}
-                                        hover
-                                        onClick={() => handleRowClick(passenger.id)}
-                                        sx={{ cursor: 'pointer' }}
+                    {!loading &&
+                        passengers.map((passenger) => (
+                            <TableRow key={passenger.id} hover onClick={() => handleRowClick(passenger.id)} sx={{ cursor: 'pointer' }}>
+                                <TableCell>
+                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                        <Avatar src={passenger.profileImage} sx={{ width: 36, height: 36 }}>
+                                            {passenger.fullName?.[0]}
+                                        </Avatar>
+                                        <Box>
+                                            <Typography variant="subtitle2">{passenger.fullName}</Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                ID · {passenger.id.slice(-4)}
+                                            </Typography>
+                                        </Box>
+                                    </Stack>
+                                </TableCell>
+                                <TableCell>{passenger.phone}</TableCell>
+                                <TableCell>
+                                    <UserStatusChip status={passenger.suspended ? 'BLOCKED' : passenger.status} />
+                                </TableCell>
+                                <TableCell>{passenger.totalTripsAsPassenger || '—'}</TableCell>
+                                <TableCell>
+                                    {passenger.rating ? (
+                                        <Stack direction="row" spacing={0.5} alignItems="center">
+                                            <Rating value={passenger.rating} precision={0.1} readOnly size="small" />
+                                            <Typography variant="body2">{passenger.rating.toFixed(1)}</Typography>
+                                        </Stack>
+                                    ) : (
+                                        '—'
+                                    )}
+                                </TableCell>
+                                <TableCell>
+                                    {passenger.totalSpendingOnRides ? (
+                                        <Typography color="success.main" fontWeight={600}>
+                                            Rs. {passenger.totalSpendingOnRides.toLocaleString()}
+                                        </Typography>
+                                    ) : (
+                                        '—'
+                                    )}
+                                </TableCell>
+                                <TableCell align="right">
+                                    <IconButton
+                                        size="small"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            openMenu(e, passenger);
+                                        }}
                                     >
-                                        <TableCell>
-                                            <Stack direction="row" spacing={1.5} alignItems="center">
-                                                <Avatar src={passenger.profileImage} sx={{ width: 36, height: 36 }}>
-                                                    {passenger.fullName?.[0]}
-                                                </Avatar>
-                                                <Box>
-                                                    <Typography variant="subtitle2">{passenger.fullName}</Typography>
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        ID · {passenger.id.slice(-4)}
-                                                    </Typography>
-                                                </Box>
-                                            </Stack>
-                                        </TableCell>
-                                        <TableCell>{passenger.phone}</TableCell>
-                                        <TableCell>
-                                            <UserStatusChip status={passenger.suspended ? 'BLOCKED' : passenger.status} />
-                                        </TableCell>
-                                        <TableCell>{passenger.totalTripsAsPassenger || '—'}</TableCell>
-                                        <TableCell>
-                                            {passenger.rating ? (
-                                                <Stack direction="row" spacing={0.5} alignItems="center">
-                                                    <Rating value={passenger.rating} precision={0.1} readOnly size="small" />
-                                                    <Typography variant="body2">{passenger.rating.toFixed(1)}</Typography>
-                                                </Stack>
-                                            ) : (
-                                                '—'
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {passenger.totalSpendingOnRides ? (
-                                                <Typography color="success.main" fontWeight={600}>
-                                                    Rs. {passenger.totalSpendingOnRides.toLocaleString()}
-                                                </Typography>
-                                            ) : (
-                                                '—'
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <IconButton
-                                                size="small"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    openMenu(e, passenger);
-                                                }}
-                                            >
-                                                <MoreHorizIcon fontSize="small" />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                        </TableBody>
-                    </Table>
-                </Box>
-            </Box>{' '}
+                                        <MoreHorizIcon fontSize="small" />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                </TableBody>
+            </ResponsiveTableLayoutCustom>
+
             <TablePagination
                 component="div"
                 count={total}
