@@ -20,6 +20,8 @@ import { useDebounce } from 'hooks/useDebounce';
 import { Column, DataTable } from 'components/ui-component/DataTable';
 import { GetRiderTripsQueryResult, TripListItem } from 'types/passengers.types';
 import { GET_RIDER_TRIPS } from 'graphql/queries/passenger.queries';
+import { StatCard } from './offers';
+import { DualStatCard } from 'components/ui-component/stat-card';
 
 const STATUS_OPTIONS = ['All Status', 'COMPLETED', 'CANCELLED', 'ONGOING'];
 const DEFAULT_LIMIT = 10;
@@ -79,36 +81,23 @@ const RiderTripsTab = ({ riderId }: Props) => {
 
     return (
         <Card sx={{ p: 3 }}>
-            <Grid container spacing={2} mb={3}>
-                <Grid item xs={6} md={2.4}>
-                    <Typography variant="caption" color="text.secondary">
-                        Total Trips
-                    </Typography>
-                    <Typography variant="h5">{summary?.totalTrips ?? '—'}</Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={3}>
+                    <StatCard label="Total Trips" value={summary?.totalTrips.toString() ?? '-'} chip="Live" />
                 </Grid>
-                <Grid item xs={6} md={2.4}>
-                    <Typography variant="caption" color="text.secondary">
-                        Completed
-                    </Typography>
-                    <Typography variant="h5">{summary?.completed ?? '—'}</Typography>
+                <Grid item xs={12} sm={6} md={3}>
+                    <StatCard label="Completed" value={summary?.completed.toString() ?? '-'} chip="Live" />
                 </Grid>
-                <Grid item xs={6} md={2.4}>
-                    <Typography variant="caption" color="text.secondary">
-                        Cancelled
-                    </Typography>
-                    <Typography variant="h5">{summary?.cancelled ?? '—'}</Typography>
+                <Grid item xs={12} sm={6} md={3}>
+                    <StatCard label="Cancelled" value={summary?.cancelled.toString() ?? '-'} chip="Live" />
                 </Grid>
-                <Grid item xs={6} md={2.4}>
-                    <Typography variant="caption" color="text.secondary">
-                        Total Spend
-                    </Typography>
-                    <Typography variant="h5">Rs. {summary?.totalSpend?.toLocaleString() ?? '—'}</Typography>
-                </Grid>
-                <Grid item xs={6} md={2.4}>
-                    <Typography variant="caption" color="text.secondary">
-                        Avg Fare
-                    </Typography>
-                    <Typography variant="h5">Rs. {summary?.avgFare ?? '—'}</Typography>
+                <Grid item xs={12} sm={6} md={3}>
+                    <DualStatCard
+                        firstLabel="Total Spend"
+                        firstValue={summary?.totalSpend.toString() ?? '-'}
+                        secondLabel="Avg Fare"
+                        secondValue={summary?.avgFare.toString() ?? '-'}
+                    />
                 </Grid>
             </Grid>
 

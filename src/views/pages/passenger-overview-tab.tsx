@@ -36,10 +36,10 @@ const RiderOverviewTab = ({ rider }: Props) => (
         </Stack>
 
         <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
                 <InfoRow label="Phone" value={rider.phone || '—'} />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
                 <InfoRow
                     label="Account Status"
                     value={
@@ -52,7 +52,7 @@ const RiderOverviewTab = ({ rider }: Props) => (
                     }
                 />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
                 <InfoRow label="Email" value={rider.email || '—'} />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -68,10 +68,10 @@ const RiderOverviewTab = ({ rider }: Props) => (
                     }
                 />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
                 <InfoRow label="Joined Date" value={rider.joinedDate || '—'} />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={6}>
                 <InfoRow label="Last Active" value={rider.lastActive || '—'} />
             </Grid>
         </Grid>

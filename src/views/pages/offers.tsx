@@ -44,7 +44,7 @@ const formatStatus = (status: PromoStatus) => status.charAt(0) + status.slice(1)
 
 // ==============================|| STAT CARD ||============================== //
 
-const StatCard = ({ label, value, chip }: { label: string; value: string; chip?: string }) => (
+export const StatCard = ({ label, value, chip }: { label: string; value: string; chip?: string }) => (
     <Card
         sx={{
             p: 2.5,
