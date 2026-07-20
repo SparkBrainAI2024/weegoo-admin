@@ -266,15 +266,7 @@ const DriverList = () => {
                                         '—'
                                     )}
                                 </TableCell>
-                                <TableCell>
-                                    {driver.totalEarnings ? (
-                                        <Typography color="success.main" fontWeight={600}>
-                                            Rs. {driver.totalEarnings.toLocaleString()}
-                                        </Typography>
-                                    ) : (
-                                        '—'
-                                    )}
-                                </TableCell>
+                                <TableCell>{driver.totalEarnings}</TableCell>
                                 <TableCell align="right">
                                     <IconButton
                                         size="small"

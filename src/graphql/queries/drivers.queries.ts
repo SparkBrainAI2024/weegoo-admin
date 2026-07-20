@@ -12,7 +12,7 @@ export const GET_DRIVERS = gql`
                 fullName
                 suspended
                 joinedDate
-                totalRides
+                totalRidesAsDriver
                 totalEarnings
                 phone
                 status
