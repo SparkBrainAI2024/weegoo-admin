@@ -37,6 +37,7 @@ import {
 import { useParams } from 'react-router';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import useNotification from 'hooks/useNotification';
+import { DriverRideHistoryTab } from './driver-trips-tab';
 
 interface SelectedFile {
     documentId: string;
@@ -166,9 +167,9 @@ export default function DriverDetailsPage() {
                 variables: { driverId: driverId! }
             });
         }
-        if (value === 'rides' && !rideHistoryResult.called) {
-            loadRideHistory({ variables: { driverId, page, limit: 10 } });
-        }
+        // if (value === 'rides' && !rideHistoryResult.called) {
+        //     loadRideHistory({ variables: { driverId, page, limit: 10 } });
+        // }
 
         console.log(selectedFile, 'sf');
     };
@@ -263,7 +264,6 @@ export default function DriverDetailsPage() {
                 onClose={clearNotification}
                 severity={notification?.severity ?? 'success'}
             />
-
             {/* ---- Top tab bar (Details / Documents / Ride History) ---- */}
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Tabs value={activeTab} onChange={handleTabChange}>
@@ -284,7 +284,6 @@ export default function DriverDetailsPage() {
                     Verify KYC
                 </Button>
             </Box>
-
             {activeTab === 'details' && (
                 <>
                     {/* ---- Header summary card ---- */}
@@ -568,6 +567,7 @@ export default function DriverDetailsPage() {
                     </Grid>
                 </Grid>
             )}
+            {activeTab === 'rides' && <DriverRideHistoryTab driverId={driverId!} />}{' '}
         </Box>
     );
 }

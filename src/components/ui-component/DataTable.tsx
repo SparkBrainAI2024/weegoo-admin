@@ -34,7 +34,13 @@ export const DataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, s
                     Array.from({ length: skeletonRows }).map((_, i) => (
                         <TableRow key={i}>
                             {columns.map((c) => (
-                                <TableCell key={c.key}>
+                                <TableCell
+                                    sx={{
+                                        '& .MuiTableCell-root': { fontSize: 12, py: 1, fontWeight: 400, color: '#2A2A2A' },
+                                        '& .MuiTableCell-head': { fontSize: 11, fontWeight: 400, color: '#6F6F6E' }
+                                    }}
+                                    key={c.key}
+                                >
                                     <Skeleton variant="text" />
                                 </TableCell>
                             ))}
