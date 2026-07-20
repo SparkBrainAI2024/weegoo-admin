@@ -23,7 +23,7 @@ export const DataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, s
             <TableHead>
                 <TableRow>
                     {columns.map((c) => (
-                        <TableCell key={c.key} align={c.align}>
+                        <TableCell key={c.key} align={c.align} sx={{ fontSize: 12, fontWeight: 400, color: '#2A2A2A', py: 1 }}>
                             {c.header}
                         </TableCell>
                     ))}

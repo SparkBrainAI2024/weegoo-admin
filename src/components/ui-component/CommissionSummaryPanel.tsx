@@ -20,55 +20,41 @@ export function CommissionSummaryPanel({ driverId }: Props) {
     const summary = data?.driverCommissionSummary;
 
     return (
-        <Paper variant="outlined" sx={{ p: 3 }}>
-            <Typography variant="subtitle1" fontWeight={600}>
-                Commission Summary
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mb={2}>
+        <Paper variant="outlined" sx={{ p: 2 }}>
+            <Typography sx={{ fontSize: 12, fontWeight: 400, color: '#2A2A2A' }}>Commission Summary</Typography>
+            <Typography sx={{ fontSize: 11, fontWeight: 400, color: '#6F6F6E', mb: 1.5 }}>
                 10% commission collected from each ride
             </Typography>
 
-            <Stack spacing={2}>
-                <Box sx={{ bgcolor: '#fdecea', borderRadius: 2, p: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                        Outstanding to Pay
-                    </Typography>
-                    <Typography variant="h6">{fmt(summary?.outstandingToPay)}</Typography>
+            <Stack spacing={1.25}>
+                <Box sx={{ bgcolor: '#fdecea', borderRadius: 2, p: 1.5 }}>
+                    <Typography sx={{ fontSize: 11, color: 'text.secondary' }}>Outstanding to Pay</Typography>
+                    <Typography sx={{ fontSize: 15, fontWeight: 600 }}>{fmt(summary?.outstandingToPay)}</Typography>
                 </Box>
 
-                <Box sx={{ border: '1px solid #4caf50', borderRadius: 2, p: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                        Commission Paid
-                    </Typography>
-                    <Typography variant="h6">{fmt(summary?.commissionPaid)}</Typography>
+                <Box sx={{ border: '1px solid #4caf50', borderRadius: 2, p: 1.5 }}>
+                    <Typography sx={{ fontSize: 11, color: 'text.secondary' }}>Commission Paid</Typography>
+                    <Typography sx={{ fontSize: 15, fontWeight: 600 }}>{fmt(summary?.commissionPaid)}</Typography>
                 </Box>
 
-                <Box sx={{ bgcolor: '#f5f5f5', borderRadius: 2, p: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                        Total Rides
-                    </Typography>
+                <Box sx={{ bgcolor: '#f5f5f5', borderRadius: 2, p: 1.5 }}>
+                    <Typography sx={{ fontSize: 11, color: 'text.secondary' }}>Total Rides</Typography>
                     <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="h6">{summary?.totalRides ?? '-'}</Typography>
-                        <Typography variant="caption" color="text.secondary" alignSelf="flex-end">
-                            All time
-                        </Typography>
+                        <Typography sx={{ fontSize: 15, fontWeight: 600 }}>{summary?.totalRides ?? '-'}</Typography>
+                        <Typography sx={{ fontSize: 10, color: 'text.secondary', alignSelf: 'flex-end' }}>All time</Typography>
                     </Stack>
                 </Box>
 
-                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 2, p: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                        Last Settlement
-                    </Typography>
+                <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 2, p: 1.5 }}>
+                    <Typography sx={{ fontSize: 11, color: 'text.secondary' }}>Last Settlement</Typography>
                     <Stack direction="row" justifyContent="space-between">
-                        <Typography>{summary?.lastSettlementDate ?? '-'}</Typography>
-                        <Typography>{fmt(summary?.lastSettlementAmount)}</Typography>
+                        <Typography sx={{ fontSize: 12 }}>{summary?.lastSettlementDate ?? '-'}</Typography>
+                        <Typography sx={{ fontSize: 12 }}>{fmt(summary?.lastSettlementAmount)}</Typography>
                     </Stack>
-                    <Typography variant="caption" color="text.secondary">
-                        Method: {summary?.lastSettlementMethod ?? '-'}
-                    </Typography>
+                    <Typography sx={{ fontSize: 10, color: 'text.secondary' }}>Method: {summary?.lastSettlementMethod ?? '-'}</Typography>
                 </Box>
 
-                <Button variant="contained" sx={{ bgcolor: '#111', '&:hover': { bgcolor: '#000' } }}>
+                <Button variant="contained" size="small" sx={{ bgcolor: '#111', fontSize: 12, '&:hover': { bgcolor: '#000' } }}>
                     Notify Driver
                 </Button>
             </Stack>

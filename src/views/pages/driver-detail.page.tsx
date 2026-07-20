@@ -26,7 +26,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventIcon from '@mui/icons-material/Event';
-import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW, GET_DRIVER_RIDE_HISTORY } from 'graphql/queries/drivers.queries';
+import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
 import {
     APPROVE_DRIVER_DOCUMENT_FILE,
     BLOCK_DRIVER,
@@ -130,16 +130,12 @@ export default function DriverDetailsPage() {
     // state. Keeping this separate means a slow/expensive ride-history
     // aggregation on the backend never blocks or slows down the initial
     // page render.
-    // ---------------------------------------------------------------------
-    const [page, setPage] = useState(0);
-    const [loadRideHistory, rideHistoryResult] = useLazyQuery(GET_DRIVER_RIDE_HISTORY, {
-        fetchPolicy: 'cache-and-network'
-    });
 
     const statusChipColor: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
         APPROVED: 'success',
         PENDING: 'warning',
-        REJECTED: 'error'
+        REJECTED: 'error',
+        VERIFIED: 'success'
     };
     function formatDocLabel(type: string, side: string) {
         const typeLabel = type

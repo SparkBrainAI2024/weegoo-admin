@@ -49,7 +49,6 @@ export function DriverRideHistoryTab({ driverId }: Props) {
     const rows = data?.driverTrips?.data ?? [];
     const pagination = data?.driverTrips?.pagination;
 
-    const setPaymentMethod = (value: string) => updateParams({ paymentMethod: value }, { resetKeys: ['page'] });
     const setSort = (value: string) => {
         const [field, dir] = value.split(':');
         updateParams({ orderBy: field, order: dir }, { resetKeys: ['page'] });
@@ -101,7 +100,12 @@ export function DriverRideHistoryTab({ driverId }: Props) {
             header: 'Status',
             render: (row) =>
                 row.status ? (
-                    <Chip size="small" label={row.status} color={row.status === 'Settled' ? 'success' : 'warning'} variant="outlined" />
+                    <Chip
+                        size="small"
+                        label={row.status}
+                        color={row.status === 'COMPLETED' ? 'success' : row.status === 'CANCELLED' ? 'error' : 'warning'}
+                        variant="outlined"
+                    />
                 ) : (
                     '-'
                 )
@@ -110,7 +114,7 @@ export function DriverRideHistoryTab({ driverId }: Props) {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={8.5}>
                 <Paper variant="outlined" sx={{ p: 2.5 }}>
                     <Typography sx={{ fontSize: 12, fontWeight: 400, color: '#2A2A2A' }}>Ride History</Typography>
                     <Typography sx={{ fontSize: 11, fontWeight: 400, color: '#6F6F6E', mb: 1.5 }}>
@@ -185,7 +189,7 @@ export function DriverRideHistoryTab({ driverId }: Props) {
                     />
                 </Paper>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3.5}>
                 <CommissionSummaryPanel driverId={driverId} />
             </Grid>
         </Grid>
