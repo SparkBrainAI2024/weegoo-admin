@@ -60,6 +60,7 @@ export function DriverRideHistoryTab({ driverId }: Props) {
         {
             key: 'trip',
             header: 'Trip',
+            width: '26%',
             render: (row) => (
                 <Box>
                     <Box fontWeight={600}>{row.rideUUId}</Box>
@@ -72,6 +73,7 @@ export function DriverRideHistoryTab({ driverId }: Props) {
         {
             key: 'createdAt',
             header: 'Date',
+            width: '13%',
             render: (row) =>
                 new Date(row.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
@@ -79,39 +81,48 @@ export function DriverRideHistoryTab({ driverId }: Props) {
                     year: 'numeric'
                 })
         },
-        { key: 'fare', header: 'Fare', render: (row) => fmt(row.fare) },
+        {
+            key: 'fare',
+            header: 'Fare',
+            width: '11%',
+            render: (row) => fmt(row.fare)
+        },
         {
             key: 'paymentMethod',
             header: 'Payment',
+            width: '11%',
             render: (row) => row.paymentMethod ?? '-'
         },
         {
             key: 'driverCommission',
             header: 'Commission',
+            width: '13%',
             render: (row) => fmt(row.driverCommission)
         },
         {
             key: 'driverGets',
             header: 'Driver Gets',
+            width: '13%',
             render: (row) => fmt(row.driverGets)
         },
         {
             key: 'status',
             header: 'Status',
+            width: '13%',
             render: (row) =>
                 row.status ? (
                     <Chip
                         size="small"
                         label={row.status}
-                        color={row.status === 'COMPLETED' ? 'success' : row.status === 'CANCELLED' ? 'error' : 'warning'}
+                        color={row.status === 'COMPLETED' ? 'success' : 'warning'}
                         variant="outlined"
+                        sx={{ fontSize: 11, whiteSpace: 'nowrap' }}
                     />
                 ) : (
                     '-'
                 )
         }
     ];
-
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} md={8.5}>
