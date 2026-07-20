@@ -101,6 +101,7 @@ export interface DriverDocumentFile {
     verifiedBy: string | null;
     verifiedAt: string | null;
     createdAt: string;
+    _id: string;
 }
 
 export interface DriverDocument {
@@ -222,6 +223,7 @@ export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, Get
                     verifiedAt
                     downloadUrl
                     createdAt
+                    _id
                 }
             }
         }

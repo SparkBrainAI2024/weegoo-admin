@@ -27,8 +27,16 @@ import EmailIcon from '@mui/icons-material/Email';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventIcon from '@mui/icons-material/Event';
 import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW, GET_DRIVER_RIDE_HISTORY } from 'graphql/queries/drivers.queries';
-import { BLOCK_DRIVER, DELETE_DRIVER, REVIEW_DOCUMENT, UNBLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
+import {
+    APPROVE_DRIVER_DOCUMENT_FILE,
+    BLOCK_DRIVER,
+    DELETE_DRIVER,
+    REJECT_DRIVER_DOCUMENT_FILE,
+    UNBLOCK_DRIVER
+} from 'graphql/mutations/driver.mutation';
 import { useParams } from 'react-router';
+import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
+import useNotification from 'hooks/useNotification';
 
 interface SelectedFile {
     documentId: string;
@@ -36,6 +44,7 @@ interface SelectedFile {
     side: string;
     s3Key: string;
     status: string;
+    fileId: string;
 }
 // ---------------------------------------------------------------------------
 // Small status -> color maps, kept outside the component so they aren't
@@ -58,6 +67,37 @@ export default function DriverDetailsPage() {
     const [infoSubTab, setInfoSubTab] = useState<'basic' | 'vehicle'>('basic');
     const { id: driverId } = useParams<{ id: string }>(); // matches your route /drivers/:id
 
+    const handleReject = async () => {
+        if (!selectedFile) return;
+        const reason = window.prompt('Rejection reason:');
+        if (!reason) return; // bail if admin cancels or leaves it blank
+
+        await rejectFile({
+            variables: {
+                input: {
+                    documentFileId: selectedFile.fileId,
+                    rejectionReason: reason
+                }
+            },
+            // optionally refetch the driver documents list so status updates in the table
+            refetchQueries: ['GetDriverDocuments'] // match your actual query's operation name
+        });
+    };
+
+    const handleApprove = async () => {
+        console.log(selectedFile, 'sf');
+
+        if (!selectedFile) return;
+
+        await approveFile({
+            variables: {
+                input: {
+                    documentFileId: selectedFile.fileId
+                }
+            },
+            refetchQueries: ['GetDriverDocuments']
+        });
+    };
     // ---------------------------------------------------------------------
     // OVERVIEW QUERY — fires immediately on mount.
     //
@@ -94,6 +134,7 @@ export default function DriverDetailsPage() {
     const [loadRideHistory, rideHistoryResult] = useLazyQuery(GET_DRIVER_RIDE_HISTORY, {
         fetchPolicy: 'cache-and-network'
     });
+
     const statusChipColor: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
         APPROVED: 'success',
         PENDING: 'warning',
@@ -115,12 +156,6 @@ export default function DriverDetailsPage() {
         });
     }
 
-    function buildS3Url(s3Key: string) {
-        return `https://amazon-s3-pilot-testers.s3.eu-north-1.amazonaws.com/${s3Key}`;
-    }
-
-    const [reviewDocument, { loading: reviewing }] = useMutation(REVIEW_DOCUMENT);
-
     const handleTabChange = (_: React.SyntheticEvent, value: typeof activeTab) => {
         setActiveTab(value);
         // Fire the lazy query the FIRST time each tab is opened.
@@ -134,7 +169,30 @@ export default function DriverDetailsPage() {
         if (value === 'rides' && !rideHistoryResult.called) {
             loadRideHistory({ variables: { driverId, page, limit: 10 } });
         }
+
+        console.log(selectedFile, 'sf');
     };
+    const { notification, showSuccess, showError, clearNotification } = useNotification();
+
+    const [approveFile, { loading: approving }] = useMutation(APPROVE_DRIVER_DOCUMENT_FILE, {
+        onCompleted: () => {
+            showSuccess('Document approved successfully');
+        },
+        onError: (err) => {
+            showError(err.message || 'Failed to approve document');
+        },
+        refetchQueries: ['GetDriverDocuments']
+    });
+
+    const [rejectFile, { loading: rejecting }] = useMutation(REJECT_DRIVER_DOCUMENT_FILE, {
+        onCompleted: () => {
+            showSuccess('Document rejected');
+        },
+        onError: (err) => {
+            showError(err.message || 'Failed to reject document');
+        },
+        refetchQueries: ['GetDriverDocuments']
+    });
 
     // ---------------------------------------------------------------------
     // MUTATIONS
@@ -199,6 +257,13 @@ export default function DriverDetailsPage() {
 
     return (
         <Box sx={{ p: 3, bgcolor: '#f5f6f8', minHeight: '100vh' }}>
+            <NotificationBanner
+                open={Boolean(notification?.message)}
+                message={notification?.message ?? ''}
+                onClose={clearNotification}
+                severity={notification?.severity ?? 'success'}
+            />
+
             {/* ---- Top tab bar (Details / Documents / Ride History) ---- */}
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Tabs value={activeTab} onChange={handleTabChange}>
@@ -406,7 +471,8 @@ export default function DriverDetailsPage() {
                                                                 documentType: doc.type,
                                                                 side: file.side,
                                                                 s3Key: file.s3Key,
-                                                                status: file.status
+                                                                status: file.status,
+                                                                fileId: file._id
                                                             })
                                                         }
                                                         sx={{ cursor: 'pointer' }}
@@ -430,7 +496,8 @@ export default function DriverDetailsPage() {
                                                                         documentType: doc.type,
                                                                         side: file.side,
                                                                         s3Key: file.s3Key,
-                                                                        status: file.status
+                                                                        status: file.status,
+                                                                        fileId: file._id.toString()
                                                                     });
                                                                 }}
                                                             >
@@ -488,33 +555,12 @@ export default function DriverDetailsPage() {
                                 <Button
                                     variant="contained"
                                     color="success"
-                                    disabled={!selectedFile || reviewing}
-                                    onClick={() =>
-                                        selectedFile &&
-                                        reviewDocument({
-                                            variables: {
-                                                documentId: selectedFile.documentId,
-                                                status: 'APPROVED'
-                                            }
-                                        })
-                                    }
+                                    disabled={!selectedFile || approving || selectedFile.status === 'VERIFIED'}
+                                    onClick={handleApprove}
                                 >
                                     Approve
                                 </Button>
-                                <Button
-                                    variant="contained"
-                                    color="error"
-                                    disabled={!selectedFile || reviewing}
-                                    onClick={() =>
-                                        selectedFile &&
-                                        reviewDocument({
-                                            variables: {
-                                                documentId: selectedFile.documentId,
-                                                status: 'REJECTED'
-                                            }
-                                        })
-                                    }
-                                >
+                                <Button variant="contained" color="error" disabled={!selectedFile || rejecting} onClick={handleReject}>
                                     Reject
                                 </Button>
                             </Box>

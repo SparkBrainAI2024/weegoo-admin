@@ -53,3 +53,34 @@ export const REVIEW_DOCUMENT: TypedDocumentNode<ReviewDocumentData, ReviewDocume
         }
     }
 `;
+
+export const APPROVE_DRIVER_DOCUMENT_FILE = gql`
+    mutation ApproveDriverDocumentFile($input: ApproveDocumentFileInput!) {
+        approveDriverDocumentFile(input: $input) {
+            _id
+            status
+            files {
+                _id
+                status
+                verifiedBy
+                verifiedAt
+            }
+        }
+    }
+`;
+
+export const REJECT_DRIVER_DOCUMENT_FILE = gql`
+    mutation RejectDriverDocumentFile($input: RejectDocumentFileInput!) {
+        rejectDriverDocumentFile(input: $input) {
+            _id
+            status
+            rejectionReason
+            files {
+                _id
+                status
+                verifiedBy
+                verifiedAt
+            }
+        }
+    }
+`;
