@@ -12,7 +12,7 @@ export const GET_DRIVERS = gql`
                 fullName
                 suspended
                 joinedDate
-                totalRides
+                totalRidesAsDriver
                 totalEarnings
                 phone
                 status
@@ -97,9 +97,11 @@ export interface DriverDocumentFile {
     s3Key: string;
     isActive: boolean;
     status: string;
+    downloadUrl: string;
     verifiedBy: string | null;
     verifiedAt: string | null;
     createdAt: string;
+    _id: string;
 }
 
 export interface DriverDocument {
@@ -219,7 +221,9 @@ export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, Get
                     status
                     verifiedBy
                     verifiedAt
+                    downloadUrl
                     createdAt
+                    _id
                 }
             }
         }

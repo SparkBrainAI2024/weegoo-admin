@@ -39,6 +39,87 @@ export interface PassengerListInput {
     search?: string;
 }
 
+export const GET_RIDER_OVERVIEW = gql`
+    query GetRiderOverview($riderId: String!) {
+        getRiderOverview(riderId: $riderId) {
+            id
+            fullName
+            profileImage
+            phone
+            email
+            suspended
+            joinedDate
+            lastActive
+            phoneVerified
+        }
+    }
+`;
+
+export const GET_RIDER_TRIPS = gql`
+    query GetRiderTrips($input: RiderTripsInput!) {
+        getRiderTrips(input: $input) {
+            data {
+                id
+                rideUUId
+                createdAt
+                pickupLocation
+                dropoffLocation
+                fare
+                paymentMethod
+                status
+            }
+            summary {
+                totalTrips
+                completed
+                cancelled
+                totalSpend
+                avgFare
+            }
+            pagination {
+                total
+                page
+                limit
+                total
+            }
+        }
+    }
+`;
+
+export const GET_RIDER_RATINGS = gql`
+    query GetRiderRatings($input: RiderRatingsInput!) {
+        getPassengerRatings(input: $input) {
+            averageRating
+            totalReviews
+            breakdown {
+                fiveStar
+                fourStar
+                threeStar
+                twoStar
+                oneStar
+            }
+            data {
+                rideId
+                rideUUId
+                pickup
+                drop
+                fare
+                raterName
+                raterProfileImage
+                raterShortId
+                createdAt
+                rating
+                review
+                feedbackTag
+            }
+            pagination {
+                total
+                page
+                limit
+            }
+        }
+    }
+`;
+
 export interface Pagination {
     page: number;
     limit: number;

@@ -9,7 +9,6 @@ import {
     Badge,
     TextField,
     InputAdornment,
-    Table,
     TableHead,
     TableBody,
     TableRow,
@@ -25,6 +24,7 @@ import {
     ListItemText,
     Skeleton
 } from '@mui/material';
+
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BlockIcon from '@mui/icons-material/Block';
@@ -39,6 +39,8 @@ import { DeleteUserDialog } from 'components/ui-component/extended/notistack/Del
 import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
 import { useNavigate } from 'react-router';
+import { useUrlParams } from 'hooks/useSearchParams';
+import ResponsiveTableLayoutCustom from 'components/ui-component/responsive-layout';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -46,18 +48,32 @@ const TABS = [
     { key: 'BLOCKED', label: 'Blocked' }
 ] as const;
 
+const DEFAULT_TAB = 'ACTIVE';
+const DEFAULT_LIMIT = 10;
+
 const DriverList = () => {
-    const [tab, setTab] = useState<string>('ACTIVE');
-    const [search, setSearch] = useState('');
-    const [page, setPage] = useState(0);
-    const [limit, setLimit] = useState(10);
+    const navigate = useNavigate();
+    const { getParam, updateParams } = useUrlParams();
+
+    // ---- URL is the single source of truth for filter/pagination state ----
+    const tab = getParam('status', DEFAULT_TAB);
+    const search = getParam('search', '');
+    const page = getParam('page', 0, Number);
+    const limit = getParam('limit', DEFAULT_LIMIT, Number);
+
+    // Local, non-URL UI state only
+    const [searchInput, setSearchInput] = useState(search);
     const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [blockDialogOpen, setBlockDialogOpen] = useState(false);
-    const debouncedSearch = useDebounce(search, 400);
-
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const navigate = useNavigate();
+    const debouncedSearch = useDebounce(searchInput, 400);
+
+    // Sync debounced search text -> URL (resets page on change)
+    if (debouncedSearch !== search) {
+        updateParams({ search: debouncedSearch || undefined }, { resetKeys: ['page'] });
+    }
+
     const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
         variables: {
             input: {
@@ -69,6 +85,7 @@ const DriverList = () => {
         },
         fetchPolicy: 'cache-and-network'
     });
+
     const closeDialog = () => {
         setBlockDialogOpen(false);
         setSelectedId(null);
@@ -111,12 +128,13 @@ const DriverList = () => {
             }
         });
     };
+
     const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
     const total = data?.getDrivers?.pagination?.total ?? 0;
     const selectedDriver = drivers.find((d) => d.id === selectedId);
+
     const handleTabChange = (_: React.SyntheticEvent, value: string) => {
-        setTab(value);
-        setPage(0);
+        updateParams({ status: value === DEFAULT_TAB ? undefined : value }, { resetKeys: ['page'] });
     };
 
     const openMenu = (e: MouseEvent<HTMLElement>, driver: DriverListItem) => {
@@ -136,11 +154,8 @@ const DriverList = () => {
                 <TextField
                     placeholder="Search driver..."
                     size="small"
-                    value={search}
-                    onChange={(e) => {
-                        setSearch(e.target.value);
-                        setPage(0);
-                    }}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
                     sx={{ width: 320 }}
                     InputProps={{
                         startAdornment: (
@@ -196,98 +211,87 @@ const DriverList = () => {
                     ))}
                 </Tabs>
             </Stack>
-            <Box sx={{ overflowX: 'auto' }}>
-                <Box sx={{ minWidth: 1500 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Driver</TableCell>
-                                <TableCell>Phone</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Rides</TableCell>
-                                <TableCell>Rating</TableCell>
-                                <TableCell>Earnings</TableCell>
-                                <TableCell align="right" />
+            <ResponsiveTableLayoutCustom>
+                <TableHead>
+                    <TableRow>
+                        <TableCell sx={{ width: '28%' }}>Driver</TableCell>
+                        <TableCell sx={{ width: '14%' }}>Phone</TableCell>
+                        <TableCell sx={{ width: '12%' }}>Status</TableCell>
+                        <TableCell sx={{ width: '10%' }}>Rides</TableCell>
+                        <TableCell sx={{ width: '16%' }}>Rating</TableCell>
+                        <TableCell sx={{ width: '14%' }}>Earnings</TableCell>
+                        <TableCell sx={{ width: '6%' }} align="right" />
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {loading &&
+                        Array.from({ length: limit }).map((_, i) => (
+                            <TableRow key={i}>
+                                {Array.from({ length: 7 }).map((__, j) => (
+                                    <TableCell key={j}>
+                                        <Skeleton variant="text" />
+                                    </TableCell>
+                                ))}
                             </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {loading &&
-                                Array.from({ length: limit }).map((_, i) => (
-                                    <TableRow key={i}>
-                                        {Array.from({ length: 7 }).map((__, j) => (
-                                            <TableCell key={j}>
-                                                <Skeleton variant="text" />
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))}
+                        ))}
 
-                            {!loading &&
-                                drivers.map((driver) => (
-                                    <TableRow key={driver.id} hover onClick={() => handleRowClick(driver.id)} sx={{ cursor: 'pointer' }}>
-                                        <TableCell>
-                                            <Stack direction="row" spacing={1.5} alignItems="center">
-                                                <Avatar src={driver.profileImage} sx={{ width: 36, height: 36 }}>
-                                                    {driver.fullName?.[0]}
-                                                </Avatar>
-                                                <Box>
-                                                    <Typography variant="subtitle2">{driver.fullName}</Typography>
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        ID · {driver.id.slice(-4)}
-                                                    </Typography>
-                                                </Box>
-                                            </Stack>
-                                        </TableCell>
-                                        <TableCell>{driver.phone}</TableCell>
-                                        <TableCell>
-                                            <UserStatusChip status={driver.suspended ? 'BLOCKED' : driver.status} />
-                                        </TableCell>
-                                        <TableCell>{driver.totalRidesAsDriver || '—'}</TableCell>
-                                        <TableCell>
-                                            {driver.rating ? (
-                                                <Stack direction="row" spacing={0.5} alignItems="center">
-                                                    <Rating value={driver.rating} precision={0.1} readOnly size="small" />
-                                                    <Typography variant="body2">{driver.rating.toFixed(1)}</Typography>
-                                                </Stack>
-                                            ) : (
-                                                '—'
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {driver.totalEarnings ? (
-                                                <Typography color="success.main" fontWeight={600}>
-                                                    Rs. {driver.totalEarnings.toLocaleString()}
-                                                </Typography>
-                                            ) : (
-                                                '—'
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <IconButton
-                                                size="small"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    openMenu(e, driver);
-                                                }}
-                                            >
-                                                <MoreHorizIcon fontSize="small" />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                        </TableBody>
-                    </Table>
-                </Box>
-            </Box>{' '}
+                    {!loading &&
+                        drivers.map((driver) => (
+                            <TableRow key={driver.id} hover onClick={() => handleRowClick(driver.id)} sx={{ cursor: 'pointer' }}>
+                                <TableCell>
+                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                        <Avatar src={driver.profileImage} sx={{ width: 36, height: 36 }}>
+                                            {driver.fullName?.[0]}
+                                        </Avatar>
+                                        <Box>
+                                            <Typography variant="subtitle2">{driver.fullName}</Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                ID · {driver.id.slice(-4)}
+                                            </Typography>
+                                        </Box>
+                                    </Stack>
+                                </TableCell>
+                                <TableCell>{driver.phone}</TableCell>
+                                <TableCell>
+                                    <UserStatusChip status={driver.suspended ? 'BLOCKED' : driver.status} />
+                                </TableCell>
+                                <TableCell>{driver.totalRidesAsDriver || '—'}</TableCell>
+                                <TableCell>
+                                    {driver.rating ? (
+                                        <Stack direction="row" spacing={0.5} alignItems="center">
+                                            <Rating value={driver.rating} precision={0.1} readOnly size="small" />
+                                            <Typography variant="body2">{driver.rating.toFixed(1)}</Typography>
+                                        </Stack>
+                                    ) : (
+                                        '—'
+                                    )}
+                                </TableCell>
+                                <TableCell>{driver.totalEarnings}</TableCell>
+                                <TableCell align="right">
+                                    <IconButton
+                                        size="small"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            openMenu(e, driver);
+                                        }}
+                                    >
+                                        <MoreHorizIcon fontSize="small" />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                </TableBody>
+            </ResponsiveTableLayoutCustom>
+
             <TablePagination
                 component="div"
                 count={total}
                 page={page}
                 rowsPerPage={limit}
-                onPageChange={(_, newPage) => setPage(newPage)}
+                onPageChange={(_, newPage) => updateParams({ page: newPage || undefined })}
                 onRowsPerPageChange={(e) => {
-                    setLimit(parseInt(e.target.value, 10));
-                    setPage(0);
+                    const newLimit = parseInt(e.target.value, 10);
+                    updateParams({ limit: newLimit === DEFAULT_LIMIT ? undefined : newLimit }, { resetKeys: ['page'] });
                 }}
                 rowsPerPageOptions={[10, 25, 50]}
             />

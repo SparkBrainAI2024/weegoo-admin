@@ -36,7 +36,6 @@ import { extractApiLevelError } from 'lib/apiError';
 const AuthForgotPassword = ({ ...others }) => {
     const { notification, showSuccess, showError, clearNotification } = useNotification();
 
-
     const navigate = useNavigate();
     const [forgotPassword] = useMutation<ForgotPasswordResponse>(FORGOT_PASSWORD);
 
@@ -57,22 +56,15 @@ const AuthForgotPassword = ({ ...others }) => {
                         showSuccess(data.adminForgotPassword.message || 'Check mail for reset password link');
 
                         setTimeout(() => navigate(ROUTES.VERIFY_OTP, { state: { email: values.email }, replace: true }), 1500);
-
                     } else {
                         setStatus({ success: false });
                         setErrors({ submit: data?.adminForgotPassword?.message || 'Something went wrong' });
                         setSubmitting(false);
-
-
                     }
                 } catch (err: any) {
-
-
                     setSubmitting(false);
 
-
                     showError(extractApiLevelError(err));
-
                 }
             }}
         >
@@ -84,18 +76,21 @@ const AuthForgotPassword = ({ ...others }) => {
                         onClose={clearNotification}
                         severity={notification.severity}
                     />
-                    <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }} {...others}>
-
+                    <form
+                        noValidate
+                        onSubmit={handleSubmit}
+                        style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}
+                        {...others}
+                    >
                         <InputField name="email" label="Email Address" type="email" />
-
 
                         <AnimateButton>
                             <Button disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
                                 Send
                             </Button>
                         </AnimateButton>
-
-                    </form></>
+                    </form>
+                </>
             )}
         </Formik>
     );
