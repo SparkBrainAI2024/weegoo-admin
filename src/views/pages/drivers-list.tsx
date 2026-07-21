@@ -5,8 +5,6 @@ import {
     Card,
     Stack,
     Tabs,
-    Tab,
-    Badge,
     TextField,
     InputAdornment,
     TableHead,
@@ -41,6 +39,7 @@ import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-d
 import { useNavigate } from 'react-router';
 import { useUrlParams } from 'hooks/useSearchParams';
 import ResponsiveTableLayoutCustom from 'components/ui-component/responsive-layout';
+import CustomTab from 'components/ui-component/extended/notistack/CustomTab';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -174,53 +173,28 @@ const DriverList = () => {
                         '& .MuiTabs-indicator': { display: 'none' },
                         '& .MuiTab-root': {
                             minHeight: 40,
-                            borderRadius: '8px',
+                            borderRadius: '20px',
                             mx: 0.5,
                             textTransform: 'none',
-                            fontWeight: 500,
-                            '&.Mui-selected': {
-                                bgcolor: 'success.lighter',
-                                color: 'success.dark'
-                            }
+                            fontWeight: 500
                         }
                     }}
                 >
                     {TABS.map((t) => (
-                        <Tab
-                            key={t.key}
-                            value={t.key}
-                            label={
-                                t.key === 'ACTIVE' ? (
-                                    t.label
-                                ) : (
-                                    <Stack direction="row" spacing={0.75} alignItems="center">
-                                        <span>{t.label}</span>
-                                        <Badge
-                                            badgeContent={undefined}
-                                            sx={{
-                                                bgcolor: 'grey.200',
-                                                borderRadius: '10px',
-                                                px: 0.75,
-                                                fontSize: 12
-                                            }}
-                                        />
-                                    </Stack>
-                                )
-                            }
-                        />
+                        <CustomTab key={t.key} value={t.key} label={t.label} count={33} />
                     ))}
                 </Tabs>
             </Stack>
             <ResponsiveTableLayoutCustom>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ width: '28%' }}>Driver</TableCell>
-                        <TableCell sx={{ width: '14%' }}>Phone</TableCell>
-                        <TableCell sx={{ width: '12%' }}>Status</TableCell>
+                        <TableCell sx={{ width: '32%' }}>Driver</TableCell>
+                        <TableCell sx={{ width: '20%' }}>Phone</TableCell>
+                        <TableCell sx={{ width: '11%' }}>Status</TableCell>
                         <TableCell sx={{ width: '10%' }}>Rides</TableCell>
-                        <TableCell sx={{ width: '16%' }}>Rating</TableCell>
-                        <TableCell sx={{ width: '14%' }}>Earnings</TableCell>
-                        <TableCell sx={{ width: '6%' }} align="right" />
+                        <TableCell sx={{ width: '15%' }}>Rating</TableCell>
+                        <TableCell sx={{ width: '8%' }}>Earnings</TableCell>
+                        <TableCell sx={{ width: '5%' }} align="right" />
                     </TableRow>
                 </TableHead>
                 <TableBody>
