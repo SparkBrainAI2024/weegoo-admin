@@ -176,7 +176,8 @@ const Breadcrumbs = ({
                 sx={card === false ? { mb: 3, bgcolor: 'transparent', ...sx } : { mb: 3, bgcolor: 'background.default', ...sx }}
                 {...others}
             >
-                <Box sx={{ p: 2, pl: card === false ? 0 : 2 }}>
+                <Box>
+                    {/* <Box sx={{ p: 2, pl: card === false ? 0 : 2 }}> */}
                     <Grid
                         container
                         direction={rightAlign ? 'row' : 'column'}

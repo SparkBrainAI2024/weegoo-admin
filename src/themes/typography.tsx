@@ -35,6 +35,11 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
         color: theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[600] : theme.palette.grey[900],
         fontWeight: 700
     },
+    pageTitle: {
+        fontSize: '1.9rem', // ← swap for the real Figma value
+        fontWeight: 600,
+        color: theme.palette.text.dark
+    },
     subtitle1: {
         fontSize: '0.875rem',
         fontWeight: 500,
@@ -65,7 +70,6 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
         textTransform: 'capitalize'
     },
     customInput: {
-   
         '& > label': {
             top: 23,
             left: 0,
@@ -73,13 +77,13 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
             '&[data-shrink="false"]': {
                 top: 5
             },
-             '&.Mui-focused': {
-            color: theme.palette.text.secondary,
-            fontWeight:500,
-            fontsize:'10px'
+            '&.Mui-focused': {
+                color: theme.palette.text.secondary,
+                fontWeight: 500,
+                fontsize: '10px'
+            }
         },
-        },
-        
+
         '& > div > input': {
             padding: '30.5px 14px 11.5px !important'
         },

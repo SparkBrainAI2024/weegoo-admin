@@ -232,7 +232,7 @@ export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, Get
 
 export const GET_DRIVER_RIDE_HISTORY = gql`
     query GetDriverRideHistory($driverId: ID!, $page: Int!, $limit: Int!) {
-        getDriverRideHistory(driverId: $driverId, page: $page, limit: $limit) {
+        driverTrips(driverId: $driverId, page: $page, limit: $limit) {
             totalCount
             hasNextPage
             rides {

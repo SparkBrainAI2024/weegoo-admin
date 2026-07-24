@@ -26,7 +26,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventIcon from '@mui/icons-material/Event';
-import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW, GET_DRIVER_RIDE_HISTORY } from 'graphql/queries/drivers.queries';
+import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
 import {
     APPROVE_DRIVER_DOCUMENT_FILE,
     BLOCK_DRIVER,
@@ -37,6 +37,7 @@ import {
 import { useParams } from 'react-router';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import useNotification from 'hooks/useNotification';
+import { DriverRideHistoryTab } from './driver-trips-tab';
 
 interface SelectedFile {
     documentId: string;
@@ -129,16 +130,12 @@ export default function DriverDetailsPage() {
     // state. Keeping this separate means a slow/expensive ride-history
     // aggregation on the backend never blocks or slows down the initial
     // page render.
-    // ---------------------------------------------------------------------
-    const [page, setPage] = useState(0);
-    const [loadRideHistory, rideHistoryResult] = useLazyQuery(GET_DRIVER_RIDE_HISTORY, {
-        fetchPolicy: 'cache-and-network'
-    });
 
     const statusChipColor: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
         APPROVED: 'success',
         PENDING: 'warning',
-        REJECTED: 'error'
+        REJECTED: 'error',
+        VERIFIED: 'success'
     };
     function formatDocLabel(type: string, side: string) {
         const typeLabel = type
@@ -166,9 +163,9 @@ export default function DriverDetailsPage() {
                 variables: { driverId: driverId! }
             });
         }
-        if (value === 'rides' && !rideHistoryResult.called) {
-            loadRideHistory({ variables: { driverId, page, limit: 10 } });
-        }
+        // if (value === 'rides' && !rideHistoryResult.called) {
+        //     loadRideHistory({ variables: { driverId, page, limit: 10 } });
+        // }
 
         console.log(selectedFile, 'sf');
     };
@@ -263,7 +260,6 @@ export default function DriverDetailsPage() {
                 onClose={clearNotification}
                 severity={notification?.severity ?? 'success'}
             />
-
             {/* ---- Top tab bar (Details / Documents / Ride History) ---- */}
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Tabs value={activeTab} onChange={handleTabChange}>
@@ -284,7 +280,6 @@ export default function DriverDetailsPage() {
                     Verify KYC
                 </Button>
             </Box>
-
             {activeTab === 'details' && (
                 <>
                     {/* ---- Header summary card ---- */}
@@ -568,6 +563,7 @@ export default function DriverDetailsPage() {
                     </Grid>
                 </Grid>
             )}
+            {activeTab === 'rides' && <DriverRideHistoryTab driverId={driverId!} />}{' '}
         </Box>
     );
 }
