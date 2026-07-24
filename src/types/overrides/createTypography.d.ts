@@ -28,6 +28,7 @@ declare module '@mui/material/styles/createTypography' {
         smallAvatar?: TypographyStyleOptions;
         mediumAvatar?: TypographyStyleOptions;
         largeAvatar?: TypographyStyleOptions;
+        pageTitle?: TypographyStyleOptions;
     }
 
     export interface Typography extends Record<Variant, TypographyStyle>, FontStyle, TypographyUtils {

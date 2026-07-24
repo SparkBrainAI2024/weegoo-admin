@@ -19,7 +19,7 @@ interface MainStyleProps {
 const MainContentStyled = styled('main', {
     shouldForwardProp: (prop) => prop !== 'open' && prop !== 'borderRadius' && prop !== 'menuOrientation'
 })(({ theme, open, menuOrientation, borderRadius }: MainStyleProps) => ({
-    backgroundColor: theme.palette.mode === ThemeMode.DARK ? theme.palette.dark[800] : theme.palette.grey[100],
+    backgroundColor: theme.palette.mode === ThemeMode.DARK ? theme.palette.dark[800] : theme.palette.background.default,
     minWidth: '1%',
     width: '100%',
     minHeight: 'calc(100vh - 88px)',
@@ -30,17 +30,17 @@ const MainContentStyled = styled('main', {
     borderRadius: `${borderRadius}px`,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
- ...(!open && {
-    transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.shorter + 200
+    ...(!open && {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.shorter + 200
+        }),
+        [theme.breakpoints.up('md')]: {
+            marginLeft: 0,
+            width: `calc(100% - 72px)`,
+            marginTop: menuOrientation === MenuOrientation.HORIZONTAL ? 135 : 88
+        }
     }),
-    [theme.breakpoints.up('md')]: {
-        marginLeft: 0,
-        width: `calc(100% - 72px)`,
-        marginTop: menuOrientation === MenuOrientation.HORIZONTAL ? 135 : 88
-    }
-}),
     ...(open && {
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.easeOut,
@@ -53,16 +53,16 @@ const MainContentStyled = styled('main', {
             marginTop: menuOrientation === MenuOrientation.HORIZONTAL ? 135 : 88
         }
     }),
-   [theme.breakpoints.down('md')]: {
-    marginLeft: '0px !important',
-    padding: 16,
-    marginTop: 88,
-    width: 'calc(100% - 92px) !important'
-},
-[theme.breakpoints.down('sm')]: {
-    marginLeft: '0px !important',
-    marginRight: 10
-}
+    [theme.breakpoints.down('md')]: {
+        marginLeft: '0px !important',
+        padding: 16,
+        marginTop: 88,
+        width: 'calc(100% - 92px) !important'
+    },
+    [theme.breakpoints.down('sm')]: {
+        marginLeft: '0px !important',
+        marginRight: 10
+    }
 }));
 
 export default MainContentStyled;

@@ -388,6 +388,35 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
                     }
                 }
             }
+        },
+        MuiToggleButtonGroup: {
+            styleOverrides: {
+                root: {
+                    gap: 8,
+                    backgroundColor: 'transparent'
+                },
+                grouped: {
+                    border: `1px solid ${theme.palette.grey[300]} !important`,
+                    borderRadius: '24px !important', // pill shape, replaces MUI's default shared-edge squaring
+                    marginLeft: '0 !important'
+                }
+            }
+        },
+        MuiToggleButton: {
+            styleOverrides: {
+                root: {
+                    textTransform: 'none',
+                    padding: '8px 20px',
+                    backgroundColor: theme.palette.background.paper,
+                    '&.Mui-selected': {
+                        backgroundColor: theme.palette.background.paper,
+                        borderColor: `${theme.palette.secondary.main} !important`,
+                        '&:hover': {
+                            backgroundColor: theme.palette.background.paper
+                        }
+                    }
+                }
+            }
         }
     };
 }

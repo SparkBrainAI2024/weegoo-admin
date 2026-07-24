@@ -109,7 +109,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
             divider: mode === ThemeMode.DARK ? alpha(colors.grey200, 0.2) : colors.grey200,
             background: {
                 paper: mode === ThemeMode.DARK ? colors.darkLevel2 : colors.paper,
-                default: mode === ThemeMode.DARK ? colors.darkPaper : colors.paper
+                default: mode === ThemeMode.DARK ? colors.darkPaper : colors.contentBackground // or a new key
             }
         }
     });

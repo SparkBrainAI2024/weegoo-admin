@@ -20,7 +20,10 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
-    Skeleton
+    Skeleton,
+    ToggleButtonGroup,
+    ToggleButton,
+    Chip
 } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -49,51 +52,31 @@ const TABS = [
 
 const DEFAULT_TAB = 'ACTIVE';
 const DEFAULT_LIMIT = 10;
+enum DRIVER_TABS_ENUM {
+    ACTIVE = 'ACTIVE',
+    PENDING = 'PENDING',
+    BLOCKED = 'BLOCKED'
+}
+
+const COLUMNS = [
+    { label: 'Driver', width: '32%' },
+    { label: 'Phone', width: '20%' },
+    { label: 'Status', width: '11%' },
+    { label: 'Rides', width: '10%' },
+    { label: 'Rating', width: '15%' },
+    { label: 'Earnings', width: '8%' },
+    { label: '', width: '5%' }
+];
 
 const DriverList = () => {
-    const navigate = useNavigate();
-    const { getParam, updateParams } = useUrlParams();
-
-    // ---- URL is the single source of truth for filter/pagination state ----
-    const tab = getParam('status', DEFAULT_TAB);
-    const search = getParam('search', '');
-    const page = getParam('page', 0, Number);
-    const limit = getParam('limit', DEFAULT_LIMIT, Number);
-
-    // Local, non-URL UI state only
-    const [searchInput, setSearchInput] = useState(search);
-    const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+    const [tab, setTab] = useState<string>(DRIVER_TABS_ENUM.ACTIVE);
+    const [page, setPage] = useState(0);
+    const [limit, setLimit] = useState(10);
+    const [search, setSearch] = useState('');
+    const debouncedSearch = useDebounce(search, 400);
     const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
     const [blockDialogOpen, setBlockDialogOpen] = useState(false);
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const debouncedSearch = useDebounce(searchInput, 400);
-
-    // Sync debounced search text -> URL (resets page on change)
-    if (debouncedSearch !== search) {
-        updateParams({ search: debouncedSearch || undefined }, { resetKeys: ['page'] });
-    }
-
-    const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
-        variables: {
-            input: {
-                page,
-                limit,
-                status: tab,
-                search: debouncedSearch || undefined
-            }
-        },
-        fetchPolicy: 'cache-and-network'
-    });
-
-    const closeDialog = () => {
-        setBlockDialogOpen(false);
-        setSelectedId(null);
-    };
-
-    const handleRowClick = (driverId: string) => {
-        navigate(`/drivers/${driverId}`);
-    };
-
     const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
         onCompleted: () => {
             setDeleteDialogOpen(false);
@@ -104,16 +87,25 @@ const DriverList = () => {
             console.log('DeleteDriver failed:', err.message);
         }
     });
-
-    // ---- Menu-item click handlers: ONLY open dialogs, never call mutations ----
+    const closeMenu = () => {
+        setMenuAnchor(null);
+        // NOTE: don't clear selectedPassenger here — dialogs opened from this menu
+        // need it. selectedPassenger is cleared explicitly in each dialog's onClose.
+    };
+    const navigate = useNavigate();
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const closeDialog = () => {
+        setBlockDialogOpen(false);
+        setSelectedId(null);
+    };
     const handleBlockClick = () => {
         setBlockDialogOpen(true);
-        setMenuAnchor(null); // close menu, keep selectedDriver
+        setMenuAnchor(null); // close menu, keep selectedPassenger
     };
 
     const handleDeleteClick = () => {
         setDeleteDialogOpen(true);
-        setMenuAnchor(null); // close menu, keep selectedDriver
+        setMenuAnchor(null); // close menu, keep selectedPassenger
     };
 
     const handleConfirmDelete = () => {
@@ -128,73 +120,87 @@ const DriverList = () => {
         });
     };
 
-    const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
-    const total = data?.getDrivers?.pagination?.total ?? 0;
-    const selectedDriver = drivers.find((d) => d.id === selectedId);
-
-    const handleTabChange = (_: React.SyntheticEvent, value: string) => {
-        updateParams({ status: value === DEFAULT_TAB ? undefined : value }, { resetKeys: ['page'] });
+    const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
+        variables: {
+            input: {
+                page,
+                limit,
+                status: tab,
+                search: debouncedSearch || undefined
+            }
+        },
+        fetchPolicy: 'cache-and-network'
+    });
+    const handleRowClick = (driverId: string) => {
+        navigate(`/drivers/${driverId}`);
     };
-
     const openMenu = (e: MouseEvent<HTMLElement>, driver: DriverListItem) => {
         setMenuAnchor(e.currentTarget);
         setSelectedId(driver.id);
     };
+    const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
+    const selectedDriver = drivers.find((d) => d.id === selectedId);
 
-    const closeMenu = () => {
-        setMenuAnchor(null);
-        // NOTE: don't clear selectedDriver here — dialogs opened from this menu
-        // need it. selectedDriver is cleared explicitly in each dialog's onClose.
+    const total = data?.getDrivers?.pagination?.total ?? 0;
+    const handleTabChange = (_: React.SyntheticEvent, value: string) => {
+        setTab(value);
+        setPage(0);
     };
-
     return (
-        <Card sx={{ p: 2 }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+        <Stack gap={2.5}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingTop: '24px',
+                    gap: 5
+                }}
+            >
                 <TextField
                     placeholder="Search driver..."
                     size="small"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
+                    InputProps={{ startAdornment: <SearchIcon /> }}
                     sx={{ width: 320 }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon fontSize="small" color="disabled" />
-                            </InputAdornment>
-                        )
-                    }}
+                    // secondaryText → placeholder color already comes from MuiInputBase override (text.secondary)
                 />
-
-                <Tabs
-                    value={tab}
-                    onChange={handleTabChange}
-                    sx={{
-                        minHeight: 40,
-                        '& .MuiTabs-indicator': { display: 'none' },
-                        '& .MuiTab-root': {
-                            minHeight: 40,
-                            borderRadius: '20px',
-                            mx: 0.5,
-                            textTransform: 'none',
-                            fontWeight: 500
-                        }
-                    }}
-                >
-                    {TABS.map((t) => (
-                        <CustomTab key={t.key} value={t.key} label={t.label} count={33} />
+                <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>
+                    {TABS.map(({ key, label }) => (
+                        <ToggleButton key={key} value={key}>
+                            <Typography
+                                variant="subtitle2"
+                                sx={{
+                                    fontSize: '13px',
+                                    fontWeight: 700,
+                                    color: tab === key ? 'text.dark' : 'text.secondary'
+                                }}
+                            >
+                                {label}
+                            </Typography>
+                            {key !== 'ACTIVE' && (
+                                <Chip
+                                    size="small"
+                                    label={<Typography variant="caption">{key === 'PENDING' ? 58 : 12}</Typography>}
+                                    sx={{ ml: 0.75 }}
+                                />
+                            )}
+                        </ToggleButton>
                     ))}
-                </Tabs>
-            </Stack>
+                </ToggleButtonGroup>
+            </Box>
+
             <ResponsiveTableLayoutCustom>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ width: '32%' }}>Driver</TableCell>
-                        <TableCell sx={{ width: '20%' }}>Phone</TableCell>
-                        <TableCell sx={{ width: '11%' }}>Status</TableCell>
-                        <TableCell sx={{ width: '10%' }}>Rides</TableCell>
-                        <TableCell sx={{ width: '15%' }}>Rating</TableCell>
-                        <TableCell sx={{ width: '8%' }}>Earnings</TableCell>
-                        <TableCell sx={{ width: '5%' }} align="right" />
+                        {COLUMNS.map(({ label, width }, i) => (
+                            <TableCell key={i} sx={{ width }} align={label === '' ? 'right' : 'left'}>
+                                {label && (
+                                    <Typography variant="h6" color="text.dark">
+                                        {label}
+                                    </Typography>
+                                )}
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -214,33 +220,68 @@ const DriverList = () => {
                             <TableRow key={driver.id} hover onClick={() => handleRowClick(driver.id)} sx={{ cursor: 'pointer' }}>
                                 <TableCell>
                                     <Stack direction="row" spacing={1.5} alignItems="center">
-                                        <Avatar src={driver.profileImage} sx={{ width: 36, height: 36 }}>
+                                        <Avatar
+                                            src={driver.profileImage}
+                                            sx={{
+                                                width: 36,
+                                                height: 36,
+                                                bgcolor: 'secondary.light',
+                                                color: 'text.dark'
+                                            }}
+                                        >
                                             {driver.fullName?.[0]}
                                         </Avatar>
                                         <Box>
-                                            <Typography variant="subtitle2">{driver.fullName}</Typography>
+                                            <Typography variant="subtitle1">{driver.fullName}</Typography>
                                             <Typography variant="caption" color="text.secondary">
                                                 ID · {driver.id.slice(-4)}
                                             </Typography>
                                         </Box>
                                     </Stack>
                                 </TableCell>
-                                <TableCell>{driver.phone}</TableCell>
                                 <TableCell>
+                                    <Typography variant="body2" color="text.primary">
+                                        {driver.phone}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    {/* statusChip → subtitle2, colors: active=success, pending=warning, blocked=error.
+                                        UserStatusChip's internals aren't shown here — make sure its label
+                                        Typography uses variant="subtitle2" and its status→color map matches
+                                        success.main/light, warning.main/light, error.main/light. */}
                                     <UserStatusChip status={driver.suspended ? 'BLOCKED' : driver.status} />
                                 </TableCell>
-                                <TableCell>{driver.totalRidesAsDriver || '—'}</TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" color="text.primary">
+                                        {driver.totalRidesAsDriver || '—'}
+                                    </Typography>
+                                </TableCell>
                                 <TableCell>
                                     {driver.rating ? (
                                         <Stack direction="row" spacing={0.5} alignItems="center">
-                                            <Rating value={driver.rating} precision={0.1} readOnly size="small" />
-                                            <Typography variant="body2">{driver.rating.toFixed(1)}</Typography>
+                                            <Rating
+                                                value={driver.rating}
+                                                precision={0.1}
+                                                readOnly
+                                                size="small"
+                                                sx={{
+                                                    color: 'orange.main',
+                                                    '& .MuiRating-iconEmpty': { color: 'grey.300' }
+                                                }}
+                                            />
+                                            <Typography variant="body2" color="text.primary">
+                                                {driver.rating.toFixed(1)}
+                                            </Typography>
                                         </Stack>
                                     ) : (
                                         '—'
                                     )}
                                 </TableCell>
-                                <TableCell>{driver.totalEarnings}</TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" color="success.main">
+                                        {driver.totalEarnings}
+                                    </Typography>
+                                </TableCell>
                                 <TableCell align="right">
                                     <IconButton
                                         size="small"
@@ -262,13 +303,17 @@ const DriverList = () => {
                 count={total}
                 page={page}
                 rowsPerPage={limit}
-                onPageChange={(_, newPage) => updateParams({ page: newPage || undefined })}
+                onPageChange={(_, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(e) => {
-                    const newLimit = parseInt(e.target.value, 10);
-                    updateParams({ limit: newLimit === DEFAULT_LIMIT ? undefined : newLimit }, { resetKeys: ['page'] });
+                    setLimit(parseInt(e.target.value, 10));
+                    setPage(0);
                 }}
                 rowsPerPageOptions={[10, 25, 50]}
+                // "Rows per page" label → caption/text.secondary comes from MUI default;
+                // override via sx if it's not matching your caption token exactly:
+                // sx={{ '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': { ...theme.typography.caption, color: 'text.secondary' } }}
             />
+
             <DeleteUserDialog
                 open={deleteDialogOpen}
                 userName={selectedDriver?.fullName}
@@ -282,13 +327,14 @@ const DriverList = () => {
             {blockDialogOpen && selectedDriver && (
                 <BlockUnblockDriverDialog driver={selectedDriver} onClose={closeDialog} refetch={refetch} />
             )}
-            {/* Menu itself has NO onClick — only individual MenuItems trigger actions */}
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
                 <MenuItem onClick={handleBlockClick}>
                     <ListItemIcon>
-                        <BlockIcon fontSize="small" />
+                        <BlockIcon fontSize="small" sx={{ color: 'text.secondary' }} />
                     </ListItemIcon>
-                    <ListItemText>{selectedDriver?.suspended ? 'Unblock' : 'Block'}</ListItemText>
+                    <ListItemText primaryTypographyProps={{ color: 'text.secondary' }}>
+                        {selectedDriver?.suspended ? 'Unblock' : 'Block'}
+                    </ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleDeleteClick} sx={{ color: 'error.main' }}>
                     <ListItemIcon>
@@ -297,7 +343,7 @@ const DriverList = () => {
                     <ListItemText>Delete</ListItemText>
                 </MenuItem>
             </Menu>
-        </Card>
+        </Stack>
     );
 };
 

@@ -1,12 +1,12 @@
 // components/passengers/PassengerList.tsx
 import { useState, MouseEvent } from 'react';
 import {
-    Box,
     Card,
     Stack,
-    Tabs,
-    Tab,
-    Badge,
+    Box,
+    ToggleButtonGroup,
+    ToggleButton,
+    Chip,
     TextField,
     InputAdornment,
     TableHead,
@@ -44,6 +44,16 @@ const TABS = [
     { key: 'PENDING', label: 'Pending' },
     { key: 'BLOCKED', label: 'Blocked' }
 ] as const;
+
+const COLUMNS = [
+    { label: 'Passenger', width: '28%' },
+    { label: 'Phone', width: '14%' },
+    { label: 'Status', width: '12%' },
+    { label: 'Trips', width: '10%' },
+    { label: 'Rating', width: '16%' },
+    { label: 'Spending', width: '14%' },
+    { label: '', width: '6%' }
+];
 
 const PassengerList = () => {
     const [tab, setTab] = useState<string>('ACTIVE');
@@ -87,15 +97,14 @@ const PassengerList = () => {
         }
     });
 
-    // ---- Menu-item click handlers: ONLY open dialogs, never call mutations ----
     const handleBlockClick = () => {
         setBlockDialogOpen(true);
-        setMenuAnchor(null); // close menu, keep selectedPassenger
+        setMenuAnchor(null);
     };
 
     const handleDeleteClick = () => {
         setDeleteDialogOpen(true);
-        setMenuAnchor(null); // close menu, keep selectedPassenger
+        setMenuAnchor(null);
     };
 
     const handleConfirmDelete = () => {
@@ -113,6 +122,7 @@ const PassengerList = () => {
     const total = data?.getPassengers?.pagination?.total ?? 0;
     const selectedPassenger = passengers.find((d) => d.id === selectedId);
     const handleTabChange = (_: React.SyntheticEvent, value: string) => {
+        if (value === null) return; // ToggleButtonGroup exclusive can emit null on re-click
         setTab(value);
         setPage(0);
     };
@@ -124,13 +134,11 @@ const PassengerList = () => {
 
     const closeMenu = () => {
         setMenuAnchor(null);
-        // NOTE: don't clear selectedPassenger here — dialogs opened from this menu
-        // need it. selectedPassenger is cleared explicitly in each dialog's onClose.
     };
 
     return (
-        <Card sx={{ p: 2 }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+        <Stack gap={2.5}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <TextField
                     placeholder="Search passenger..."
                     size="small"
@@ -149,64 +157,46 @@ const PassengerList = () => {
                     }}
                 />
 
-                <Tabs
-                    value={tab}
-                    onChange={handleTabChange}
-                    sx={{
-                        minHeight: 40,
-                        '& .MuiTabs-indicator': { display: 'none' },
-                        '& .MuiTab-root': {
-                            minHeight: 40,
-                            borderRadius: '8px',
-                            mx: 0.5,
-                            textTransform: 'none',
-                            fontWeight: 500,
-                            '&.Mui-selected': {
-                                bgcolor: 'success.lighter',
-                                color: 'success.dark'
-                            }
-                        }
-                    }}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    allowScrollButtonsMobile
-                >
-                    {TABS.map((t) => (
-                        <Tab
-                            key={t.key}
-                            value={t.key}
-                            label={
-                                t.key === 'ACTIVE' ? (
-                                    t.label
-                                ) : (
-                                    <Stack direction="row" spacing={0.75} alignItems="center">
-                                        <span>{t.label}</span>
-                                        <Badge
-                                            badgeContent={undefined}
-                                            sx={{
-                                                bgcolor: 'grey.200',
-                                                borderRadius: '10px',
-                                                px: 0.75,
-                                                fontSize: 12
-                                            }}
-                                        />
-                                    </Stack>
-                                )
-                            }
-                        />
+                <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>
+                    {TABS.map(({ key, label }) => (
+                        <ToggleButton key={key} value={key}>
+                            <Typography
+                                variant="subtitle2"
+                                sx={{
+                                    fontSize: '13px',
+                                    fontWeight: 700,
+                                    color: tab === key ? 'text.dark' : 'text.secondary'
+                                }}
+                            >
+                                {label}
+                            </Typography>
+                            {key !== 'ACTIVE' && (
+                                <Chip
+                                    size="small"
+                                    label={
+                                        <Typography variant="caption" color="grey.700" fontWeight={600}>
+                                            {key === 'PENDING' ? 58 : 12}
+                                        </Typography>
+                                    }
+                                    sx={{ ml: 0.75, bgcolor: 'grey.100' }}
+                                />
+                            )}
+                        </ToggleButton>
                     ))}
-                </Tabs>
+                </ToggleButtonGroup>
             </Stack>
             <ResponsiveTableLayoutCustom>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ width: '28%' }}>Passenger</TableCell>
-                        <TableCell sx={{ width: '14%' }}>Phone</TableCell>
-                        <TableCell sx={{ width: '12%' }}>Status</TableCell>
-                        <TableCell sx={{ width: '10%' }}>Trips</TableCell>
-                        <TableCell sx={{ width: '16%' }}>Rating</TableCell>
-                        <TableCell sx={{ width: '14%' }}>Spending</TableCell>
-                        <TableCell sx={{ width: '6%' }} />
+                        {COLUMNS.map(({ label, width }, i) => (
+                            <TableCell key={i} sx={{ width }} align={label === '' ? 'right' : 'left'}>
+                                {label && (
+                                    <Typography variant="h6" color="text.dark">
+                                        {label}
+                                    </Typography>
+                                )}
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -226,27 +216,54 @@ const PassengerList = () => {
                             <TableRow key={passenger.id} hover onClick={() => handleRowClick(passenger.id)} sx={{ cursor: 'pointer' }}>
                                 <TableCell>
                                     <Stack direction="row" spacing={1.5} alignItems="center">
-                                        <Avatar src={passenger.profileImage} sx={{ width: 36, height: 36 }}>
+                                        <Avatar
+                                            src={passenger.profileImage}
+                                            sx={{
+                                                width: 36,
+                                                height: 36,
+                                                bgcolor: 'secondary.light',
+                                                color: 'text.dark'
+                                            }}
+                                        >
                                             {passenger.fullName?.[0]}
                                         </Avatar>
                                         <Box>
-                                            <Typography variant="subtitle2">{passenger.fullName}</Typography>
+                                            <Typography variant="subtitle1">{passenger.fullName}</Typography>
                                             <Typography variant="caption" color="text.secondary">
                                                 ID · {passenger.id.slice(-4)}
                                             </Typography>
                                         </Box>
                                     </Stack>
                                 </TableCell>
-                                <TableCell>{passenger.phone}</TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" color="text.primary">
+                                        {passenger.phone}
+                                    </Typography>
+                                </TableCell>
                                 <TableCell>
                                     <UserStatusChip status={passenger.suspended ? 'BLOCKED' : passenger.status} />
                                 </TableCell>
-                                <TableCell>{passenger.totalTripsAsPassenger || '—'}</TableCell>
+                                <TableCell>
+                                    <Typography variant="body2" color="text.primary">
+                                        {passenger.totalTripsAsPassenger || '—'}
+                                    </Typography>
+                                </TableCell>
                                 <TableCell>
                                     {passenger.rating ? (
                                         <Stack direction="row" spacing={0.5} alignItems="center">
-                                            <Rating value={passenger.rating} precision={0.1} readOnly size="small" />
-                                            <Typography variant="body2">{passenger.rating.toFixed(1)}</Typography>
+                                            <Rating
+                                                value={passenger.rating}
+                                                precision={0.1}
+                                                readOnly
+                                                size="small"
+                                                sx={{
+                                                    color: 'orange.main',
+                                                    '& .MuiRating-iconEmpty': { color: 'grey.300' }
+                                                }}
+                                            />
+                                            <Typography variant="body2" color="text.primary">
+                                                {passenger.rating.toFixed(1)}
+                                            </Typography>
                                         </Stack>
                                     ) : (
                                         '—'
@@ -254,7 +271,7 @@ const PassengerList = () => {
                                 </TableCell>
                                 <TableCell>
                                     {passenger.totalSpendingOnRides ? (
-                                        <Typography color="success.main" fontWeight={600}>
+                                        <Typography variant="body2" color="success.main">
                                             Rs. {passenger.totalSpendingOnRides.toLocaleString()}
                                         </Typography>
                                     ) : (
@@ -302,13 +319,14 @@ const PassengerList = () => {
             {blockDialogOpen && selectedPassenger && (
                 <BlockUnblockPassengerDialog passenger={selectedPassenger} onClose={closeDialog} refetch={refetch} />
             )}
-            {/* Menu itself has NO onClick — only individual MenuItems trigger actions */}
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
                 <MenuItem onClick={handleBlockClick}>
                     <ListItemIcon>
-                        <BlockIcon fontSize="small" />
+                        <BlockIcon fontSize="small" sx={{ color: 'text.secondary' }} />
                     </ListItemIcon>
-                    <ListItemText>{selectedPassenger?.suspended ? 'Unblock' : 'Block'}</ListItemText>
+                    <ListItemText primaryTypographyProps={{ color: 'text.secondary' }}>
+                        {selectedPassenger?.suspended ? 'Unblock' : 'Block'}
+                    </ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleDeleteClick} sx={{ color: 'error.main' }}>
                     <ListItemIcon>
@@ -317,7 +335,7 @@ const PassengerList = () => {
                     <ListItemText>Delete</ListItemText>
                 </MenuItem>
             </Menu>
-        </Card>
+        </Stack>
     );
 };
 

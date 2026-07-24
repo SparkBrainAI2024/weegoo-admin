@@ -69,9 +69,7 @@ const Header = () => {
             {/* Page Title */}
             <Stack direction="row" alignItems="center" spacing={1.5}>
                 {Icon && <Icon stroke={1.5} size="24px" />}
-                <Typography variant="h3" fontWeight={600}>
-                    {title}
-                </Typography>
+                <Typography variant="pageTitle">{title}</Typography>
             </Stack>
 
             <Box sx={{ flexGrow: 1 }} />

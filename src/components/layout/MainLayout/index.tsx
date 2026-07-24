@@ -50,26 +50,24 @@ const MainLayout = () => {
     if (menuMasterLoading) return <Loader />;
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', padding: '0', margin: '0' }}>
             {/* header */}
-          <AppBar 
-    enableColorOnDark 
-    position="fixed" 
-    color="inherit" 
-    elevation={0} 
-    sx={{ 
-        width: `calc(100% - ${drawerOpen ? drawerWidth : 72}px)`,
-        ml: `${drawerOpen ? drawerWidth : 72}px`,
-        bgcolor: 'background.default',
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: drawerOpen 
-                ? theme.transitions.duration.enteringScreen 
-                : theme.transitions.duration.leavingScreen
-        })
-    }}
->
-                <Toolbar sx={{ p: isHorizontal ? 1.25 : 2 }}>
+            <AppBar
+                enableColorOnDark
+                position="fixed"
+                color="inherit"
+                elevation={0}
+                sx={{
+                    width: `calc(100% - ${drawerOpen ? drawerWidth : 72}px)`,
+                    ml: `${drawerOpen ? drawerWidth : 72}px`,
+                    transition: theme.transitions.create(['width', 'margin'], {
+                        easing: theme.transitions.easing.sharp,
+                        duration: drawerOpen ? theme.transitions.duration.enteringScreen : theme.transitions.duration.leavingScreen
+                    }),
+                    bgcolor: '#ffffff'
+                }}
+            >
+                <Toolbar>
                     <Header />
                 </Toolbar>
             </AppBar>
