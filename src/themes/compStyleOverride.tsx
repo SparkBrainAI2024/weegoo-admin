@@ -405,7 +405,7 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
         MuiToggleButton: {
             styleOverrides: {
                 root: {
-                    textTransform: 'none',
+                    textTransform: 'none' as const,
                     padding: '8px 20px',
                     backgroundColor: theme.palette.background.paper,
                     '&.Mui-selected': {

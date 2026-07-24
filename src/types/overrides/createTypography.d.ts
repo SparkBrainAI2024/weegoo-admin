@@ -17,7 +17,8 @@ declare module '@mui/material/styles/createTypography' {
         | 'commonAvatar'
         | 'smallAvatar'
         | 'mediumAvatar'
-        | 'largeAvatar';
+        | 'largeAvatar'
+        | 'pageTitle';
 
     export interface TypographyOptions extends Partial<Record<Variant, TypographyStyleOptions> & FontStyleOptions> {
         customInput?: TypographyStyleOptions;
