@@ -163,7 +163,7 @@ const DriverList = () => {
                     placeholder="Search driver..."
                     size="small"
                     InputProps={{ startAdornment: <SearchIcon /> }}
-                    sx={{ width: 320 }}
+                    sx={{ width: '50%', minWidth: 200 }}
                     onChange={(e) => setSearch(e.target.value)} // secondaryText → placeholder color already comes from MuiInputBase override (text.secondary)
                 />
                 <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>

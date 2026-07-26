@@ -102,19 +102,19 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                         ...(drawerOpen &&
                             level === 1 &&
                             mode !== ThemeMode.DARK && {
-                            '&:hover': {
-                                color: '#E5E2E2',
-                                bgcolor: '#4caf50'
-                            },
-                            '&.Mui-selected': {
-                                bgcolor: '#4caf50',
-                                color: '#E5E2E2',
                                 '&:hover': {
                                     color: '#E5E2E2',
                                     bgcolor: '#4caf50'
+                                },
+                                '&.Mui-selected': {
+                                    bgcolor: '#4caf50',
+                                    color: '#E5E2E2',
+                                    '&:hover': {
+                                        color: '#E5E2E2',
+                                        bgcolor: '#4caf50'
+                                    }
                                 }
-                            }
-                        }),
+                            }),
                         ...((!drawerOpen || level !== 1) && {
                             py: level === 1 ? 0 : 1,
                             '&:hover': {
@@ -134,13 +134,12 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                     selected={isSelected}
                     onClick={() => itemHandler()}
                 >
-            
-                        <ListItemIcon
-                            sx={{
-                                minWidth: level === 1 ? 36 : 18,
-                                color: isSelected ? iconSelectedColor : '#E5E2E2',
-                                ...(!drawerOpen &&
-                                    level === 1 && {
+                    <ListItemIcon
+                        sx={{
+                            minWidth: level === 1 ? 36 : 18,
+                            color: isSelected ? iconSelectedColor : '#E5E2E2',
+                            ...(!drawerOpen &&
+                                level === 1 && {
                                     borderRadius: `${borderRadius}px`,
                                     width: 46,
                                     height: 46,
@@ -150,28 +149,19 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                                         bgcolor: mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.25) : '#4caf50'
                                     },
                                     ...(isSelected && {
-                                        bgcolor:
-                                            mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.25) : '#4caf50',
+                                        bgcolor: mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.25) : '#4caf50',
                                         '&:hover': {
-                                            bgcolor:
-                                                mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.3) : '#4caf50'
+                                            bgcolor: mode === ThemeMode.DARK ? alpha(theme.palette.secondary.main, 0.3) : '#4caf50'
                                         }
                                     })
                                 }),
-                                '& svg': {
-                                    color: '#E5E2E2'  // ← force icon color directly
-                                },
-
-                            }}
-                        >
-
-
-
-
-
-
-                            {itemIcon}
-                        </ListItemIcon>
+                            '& svg': {
+                                color: '#E5E2E2' // ← force icon color directly
+                            }
+                        }}
+                    >
+                        {itemIcon}
+                    </ListItemIcon>
 
                     {(drawerOpen || (!drawerOpen && level !== 1)) && (
                         <Tooltip title={item.title} disableHoverListener={!hoverStatus}>

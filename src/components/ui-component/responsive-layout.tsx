@@ -12,7 +12,9 @@ const ResponsiveTableLayoutCustom = ({ children }: ResponsiveTableLayoutCustomPr
                 overflowX: 'hidden',
                 [theme.breakpoints.down(900)]: {
                     overflowX: 'auto'
-                }
+                },
+                backgroundColor: '#fff',
+                borderRadius: 2
             })}
         >
             <Table
