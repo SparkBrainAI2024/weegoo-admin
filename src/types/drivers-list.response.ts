@@ -13,5 +13,7 @@ export interface GetDriversQueryResult {
             previousPage: number | null;
             total: number;
         };
+        totalPending: number;
+        totalBlocked: number;
     };
 }

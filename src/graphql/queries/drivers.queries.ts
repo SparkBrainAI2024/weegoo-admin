@@ -19,6 +19,8 @@ export const GET_DRIVERS = gql`
                 rating
                 profileImage
             }
+            totalPending
+            totalBlocked
             pagination {
                 page
                 limit
