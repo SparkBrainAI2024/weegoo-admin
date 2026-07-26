@@ -1,9 +1,10 @@
 // assets
-import { IconUser, IconUsers } from '@tabler/icons-react';
-import drivers from '../components/ui-component/IconsMenu';
+import { IconUsers } from '@tabler/icons-react';
 
 // types
 import { NavItemType } from 'types';
+import { PersonOutline } from '@mui/icons-material';
+import IconDrivers from 'assets/images/icons/DriversIcon';
 
 // ==============================|| MENU ITEMS - USERS ||============================== //
 
@@ -17,7 +18,7 @@ const users: NavItemType = {
             title: 'Drivers',
             type: 'item',
             url: '/drivers',
-            icon: drivers,
+            icon: IconDrivers,
             breadcrumbs: true
             // chip prop can be added here for the red badge (e.g. pending driver approvals)
             // chip: { color: 'error', label: '2' }
