@@ -139,6 +139,8 @@ const DriverList = () => {
         setSelectedId(driver.id);
     };
     const drivers: DriverListItem[] = data?.getDrivers?.data ?? [];
+    const totalPending = data?.getDrivers?.totalPending ?? 0;
+    const totalBlocked = data?.getDrivers?.totalBlocked ?? 0;
     const selectedDriver = drivers.find((d) => d.id === selectedId);
 
     const total = data?.getDrivers?.pagination?.total ?? 0;
@@ -161,8 +163,8 @@ const DriverList = () => {
                     placeholder="Search driver..."
                     size="small"
                     InputProps={{ startAdornment: <SearchIcon /> }}
-                    sx={{ width: 320 }}
-                    // secondaryText → placeholder color already comes from MuiInputBase override (text.secondary)
+                    sx={{ width: '50%', minWidth: 200 }}
+                    onChange={(e) => setSearch(e.target.value)} // secondaryText → placeholder color already comes from MuiInputBase override (text.secondary)
                 />
                 <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>
                     {TABS.map(({ key, label }) => (
@@ -180,7 +182,7 @@ const DriverList = () => {
                             {key !== 'ACTIVE' && (
                                 <Chip
                                     size="small"
-                                    label={<Typography variant="caption">{key === 'PENDING' ? 58 : 12}</Typography>}
+                                    label={<Typography variant="caption">{key === 'PENDING' ? totalPending : totalBlocked}</Typography>}
                                     sx={{ ml: 0.75 }}
                                 />
                             )}

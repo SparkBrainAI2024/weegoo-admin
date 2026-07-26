@@ -180,7 +180,12 @@ const NavGroup = ({ item, lastItem, remItems, lastItemId, selectedID, setSelecte
                         subheader={
                             currentItem.title &&
                             drawerOpen && (
-                                <Typography variant="caption" sx={{ ...theme.typography.menuCaption,color: '#AFAFAF'  }} display="block" gutterBottom>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ ...theme.typography.menuCaption, color: '#AFAFAF' }}
+                                    display="block"
+                                    gutterBottom
+                                >
                                     {currentItem.title}
                                     {currentItem.caption && (
                                         <Typography
@@ -198,7 +203,6 @@ const NavGroup = ({ item, lastItem, remItems, lastItemId, selectedID, setSelecte
                     >
                         {items}
                     </List>
-
                 </>
             ) : (
                 <List>
@@ -226,7 +230,7 @@ const NavGroup = ({ item, lastItem, remItems, lastItemId, selectedID, setSelecte
                         <ListItemText
                             sx={{ mr: 1 }}
                             primary={
-                                <Typography variant={isSelected ? 'h5' : 'body1'} >
+                                <Typography variant={isSelected ? 'h5' : 'body1'}>
                                     {currentItem.id === lastItemId ? <FormattedMessage id="more-items" /> : currentItem.title}
                                 </Typography>
                             }
