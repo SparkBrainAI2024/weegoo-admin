@@ -8,16 +8,20 @@ interface BlockUnblockDriverDialogProps {
     driver: DriverListItem;
     onClose: () => void;
     refetch: () => void; // pass this down from the parent's useQuery
+    showSuccess: (message: string) => void;
+    showError: (message: string) => void;
 }
 
-export function BlockUnblockDriverDialog({ driver, onClose, refetch }: BlockUnblockDriverDialogProps) {
+export function BlockUnblockDriverDialog({ driver, onClose, refetch, showSuccess, showError }: BlockUnblockDriverDialogProps) {
     const [blockDriver, { loading: blocking }] = useMutation(BLOCK_DRIVER, {
         onCompleted: () => {
             onClose();
             refetch(); // re-runs the list query so the ACTIVE-tab filter excludes this row
+            showSuccess('Driver blocked successfully');
         },
         onError: (err) => {
             console.log('BlockDriver failed:', err.message);
+            showError('Failed to block driver');
         }
     });
 
@@ -25,9 +29,11 @@ export function BlockUnblockDriverDialog({ driver, onClose, refetch }: BlockUnbl
         onCompleted: () => {
             onClose();
             refetch();
+            showSuccess('Driver unblocked successfully');
         },
         onError: (err) => {
             console.log('UnblockDriver failed:', err.message);
+            showError('Failed to unblock driver');
         }
     });
 

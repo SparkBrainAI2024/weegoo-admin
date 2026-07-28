@@ -417,6 +417,32 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
                     }
                 }
             }
+        },
+        MuiTablePagination: {
+            styleOverrides: {
+                toolbar: {
+                    display: 'flex',
+                    width: '100%',
+                    padding: 0
+                },
+                spacer: {
+                    display: 'none' // remove the default spacer, we'll push manually instead
+                },
+                selectLabel: {
+                    order: 1
+                },
+                input: {
+                    order: 2,
+                    marginRight: 'auto' // this is what actually pushes label+select left, everything else right
+                },
+                displayedRows: {
+                    order: 3
+                },
+                actions: {
+                    order: 4,
+                    marginLeft: 0
+                }
+            }
         }
     };
 }

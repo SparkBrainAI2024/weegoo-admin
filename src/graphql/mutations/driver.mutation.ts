@@ -2,7 +2,10 @@ import { gql, TypedDocumentNode } from '@apollo/client';
 
 export const DELETE_DRIVER = gql`
     mutation DeleteDriver($input: DeleteDriverInput!) {
-        deleteDriver(input: $input)
+        deleteDriver(input: $input) {
+            deleted
+            message
+        }
     }
 `;
 
@@ -11,6 +14,7 @@ export const BLOCK_DRIVER = gql`
         blockDriver(id: $id) {
             id
             suspended
+            message
         }
     }
 `;
@@ -20,6 +24,7 @@ export const UNBLOCK_DRIVER = gql`
         unblockDriver(id: $id) {
             id
             suspended
+            message
         }
     }
 `;
