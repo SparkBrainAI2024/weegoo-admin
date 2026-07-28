@@ -23,7 +23,9 @@ import {
     ToggleButtonGroup,
     ToggleButton,
     Chip,
-    TablePagination
+    TablePagination,
+    useTheme,
+    useMediaQuery
 } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -153,6 +155,9 @@ const DriverList = () => {
         setTab(value);
         setPage(0);
     };
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <Stack gap={2.5}>
             <NotificationBanner
@@ -177,7 +182,13 @@ const DriverList = () => {
                     sx={{ width: '50%', minWidth: 200 }}
                     onChange={(e) => setSearch(e.target.value)} // secondaryText → placeholder color already comes from MuiInputBase override (text.secondary)
                 />
-                <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>
+                <ToggleButtonGroup
+                    exclusive
+                    value={tab}
+                    onChange={handleTabChange}
+                    orientation={isMobile ? 'vertical' : 'horizontal'}
+                    fullWidth={isMobile}
+                >
                     {TABS.map(({ key, label }) => (
                         <ToggleButton key={key} value={key}>
                             <Typography
