@@ -11,7 +11,6 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    TablePagination,
     Avatar,
     Typography,
     Rating,
@@ -23,7 +22,10 @@ import {
     Skeleton,
     ToggleButtonGroup,
     ToggleButton,
-    Chip
+    Chip,
+    TablePagination,
+    useTheme,
+    useMediaQuery
 } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -43,6 +45,9 @@ import { useNavigate } from 'react-router';
 import { useUrlParams } from 'hooks/useSearchParams';
 import ResponsiveTableLayoutCustom from 'components/ui-component/responsive-layout';
 import CustomTab from 'components/ui-component/extended/notistack/CustomTab';
+import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
+import useNotification from 'hooks/useNotification';
+import { CustomPaginationActions } from 'components/ui-component/actionsComponent';
 
 const TABS = [
     { key: 'ACTIVE', label: 'Active' },
@@ -77,20 +82,22 @@ const DriverList = () => {
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
     const [blockDialogOpen, setBlockDialogOpen] = useState(false);
+    const { notification, showSuccess, showError, clearNotification } = useNotification();
+
     const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
         onCompleted: () => {
             setDeleteDialogOpen(false);
             setSelectedId(null);
             refetch();
+            showSuccess('Driver deleted successfully');
         },
         onError: (err) => {
+            showError('Failed to delete driver');
             console.log('DeleteDriver failed:', err.message);
         }
     });
     const closeMenu = () => {
         setMenuAnchor(null);
-        // NOTE: don't clear selectedPassenger here — dialogs opened from this menu
-        // need it. selectedPassenger is cleared explicitly in each dialog's onClose.
     };
     const navigate = useNavigate();
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -148,8 +155,17 @@ const DriverList = () => {
         setTab(value);
         setPage(0);
     };
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <Stack gap={2.5}>
+            <NotificationBanner
+                open={Boolean(notification?.message)}
+                message={notification?.message ?? ''}
+                onClose={clearNotification}
+                severity={notification?.severity ?? 'success'}
+            />
             <Box
                 sx={{
                     display: 'flex',
@@ -166,7 +182,13 @@ const DriverList = () => {
                     sx={{ width: '50%', minWidth: 200 }}
                     onChange={(e) => setSearch(e.target.value)} // secondaryText → placeholder color already comes from MuiInputBase override (text.secondary)
                 />
-                <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>
+                <ToggleButtonGroup
+                    exclusive
+                    value={tab}
+                    onChange={handleTabChange}
+                    orientation={isMobile ? 'vertical' : 'horizontal'}
+                    fullWidth={isMobile}
+                >
                     {TABS.map(({ key, label }) => (
                         <ToggleButton key={key} value={key}>
                             <Typography
@@ -311,9 +333,7 @@ const DriverList = () => {
                     setPage(0);
                 }}
                 rowsPerPageOptions={[10, 25, 50]}
-                // "Rows per page" label → caption/text.secondary comes from MUI default;
-                // override via sx if it's not matching your caption token exactly:
-                // sx={{ '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': { ...theme.typography.caption, color: 'text.secondary' } }}
+                ActionsComponent={CustomPaginationActions}
             />
 
             <DeleteUserDialog
@@ -327,7 +347,13 @@ const DriverList = () => {
                 onConfirm={handleConfirmDelete}
             />
             {blockDialogOpen && selectedDriver && (
-                <BlockUnblockDriverDialog driver={selectedDriver} onClose={closeDialog} refetch={refetch} />
+                <BlockUnblockDriverDialog
+                    driver={selectedDriver}
+                    onClose={closeDialog}
+                    refetch={refetch}
+                    showSuccess={showSuccess}
+                    showError={showError}
+                />
             )}
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
                 <MenuItem onClick={handleBlockClick}>
