@@ -181,6 +181,7 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
             phone
             dateOfBirth
             joinedDate
+            gender
             totalRidesAsDriver
             totalEarnings
             amountDueToCompany
@@ -188,6 +189,8 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
             lastTripStartTime
             lastTripEndTime
             lastTripDuration
+            status
+            citizenshipNumber
         }
     }
 `;

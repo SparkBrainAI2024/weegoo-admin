@@ -351,15 +351,6 @@ export default function DriverDetailsPage() {
                             <Grid item xs={12} md={6}>
                                 <Grid container rowSpacing={4}>
                                     <Grid item xs={6} md={4}>
-                                        <StatBlock label="KYC Status">
-                                            <Chip
-                                                label="verified/not verified"
-                                                //TODO label={driver.kycStatus}
-                                                // color={kycColor[driver.kycStatus] ?? 'default'} size="small"
-                                            />
-                                        </StatBlock>
-                                    </Grid>
-                                    <Grid item xs={6} md={4}>
                                         <StatBlock label="Driver Status">
                                             <Chip label={driver.status} size="small" />
                                         </StatBlock>
