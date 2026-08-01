@@ -150,6 +150,7 @@ export interface GetDriverOverviewData {
         suspended: boolean;
         phone: string;
         dateOfBirth: string | null;
+        citizenshipNumber: string | null;
         joinedDate: string;
         totalRidesAsDriver: number;
         totalEarnings: number;
