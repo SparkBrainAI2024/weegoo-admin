@@ -399,11 +399,13 @@ export default function DriverDetailsPage() {
                         </Grid>
                     </Paper>
 
-                    {/* ---- Basic Info / Vehicle Info sub-tabs ---- */}
-                    <Tabs value={infoSubTab} onChange={(_, v) => setInfoSubTab(v)} sx={{ mb: 0, '& .MuiTab-root': { bgcolor: 'white' } }}>
-                        <Tab label="Basic Information" value="basic" />
-                        <Tab label="Vehicle Information" value="vehicle" />
-                    </Tabs>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                        {/* ---- Basic Info / Vehicle Info sub-tabs ---- */}
+                        <Tabs value={infoSubTab} onChange={(_, v) => setInfoSubTab(v)}>
+                            <Tab label="Basic Information" value="basic" />
+                            <Tab label="Vehicle Information" value="vehicle" />
+                        </Tabs>
+                    </Box>
 
                     <Paper sx={{ p: 3 }}>
                         {infoSubTab === 'basic' && (
