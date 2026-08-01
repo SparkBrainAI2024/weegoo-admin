@@ -263,11 +263,47 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
                 }
             }
         },
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    minHeight: 'auto',
+                    paddingTop: '9px',
+                    paddingBottom: '9px',
+                    paddingLeft: '24px',
+                    paddingRight: '24px',
+                    marginRight: '4px',
+
+                    borderRadius: 999,
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    fontSize: '0.875rem',
+                    lineHeight: 1.5,
+
+                    color: theme.palette.text.secondary,
+
+                    transition: 'all 0.2s ease',
+
+                    '&.Mui-selected': {
+                        backgroundColor: '#000000',
+                        color: mode === ThemeMode.DARK ? theme.palette.grey[900] : theme.palette.common.white
+                    },
+
+                    '&:not(.Mui-selected):hover': {
+                        backgroundColor: theme.palette.action.hover,
+                        color: theme.palette.text.primary
+                    }
+                }
+            }
+        },
+
         MuiTabs: {
             styleOverrides: {
-                flexContainer: {
-                    borderBottom: '1px solid',
-                    borderColor: mode === ThemeMode.DARK ? alpha(theme.palette.text.primary, 0.2) : theme.palette.grey[200]
+                root: {
+                    minHeight: 'auto'
+                },
+
+                indicator: {
+                    display: 'none'
                 }
             }
         },
