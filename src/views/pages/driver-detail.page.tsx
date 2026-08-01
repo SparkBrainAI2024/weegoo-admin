@@ -63,11 +63,6 @@ const ChipColorStyle = {
     backgroundColor: '#EAF6EA',
     border: '1px solid #BFE6C4'
 };
-const kycColor: Record<string, 'warning' | 'success' | 'error'> = {
-    PENDING: 'warning',
-    APPROVED: 'success',
-    REJECTED: 'error'
-};
 
 export default function DriverDetailsPage() {
     const [activeTab, setActiveTab] = useState<'details' | 'documents' | 'rides'>('details');
@@ -351,15 +346,6 @@ export default function DriverDetailsPage() {
                             <Grid item xs={12} md={6}>
                                 <Grid container rowSpacing={4}>
                                     <Grid item xs={6} md={4}>
-                                        <StatBlock label="KYC Status">
-                                            <Chip
-                                                label="verified/not verified"
-                                                //TODO label={driver.kycStatus}
-                                                // color={kycColor[driver.kycStatus] ?? 'default'} size="small"
-                                            />
-                                        </StatBlock>
-                                    </Grid>
-                                    <Grid item xs={6} md={4}>
                                         <StatBlock label="Driver Status">
                                             <Chip label={driver.status} size="small" />
                                         </StatBlock>
@@ -414,16 +400,30 @@ export default function DriverDetailsPage() {
                     <Paper sx={{ p: 3 }}>
                         {infoSubTab === 'basic' && (
                             <Grid container spacing={3}>
-                                <Field label="Phone" value={driver.phone} />
-                                <Field label="Gender" value={driver.gender} />
-                                <Field label="Email" value={driver.email} />
-                                {/* <Field label="Citizenship No." value={driver.citizenshipNo} /> */}
-                                <Field label="Date of Birth" value={driver.dateOfBirth} />
-                                <Field label="Joined" value={driver.joinedDate} />
-                                <Field
-                                    label="Emergency Contact"
-                                    value={`${driver?.emergencyContactPhone ?? '-'} (${driver?.emergencyContactName})`}
-                                />
+                                <GridItem5Container>
+                                    <Field label="Phone" value={driver.phone} />
+                                </GridItem5Container>
+                                <GridItem6Container>
+                                    <Field label="Gender" value={driver.gender} />
+                                </GridItem6Container>
+                                <Grid item xs={0} md={1} />
+                                <GridItem5Container>
+                                    <Field label="Email" value={driver.email} />
+                                </GridItem5Container>
+                                <GridItem6Container>
+                                    <Field label="Citizenship No." value={driver.citizenshipNumber} />
+                                </GridItem6Container>
+                                <Grid item xs={0} md={1} />
+                                <GridItem5Container>
+                                    <Field label="Date of Birth" value={driver.dateOfBirth} />{' '}
+                                </GridItem5Container>
+                                <GridItem6Container>
+                                    <Field label="Joined" value={driver.joinedDate} />
+                                </GridItem6Container>
+                                <Grid item xs={0} md={1} />
+                                <GridItem5Container>
+                                    <Field label="Emergency Contact" value={`${driver?.emergencyContact ?? '—'}`} />{' '}
+                                </GridItem5Container>
 
                                 <Grid item xs={12} md={6}>
                                     <TextField
@@ -441,12 +441,19 @@ export default function DriverDetailsPage() {
                                         <Button
                                             variant="outlined"
                                             color="error"
+                                            sx={{ borderRadius: 2 }}
                                             disabled={blocking || unblocking}
                                             onClick={() => (driver.status === 'BLOCKED' ? unblockDriver() : blockDriver())}
                                         >
                                             {driver.status === 'BLOCKED' ? 'Unblock Driver' : 'Block Driver'}
                                         </Button>
-                                        <Button variant="outlined" color="warning" disabled={deleting} onClick={() => deleteDriver()}>
+                                        <Button
+                                            variant="outlined"
+                                            sx={{ borderColor: theme.palette.primary.main, borderRadius: 2 }}
+                                            color="error"
+                                            disabled={deleting}
+                                            onClick={() => deleteDriver()}
+                                        >
                                             Delete Driver
                                         </Button>
                                     </Box>
@@ -627,11 +634,34 @@ function StatBlock({ label, children }: { label: string; children: React.ReactNo
 
 function Field({ label, value }: { label: string; value?: React.ReactNode }) {
     return (
+        <>
+            <Grid container>
+                <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                        {label}
+                    </Typography>
+                </Grid>
+
+                <Grid item xs={8}>
+                    <Typography variant="body1">{value ?? '—'}</Typography>
+                </Grid>
+            </Grid>
+        </>
+    );
+}
+
+function GridItem5Container({ children }: { children: React.ReactNode }) {
+    return (
+        <Grid item xs={12} md={5}>
+            {children}
+        </Grid>
+    );
+}
+
+function GridItem6Container({ children }: { children: React.ReactNode }) {
+    return (
         <Grid item xs={12} md={6}>
-            <Typography variant="caption" color="text.secondary">
-                {label}
-            </Typography>
-            <Typography variant="body1">{value ?? '—'}</Typography>
+            {children}
         </Grid>
     );
 }

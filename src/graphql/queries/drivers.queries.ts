@@ -150,6 +150,7 @@ export interface GetDriverOverviewData {
         suspended: boolean;
         phone: string;
         dateOfBirth: string | null;
+        citizenshipNumber: string | null;
         joinedDate: string;
         totalRidesAsDriver: number;
         totalEarnings: number;
@@ -158,8 +159,7 @@ export interface GetDriverOverviewData {
         lastTripStartTime: string | null;
         lastTripEndTime: string | null;
         lastTripDuration: number | null;
-        emergencyContactPhone: string | null;
-        emergencyContactName: string | null;
+        emergencyContact: string | null;
         status: 'ACTIVE' | 'PENDING' | 'BLOCKED';
     };
 }
@@ -181,6 +181,7 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
             phone
             dateOfBirth
             joinedDate
+            gender
             totalRidesAsDriver
             totalEarnings
             amountDueToCompany
@@ -188,6 +189,8 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
             lastTripStartTime
             lastTripEndTime
             lastTripDuration
+            status
+            citizenshipNumber
         }
     }
 `;
