@@ -77,7 +77,7 @@ const MainLayout = () => {
 
             {/* main content */}
             <MainContentStyled {...{ borderRadius, menuOrientation, open: drawerOpen, theme }}>
-                <Container maxWidth={container ? 'lg' : false} {...(!container && { sx: { px: { xs: 0 } } })}>
+                <Container maxWidth={container ? 'lg' : false} {...(!container && { sx: { px: { xs: 0 }, marginTop: 4 } })}>
                     <Outlet />
                 </Container>
             </MainContentStyled>

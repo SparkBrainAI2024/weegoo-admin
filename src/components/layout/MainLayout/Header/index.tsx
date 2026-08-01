@@ -17,6 +17,7 @@ import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics } fr
 // types
 import { NavItemType, OverrideIcon } from 'types';
 import { IconFileText } from '@tabler/icons-react';
+import IconDrivers from 'assets/images/icons/DriversIcon';
 
 // ==============================|| FIND CURRENT NAV ITEM ||============================== //
 
@@ -43,7 +44,7 @@ interface DetailRoute {
 
 const DETAIL_ROUTES: DetailRoute[] = [
     { pattern: '/offers/:id', title: 'Offer Detail', icon: IconGift },
-    { pattern: '/drivers/:id', title: 'Driver Detail', icon: IconUser },
+    { pattern: '/drivers/:id', title: 'Driver Detail', icon: IconDrivers },
     { pattern: '/passengers/:id', title: 'Rider Detail', icon: IconUsers },
     { pattern: '/payments/:id', title: 'Payment Detail', icon: IconCreditCard },
     { pattern: '/reports/:id', title: 'Report Detail', icon: IconReportAnalytics },
