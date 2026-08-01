@@ -159,8 +159,7 @@ export interface GetDriverOverviewData {
         lastTripStartTime: string | null;
         lastTripEndTime: string | null;
         lastTripDuration: number | null;
-        emergencyContactPhone: string | null;
-        emergencyContactName: string | null;
+        emergencyContact: string | null;
         status: 'ACTIVE' | 'PENDING' | 'BLOCKED';
     };
 }

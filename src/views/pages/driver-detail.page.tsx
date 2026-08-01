@@ -422,10 +422,7 @@ export default function DriverDetailsPage() {
                                 </GridItem6Container>
                                 <Grid item xs={0} md={1} />
                                 <GridItem5Container>
-                                    <Field
-                                        label="Emergency Contact"
-                                        value={`${driver?.emergencyContactPhone ?? '-'} (${driver?.emergencyContactName})`}
-                                    />{' '}
+                                    <Field label="Emergency Contact" value={`${driver?.emergencyContact ?? '—'}`} />{' '}
                                 </GridItem5Container>
 
                                 <Grid item xs={12} md={6}>
