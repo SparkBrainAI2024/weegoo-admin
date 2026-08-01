@@ -21,7 +21,8 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    useTheme
+    useTheme,
+    Stack
 } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
@@ -269,7 +270,7 @@ export default function DriverDetailsPage() {
     if (!driver) return null;
 
     return (
-        <Box sx={{ p: 3, bgcolor: '#f5f6f8', minHeight: '100vh' }}>
+        <Box sx={{ bgcolor: '#f5f6f8', minHeight: '100vh' }}>
             <NotificationBanner
                 open={Boolean(notification?.message)}
                 message={notification?.message ?? ''}
@@ -300,52 +301,55 @@ export default function DriverDetailsPage() {
                 <>
                     {/* ---- Header summary card ---- */}
                     <Paper sx={{ p: 3, mb: 2 }}>
-                        <Grid container rowSpacing={3}>
+                        <Grid container rowSpacing={3} columnSpacing={3}>
                             <Grid item xs={12} md={6}>
-                                <Box display="flex" alignItems="start" gap={4}>
-                                    <Avatar src={driver.profileImage} sx={{ width: 98, height: 98 }}>
-                                        {driver.fullName?.[0]}
-                                    </Avatar>
-                                    <Box display="flex" flexDirection="column" gap={1}>
-                                        <Typography variant="h6">{driver.fullName}</Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            ID: {driver.id}
-                                        </Typography>
-                                        <Box>
-                                            <Chip
-                                                label="Active"
-                                                // {driver.status}
-                                                color={
-                                                    statusColor['ACTIVE'] ??
-                                                    // statusColor[driver.status]
-                                                    'default'
-                                                }
-                                                size="small"
-                                                sx={wrappingLabelSx}
-                                            />
-                                        </Box>
-                                        <Box display="flex" alignItems="center" gap={1}>
-                                            <PhoneIcon fontSize="small" color="action" />
-                                            <Typography variant="body2">{driver.phone}</Typography>
-                                        </Box>
-                                        <Box display="flex" alignItems="center" gap={1}>
-                                            <EmailIcon fontSize="small" color="action" />
-                                            <Typography variant="body2">{driver.email}</Typography>
-                                        </Box>
-                                        <Box display="flex" alignItems="center" gap={1}>
-                                            <PlaceIcon fontSize="small" color="action" />
-                                            <Typography variant="body2">{driver.address}</Typography>
-                                        </Box>
-                                        <Box display="flex" alignItems="center" gap={1}>
-                                            <EventIcon fontSize="small" color="action" />
-                                            <Typography variant="body2">{driver.joinedDate} (Joined Date)</Typography>
+                                <Box display="flex" alignItems="start" justifyContent="space-between" gap={4}>
+                                    <Box display="flex" gap={3}>
+                                        <Avatar src={driver.profileImage} sx={{ width: 98, height: 98 }}>
+                                            {driver.fullName?.[0]}
+                                        </Avatar>
+                                        <Box display="flex" flexDirection="column" gap={1}>
+                                            <Typography variant="h6">{driver.fullName}</Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                ID: {driver.id}
+                                            </Typography>
+                                            <Box>
+                                                <Chip
+                                                    label="Active"
+                                                    // {driver.status}
+                                                    color={
+                                                        statusColor['ACTIVE'] ??
+                                                        // statusColor[driver.status]
+                                                        'default'
+                                                    }
+                                                    size="small"
+                                                    sx={wrappingLabelSx}
+                                                />
+                                            </Box>
+                                            <Box display="flex" alignItems="center" gap={1}>
+                                                <PhoneIcon fontSize="small" color="action" />
+                                                <Typography variant="body2">{driver.phone}</Typography>
+                                            </Box>
+                                            <Box display="flex" alignItems="center" gap={1}>
+                                                <EmailIcon fontSize="small" color="action" />
+                                                <Typography variant="body2">{driver.email}</Typography>
+                                            </Box>
+                                            <Box display="flex" alignItems="center" gap={1}>
+                                                <PlaceIcon fontSize="small" color="action" />
+                                                <Typography variant="body2">{driver.address}</Typography>
+                                            </Box>
+                                            <Box display="flex" alignItems="center" gap={1}>
+                                                <EventIcon fontSize="small" color="action" />
+                                                <Typography variant="body2">{driver.joinedDate} (Joined Date)</Typography>
+                                            </Box>
                                         </Box>
                                     </Box>
+                                    <Divider orientation="vertical" flexItem />{' '}
                                 </Box>
                             </Grid>
 
                             <Grid item xs={12} md={6}>
-                                <Grid container rowSpacing={3}>
+                                <Grid container rowSpacing={4}>
                                     <Grid item xs={6} md={4}>
                                         <StatBlock label="KYC Status">
                                             <Chip
@@ -612,12 +616,12 @@ export default function DriverDetailsPage() {
 // ---------------------------------------------------------------------------
 function StatBlock({ label, children }: { label: string; children: React.ReactNode }) {
     return (
-        <Grid>
+        <Stack gap={0.75}>
             <Typography variant="caption" color="text.secondary">
                 {label}
             </Typography>
             <Typography variant="body1">{children}</Typography>
-        </Grid>
+        </Stack>
     );
 }
 
