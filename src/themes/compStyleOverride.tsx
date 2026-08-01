@@ -273,7 +273,7 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
                     paddingRight: '24px',
                     marginRight: '4px',
 
-                    borderRadius: 999,
+                    borderRadius: 10,
                     textTransform: 'none',
                     fontWeight: 500,
                     fontSize: '0.875rem',

@@ -20,7 +20,8 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    TableBody
+    TableBody,
+    useTheme
 } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
@@ -57,6 +58,10 @@ const statusColor: Record<string, 'success' | 'default' | 'error'> = {
     INACTIVE: 'default'
 };
 
+const ChipColorStyle = {
+    backgroundColor: '#EAF6EA',
+    border: '1px solid #BFE6C4'
+};
 const kycColor: Record<string, 'warning' | 'success' | 'error'> = {
     PENDING: 'warning',
     APPROVED: 'success',
@@ -67,7 +72,18 @@ export default function DriverDetailsPage() {
     const [activeTab, setActiveTab] = useState<'details' | 'documents' | 'rides'>('details');
     const [infoSubTab, setInfoSubTab] = useState<'basic' | 'vehicle'>('basic');
     const { id: driverId } = useParams<{ id: string }>(); // matches your route /drivers/:id
-
+    const theme = useTheme();
+    const wrappingLabelSx = {
+        height: 'auto',
+        borderRadius: 9,
+        ...ChipColorStyle,
+        '& .MuiChip-label': {
+            whiteSpace: 'normal' as const,
+            py: 0.75,
+            px: 3,
+            color: theme.palette.secondary.main
+        }
+    };
     const handleReject = async () => {
         if (!selectedFile) return;
         const reason = window.prompt('Rejection reason:');
@@ -284,81 +300,101 @@ export default function DriverDetailsPage() {
                 <>
                     {/* ---- Header summary card ---- */}
                     <Paper sx={{ p: 3, mb: 2 }}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} md={4}>
-                                <Box display="flex" gap={2}>
-                                    <Avatar src={driver.profileImage} sx={{ width: 72, height: 72 }}>
+                        <Grid container rowSpacing={3}>
+                            <Grid item xs={12} md={6}>
+                                <Box display="flex" alignItems="start" gap={4}>
+                                    <Avatar src={driver.profileImage} sx={{ width: 98, height: 98 }}>
                                         {driver.fullName?.[0]}
                                     </Avatar>
-                                    <Box>
+                                    <Box display="flex" flexDirection="column" gap={1}>
                                         <Typography variant="h6">{driver.fullName}</Typography>
                                         <Typography variant="body2" color="text.secondary">
                                             ID: {driver.id}
                                         </Typography>
-                                        <Chip
-                                            label={driver.status}
-                                            color={statusColor[driver.status] ?? 'default'}
-                                            size="small"
-                                            sx={{ mt: 0.5 }}
-                                        />
-                                        <Box mt={1} display="flex" flexDirection="column" gap={0.5}>
-                                            <Box display="flex" alignItems="center" gap={1}>
-                                                <PhoneIcon fontSize="small" color="action" />
-                                                <Typography variant="body2">{driver.phone}</Typography>
-                                            </Box>
-                                            <Box display="flex" alignItems="center" gap={1}>
-                                                <EmailIcon fontSize="small" color="action" />
-                                                <Typography variant="body2">{driver.email}</Typography>
-                                            </Box>
-                                            <Box display="flex" alignItems="center" gap={1}>
-                                                <PlaceIcon fontSize="small" color="action" />
-                                                <Typography variant="body2">{driver.address}</Typography>
-                                            </Box>
-                                            <Box display="flex" alignItems="center" gap={1}>
-                                                <EventIcon fontSize="small" color="action" />
-                                                <Typography variant="body2">{driver.joinedDate} (Joined Date)</Typography>
-                                            </Box>
+                                        <Box>
+                                            <Chip
+                                                label="Active"
+                                                // {driver.status}
+                                                color={
+                                                    statusColor['ACTIVE'] ??
+                                                    // statusColor[driver.status]
+                                                    'default'
+                                                }
+                                                size="small"
+                                                sx={wrappingLabelSx}
+                                            />
+                                        </Box>
+                                        <Box display="flex" alignItems="center" gap={1}>
+                                            <PhoneIcon fontSize="small" color="action" />
+                                            <Typography variant="body2">{driver.phone}</Typography>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" gap={1}>
+                                            <EmailIcon fontSize="small" color="action" />
+                                            <Typography variant="body2">{driver.email}</Typography>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" gap={1}>
+                                            <PlaceIcon fontSize="small" color="action" />
+                                            <Typography variant="body2">{driver.address}</Typography>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" gap={1}>
+                                            <EventIcon fontSize="small" color="action" />
+                                            <Typography variant="body2">{driver.joinedDate} (Joined Date)</Typography>
                                         </Box>
                                     </Box>
                                 </Box>
                             </Grid>
 
-                            <Grid item xs={12} md={5}>
-                                <Grid container spacing={2}>
-                                    <StatBlock label="KYC Status">
-                                        <Chip
-                                            label="verified/not verified"
-                                            //TODO label={driver.kycStatus}
-                                            // color={kycColor[driver.kycStatus] ?? 'default'} size="small"
-                                        />
-                                    </StatBlock>
-                                    <StatBlock label="Driver Status">
-                                        <Chip label={driver.status} size="small" />
-                                    </StatBlock>
-                                    <StatBlock label="Total Rides">{driver.totalRidesAsDriver}</StatBlock>
-                                    <StatBlock label="Rating">
-                                        <Box display="flex" alignItems="center" gap={0.5}>
-                                            {driver.rating}
-                                            <Rating value={driver.rating} readOnly size="small" precision={0.1} />
-                                        </Box>
-                                    </StatBlock>
-                                    <StatBlock label="Last Trip Date">{driver.lastTripAt ?? '—'}</StatBlock>
-                                    <StatBlock label="Last Trip Time">
-                                        {driver.lastTripStartTime && driver.lastTripEndTime
-                                            ? `${driver.lastTripStartTime} - ${driver.lastTripEndTime}`
-                                            : '—'}
-                                    </StatBlock>
-                                </Grid>
-                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Grid container rowSpacing={3}>
+                                    <Grid item xs={6} md={4}>
+                                        <StatBlock label="KYC Status">
+                                            <Chip
+                                                label="verified/not verified"
+                                                //TODO label={driver.kycStatus}
+                                                // color={kycColor[driver.kycStatus] ?? 'default'} size="small"
+                                            />
+                                        </StatBlock>
+                                    </Grid>
+                                    <Grid item xs={6} md={4}>
+                                        <StatBlock label="Driver Status">
+                                            <Chip label={driver.status} size="small" />
+                                        </StatBlock>
+                                    </Grid>
 
-                            <Grid item xs={12} md={3}>
-                                <StatBlock label="Commission to Pay">
-                                    <Typography color="error" fontWeight={600}>
-                                        Rs. {driver.amountDueToCompany}
-                                    </Typography>
-                                </StatBlock>
-                                <StatBlock label="Total Earnings">Rs. {driver.totalEarnings}</StatBlock>
-                                {/* <StatBlock label="Web/Online">Rs. {driver.webOnlineRate}</StatBlock> */}
+                                    <Grid item xs={6} md={4}>
+                                        <StatBlock label="Commission to Pay">
+                                            <Typography color="error" fontWeight={600}>
+                                                Rs. {driver.amountDueToCompany}
+                                            </Typography>
+                                        </StatBlock>
+                                        {/* <StatBlock label="Web/Online">Rs. {driver.webOnlineRate}</StatBlock> */}
+                                    </Grid>
+                                    <Grid item xs={6} md={4}>
+                                        {' '}
+                                        <StatBlock label="Total Rides">{driver.totalRidesAsDriver}</StatBlock>
+                                    </Grid>
+                                    <Grid item xs={6} md={4}>
+                                        <StatBlock label="Rating">
+                                            <Box display="flex" alignItems="center" gap={0.5}>
+                                                {driver.rating}
+                                                <Rating value={driver.rating} readOnly size="small" precision={0.1} />
+                                            </Box>
+                                        </StatBlock>
+                                    </Grid>
+                                    <Grid item xs={6} md={4}>
+                                        <StatBlock label="Total Earnings">Rs. {driver.totalEarnings}</StatBlock>
+                                    </Grid>
+                                    <Grid item xs={6} md={4}>
+                                        <StatBlock label="Last Trip Date">{driver.lastTripAt ?? '—'}</StatBlock>
+                                    </Grid>
+                                    <Grid item xs={6} md={4}>
+                                        <StatBlock label="Last Trip Time">
+                                            {driver.lastTripStartTime && driver.lastTripEndTime
+                                                ? `${driver.lastTripStartTime} - ${driver.lastTripEndTime}`
+                                                : '—'}
+                                        </StatBlock>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Paper>
@@ -574,7 +610,7 @@ export default function DriverDetailsPage() {
 // ---------------------------------------------------------------------------
 function StatBlock({ label, children }: { label: string; children: React.ReactNode }) {
     return (
-        <Grid item xs={6}>
+        <Grid>
             <Typography variant="caption" color="text.secondary">
                 {label}
             </Typography>
