@@ -444,12 +444,19 @@ export default function DriverDetailsPage() {
                                         <Button
                                             variant="outlined"
                                             color="error"
+                                            sx={{ borderRadius: 2 }}
                                             disabled={blocking || unblocking}
                                             onClick={() => (driver.status === 'BLOCKED' ? unblockDriver() : blockDriver())}
                                         >
                                             {driver.status === 'BLOCKED' ? 'Unblock Driver' : 'Block Driver'}
                                         </Button>
-                                        <Button variant="outlined" color="warning" disabled={deleting} onClick={() => deleteDriver()}>
+                                        <Button
+                                            variant="outlined"
+                                            sx={{ borderColor: theme.palette.primary.main, borderRadius: 2 }}
+                                            color="error"
+                                            disabled={deleting}
+                                            onClick={() => deleteDriver()}
+                                        >
                                             Delete Driver
                                         </Button>
                                     </Box>
