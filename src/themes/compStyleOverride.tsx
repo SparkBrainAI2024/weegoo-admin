@@ -291,7 +291,8 @@ export default function componentStyleOverrides(theme: Theme, borderRadius: numb
                     '&:not(.Mui-selected):hover': {
                         backgroundColor: theme.palette.action.hover,
                         color: theme.palette.text.primary
-                    }
+                    },
+                    variants: []
                 }
             }
         },
