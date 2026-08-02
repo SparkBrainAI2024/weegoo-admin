@@ -159,8 +159,13 @@ const DriverList = () => {
     useEffect(() => {
         if (location.state?.notification) {
             showSuccess(location.state.notification.message);
+
+            navigate(location.pathname, {
+                replace: true,
+                state: null
+            });
         }
-    }, []);
+    }, [location, navigate]);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     return (
