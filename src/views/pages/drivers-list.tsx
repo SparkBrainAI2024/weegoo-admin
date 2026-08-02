@@ -1,5 +1,5 @@
 // components/drivers/DriverList.tsx
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useEffect } from 'react';
 import {
     Box,
     Card,
@@ -41,7 +41,7 @@ import { UserStatusChip } from 'components/ui-component/UserStatusChip';
 import { DeleteUserDialog } from 'components/ui-component/extended/notistack/DeleteUserDialog';
 import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useUrlParams } from 'hooks/useSearchParams';
 import ResponsiveTableLayoutCustom from 'components/ui-component/responsive-layout';
 import CustomTab from 'components/ui-component/extended/notistack/CustomTab';
@@ -96,20 +96,7 @@ const DriverList = () => {
             console.log('DeleteDriver failed:', err.message);
         }
     });
-    const closeMenu = () => {
-        setMenuAnchor(null);
-    };
-    const navigate = useNavigate();
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const closeDialog = () => {
-        setBlockDialogOpen(false);
-        setSelectedId(null);
-    };
-    const handleBlockClick = () => {
-        setBlockDialogOpen(true);
-        setMenuAnchor(null); // close menu, keep selectedPassenger
-    };
-
     const handleDeleteClick = () => {
         setDeleteDialogOpen(true);
         setMenuAnchor(null); // close menu, keep selectedPassenger
@@ -125,6 +112,18 @@ const DriverList = () => {
                 }
             }
         });
+    };
+    const closeMenu = () => {
+        setMenuAnchor(null);
+    };
+    const navigate = useNavigate();
+    const closeDialog = () => {
+        setBlockDialogOpen(false);
+        setSelectedId(null);
+    };
+    const handleBlockClick = () => {
+        setBlockDialogOpen(true);
+        setMenuAnchor(null); // close menu, keep selectedPassenger
     };
 
     const { data, loading, refetch } = useQuery<GetDriversQueryResult>(GET_DRIVERS, {
@@ -155,7 +154,13 @@ const DriverList = () => {
         setTab(value);
         setPage(0);
     };
+    const location = useLocation();
 
+    useEffect(() => {
+        if (location.state?.notification) {
+            showSuccess(location.state.notification.message);
+        }
+    }, []);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     return (

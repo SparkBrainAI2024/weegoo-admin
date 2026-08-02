@@ -36,10 +36,12 @@ import {
     REJECT_DRIVER_DOCUMENT_FILE,
     UNBLOCK_DRIVER
 } from 'graphql/mutations/driver.mutation';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import useNotification from 'hooks/useNotification';
 import { DriverRideHistoryTab } from './driver-trips-tab';
+import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
+import { DeleteUserDialog } from 'components/ui-component/extended/notistack/DeleteUserDialog';
 
 interface SelectedFile {
     documentId: string;
@@ -121,14 +123,16 @@ export default function DriverDetailsPage() {
     // entry already exists and skip the network call entirely.
     // 'cache-and-network' shows the cached entry instantly (fast UI) but
     // still re-validates against the server in the background.
-    // ---------------------------------------------------------------------
-    const { data, loading, error } = useQuery(GET_DRIVER_OVERVIEW, {
+    //
+
+    const { data, loading, error, refetch } = useQuery(GET_DRIVER_OVERVIEW, {
         variables: { driverId: driverId! },
         fetchPolicy: 'cache-and-network'
     });
 
+    const [openBlockUnblockDialog, setOpenBlockUnblockDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
-
+    const navigate = useNavigate();
     // ---------------------------------------------------------------------
     // DOCUMENTS QUERY — useLazyQuery means this does NOT fire on mount.
     // We trigger it manually the first time the Documents tab is opened.
@@ -214,36 +218,39 @@ export default function DriverDetailsPage() {
     // This component re-renders with the new status automatically —
     // no network round trip, no manual cache surgery.
     // ---------------------------------------------------------------------
-    const [blockDriver, { loading: blocking }] = useMutation(BLOCK_DRIVER, {
-        variables: { driverId }
-    });
-    const [unblockDriver, { loading: unblocking }] = useMutation(UNBLOCK_DRIVER, {
-        variables: { driverId }
-    });
 
-    // DELETE is the one case that genuinely needs manual cache handling,
-    // because deleting doesn't "merge a field" — it removes an entity.
-    // We use the `update` function to evict it, rather than refetching.
-    //todo const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
-    //     variables: { driverId },
-    //     update(cache, { data: mutationData }) {
-    //         const deletedId = mutationData?.deleteDriver?.id;
-    //         if (deletedId) {
-    //             cache.evict({ id: cache.identify({ __typename: 'Driver', id: deletedId }) });
-    //             cache.gc();
-    //         }
-    //     }
-    // });
     const [deleteDriver, { loading: deleting }] = useMutation(DELETE_DRIVER, {
         onCompleted: () => {
-            // TODOsetDeleteDialogOpen(false);
-            // setSelectedId(null);
-            // refetch();
+            console.log('completeing delete');
+
+            setDeleteDialogOpen(false);
+            navigate('/drivers', {
+                state: {
+                    notification: {
+                        message: 'Driver deleted successfully',
+                        severity: 'success'
+                    }
+                }
+            });
         },
         onError: (err) => {
+            showError('Failed to delete driver');
             console.log('DeleteDriver failed:', err.message);
         }
     });
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const handleConfirmDelete = () => {
+        if (!currentDriver) return;
+
+        deleteDriver({
+            variables: {
+                input: {
+                    driverId: currentDriver.userId
+                }
+            }
+        });
+    };
 
     if (loading && !data) {
         return (
@@ -261,6 +268,20 @@ export default function DriverDetailsPage() {
         );
     }
 
+    if (!data) return null;
+    const currentDriver = {
+        id: data.getDriver.userId,
+        userId: data.getDriver.userId,
+        fullName: data.getDriver.fullName,
+        phone: data.getDriver.phone,
+        profileImage: data.getDriver.profileImage,
+        status: data.getDriver.status,
+        suspended: data.getDriver.suspended,
+        totalRidesAsDriver: data.getDriver.totalRidesAsDriver,
+        totalEarnings: data.getDriver.totalEarnings,
+        rating: data.getDriver.rating,
+        joinedDate: data.getDriver.joinedDate
+    };
     const driver = data?.getDriver;
     if (!driver) return null;
 
@@ -306,7 +327,7 @@ export default function DriverDetailsPage() {
                                         <Box display="flex" flexDirection="column" gap={1}>
                                             <Typography variant="h6">{driver.fullName}</Typography>
                                             <Typography variant="body2" color="text.secondary">
-                                                ID: {driver.id}
+                                                {driver.id}
                                             </Typography>
                                             <Box>
                                                 <Chip
@@ -442,8 +463,8 @@ export default function DriverDetailsPage() {
                                             variant="outlined"
                                             color="error"
                                             sx={{ borderRadius: 2 }}
-                                            disabled={blocking || unblocking}
-                                            onClick={() => (driver.status === 'BLOCKED' ? unblockDriver() : blockDriver())}
+                                            disabled={loading}
+                                            onClick={() => setOpenBlockUnblockDialog(!openBlockUnblockDialog)}
                                         >
                                             {driver.status === 'BLOCKED' ? 'Unblock Driver' : 'Block Driver'}
                                         </Button>
@@ -452,7 +473,7 @@ export default function DriverDetailsPage() {
                                             sx={{ borderColor: theme.palette.primary.main, borderRadius: 2 }}
                                             color="error"
                                             disabled={deleting}
-                                            onClick={() => deleteDriver()}
+                                            onClick={() => setDeleteDialogOpen(true)}
                                         >
                                             Delete Driver
                                         </Button>
@@ -613,6 +634,26 @@ export default function DriverDetailsPage() {
                 </Grid>
             )}
             {activeTab === 'rides' && <DriverRideHistoryTab driverId={driverId!} />}{' '}
+            {deleteDialogOpen && (
+                <DeleteUserDialog
+                    open={deleteDialogOpen}
+                    userName={currentDriver?.fullName}
+                    loading={deleting}
+                    onClose={() => {
+                        setDeleteDialogOpen(false);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                />
+            )}
+            {openBlockUnblockDialog && (
+                <BlockUnblockDriverDialog
+                    driver={currentDriver}
+                    showError={showError}
+                    showSuccess={showSuccess}
+                    onClose={() => setOpenBlockUnblockDialog(false)}
+                    refetch={refetch}
+                />
+            )}
         </Box>
     );
 }
