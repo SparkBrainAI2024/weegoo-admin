@@ -309,9 +309,9 @@ export default function DriverDetailsPage() {
                     <Tab label="Ride History" value="rides" />
                 </Tabs>
 
-                <Button variant="contained" color="warning">
+                {/* <Button variant="contained" color="warning">
                     Verify KYC
-                </Button>
+                </Button> */}
             </Box>
             {activeTab === 'details' && (
                 <>
