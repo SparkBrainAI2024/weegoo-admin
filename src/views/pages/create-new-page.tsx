@@ -275,7 +275,12 @@ const NewPage = () => {
                                         </Button>
                                     ) : (
                                         <>
-                                            <Button variant="contained" color="warning" onClick={() => handleSave('DRAFT')}>
+                                            <Button
+                                                variant="contained"
+                                                disabled={values.status === 'PUBLISHED'}
+                                                color="warning"
+                                                onClick={() => handleSave('DRAFT')}
+                                            >
                                                 Save as Draft
                                             </Button>
                                             <Button

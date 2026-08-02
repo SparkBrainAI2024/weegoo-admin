@@ -141,6 +141,7 @@ export interface DriverVehicle {
 export interface GetDriverOverviewData {
     getDriver: {
         id: string;
+        userId: string;
         gender: string;
         fullName: string;
         profileImage?: string;
@@ -172,6 +173,7 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
     query GetDriverOverview($driverId: String!) {
         getDriver(driverId: $driverId) {
             id
+            userId
             fullName
             profileImage
             rating
