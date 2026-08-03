@@ -162,9 +162,20 @@ export interface GetDriverOverviewData {
         lastTripDuration: number | null;
         emergencyContact: string | null;
         status: 'ACTIVE' | 'PENDING' | 'BLOCKED';
+        vehicle: {
+            vehicleType: string;
+            name: string;
+            vehicleModel: string;
+            year: number;
+            color: string;
+            numberPlate: string;
+            images: {
+                s3Key: string;
+                status: string;
+            }[];
+        };
     };
 }
-
 export interface GetDriverVars {
     driverId: string;
 }
@@ -172,6 +183,18 @@ export interface GetDriverVars {
 export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDriverVars> = gql`
     query GetDriverOverview($driverId: String!) {
         getDriver(driverId: $driverId) {
+            vehicle {
+                vehicleType
+                name
+                vehicleModel
+                year
+                color
+                numberPlate
+                images {
+                    s3Key
+                    status
+                }
+            }
             id
             userId
             fullName
@@ -213,6 +236,18 @@ export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, Get
     query GetDriverDocuments($driverId: String!) {
         getDriver(driverId: $driverId) {
             id
+            vehicle {
+                vehicleType
+                name
+                vehicleModel
+                year
+                color
+                numberPlate
+                images {
+                    s3Key
+                    status
+                }
+            }
             documents {
                 _id
                 type

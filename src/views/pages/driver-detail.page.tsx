@@ -188,6 +188,8 @@ export default function DriverDetailsPage() {
     }
 
     if (!data) return null;
+    const vehicle = data.getDriver?.vehicle;
+
     const currentDriver = {
         id: data.getDriver.userId,
         userId: data.getDriver.userId,
@@ -400,16 +402,6 @@ export default function DriverDetailsPage() {
                                 </Grid>
                             </Grid>
                         )}
-
-                        {/* {infoSubTab === 'vehicle' && driver.vehicle && (
-                            <Grid container spacing={3}>
-                                <Field label="Vehicle Type" value={driver.vehicle.vehicleType} />
-                                <Field label="Name" value={driver.vehicle.name} />
-                                <Field label="Model / Year" value={`${driver.vehicle.vehicleModel} (${driver.vehicle.year})`} />
-                                <Field label="Color" value={driver.vehicle.color} />
-                                <Field label="Number Plate" value={driver.vehicle.numberPlate} />
-                            </Grid>
-                        )} */}
                     </Paper>
                 </>
             )}
@@ -459,7 +451,7 @@ export default function DriverDetailsPage() {
                             <Box display="flex" justifyContent="space-between">
                                 <Box display="flex" gap={4} alignItems="start">
                                     <Image
-                                        src={driver.profileImage}
+                                        src={vehicle.images[0].s3Key}
                                         alt="mm"
                                         sx={{
                                             width: 80,
@@ -468,10 +460,10 @@ export default function DriverDetailsPage() {
                                         }}
                                     />
                                     <Stack direction="column" gap={1}>
-                                        <Typography variant="h3">Info</Typography>
-                                        <Typography>Model</Typography>
+                                        <Typography variant="h3">{vehicle.name}</Typography>
+                                        <Typography>{vehicle.vehicleModel}</Typography>
                                         <Chip
-                                            label="Car"
+                                            label={vehicle.vehicleType || 'Carr'}
                                             sx={{
                                                 paddingTop: '6px',
                                                 paddingBottom: '6px',
