@@ -1,104 +1,59 @@
-import React, { useMemo, useState } from 'react';
-import { Box } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Alert, CircularProgress } from '@mui/material';
+import { useQuery, useMutation } from '@apollo/client/react';
 import KycDocumentsCard from './KYCDocumentsCard';
 import VerificationChecklistCard from './verificationChecklistCard';
 import VehicleInformationCard from './VehicleInformationCard';
 import DocumentPreviewCard from './DocumentPreviewCard';
-import { DriverDocument } from 'graphql/queries/drivers.queries';
+import { GET_DRIVER_DOCUMENTS, GetDriverDocumentsData, GetDriverVars } from 'graphql/queries/drivers.queries';
 import { flattenDriverDocuments } from 'utils/document.utils';
+import { APPROVE_DRIVER_DOCUMENT_FILE, REJECT_DRIVER_DOCUMENT_FILE } from 'graphql/mutations/driver.mutation';
 
-// ---------------------------------------------------------------------------
-// STATIC MOCK DATA — shaped like the actual DriverDocument type: bundles,
-// each with a nested files[]. This gets run through flattenDriverDocuments
-// below, the same function the real GET_DRIVER_DOCUMENTS result will go
-// through — so swapping this out for `data.getDriver.documents` later is a
-// one-line change, not a reshape.
-// ---------------------------------------------------------------------------
-const MOCK_DOCUMENT_BUNDLES: DriverDocument[] = [
-    {
-        _id: 'doc_1',
-        type: 'NATIONAL_ID',
-        status: 'PENDING',
-        rejectionReason: null,
-        reviewedBy: null,
-        reviewedAt: null,
-        submittedAt: '2026-02-06T00:00:00.000Z',
-        files: [
-            {
-                _id: 'file_1',
-                side: 'FRONT',
-                s3Key: 'https://mock-view-url/national-id-front.jpg',
-                isActive: true,
-                status: 'PENDING',
-                downloadUrl: 'https://mock-download-url/national-id-front.jpg',
-                verifiedBy: null,
-                verifiedAt: null,
-                createdAt: '2026-02-06T00:00:00.000Z'
-            }
-        ]
-    },
-    {
-        _id: 'doc_2',
-        type: 'DRIVER_LICENSE',
-        status: 'PENDING',
-        rejectionReason: null,
-        reviewedBy: null,
-        reviewedAt: null,
-        submittedAt: '2026-02-05T00:00:00.000Z',
-        files: [
-            {
-                _id: 'file_2',
-                side: 'FRONT',
-                s3Key: 'https://mock-view-url/driver-license-front.jpg',
-                isActive: true,
-                status: 'PENDING',
-                downloadUrl: 'https://mock-download-url/driver-license-front.jpg',
-                verifiedBy: null,
-                verifiedAt: null,
-                createdAt: '2026-02-05T00:00:00.000Z'
-            }
-        ]
-    },
-    {
-        _id: 'doc_3',
-        type: 'BLUEBOOK',
-        status: 'REJECTED',
-        rejectionReason: 'Front image is blurry, retake the photo',
-        reviewedBy: 'admin_1',
-        reviewedAt: '2026-02-04T12:00:00.000Z',
-        submittedAt: '2026-02-04T00:00:00.000Z',
-        files: [
-            {
-                _id: 'file_3',
-                side: 'FRONT',
-                s3Key: 'https://mock-view-url/bluebook-front.jpg',
-                isActive: true,
-                status: 'REJECTED',
-                downloadUrl: 'https://mock-download-url/bluebook-front.jpg',
-                verifiedBy: null,
-                verifiedAt: null,
-                createdAt: '2026-02-04T00:00:00.000Z'
-            },
-            {
-                _id: 'file_4',
-                side: 'BACK',
-                s3Key: 'https://mock-view-url/bluebook-tax-info.jpg',
-                isActive: true,
-                status: 'REJECTED',
-                downloadUrl: 'https://mock-download-url/bluebook-tax-info.jpg',
-                verifiedBy: null,
-                verifiedAt: null,
-                createdAt: '2026-02-04T00:00:00.000Z'
-            }
-        ]
+interface DocumentsTabLayoutProps {
+    driverId: string;
+}
+
+export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
+    const { data, loading, error } = useQuery<GetDriverDocumentsData, GetDriverVars>(GET_DRIVER_DOCUMENTS, {
+        variables: { driverId },
+        skip: !driverId
+    });
+    console.log({ data, error, loading }, 'data');
+
+    // Not memoized (no useMemo) — data.getDriver.documents is already a new
+    // reference on every fetch/refetch anyway (Apollo's normalized cache
+    // read builds a fresh object each time), so memoizing against it buys
+    // nothing here. Worth reconsidering only if flattenDriverDocuments turns
+    // out to be doing real work on a large document list.
+    const documentRows = flattenDriverDocuments(data?.getDriver?.documents ?? []);
+
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string>('');
+    // Falls back to the first row once data arrives and nothing's been
+    // explicitly clicked yet — mirrors the mock-data version's behavior,
+    // now driven by query data instead of a static array.
+    const activeDocumentId = selectedDocumentId || documentRows[0]?.id || '';
+    const selectedDocument = documentRows.find((row) => row.id === activeDocumentId) ?? null;
+
+    const [approveFile, { loading: approving }] = useMutation(APPROVE_DRIVER_DOCUMENT_FILE, {
+        refetchQueries: ['GetDriverDocuments']
+    });
+    const [rejectFile, { loading: rejecting }] = useMutation(REJECT_DRIVER_DOCUMENT_FILE, {
+        refetchQueries: ['GetDriverDocuments']
+    });
+
+    const handleApprove = () => {
+        if (!selectedDocument) return;
+        approveFile({ variables: { input: { documentFileId: selectedDocument.id } } });
+    };
+
+    const handleReject = (rejectionReason: string) => {
+        if (!selectedDocument) return;
+        rejectFile({ variables: { input: { documentFileId: selectedDocument.id, rejectionReason } } });
+    };
+
+    if (error) {
+        return <Alert severity="error">Failed to load documents: {error.message}</Alert>;
     }
-];
-
-export function DocumentsTabLayout() {
-    const documentRows = useMemo(() => flattenDriverDocuments(MOCK_DOCUMENT_BUNDLES), []);
-
-    const [selectedDocumentId, setSelectedDocumentId] = useState<string>(documentRows[0]?.id ?? '');
-    const selectedDocument = documentRows.find((row) => row.id === selectedDocumentId) ?? null;
 
     return (
         <Box
@@ -116,18 +71,30 @@ export function DocumentsTabLayout() {
             }}
         >
             <Box sx={{ gridArea: 'list', display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <KycDocumentsCard
-                    minHeight={320}
-                    documents={documentRows}
-                    selectedDocumentId={selectedDocumentId}
-                    onSelect={setSelectedDocumentId}
-                />
+                {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+                        <CircularProgress size={24} />
+                    </Box>
+                ) : (
+                    <KycDocumentsCard
+                        minHeight={320}
+                        documents={documentRows}
+                        selectedDocumentId={activeDocumentId}
+                        onSelect={setSelectedDocumentId}
+                    />
+                )}
                 <VerificationChecklistCard minHeight={140} />
             </Box>
 
             <Box sx={{ gridArea: 'detail', display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <VehicleInformationCard minHeight={140} />
-                <DocumentPreviewCard minHeight={320} document={selectedDocument} />
+                <DocumentPreviewCard
+                    minHeight={320}
+                    document={selectedDocument}
+                    onApprove={handleApprove}
+                    onReject={handleReject}
+                    submitting={approving || rejecting}
+                />
             </Box>
         </Box>
     );

@@ -16,11 +16,6 @@ import {
     Rating,
     CircularProgress,
     Alert,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
     useTheme,
     Stack
 } from '@mui/material';
@@ -29,13 +24,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventIcon from '@mui/icons-material/Event';
 import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
-import {
-    APPROVE_DRIVER_DOCUMENT_FILE,
-    BLOCK_DRIVER,
-    DELETE_DRIVER,
-    REJECT_DRIVER_DOCUMENT_FILE,
-    UNBLOCK_DRIVER
-} from 'graphql/mutations/driver.mutation';
+import { APPROVE_DRIVER_DOCUMENT_FILE, DELETE_DRIVER, REJECT_DRIVER_DOCUMENT_FILE } from 'graphql/mutations/driver.mutation';
 import { useNavigate, useParams } from 'react-router';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import useNotification from 'hooks/useNotification';
@@ -101,20 +90,6 @@ export default function DriverDetailsPage() {
         });
     };
 
-    const handleApprove = async () => {
-        console.log(selectedFile, 'sf');
-
-        if (!selectedFile) return;
-
-        await approveFile({
-            variables: {
-                input: {
-                    documentFileId: selectedFile.fileId
-                }
-            },
-            refetchQueries: ['GetDriverDocuments']
-        });
-    };
     // ---------------------------------------------------------------------
     // OVERVIEW QUERY — fires immediately on mount.
     //
@@ -142,15 +117,6 @@ export default function DriverDetailsPage() {
     // decision: no point paying for this fetch if the admin never clicks
     // the tab.
     // ---------------------------------------------------------------------
-    const {
-        data: documentsData,
-        loading: documentsLoading,
-        error: errorFetchingDocuments,
-        refetch: refetchDocuments
-    } = useQuery(GET_DRIVER_DOCUMENTS, {
-        variables: { driverId: driverId! },
-        fetchPolicy: 'cache-and-network'
-    });
 
     // ---------------------------------------------------------------------
     // RIDE HISTORY QUERY — same lazy pattern, plus its own pagination
@@ -185,11 +151,11 @@ export default function DriverDetailsPage() {
         // Fire the lazy query the FIRST time each tab is opened.
         // Apollo caches the result after that, so re-clicking the tab
         // is instant (and cache-and-network still quietly refreshes it).
-        if (value === 'documents' && !docsResult.called) {
-            loadDocuments({
-                variables: { driverId: driverId! }
-            });
-        }
+        // if (value === 'documents' && !docsResult.called) {
+        //     loadDocuments({
+        //         variables: { driverId: driverId! }
+        //     });
+        // }
         // if (value === 'rides' && !rideHistoryResult.called) {
         //     loadRideHistory({ variables: { driverId, page, limit: 10 } });
         // }
@@ -295,7 +261,6 @@ export default function DriverDetailsPage() {
     };
     const driver = data?.getDriver;
     if (!driver) return null;
-    const documents: DriverDocument[] = data?.getDriverDocuments ?? [];
 
     return (
         <Box sx={{ bgcolor: '#f5f6f8', minHeight: '100vh' }}>
@@ -514,7 +479,6 @@ export default function DriverDetailsPage() {
                         onClose={clearNotification}
                         severity={notification?.severity ?? 'success'}
                     />
-
                     <Stack
                         direction={{ xs: 'column', md: 'row' }}
                         divider={
@@ -593,7 +557,7 @@ export default function DriverDetailsPage() {
                             </Box>
                         </Box>
                     </Stack>
-                    <DocumentsTabLayout></DocumentsTabLayout>
+                    <DocumentsTabLayout driverId={driverId!} />{' '}
                 </Stack>
             )}
             {activeTab === 'rides' && <DriverRideHistoryTab driverId={driverId!} />}{' '}

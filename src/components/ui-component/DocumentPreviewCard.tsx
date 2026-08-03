@@ -6,9 +6,12 @@ import { DriverDocumentFileRow } from 'utils/document.utils';
 interface DocumentPreviewCardProps {
     minHeight: number;
     document: DriverDocumentFileRow | null;
+    onApprove: () => void;
+    onReject: (rejectionReason: string) => void;
+    submitting?: boolean;
 }
 
-export function DocumentPreviewCard({ minHeight, document }: DocumentPreviewCardProps) {
+export function DocumentPreviewCard({ minHeight, document, onApprove, onReject, submitting }: DocumentPreviewCardProps) {
     // Local for now — this is the one piece of real interactivity in this
     // pass, the rest of the layout is still static. Once approve/reject
     // call into a mutation, the reason field's value goes along with it,
@@ -83,7 +86,8 @@ export function DocumentPreviewCard({ minHeight, document }: DocumentPreviewCard
                 <Button
                     variant="contained"
                     disableElevation
-                    disabled={!document || !rejectionReason.trim()}
+                    disabled={!document || !rejectionReason.trim() || submitting}
+                    onClick={() => onReject(rejectionReason.trim())}
                     sx={{
                         bgcolor: 'error.lighter',
                         color: 'error.main',
@@ -93,7 +97,7 @@ export function DocumentPreviewCard({ minHeight, document }: DocumentPreviewCard
                 >
                     Reject
                 </Button>
-                <Button variant="contained" color="success" disableElevation disabled={!document}>
+                <Button variant="contained" color="success" disableElevation disabled={!document || submitting} onClick={onApprove}>
                     Approve
                 </Button>
             </Stack>
