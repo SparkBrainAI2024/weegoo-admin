@@ -1,4 +1,4 @@
-import { Avatar, Box, BoxProps } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import { useState } from 'react';
 
 interface ImageProps extends BoxProps<'img'> {
