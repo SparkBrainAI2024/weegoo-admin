@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 
 import {
     Box,
@@ -23,8 +23,8 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventIcon from '@mui/icons-material/Event';
-import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
-import { APPROVE_DRIVER_DOCUMENT_FILE, DELETE_DRIVER, REJECT_DRIVER_DOCUMENT_FILE } from 'graphql/mutations/driver.mutation';
+import { GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
+import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 import { useNavigate, useParams } from 'react-router';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import useNotification from 'hooks/useNotification';
@@ -73,22 +73,6 @@ export default function DriverDetailsPage() {
             color: theme.palette.secondary.main
         }
     };
-    const handleReject = async () => {
-        if (!selectedFile) return;
-        const reason = window.prompt('Rejection reason:');
-        if (!reason) return; // bail if admin cancels or leaves it blank
-
-        await rejectFile({
-            variables: {
-                input: {
-                    documentFileId: selectedFile.fileId,
-                    rejectionReason: reason
-                }
-            },
-            // optionally refetch the driver documents list so status updates in the table
-            refetchQueries: ['GetDriverDocuments'] // match your actual query's operation name
-        });
-    };
 
     // ---------------------------------------------------------------------
     // OVERVIEW QUERY — fires immediately on mount.
@@ -124,28 +108,6 @@ export default function DriverDetailsPage() {
     // aggregation on the backend never blocks or slows down the initial
     // page render.
 
-    const statusChipColor: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
-        APPROVED: 'success',
-        PENDING: 'warning',
-        REJECTED: 'error',
-        VERIFIED: 'success'
-    };
-    function formatDocLabel(type: string, side: string) {
-        const typeLabel = type
-            .replace(/_/g, ' ')
-            .toLowerCase()
-            .replace(/\b\w/g, (c) => c.toUpperCase()); // "DRIVING_LICENSE" -> "Driving License"
-        return `${typeLabel} (${side.charAt(0)}${side.slice(1).toLowerCase()})`;
-    }
-
-    function formatDate(iso: string) {
-        return new Date(iso).toLocaleDateString('en-US', {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric'
-        });
-    }
-
     const handleTabChange = (_: React.SyntheticEvent, value: typeof activeTab) => {
         setActiveTab(value);
         // Fire the lazy query the FIRST time each tab is opened.
@@ -163,26 +125,6 @@ export default function DriverDetailsPage() {
         console.log(selectedFile, 'sf');
     };
     const { notification, showSuccess, showError, clearNotification } = useNotification();
-
-    const [approveFile, { loading: approving }] = useMutation(APPROVE_DRIVER_DOCUMENT_FILE, {
-        onCompleted: () => {
-            showSuccess('Document approved successfully');
-        },
-        onError: (err) => {
-            showError(err.message || 'Failed to approve document');
-        },
-        refetchQueries: ['GetDriverDocuments']
-    });
-
-    const [rejectFile, { loading: rejecting }] = useMutation(REJECT_DRIVER_DOCUMENT_FILE, {
-        onCompleted: () => {
-            showSuccess('Document rejected');
-        },
-        onError: (err) => {
-            showError(err.message || 'Failed to reject document');
-        },
-        refetchQueries: ['GetDriverDocuments']
-    });
 
     // ---------------------------------------------------------------------
     // MUTATIONS
