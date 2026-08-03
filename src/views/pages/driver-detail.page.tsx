@@ -43,6 +43,7 @@ import { DriverRideHistoryTab } from './driver-trips-tab';
 import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
 import { DeleteUserDialog } from 'components/ui-component/extended/notistack/DeleteUserDialog';
 import Image from 'components/ui-component/ImageComponent';
+import DocumentsTabLayout from 'components/ui-component/driverDocuments';
 
 interface SelectedFile {
     documentId: string;
@@ -141,7 +142,16 @@ export default function DriverDetailsPage() {
     // decision: no point paying for this fetch if the admin never clicks
     // the tab.
     // ---------------------------------------------------------------------
-    const [loadDocuments, docsResult] = useLazyQuery(GET_DRIVER_DOCUMENTS, { fetchPolicy: 'cache-and-network' });
+    const {
+        data: documentsData,
+        loading: documentsLoading,
+        error: errorFetchingDocuments,
+        refetch: refetchDocuments
+    } = useQuery(GET_DRIVER_DOCUMENTS, {
+        variables: { driverId: driverId! },
+        fetchPolicy: 'cache-and-network'
+    });
+
     // ---------------------------------------------------------------------
     // RIDE HISTORY QUERY — same lazy pattern, plus its own pagination
     // state. Keeping this separate means a slow/expensive ride-history
@@ -285,6 +295,7 @@ export default function DriverDetailsPage() {
     };
     const driver = data?.getDriver;
     if (!driver) return null;
+    const documents: DriverDocument[] = data?.getDriverDocuments ?? [];
 
     return (
         <Box sx={{ bgcolor: '#f5f6f8', minHeight: '100vh' }}>
@@ -497,8 +508,14 @@ export default function DriverDetailsPage() {
             )}
             {activeTab === 'documents' && (
                 <Stack gap={3}>
+                    <NotificationBanner
+                        open={Boolean(notification?.message)}
+                        message={notification?.message ?? ''}
+                        onClose={clearNotification}
+                        severity={notification?.severity ?? 'success'}
+                    />
+
                     <Stack
-                        // backgroundColor={theme.palette.background.paper}
                         direction={{ xs: 'column', md: 'row' }}
                         divider={
                             <Divider
@@ -557,32 +574,17 @@ export default function DriverDetailsPage() {
                                                 borderRadius: '8px',
                                                 backgroundColor: '#B8B8B8'
                                             }}
-                                        ></Chip>{' '}
+                                        />
                                     </Stack>
                                 </Box>
                                 <Box display="flex" gap={2}>
                                     <Box>
-                                        <Chip
-                                            label="Active"
-                                            // {driver.status}
-                                            color={
-                                                statusColor['ACTIVE'] ??
-                                                // statusColor[driver.status]
-                                                'default'
-                                            }
-                                            size="small"
-                                            sx={wrappingLabelSx}
-                                        />
+                                        <Chip label="Active" color={statusColor['ACTIVE'] ?? 'default'} size="small" sx={wrappingLabelSx} />
                                     </Box>
                                     <Box>
                                         <Chip
                                             label="Pending"
-                                            // {driver.status}
-                                            color={
-                                                statusColor['ACTIVE'] ??
-                                                // statusColor[driver.status]
-                                                'default'
-                                            }
+                                            color={statusColor['ACTIVE'] ?? 'default'}
                                             size="small"
                                             sx={wrappingLabelSx}
                                         />
@@ -591,7 +593,7 @@ export default function DriverDetailsPage() {
                             </Box>
                         </Box>
                     </Stack>
-                    <Paper>box 2</Paper>
+                    <DocumentsTabLayout></DocumentsTabLayout>
                 </Stack>
             )}
             {activeTab === 'rides' && <DriverRideHistoryTab driverId={driverId!} />}{' '}
