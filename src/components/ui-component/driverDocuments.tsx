@@ -77,7 +77,7 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
                     </Box>
                 ) : (
                     <KycDocumentsCard
-                        minHeight={320}
+                        minHeight={470}
                         documents={documentRows}
                         selectedDocumentId={activeDocumentId}
                         onSelect={setSelectedDocumentId}

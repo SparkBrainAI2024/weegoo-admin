@@ -29,7 +29,7 @@ export function KycDocumentsCard({ minHeight, documents, selectedDocumentId, onS
                 </Typography>
             </Box>
 
-            <Table size="small">
+            <Table size="medium">
                 <TableHead>
                     <TableRow>
                         <TableCell>Document</TableCell>

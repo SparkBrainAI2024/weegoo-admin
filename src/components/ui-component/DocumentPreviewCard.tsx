@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Paper, Typography, TextField, Button, Stack } from '@mui/material';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import { DriverDocumentFileRow } from 'utils/document.utils';
+import Image from './ImageComponent';
 
 interface DocumentPreviewCardProps {
     minHeight: number;
@@ -51,11 +52,14 @@ export function DocumentPreviewCard({ minHeight, document, onApprove, onReject, 
                 }}
             >
                 {document?.viewUrl ? (
-                    <Box
-                        component="img"
+                    <Image
                         src={document.viewUrl}
-                        alt={document.label}
-                        sx={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                        alt="document.label"
+                        sx={{
+                            width: 270,
+                            height: 270,
+                            borderRadius: 2
+                        }}
                     />
                 ) : (
                     <>
