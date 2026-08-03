@@ -9,16 +9,16 @@ interface ImageProps extends BoxProps<'img'> {
 export default function Image({ src, alt, sx, ...props }: ImageProps) {
     const [error, setError] = useState(false);
 
-    const initials = alt
-        ?.split(' ')
-        .map((word) => word[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase();
+    // const initials = alt
+    //     ?.split(' ')
+    //     .map((word) => word[0])
+    //     .join('')
+    //     .slice(0, 2)
+    //     .toUpperCase();
 
-    if (!src || error) {
-        return <Avatar sx={sx}>{initials}</Avatar>;
-    }
+    // if (!src || error) {
+    //     return <Avatar sx={sx}>{initials}</Avatar>;
+    // }
 
     return (
         <Box
@@ -31,7 +31,7 @@ export default function Image({ src, alt, sx, ...props }: ImageProps) {
                 display: 'block',
                 maxWidth: '100%',
                 height: 'auto',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 ...sx
             }}
             {...props}
