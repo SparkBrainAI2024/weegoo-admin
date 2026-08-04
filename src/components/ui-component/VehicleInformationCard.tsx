@@ -2,11 +2,6 @@ import React from 'react';
 import { Box, Paper, Typography, Stack, Grid } from '@mui/material';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 
-// ---------------------------------------------------------------------------
-// STATIC MOCK DATA — a mix of short values ("Car", "Blue") and longer ones
-// ("BA 2 PA 4567") on purpose, so the two-column field grid gets tested
-// against real width variance before it's wired to the real vehicle query.
-// ---------------------------------------------------------------------------
 const MOCK_VEHICLE = {
     numberPlate: 'BA 2 PA 4567',
     vehicleType: 'Car',
@@ -20,9 +15,6 @@ function VehicleField({ label, value, icon }: { label: string; value: string; ic
     return (
         <Grid item xs={6}>
             <Stack direction="row" gap={1} alignItems="center">
-                {/* Icon is optional per-field, not per-row — it's here to mark
-                    "this is a vehicle-identity fact" vs. a plain spec value,
-                    matching how the reference layout alternates them. */}
                 {icon && <DirectionsCarFilledOutlinedIcon fontSize="small" color="success" />}
                 <Box>
                     <Typography variant="caption" color="text.secondary" display="block">
@@ -37,9 +29,9 @@ function VehicleField({ label, value, icon }: { label: string; value: string; ic
     );
 }
 
-export function VehicleInformationCard({ minHeight }: { minHeight: number }) {
+export function VehicleInformationCard({ height }: { height: number }) {
     return (
-        <Paper sx={{ p: 3, minHeight }}>
+        <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Vehicle Information
             </Typography>

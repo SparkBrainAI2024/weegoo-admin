@@ -13,24 +13,33 @@ interface DocumentsTabLayoutProps {
     driverId: string;
 }
 
+// Figma spec, whole-tab grid = 612px tall.
+//   List column:   table 471 + gap X + checklist 120  = 612  ->  gap = 21
+//   Detail column: vehicle 196 + gap Y + preview 404   = 612  ->  gap = 12
+// The two gaps come out different from each other, which is worth
+// double-checking directly in Figma's inspector rather than trusting this
+// arithmetic blindly — 21px isn't a round number on the usual 8px spacing
+// scale, so either the table's true height isn't exactly 471, or the gap
+// token there isn't what this assumes.
+const LIST_COLUMN_GAP = 21;
+const DETAIL_COLUMN_GAP = 12;
+
+const CARD_HEIGHTS = {
+    documentsTable: 471,
+    checklist: 120,
+    vehicleInfo: 196,
+    preview: 404
+};
+
 export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
     const { data, loading, error } = useQuery<GetDriverDocumentsData, GetDriverVars>(GET_DRIVER_DOCUMENTS, {
         variables: { driverId },
         skip: !driverId
     });
-    console.log({ data, error, loading }, 'data');
 
-    // Not memoized (no useMemo) — data.getDriver.documents is already a new
-    // reference on every fetch/refetch anyway (Apollo's normalized cache
-    // read builds a fresh object each time), so memoizing against it buys
-    // nothing here. Worth reconsidering only if flattenDriverDocuments turns
-    // out to be doing real work on a large document list.
     const documentRows = flattenDriverDocuments(data?.getDriver?.documents ?? []);
 
     const [selectedDocumentId, setSelectedDocumentId] = useState<string>('');
-    // Falls back to the first row once data arrives and nothing's been
-    // explicitly clicked yet — mirrors the mock-data version's behavior,
-    // now driven by query data instead of a static array.
     const activeDocumentId = selectedDocumentId || documentRows[0]?.id || '';
     const selectedDocument = documentRows.find((row) => row.id === activeDocumentId) ?? null;
 
@@ -70,26 +79,26 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
                 }
             }}
         >
-            <Box sx={{ gridArea: 'list', display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box sx={{ gridArea: 'list', display: 'flex', flexDirection: 'column', gap: `${LIST_COLUMN_GAP}px` }}>
                 {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 4, height: CARD_HEIGHTS.documentsTable }}>
                         <CircularProgress size={24} />
                     </Box>
                 ) : (
                     <KycDocumentsCard
-                        minHeight={470}
+                        height={CARD_HEIGHTS.documentsTable}
                         documents={documentRows}
                         selectedDocumentId={activeDocumentId}
                         onSelect={setSelectedDocumentId}
                     />
                 )}
-                <VerificationChecklistCard minHeight={140} />
+                <VerificationChecklistCard height={CARD_HEIGHTS.checklist} />
             </Box>
 
-            <Box sx={{ gridArea: 'detail', display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <VehicleInformationCard minHeight={140} />
+            <Box sx={{ gridArea: 'detail', display: 'flex', flexDirection: 'column', gap: `${DETAIL_COLUMN_GAP}px` }}>
+                <VehicleInformationCard height={CARD_HEIGHTS.vehicleInfo} />
                 <DocumentPreviewCard
-                    minHeight={320}
+                    height={CARD_HEIGHTS.preview}
                     document={selectedDocument}
                     onApprove={handleApprove}
                     onReject={handleReject}

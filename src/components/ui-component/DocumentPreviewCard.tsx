@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Box, Paper, Typography, TextField, Button, Stack } from '@mui/material';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import { DriverDocumentFileRow } from 'utils/document.utils';
-import Image from './ImageComponent';
 
 interface DocumentPreviewCardProps {
-    minHeight: number;
+    height: number;
     document: DriverDocumentFileRow | null;
     onApprove: () => void;
     onReject: (rejectionReason: string) => void;
     submitting?: boolean;
 }
 
-export function DocumentPreviewCard({ minHeight, document, onApprove, onReject, submitting }: DocumentPreviewCardProps) {
+export function DocumentPreviewCard({ height, document, onApprove, onReject, submitting }: DocumentPreviewCardProps) {
     // Local for now — this is the one piece of real interactivity in this
     // pass, the rest of the layout is still static. Once approve/reject
     // call into a mutation, the reason field's value goes along with it,
@@ -27,20 +26,19 @@ export function DocumentPreviewCard({ minHeight, document, onApprove, onReject, 
     }, [document?.id]);
 
     return (
-        <Paper sx={{ p: 3, minHeight, display: 'flex', flexDirection: 'column' }}>
+        <Paper sx={{ p: 3, height, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Document Preview
             </Typography>
 
-            {/* Preview area — flex: 1 so it absorbs whatever extra height the
-                card has, rather than a fixed px value. That matters because
-                this card sits in the same column as VehicleInformationCard,
-                whose height varies with field count, so a fixed height here
-                would either clip or leave a gap depending on content above it. */}
+            {/* flex: 1 with no minHeight — the card's height is fixed now
+                (matches Figma's 404), so this box just absorbs whatever's
+                left after the title, textarea, and button row take their
+                natural height. The old minHeight: 220 was compensating for
+                a variable-height parent; that parent doesn't vary anymore. */}
             <Box
                 sx={{
                     flex: 1,
-                    minHeight: 220,
                     mb: 2,
                     borderRadius: 1,
                     bgcolor: 'action.hover',
@@ -48,18 +46,16 @@ export function DocumentPreviewCard({ minHeight, document, onApprove, onReject, 
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: 1
+                    gap: 1,
+                    overflow: 'hidden'
                 }}
             >
                 {document?.viewUrl ? (
-                    <Image
+                    <Box
+                        component="img"
                         src={document.viewUrl}
-                        alt="document.label"
-                        sx={{
-                            width: 270,
-                            height: 270,
-                            borderRadius: 2
-                        }}
+                        alt={document.label}
+                        sx={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                     />
                 ) : (
                     <>
