@@ -37,7 +37,12 @@ export function KycDocumentsCard({ height, documents, selectedDocumentId, onSele
                 title block, instead of a second hardcoded number that'd
                 need updating if the title block's height ever changes. */}
             <Box sx={{ flex: 1, overflowY: 'auto' }}>
-                <Table size="small" stickyHeader>
+                <Table
+                    stickyHeader
+                    sx={{
+                        '& .MuiTableCell-root': { py: 2.5 }
+                    }}
+                >
                     <TableHead>
                         <TableRow>
                             <TableCell>Document</TableCell>

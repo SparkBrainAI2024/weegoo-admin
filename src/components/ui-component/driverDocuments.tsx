@@ -38,7 +38,6 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
     });
 
     const documentRows = flattenDriverDocuments(data?.getDriver?.documents ?? []);
-
     const [selectedDocumentId, setSelectedDocumentId] = useState<string>('');
     const activeDocumentId = selectedDocumentId || documentRows[0]?.id || '';
     const selectedDocument = documentRows.find((row) => row.id === activeDocumentId) ?? null;
@@ -49,6 +48,11 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
     const [rejectFile, { loading: rejecting }] = useMutation(REJECT_DRIVER_DOCUMENT_FILE, {
         refetchQueries: ['GetDriverDocuments']
     });
+    const docWiseStatus =
+        data?.getDriver?.documents?.map((doc) => ({
+            label: doc.type,
+            verified: doc.status === 'APPROVED'
+        })) || [];
 
     const handleApprove = () => {
         if (!selectedDocument) return;
@@ -62,6 +66,10 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
 
     if (error) {
         return <Alert severity="error">Failed to load documents: {error.message}</Alert>;
+    }
+    const vehicle = data?.getDriver?.vehicle;
+    if (loading) {
+        return <CircularProgress size={24} />;
     }
 
     return (
@@ -92,11 +100,11 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
                         onSelect={setSelectedDocumentId}
                     />
                 )}
-                <VerificationChecklistCard height={CARD_HEIGHTS.checklist} />
+                <VerificationChecklistCard docWiseStatus={docWiseStatus} height={CARD_HEIGHTS.checklist} />
             </Box>
 
             <Box sx={{ gridArea: 'detail', display: 'flex', flexDirection: 'column', gap: `${DETAIL_COLUMN_GAP}px` }}>
-                <VehicleInformationCard height={CARD_HEIGHTS.vehicleInfo} />
+                <VehicleInformationCard height={CARD_HEIGHTS.vehicleInfo} vehicle={vehicle} />
                 <DocumentPreviewCard
                     height={CARD_HEIGHTS.preview}
                     document={selectedDocument}

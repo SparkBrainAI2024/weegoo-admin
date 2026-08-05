@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Paper, Typography, Stack, Grid } from '@mui/material';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
+import { Vehicle } from 'graphql/queries/drivers.queries';
 
 const MOCK_VEHICLE = {
     numberPlate: 'BA 2 PA 4567',
@@ -29,18 +30,17 @@ function VehicleField({ label, value, icon }: { label: string; value: string; ic
     );
 }
 
-export function VehicleInformationCard({ height }: { height: number }) {
+export function VehicleInformationCard({ height, vehicle }: { height: number; vehicle?: Vehicle }) {
     return (
         <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Vehicle Information
             </Typography>
             <Grid container spacing={2}>
-                <VehicleField icon label="Vehicle Number" value={MOCK_VEHICLE.numberPlate} />
-                <VehicleField label="Color" value={MOCK_VEHICLE.color} />
-                <VehicleField icon label="Vehicle Type" value={MOCK_VEHICLE.vehicleType} />
-                <VehicleField label="Engine Type" value={MOCK_VEHICLE.engineType} />
-                <VehicleField icon label="Brand" value={MOCK_VEHICLE.brand} />
+                <VehicleField icon label="Vehicle Number" value={vehicle.numberPlate} />
+                <VehicleField label="Color" value={vehicle.color} />
+                <VehicleField icon label="Vehicle Type" value={vehicle.vehicleType} />
+                <VehicleField label="Name" value={vehicle.name} />
                 <VehicleField label="Model" value={MOCK_VEHICLE.model} />
             </Grid>
         </Paper>

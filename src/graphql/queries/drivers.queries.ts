@@ -229,6 +229,20 @@ export interface GetDriverDocumentsData {
     getDriver: {
         id: string;
         documents: DriverDocument[];
+        vehicle: Vehicle;
+    };
+}
+
+export interface Vehicle {
+    vehicleType: string;
+    name: string;
+    vehicleModel: string;
+    year: number;
+    color: string;
+    numberPlate: string;
+    images: {
+        s3Key: string;
+        status: string;
     };
 }
 
