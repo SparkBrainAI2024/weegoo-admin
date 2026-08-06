@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 
 import {
     Box,
@@ -16,11 +16,6 @@ import {
     Rating,
     CircularProgress,
     Alert,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
     useTheme,
     Stack
 } from '@mui/material';
@@ -28,20 +23,17 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventIcon from '@mui/icons-material/Event';
-import { GET_DRIVER_DOCUMENTS, GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
-import {
-    APPROVE_DRIVER_DOCUMENT_FILE,
-    BLOCK_DRIVER,
-    DELETE_DRIVER,
-    REJECT_DRIVER_DOCUMENT_FILE,
-    UNBLOCK_DRIVER
-} from 'graphql/mutations/driver.mutation';
+import { GET_DRIVER_OVERVIEW } from 'graphql/queries/drivers.queries';
+import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 import { useNavigate, useParams } from 'react-router';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import useNotification from 'hooks/useNotification';
 import { DriverRideHistoryTab } from './driver-trips-tab';
 import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
 import { DeleteUserDialog } from 'components/ui-component/extended/notistack/DeleteUserDialog';
+import Image from 'components/ui-component/ImageComponent';
+import DocumentsTabLayout from 'components/ui-component/driverDocuments';
+import { Theme } from '@mui/material/styles';
 
 interface SelectedFile {
     documentId: string;
@@ -55,15 +47,41 @@ interface SelectedFile {
 // Small status -> color maps, kept outside the component so they aren't
 // recreated on every render.
 // ---------------------------------------------------------------------------
-const statusColor: Record<string, 'success' | 'default' | 'error'> = {
+export const statusColor: Record<string, 'success' | 'default' | 'error' | 'warning'> = {
     ACTIVE: 'success',
     BLOCKED: 'error',
-    INACTIVE: 'default'
+    INACTIVE: 'default',
+    REJECTED: 'error',
+    PENDING: 'warning'
 };
 
-const ChipColorStyle = {
-    backgroundColor: '#EAF6EA',
-    border: '1px solid #BFE6C4'
+export const getChipColorStyle = (theme: Theme, status: string) => {
+    switch (status) {
+        case 'ACTIVE':
+        case 'VERIFIED':
+            return {
+                backgroundColor: theme.palette.success.light,
+                color: theme.palette.success.dark,
+                border: `1px solid ${theme.palette.success.main}`
+            };
+
+        case 'PENDING':
+            return {
+                backgroundColor: theme.palette.warning.light,
+                color: theme.palette.warning.dark,
+                border: `1px solid ${theme.palette.warning.main}`
+            };
+
+        case 'REJECTED':
+            return {
+                backgroundColor: theme.palette.error.light,
+                color: theme.palette.error.dark,
+                border: `1px solid ${theme.palette.error.main}`
+            };
+
+        default:
+            return {};
+    }
 };
 
 export default function DriverDetailsPage() {
@@ -74,45 +92,13 @@ export default function DriverDetailsPage() {
     const wrappingLabelSx = {
         height: 'auto',
         borderRadius: 9,
-        ...ChipColorStyle,
         '& .MuiChip-label': {
             whiteSpace: 'normal' as const,
             py: 0.75,
-            px: 3,
-            color: theme.palette.secondary.main
+            px: 3
         }
     };
-    const handleReject = async () => {
-        if (!selectedFile) return;
-        const reason = window.prompt('Rejection reason:');
-        if (!reason) return; // bail if admin cancels or leaves it blank
 
-        await rejectFile({
-            variables: {
-                input: {
-                    documentFileId: selectedFile.fileId,
-                    rejectionReason: reason
-                }
-            },
-            // optionally refetch the driver documents list so status updates in the table
-            refetchQueries: ['GetDriverDocuments'] // match your actual query's operation name
-        });
-    };
-
-    const handleApprove = async () => {
-        console.log(selectedFile, 'sf');
-
-        if (!selectedFile) return;
-
-        await approveFile({
-            variables: {
-                input: {
-                    documentFileId: selectedFile.fileId
-                }
-            },
-            refetchQueries: ['GetDriverDocuments']
-        });
-    };
     // ---------------------------------------------------------------------
     // OVERVIEW QUERY — fires immediately on mount.
     //
@@ -140,45 +126,23 @@ export default function DriverDetailsPage() {
     // decision: no point paying for this fetch if the admin never clicks
     // the tab.
     // ---------------------------------------------------------------------
-    const [loadDocuments, docsResult] = useLazyQuery(GET_DRIVER_DOCUMENTS, { fetchPolicy: 'cache-and-network' });
+
     // ---------------------------------------------------------------------
     // RIDE HISTORY QUERY — same lazy pattern, plus its own pagination
     // state. Keeping this separate means a slow/expensive ride-history
     // aggregation on the backend never blocks or slows down the initial
     // page render.
 
-    const statusChipColor: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
-        APPROVED: 'success',
-        PENDING: 'warning',
-        REJECTED: 'error',
-        VERIFIED: 'success'
-    };
-    function formatDocLabel(type: string, side: string) {
-        const typeLabel = type
-            .replace(/_/g, ' ')
-            .toLowerCase()
-            .replace(/\b\w/g, (c) => c.toUpperCase()); // "DRIVING_LICENSE" -> "Driving License"
-        return `${typeLabel} (${side.charAt(0)}${side.slice(1).toLowerCase()})`;
-    }
-
-    function formatDate(iso: string) {
-        return new Date(iso).toLocaleDateString('en-US', {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric'
-        });
-    }
-
     const handleTabChange = (_: React.SyntheticEvent, value: typeof activeTab) => {
         setActiveTab(value);
         // Fire the lazy query the FIRST time each tab is opened.
         // Apollo caches the result after that, so re-clicking the tab
         // is instant (and cache-and-network still quietly refreshes it).
-        if (value === 'documents' && !docsResult.called) {
-            loadDocuments({
-                variables: { driverId: driverId! }
-            });
-        }
+        // if (value === 'documents' && !docsResult.called) {
+        //     loadDocuments({
+        //         variables: { driverId: driverId! }
+        //     });
+        // }
         // if (value === 'rides' && !rideHistoryResult.called) {
         //     loadRideHistory({ variables: { driverId, page, limit: 10 } });
         // }
@@ -186,26 +150,6 @@ export default function DriverDetailsPage() {
         console.log(selectedFile, 'sf');
     };
     const { notification, showSuccess, showError, clearNotification } = useNotification();
-
-    const [approveFile, { loading: approving }] = useMutation(APPROVE_DRIVER_DOCUMENT_FILE, {
-        onCompleted: () => {
-            showSuccess('Document approved successfully');
-        },
-        onError: (err) => {
-            showError(err.message || 'Failed to approve document');
-        },
-        refetchQueries: ['GetDriverDocuments']
-    });
-
-    const [rejectFile, { loading: rejecting }] = useMutation(REJECT_DRIVER_DOCUMENT_FILE, {
-        onCompleted: () => {
-            showSuccess('Document rejected');
-        },
-        onError: (err) => {
-            showError(err.message || 'Failed to reject document');
-        },
-        refetchQueries: ['GetDriverDocuments']
-    });
 
     // ---------------------------------------------------------------------
     // MUTATIONS
@@ -269,6 +213,8 @@ export default function DriverDetailsPage() {
     }
 
     if (!data) return null;
+    const vehicle = data.getDriver?.vehicle;
+
     const currentDriver = {
         id: data.getDriver.userId,
         userId: data.getDriver.userId,
@@ -331,15 +277,18 @@ export default function DriverDetailsPage() {
                                             </Typography>
                                             <Box>
                                                 <Chip
-                                                    label="Active"
-                                                    // {driver.status}
-                                                    color={
-                                                        statusColor['ACTIVE'] ??
-                                                        // statusColor[driver.status]
-                                                        'default'
-                                                    }
-                                                    size="small"
-                                                    sx={wrappingLabelSx}
+                                                    label={driver.status}
+                                                    color={statusColor[driver.status] ?? 'default'}
+                                                    sx={{
+                                                        height: 'auto',
+                                                        borderRadius: 9,
+                                                        ...getChipColorStyle(theme, driver.status),
+                                                        '& .MuiChip-label': {
+                                                            whiteSpace: 'normal',
+                                                            py: 0.75,
+                                                            px: 3
+                                                        }
+                                                    }}
                                                 />
                                             </Box>
                                             <Box display="flex" alignItems="center" gap={1}>
@@ -481,157 +430,94 @@ export default function DriverDetailsPage() {
                                 </Grid>
                             </Grid>
                         )}
-
-                        {/* {infoSubTab === 'vehicle' && driver.vehicle && (
-                            <Grid container spacing={3}>
-                                <Field label="Vehicle Type" value={driver.vehicle.vehicleType} />
-                                <Field label="Name" value={driver.vehicle.name} />
-                                <Field label="Model / Year" value={`${driver.vehicle.vehicleModel} (${driver.vehicle.year})`} />
-                                <Field label="Color" value={driver.vehicle.color} />
-                                <Field label="Number Plate" value={driver.vehicle.numberPlate} />
-                            </Grid>
-                        )} */}
                     </Paper>
                 </>
             )}
             {activeTab === 'documents' && (
-                <Grid container spacing={2}>
-                    {/* ---- Left: documents table ---- */}
-                    <Grid item xs={12} md={7}>
-                        <Paper sx={{ p: 3 }}>
-                            <Typography fontWeight={600}>KYC Documents</Typography>
-                            <Typography variant="body2" color="text.secondary" mb={2}>
-                                Review uploaded documents and update status
-                            </Typography>
-
-                            {docsResult.loading && !docsResult.data && <CircularProgress size={24} />}
-                            {docsResult.error && <Alert severity="error">{docsResult.error.message}</Alert>}
-
-                            {docsResult.data && (
-                                <Table size="small">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Document</TableCell>
-                                            <TableCell>Uploaded</TableCell>
-                                            <TableCell>Status</TableCell>
-                                            <TableCell align="right">Action</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {/* Flatten: one row per file, not per document.
-                  This is why we need the .flatMap — the screenshot's
-                  rows correspond to `files`, the query's top-level
-                  array is `documents`. */}
-                                        {docsResult.data.getDriver.documents.flatMap((doc) =>
-                                            doc.files.map((file) => {
-                                                const isSelected = selectedFile?.s3Key === file.s3Key;
-                                                return (
-                                                    <TableRow
-                                                        key={file.s3Key}
-                                                        hover
-                                                        selected={isSelected}
-                                                        onClick={() =>
-                                                            setSelectedFile({
-                                                                documentId: doc._id,
-                                                                documentType: doc.type,
-                                                                side: file.side,
-                                                                s3Key: file.s3Key,
-                                                                status: file.status,
-                                                                fileId: file._id
-                                                            })
-                                                        }
-                                                        sx={{ cursor: 'pointer' }}
-                                                    >
-                                                        <TableCell>{formatDocLabel(doc.type, file.side)}</TableCell>
-                                                        <TableCell>{formatDate(file.createdAt)}</TableCell>
-                                                        <TableCell>
-                                                            <Chip
-                                                                size="small"
-                                                                label={file.status}
-                                                                color={statusChipColor[file.status] ?? 'default'}
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell align="right">
-                                                            <Button
-                                                                size="small"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation(); // don't also trigger row select
-                                                                    setSelectedFile({
-                                                                        documentId: doc._id,
-                                                                        documentType: doc.type,
-                                                                        side: file.side,
-                                                                        s3Key: file.s3Key,
-                                                                        status: file.status,
-                                                                        fileId: file._id.toString()
-                                                                    });
-                                                                }}
-                                                            >
-                                                                Preview
-                                                            </Button>
-                                                            <Button
-                                                                size="small"
-                                                                sx={{ ml: 1 }}
-                                                                component="a"
-                                                                href={file.downloadUrl}
-                                                                download
-                                                                onClick={(e) => e.stopPropagation()} // don't also trigger row select
-                                                            >
-                                                                Download
-                                                            </Button>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                );
-                                            })
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            )}
-                        </Paper>
-                    </Grid>
-
-                    {/* ---- Right: preview + approve/reject ---- */}
-                    <Grid item xs={12} md={5}>
-                        <Paper sx={{ p: 3, height: '100%' }}>
-                            <Typography fontWeight={600}>Preview</Typography>
-                            <Typography variant="body2" color="text.secondary" mb={2}>
-                                {selectedFile
-                                    ? formatDocLabel(selectedFile.documentType, selectedFile.side)
-                                    : 'Select a document to review'}
-                            </Typography>
-
-                            <Box
+                <Stack gap={3}>
+                    <NotificationBanner
+                        open={Boolean(notification?.message)}
+                        message={notification?.message ?? ''}
+                        onClose={clearNotification}
+                        severity={notification?.severity ?? 'success'}
+                    />
+                    <Stack
+                        direction={{ xs: 'column', md: 'row' }}
+                        divider={
+                            <Divider
+                                orientation="vertical"
+                                flexItem
                                 sx={{
-                                    height: 320,
-                                    bgcolor: '#f5f6f8',
-                                    borderRadius: 1,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
+                                    display: { xs: 'none', md: 'block' }
                                 }}
-                            >
-                                {selectedFile ? (
-                                    <img src={selectedFile.s3Key} alt="document preview" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-                                ) : (
-                                    <Typography color="text.secondary">Document Preview Area</Typography>
-                                )}
+                            />
+                        }
+                        sx={{
+                            minHeight: 120,
+                            height: { md: 165 },
+                            paddingTop: 2,
+                            paddingBottom: 2,
+                            bgcolor: theme.palette.background.paper
+                        }}
+                    >
+                        <Box sx={{ flex: 1, p: 2 }}>
+                            <Box display="flex" gap={2} alignItems="center">
+                                <Avatar src={driver.profileImage} sx={{ width: 60, height: 60 }}>
+                                    {driver.fullName?.[0]}
+                                </Avatar>
+                                <Box display="flex" flexDirection="column" gap={0.25}>
+                                    <Typography variant="h6">{driver.fullName}</Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        ID:4567-899
+                                        {/* {driver.id} */}
+                                    </Typography>
+                                </Box>
                             </Box>
+                        </Box>
 
-                            <Box display="flex" gap={2} mt={2}>
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    disabled={!selectedFile || approving || selectedFile.status === 'VERIFIED'}
-                                    onClick={handleApprove}
-                                >
-                                    Approve
-                                </Button>
-                                <Button variant="contained" color="error" disabled={!selectedFile || rejecting} onClick={handleReject}>
-                                    Reject
-                                </Button>
+                        <Box sx={{ flex: 2, p: 2 }}>
+                            <Box display="flex" justifyContent="space-between">
+                                <Box display="flex" gap={4} alignItems="start">
+                                    <Image
+                                        src={vehicle.images[0].s3Key}
+                                        alt="mm"
+                                        sx={{
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 2
+                                        }}
+                                    />
+                                    <Stack direction="column" gap={1}>
+                                        <Typography variant="h3">{vehicle.name}</Typography>
+                                        <Typography>{vehicle.vehicleModel}</Typography>
+                                        <Chip
+                                            label={vehicle.vehicleType || 'Carr'}
+                                            sx={{
+                                                paddingTop: '6px',
+                                                paddingBottom: '6px',
+                                                paddingLeft: '20px',
+                                                paddingRight: '20px',
+                                                borderRadius: '8px',
+                                                backgroundColor: '#B8B8B8'
+                                            }}
+                                        />
+                                    </Stack>
+                                </Box>
+                                <Box display="flex" gap={2}>
+                                    <Box>
+                                        <Chip
+                                            label={driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'}
+                                            color={statusColor[driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'] ?? 'default'}
+                                            size="small"
+                                            sx={wrappingLabelSx}
+                                        />
+                                    </Box>
+                                </Box>
                             </Box>
-                        </Paper>
-                    </Grid>
-                </Grid>
+                        </Box>
+                    </Stack>
+                    <DocumentsTabLayout driverId={driverId!} />{' '}
+                </Stack>
             )}
             {activeTab === 'rides' && <DriverRideHistoryTab driverId={driverId!} />}{' '}
             {deleteDialogOpen && (

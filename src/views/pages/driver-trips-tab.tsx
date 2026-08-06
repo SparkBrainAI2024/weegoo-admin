@@ -14,7 +14,7 @@ interface Props {
     driverId: string;
 }
 
-export function DriverRideHistoryTab({ driverId }: Props) {
+export const DriverRideHistoryTab = ({ driverId }: Props) => {
     const { getParam, updateParams } = useUrlParams();
 
     const orderBy = getParam<string>('orderBy', 'createdAt');
@@ -205,4 +205,4 @@ export function DriverRideHistoryTab({ driverId }: Props) {
             </Grid>
         </Grid>
     );
-}
+};
