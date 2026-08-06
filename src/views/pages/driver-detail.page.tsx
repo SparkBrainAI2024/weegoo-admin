@@ -475,46 +475,48 @@ export default function DriverDetailsPage() {
                             </Box>
                         </Box>
 
-                        <Box sx={{ flex: 2, p: 2 }}>
-                            <Box display="flex" justifyContent="space-between">
-                                <Box display="flex" gap={4} alignItems="start">
-                                    <Image
-                                        src={vehicle.images[0].s3Key}
-                                        alt="mm"
-                                        sx={{
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 2
-                                        }}
-                                    />
-                                    <Stack direction="column" gap={1}>
-                                        <Typography variant="h3">{vehicle.name}</Typography>
-                                        <Typography>{vehicle.vehicleModel}</Typography>
-                                        <Chip
-                                            label={vehicle.vehicleType || 'Carr'}
+                        {vehicle && (
+                            <Box sx={{ flex: 2, p: 2 }}>
+                                <Box display="flex" justifyContent="space-between">
+                                    <Box display="flex" gap={4} alignItems="start">
+                                        <Image
+                                            src={vehicle.images[0].s3Key}
+                                            alt="mm"
                                             sx={{
-                                                paddingTop: '6px',
-                                                paddingBottom: '6px',
-                                                paddingLeft: '20px',
-                                                paddingRight: '20px',
-                                                borderRadius: '8px',
-                                                backgroundColor: '#B8B8B8'
+                                                width: 80,
+                                                height: 80,
+                                                borderRadius: 2
                                             }}
                                         />
-                                    </Stack>
-                                </Box>
-                                <Box display="flex" gap={2}>
-                                    <Box>
-                                        <Chip
-                                            label={driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'}
-                                            color={statusColor[driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'] ?? 'default'}
-                                            size="small"
-                                            sx={wrappingLabelSx}
-                                        />
+                                        <Stack direction="column" gap={1}>
+                                            <Typography variant="h3">{vehicle.name}</Typography>
+                                            <Typography>{vehicle.vehicleModel}</Typography>
+                                            <Chip
+                                                label={vehicle.vehicleType || 'Carr'}
+                                                sx={{
+                                                    paddingTop: '6px',
+                                                    paddingBottom: '6px',
+                                                    paddingLeft: '20px',
+                                                    paddingRight: '20px',
+                                                    borderRadius: '8px',
+                                                    backgroundColor: '#B8B8B8'
+                                                }}
+                                            />
+                                        </Stack>
+                                    </Box>
+                                    <Box display="flex" gap={2}>
+                                        <Box>
+                                            <Chip
+                                                label={driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'}
+                                                color={statusColor[driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'] ?? 'default'}
+                                                size="small"
+                                                sx={wrappingLabelSx}
+                                            />
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Box>
-                        </Box>
+                        )}
                     </Stack>
                     <DocumentsTabLayout driverId={driverId!} />{' '}
                 </Stack>
