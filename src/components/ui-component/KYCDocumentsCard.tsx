@@ -1,16 +1,12 @@
 import React from 'react';
-import { Box, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Chip, Button, Stack } from '@mui/material';
+import { Box, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Chip, Button, Stack, useTheme } from '@mui/material';
 import { DriverDocumentFileRow } from 'utils/document.utils';
+import { getChipColorStyle, statusColor } from 'views/pages/driver-detail.page';
 
 // File-level status per DocumentFile's status field (@libs/data-access
 // enums/upload.enum -> DocumentFileStatus): PENDING | VERIFIED | REJECTED.
 // Not APPROVED — that word only shows up at the bundle-status level
 // (DriverDocumentBundleStatus), which this table isn't rendering.
-const statusChipColor: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
-    VERIFIED: 'success',
-    PENDING: 'warning',
-    REJECTED: 'error'
-};
 
 interface KycDocumentsCardProps {
     height: number;
@@ -20,6 +16,17 @@ interface KycDocumentsCardProps {
 }
 
 export function KycDocumentsCard({ height, documents, selectedDocumentId, onSelect }: KycDocumentsCardProps) {
+    const wrappingLabelSx = {
+        height: 'auto',
+        borderRadius: 9,
+        '& .MuiChip-label': {
+            whiteSpace: 'normal' as const,
+            py: 0.75,
+            px: 3
+        }
+    };
+    const theme = useTheme();
+
     return (
         <Paper sx={{ p: 3, height, display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ mb: 2 }}>
@@ -65,7 +72,20 @@ export function KycDocumentsCard({ height, documents, selectedDocumentId, onSele
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Chip label={row.status} color={statusChipColor[row.status]} size="small" />
+                                    <Chip
+                                        label={row.status}
+                                        color={statusColor[row.status] ?? 'default'}
+                                        sx={{
+                                            height: 'auto',
+                                            borderRadius: 9,
+                                            ...getChipColorStyle(theme, row.status),
+                                            '& .MuiChip-label': {
+                                                whiteSpace: 'normal',
+                                                py: 0.75,
+                                                px: 3
+                                            }
+                                        }}
+                                    />
                                 </TableCell>
                                 <TableCell align="right">
                                     <Stack direction="row" gap={1} justifyContent="flex-end">

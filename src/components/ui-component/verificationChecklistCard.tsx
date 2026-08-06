@@ -12,7 +12,7 @@ export function VerificationChecklistCard({
 }) {
     const verifiedCount = docWiseStatus?.filter((c) => c.verified).length;
     const progress = (verifiedCount / docWiseStatus.length) * 100;
-
+    const sortedChecklist = [...docWiseStatus].sort((a, b) => Number(b.verified) - Number(a.verified));
     return (
         <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
@@ -20,7 +20,7 @@ export function VerificationChecklistCard({
             </Typography>
 
             <Stack direction="row" flexWrap="wrap" gap={4} sx={{ mb: 2 }}>
-                {docWiseStatus?.map((item) => (
+                {sortedChecklist?.map((item) => (
                     <Stack key={item.label} direction="row" gap={1} alignItems="flex-start">
                         {item.verified ? (
                             <CheckCircleIcon color="success" fontSize="small" />

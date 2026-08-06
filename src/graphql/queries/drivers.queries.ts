@@ -161,6 +161,7 @@ export interface GetDriverOverviewData {
         lastTripEndTime: string | null;
         lastTripDuration: number | null;
         emergencyContact: string | null;
+        allDocumentsApproved: boolean;
         status: 'ACTIVE' | 'PENDING' | 'BLOCKED';
         vehicle: {
             vehicleType: string;
@@ -230,6 +231,7 @@ export interface GetDriverDocumentsData {
         id: string;
         documents: DriverDocument[];
         vehicle: Vehicle;
+        allDocumentsApproved: boolean;
     };
 }
 
@@ -250,6 +252,7 @@ export const GET_DRIVER_DOCUMENTS: TypedDocumentNode<GetDriverDocumentsData, Get
     query GetDriverDocuments($driverId: String!) {
         getDriver(driverId: $driverId) {
             id
+            allDocumentsApproved
             vehicle {
                 vehicleType
                 name

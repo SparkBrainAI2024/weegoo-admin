@@ -31,6 +31,18 @@ function VehicleField({ label, value, icon }: { label: string; value: string; ic
 }
 
 export function VehicleInformationCard({ height, vehicle }: { height: number; vehicle?: Vehicle }) {
+    if (!vehicle) {
+        return (
+            <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                    Vehicle Information
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    No vehicle information available.
+                </Typography>
+            </Paper>
+        );
+    }
     return (
         <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>

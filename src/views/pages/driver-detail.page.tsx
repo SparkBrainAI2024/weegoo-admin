@@ -33,6 +33,7 @@ import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-d
 import { DeleteUserDialog } from 'components/ui-component/extended/notistack/DeleteUserDialog';
 import Image from 'components/ui-component/ImageComponent';
 import DocumentsTabLayout from 'components/ui-component/driverDocuments';
+import { Theme } from '@mui/material/styles';
 
 interface SelectedFile {
     documentId: string;
@@ -46,15 +47,41 @@ interface SelectedFile {
 // Small status -> color maps, kept outside the component so they aren't
 // recreated on every render.
 // ---------------------------------------------------------------------------
-const statusColor: Record<string, 'success' | 'default' | 'error'> = {
+export const statusColor: Record<string, 'success' | 'default' | 'error' | 'warning'> = {
     ACTIVE: 'success',
     BLOCKED: 'error',
-    INACTIVE: 'default'
+    INACTIVE: 'default',
+    REJECTED: 'error',
+    PENDING: 'warning'
 };
 
-const ChipColorStyle = {
-    backgroundColor: '#EAF6EA',
-    border: '1px solid #BFE6C4'
+export const getChipColorStyle = (theme: Theme, status: string) => {
+    switch (status) {
+        case 'ACTIVE':
+        case 'VERIFIED':
+            return {
+                backgroundColor: theme.palette.success.light,
+                color: theme.palette.success.dark,
+                border: `1px solid ${theme.palette.success.main}`
+            };
+
+        case 'PENDING':
+            return {
+                backgroundColor: theme.palette.warning.light,
+                color: theme.palette.warning.dark,
+                border: `1px solid ${theme.palette.warning.main}`
+            };
+
+        case 'REJECTED':
+            return {
+                backgroundColor: theme.palette.error.light,
+                color: theme.palette.error.dark,
+                border: `1px solid ${theme.palette.error.main}`
+            };
+
+        default:
+            return {};
+    }
 };
 
 export default function DriverDetailsPage() {
@@ -65,12 +92,10 @@ export default function DriverDetailsPage() {
     const wrappingLabelSx = {
         height: 'auto',
         borderRadius: 9,
-        ...ChipColorStyle,
         '& .MuiChip-label': {
             whiteSpace: 'normal' as const,
             py: 0.75,
-            px: 3,
-            color: theme.palette.secondary.main
+            px: 3
         }
     };
 
@@ -252,15 +277,18 @@ export default function DriverDetailsPage() {
                                             </Typography>
                                             <Box>
                                                 <Chip
-                                                    label="Active"
-                                                    // {driver.status}
-                                                    color={
-                                                        statusColor['ACTIVE'] ??
-                                                        // statusColor[driver.status]
-                                                        'default'
-                                                    }
-                                                    size="small"
-                                                    sx={wrappingLabelSx}
+                                                    label={driver.status}
+                                                    color={statusColor[driver.status] ?? 'default'}
+                                                    sx={{
+                                                        height: 'auto',
+                                                        borderRadius: 9,
+                                                        ...getChipColorStyle(theme, driver.status),
+                                                        '& .MuiChip-label': {
+                                                            whiteSpace: 'normal',
+                                                            py: 0.75,
+                                                            px: 3
+                                                        }
+                                                    }}
                                                 />
                                             </Box>
                                             <Box display="flex" alignItems="center" gap={1}>
@@ -477,12 +505,9 @@ export default function DriverDetailsPage() {
                                 </Box>
                                 <Box display="flex" gap={2}>
                                     <Box>
-                                        <Chip label="Active" color={statusColor['ACTIVE'] ?? 'default'} size="small" sx={wrappingLabelSx} />
-                                    </Box>
-                                    <Box>
                                         <Chip
-                                            label="Pending"
-                                            color={statusColor['ACTIVE'] ?? 'default'}
+                                            label={driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'}
+                                            color={statusColor[driver.allDocumentsApproved ? 'ACTIVE' : 'PENDING'] ?? 'default'}
                                             size="small"
                                             sx={wrappingLabelSx}
                                         />
