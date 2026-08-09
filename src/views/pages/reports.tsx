@@ -14,6 +14,7 @@ import { GET_ISSUES, IssueListInput } from 'graphql/queries/issues.queries';
 import { useCurrentAdminId } from 'hooks/userCurrentAdminId';
 import { BULK_RESOLVE_ISSUES } from 'graphql/mutations/issues.mutations';
 import IssueListTable from 'components/ui-component/IssueListTable';
+import IssueStatusTabs, { IssueStatusTab } from 'components/ui-component/IssueStatusTabs';
 
 const DEFAULT_FILTERS: IssueFilterValues = {
     category: 'All',
@@ -29,10 +30,11 @@ const DEFAULT_FILTERS: IssueFilterValues = {
 const FROM_TO_REPORTED_TYPE: Record<string, string> = { Passenger: 'PASSENGER', Driver: 'DRIVER' };
 const PRIORITY_TO_API: Record<string, string> = { High: 'HIGH', Medium: 'MEDIUM', Low: 'LOW' };
 
-function buildQueryInput(filters: IssueFilterValues, page: number, limit: number): IssueListInput {
+function buildQueryInput(filters: IssueFilterValues, statusTab: IssueStatusTab, page: number, limit: number): IssueListInput {
     return {
         page,
         limit,
+        status: statusTab !== 'ALL' ? statusTab : undefined,
         category: filters.category !== 'All' ? filters.category : undefined,
         reportedByType: filters.from !== 'All' ? FROM_TO_REPORTED_TYPE[filters.from] : undefined,
         priority: filters.priority !== 'All' ? PRIORITY_TO_API[filters.priority] : undefined,
@@ -48,11 +50,12 @@ const IssuesPage = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [selected, setSelected] = React.useState<string[]>([]);
     const [snackbar, setSnackbar] = React.useState<{ message: string; severity: 'success' | 'error' } | null>(null);
+    const [statusTab, setStatusTab] = React.useState<IssueStatusTab>('ALL');
 
     const currentAdminId = useCurrentAdminId();
 
     const { data, loading, error, refetch } = useQuery(GET_ISSUES, {
-        variables: { input: buildQueryInput(filters, page, rowsPerPage) },
+        variables: { input: buildQueryInput(filters, statusTab, page, rowsPerPage) },
         notifyOnNetworkStatusChange: true
     });
 
@@ -81,7 +84,11 @@ const IssuesPage = () => {
         }
         bulkResolveIssues({ variables: { ids: selected, resolvedBy: currentAdminId } });
     };
-
+    const handleStatusTabChange = (next: IssueStatusTab) => {
+        setStatusTab(next);
+        setPage(0);
+        setSelected([]);
+    };
     const items = data?.getIssues.items ?? [];
     const pagination = data?.getIssues.pagination;
 
@@ -93,12 +100,13 @@ const IssuesPage = () => {
     return (
         <Stack spacing={2.5}>
             {error && <Alert severity="error">Couldn&apos;t load issues: {error.message}</Alert>}
+            <IssueStatusTabs value={statusTab} onChange={handleStatusTabChange} />
 
             <IssueStatCards
                 totalOpen={data?.getIssues.totalOpen ?? 0}
                 totalInReview={data?.getIssues.totalInReview ?? 0}
                 totalResolved={data?.getIssues.totalResolved ?? 0}
-                avgFirstResponse={data?.getIssues.avgFirstResponse}
+                avgFirstResponse={'-'}
                 avgResolution={data?.getIssues.avgResolution}
                 loading={loading && !data}
             />

@@ -198,6 +198,20 @@ const DriverList = () => {
                     onChange={handleTabChange}
                     orientation={isMobile ? 'vertical' : 'horizontal'}
                     fullWidth={isMobile}
+                    sx={{
+                        '& .MuiToggleButton-root': {
+                            textTransform: 'none' as const,
+                            padding: '8px 20px',
+                            backgroundColor: theme.palette.background.paper,
+                            '&.Mui-selected': {
+                                backgroundColor: theme.palette.background.paper,
+                                borderColor: `${theme.palette.secondary.main} !important`,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.background.paper
+                                }
+                            }
+                        }
+                    }}
                 >
                     {TABS.map(({ key, label }) => (
                         <ToggleButton key={key} value={key}>
