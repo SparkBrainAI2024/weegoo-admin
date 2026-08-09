@@ -18,7 +18,6 @@ import { InitialLoginContextProps, JWTContextType, SignInResponse, SignUpRespons
 import client from 'lib/apolloClient';
 import { SIGN_IN } from 'graphql/mutations/auth.mutations';
 
-
 // constant
 const initialState: InitialLoginContextProps = {
     isLoggedIn: false,
@@ -26,15 +25,17 @@ const initialState: InitialLoginContextProps = {
     user: null
 };
 
-const verifyToken: (st: string) => boolean = (serviceToken) => {
+const verifyToken: (st: string) => { verified: boolean; id?: string } = (serviceToken) => {
     if (!serviceToken) {
-        return false;
+        return { verified: false };
     }
     const decoded: KeyedObject = jwtDecode(serviceToken);
     /**
      * Property 'exp' does not exist on type '<T = unknown>(token: string, options?: JwtDecodeOptions | undefined) => T'.
      */
-    return decoded.exp > Date.now() / 1000;
+    console.log(decoded, 'decoded');
+
+    return { verified: decoded.exp > Date.now() / 1000, id: decoded.id };
 };
 
 const setSession = (serviceToken?: string | null) => {
@@ -56,8 +57,8 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     useEffect(() => {
         const init = async () => {
             const serviceToken = window.localStorage.getItem('serviceToken');
-            if (serviceToken && verifyToken(serviceToken)) {
-                dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: null } });
+            if (serviceToken && verifyToken(serviceToken).verified) {
+                dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: { id: verifyToken(serviceToken).id } } });
             } else {
                 dispatch({ type: LOGOUT });
             }
@@ -67,13 +68,12 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     }, []);
 
     const login = async (email: string, password: string) => {
-
         const { data } = await client.mutate<{ adminSignIn: SignInResponse }>({
             mutation: SIGN_IN,
             variables: {
-                input: { email, password },
+                input: { email, password }
             },
-            errorPolicy: 'none', // this makes Apollo throw on GraphQL errors
+            errorPolicy: 'none' // this makes Apollo throw on GraphQL errors
         });
         if (!data?.adminSignIn) {
             throw new Error('SignIn failed');
@@ -94,23 +94,20 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         });
     };
 
-
     const logout = () => {
         setSession(null);
         dispatch({ type: LOGOUT });
     };
 
-    const resetPassword = async (email: string) => { };
+    const resetPassword = async (email: string) => {};
 
-    const updateProfile = () => { };
+    const updateProfile = () => {};
 
     if (state.isInitialized !== undefined && !state.isInitialized) {
         return <>Loading</>;
     }
 
-    return (
-        <JWTContext.Provider value={{ ...state, login, logout, resetPassword, updateProfile }}>{children}</JWTContext.Provider>
-    );
+    return <JWTContext.Provider value={{ ...state, login, logout, resetPassword, updateProfile }}>{children}</JWTContext.Provider>;
 };
 
 export default JWTContext;
