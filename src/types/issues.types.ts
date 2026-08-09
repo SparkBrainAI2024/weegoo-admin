@@ -1,55 +1,34 @@
-// types/issue.types.ts
-//
-// This mirrors your real `Issue` entity (server/src/.../issue.entity.ts) as closely as
-// possible. Two fields — `priority` and `assignee` — do NOT exist on the schema yet.
-// They're marked MOCK-ONLY below. Once the backend adds them, delete the "mock-only"
-// comments and wire them to the real GraphQL fields; nothing else needs to change.
+// types/issues.types.ts
+// Matches the backend's real enums/response shape (see issue.enum.ts / issue-list.response.ts).
+// Superseded types/issue.types.ts's "Mock" enums now that we're wired to the real API —
+// that file is left in place for local/offline dev, but components import from here.
 
-// ---- Enums (mirrors ../enums/issue.enum on the server) --------------------
-// NOTE: exact enum member names weren't in front of me, so these are best-guess
-// labels based on the screenshot + your IssueStatus field. Swap for the real
-// imported enum once you paste it over, the string values below are what the
-// UI displays so keep them in sync with your server enum's actual values.
-
-export enum IssueStatusMock {
+export enum IssueStatus {
     OPEN = 'OPEN',
-    IN_PROGRESS = 'IN_PROGRESS',
+    IN_REVIEW = 'IN_REVIEW',
     RESOLVED = 'RESOLVED'
 }
 
-export enum ReportedByTypeMock {
-    RIDER = 'RIDER',
+export enum ReportedByType {
+    PASSENGER = 'PASSENGER',
     DRIVER = 'DRIVER'
 }
 
-// MOCK-ONLY — not in the Issue schema yet
-export enum IssuePriorityMock {
+export enum IssuePriority {
     HIGH = 'HIGH',
     MEDIUM = 'MEDIUM',
     LOW = 'LOW'
 }
 
-// ---- Row shape used by the table ------------------------------------------
-export interface IssueRow {
-    _id: string; // real: Issue._id
-    ticketCode: string; // derived display value, e.g. "REP-10482" (from _id)
-    createdAt: string; // real: Issue.createdAt
-    reportedByName: string; // real: would come from populating Issue.reportedBy -> User.fullName
-    reportedByType: ReportedByTypeMock; // real: Issue.reportedByType
-    rideId?: string; // real: Issue.rideId
-    categoryLabel: string; // real: Issue.category.label (IssueCategoryEmbed)
-    status: IssueStatusMock; // real: Issue.status
-
-    /** MOCK-ONLY — no `priority` field on Issue yet */
-    priority: IssuePriorityMock;
-    /** MOCK-ONLY — no `assignee` field on Issue yet */
-    assignee?: string;
-}
-
-export interface IssueStats {
-    open: number;
-    inProgress: number;
-    resolved: number;
-    avgFirstResponse: string; // e.g. "12m"
-    avgResolution: string; // e.g. "30m"
+export interface IssueSummary {
+    id: string;
+    ticketCode: string;
+    createdAt: string;
+    reportedByName: string;
+    reportedByType: ReportedByType;
+    rideId?: string | null;
+    categoryLabel?: string | null;
+    status: IssueStatus;
+    priority: IssuePriority;
+    assigneeName?: string | null;
 }

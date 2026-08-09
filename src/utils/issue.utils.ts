@@ -1,22 +1,22 @@
 // views/issues/issue.utils.ts
-import { IssuePriorityMock, IssueStatusMock, ReportedByTypeMock } from '../types/issues.types';
+import { IssuePriority, IssueStatus, ReportedByType } from 'types/issues.types';
 
 type ChipColor = 'primary' | 'secondary' | 'success' | 'orange' | 'error';
 
-export const statusMeta: Record<IssueStatusMock, { label: string; color: ChipColor }> = {
-    [IssueStatusMock.OPEN]: { label: 'Open', color: 'orange' },
-    [IssueStatusMock.IN_PROGRESS]: { label: 'In Progress', color: 'secondary' },
-    [IssueStatusMock.RESOLVED]: { label: 'Resolved', color: 'success' }
+export const statusMeta: Record<IssueStatus, { label: string; color: ChipColor }> = {
+    [IssueStatus.OPEN]: { label: 'Open', color: 'orange' },
+    [IssueStatus.IN_REVIEW]: { label: 'In Progress', color: 'secondary' },
+    [IssueStatus.RESOLVED]: { label: 'Resolved', color: 'success' }
 };
 
-export const priorityMeta: Record<IssuePriorityMock, { label: string; color: ChipColor }> = {
-    [IssuePriorityMock.HIGH]: { label: 'High', color: 'error' },
-    [IssuePriorityMock.MEDIUM]: { label: 'Medium', color: 'orange' },
-    [IssuePriorityMock.LOW]: { label: 'Low', color: 'success' }
+export const priorityMeta: Record<IssuePriority, { label: string; color: ChipColor }> = {
+    [IssuePriority.HIGH]: { label: 'High', color: 'error' },
+    [IssuePriority.MEDIUM]: { label: 'Medium', color: 'orange' },
+    [IssuePriority.LOW]: { label: 'Low', color: 'success' }
 };
 
-export function reportedByLabel(name: string, type: ReportedByTypeMock) {
-    const prefix = type === ReportedByTypeMock.RIDER ? 'Rider' : 'Driver';
+export function reportedByLabel(name: string, type: ReportedByType) {
+    const prefix = type === ReportedByType.PASSENGER ? 'Passenger' : 'Driver';
     return `${prefix}: ${name}`;
 }
 
