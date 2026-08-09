@@ -1,15 +1,18 @@
 // views/issues/IssueListTable.tsx
 //
-// Adapted from your existing OrderList.tsx pattern (sortable header, row select,
-// pagination) but re-columned to match the Issues/Reports screenshot. Data currently
-// comes from getMockIssues() — swap for a `useSelector`/GraphQL query later, the
-// component doesn't care where `rows` comes from.
+// Now presentational: filtering, sorting-by-date, and pagination all happen
+// server-side via GET_ISSUES variables (see IssuesPage.tsx). This component just
+// renders whatever page of rows it's given, and lets the header sort clicks
+// re-order that page client-side (a small UX nicety — full server-side sort-by-
+// field would need `orderBy`/`order` added to IssueListInput on the backend,
+// noted as a TODO there).
 
 import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import LinearProgress from '@mui/material/LinearProgress';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,9 +27,8 @@ import { visuallyHidden } from '@mui/utils';
 import Chip from 'components/ui-component/extended/Chip';
 import MainCard from 'components/ui-component/cards/MainCard';
 
-import { IssueRow } from '../../types/issues.types';
+import { IssueSummary } from 'types/issues.types';
 import { formatTicketDate, priorityMeta, reportedByLabel, statusMeta } from '../../utils/issue.utils';
-import { IssueFilterValues } from './IssueFilters';
 
 type Order = 'asc' | 'desc';
 type SortableKey = 'ticketCode' | 'createdAt' | 'reportedByName' | 'categoryLabel' | 'priority' | 'status';
@@ -37,10 +39,6 @@ interface HeadCell {
     align: 'left' | 'right' | 'center';
 }
 
-// Order matches the screenshot exactly: Ticket, Date, From, Related Trip, Category,
-// Priority, Status, Assignee, Action. "Related Trip" and "Assignee" aren't sortable
-// (Related Trip is a foreign id, Assignee is mock-only) so they're rendered as plain
-// cells interleaved with the sortable ones below, in HeadRow.
 const headCells: HeadCell[] = [
     { id: 'ticketCode', label: 'Ticket', align: 'left' },
     { id: 'createdAt', label: 'Date', align: 'left' },
@@ -67,58 +65,37 @@ const sortableCell = (headCell: HeadCell, order: Order, orderBy: SortableKey, on
     </TableCell>
 );
 
-function descendingComparator(a: IssueRow, b: IssueRow, orderBy: SortableKey) {
-    if (b[orderBy] < a[orderBy]) return -1;
-    if (b[orderBy] > a[orderBy]) return 1;
+function descendingComparator(a: IssueSummary, b: IssueSummary, orderBy: SortableKey) {
+    if ((b[orderBy] ?? '') < (a[orderBy] ?? '')) return -1;
+    if ((b[orderBy] ?? '') > (a[orderBy] ?? '')) return 1;
     return 0;
 }
 
-function getComparator(order: Order, orderBy: SortableKey) {
-    return order === 'desc'
-        ? (a: IssueRow, b: IssueRow) => descendingComparator(a, b, orderBy)
-        : (a: IssueRow, b: IssueRow) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array: IssueRow[], comparator: (a: IssueRow, b: IssueRow) => number) {
-    const stabilized = array.map((el, index) => [el, index] as [IssueRow, number]);
-    stabilized.sort((a, b) => {
-        const cmp = comparator(a[0], b[0]);
-        if (cmp !== 0) return cmp;
-        return a[1] - b[1];
-    });
-    return stabilized.map((el) => el[0]);
-}
-
-function applyFilters(rows: IssueRow[], filters: IssueFilterValues) {
-    return rows.filter((row) => {
-        if (filters.category !== 'All' && row.categoryLabel !== filters.category) return false;
-        if (filters.from !== 'All' && row.reportedByType !== filters.from.toUpperCase()) return false;
-        if (filters.priority !== 'All' && priorityMeta[row.priority].label !== filters.priority) return false;
-        if (filters.assignee !== 'All') {
-            const assigneeLabel = row.assignee ?? 'Unassigned';
-            if (assigneeLabel !== filters.assignee) return false;
-        }
-        return true;
-    });
-}
-
 interface IssueListTableProps {
-    rows: IssueRow[];
-    filters: IssueFilterValues;
+    rows: IssueSummary[];
+    loading: boolean;
     selected: string[];
     onSelectedChange: (selected: string[]) => void;
+    page: number;
+    rowsPerPage: number;
+    total: number;
+    onPageChange: (page: number) => void;
+    onRowsPerPageChange: (rowsPerPage: number) => void;
 }
 
-const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueListTableProps) => {
+const IssueListTable = ({
+    rows,
+    loading,
+    selected,
+    onSelectedChange,
+    page,
+    rowsPerPage,
+    total,
+    onPageChange,
+    onRowsPerPageChange
+}: IssueListTableProps) => {
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = React.useState<SortableKey>('createdAt');
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const filteredRows = React.useMemo(() => applyFilters(rows, filters), [rows, filters]);
-
-    // Reset to page 1 whenever the filtered set changes so we never land on an empty page
-    React.useEffect(() => setPage(0), [filters]);
 
     const handleRequestSort = (property: SortableKey) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -127,7 +104,7 @@ const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueList
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onSelectedChange(event.target.checked ? filteredRows.map((r) => r._id) : []);
+        onSelectedChange(event.target.checked ? rows.map((r) => r.id) : []);
     };
 
     const handleRowSelect = (id: string) => {
@@ -138,13 +115,16 @@ const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueList
 
     const isSelected = (id: string) => selected.includes(id);
 
-    const paginatedRows = stableSort(filteredRows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-    );
+    // const sortedRows = React.useMemo(() => {
+    //     const copy = [...rows];
+    //     copy.sort((a, b) => (order === 'desc' ? descendingComparator(a, b, orderBy) : -descendingComparator(a, b, orderBy)));
+    //     return copy;
+    // }, [rows, order, orderBy]);
 
     return (
         <MainCard content={false}>
+            {loading && <LinearProgress />}
+
             <TableContainer>
                 <Table sx={{ minWidth: 900 }} aria-labelledby="issuesTableTitle">
                     <TableHead>
@@ -152,8 +132,8 @@ const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueList
                             <TableCell padding="checkbox" sx={{ pl: 3 }}>
                                 <Checkbox
                                     color="primary"
-                                    indeterminate={selected.length > 0 && selected.length < filteredRows.length}
-                                    checked={filteredRows.length > 0 && selected.length === filteredRows.length}
+                                    indeterminate={selected.length > 0 && selected.length < rows.length}
+                                    checked={rows.length > 0 && selected.length === rows.length}
                                     onChange={handleSelectAllClick}
                                     inputProps={{ 'aria-label': 'select all issues' }}
                                 />
@@ -177,10 +157,12 @@ const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueList
                     </TableHead>
 
                     <TableBody>
-                        {paginatedRows.map((row) => {
-                            const isItemSelected = isSelected(row._id);
+                        {rows.map((row) => {
+                            const isItemSelected = isSelected(row.id);
                             const status = statusMeta[row.status];
                             const priority = priorityMeta[row.priority];
+                            console.log(priority, 'priority');
+                            console.log(status, 'status');
 
                             return (
                                 <TableRow
@@ -188,26 +170,34 @@ const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueList
                                     role="checkbox"
                                     aria-checked={isItemSelected}
                                     tabIndex={-1}
-                                    key={row._id}
+                                    key={row.id}
                                     selected={isItemSelected}
                                 >
-                                    <TableCell padding="checkbox" sx={{ pl: 3 }} onClick={() => handleRowSelect(row._id)}>
+                                    <TableCell padding="checkbox" sx={{ pl: 3 }} onClick={() => handleRowSelect(row.id)}>
                                         <Checkbox color="primary" checked={isItemSelected} />
                                     </TableCell>
-                                    <TableCell onClick={() => handleRowSelect(row._id)} sx={{ cursor: 'pointer' }}>
+                                    <TableCell onClick={() => handleRowSelect(row.id)} sx={{ cursor: 'pointer' }}>
                                         <Typography variant="h5">{row.ticketCode}</Typography>
                                     </TableCell>
                                     <TableCell>{formatTicketDate(row.createdAt)}</TableCell>
                                     <TableCell>{reportedByLabel(row.reportedByName, row.reportedByType)}</TableCell>
-                                    <TableCell>{row.rideId}</TableCell>
-                                    <TableCell>{row.categoryLabel}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell>{row.rideId ?? '—'}</TableCell>
+                                    <TableCell>{row.categoryLabel ?? '—'}</TableCell>
+                                    {/* <TableCell align="center">
                                         <Chip label={priority.label} size="small" chipcolor={priority.color} />
+                                    </TableCell>
+                                     */}
+                                    <TableCell align="center">
+                                        <Chip
+                                            label={row.priority ?? '—'}
+                                            size="small"
+                                            // chipcolor={priority.color}
+                                        />
                                     </TableCell>
                                     <TableCell align="center">
                                         <Chip label={status.label} size="small" chipcolor={status.color} />
                                     </TableCell>
-                                    <TableCell>{row.assignee ?? 'Unassigned'}</TableCell>
+                                    <TableCell>{row.assigneeName ?? 'Unassigned'}</TableCell>
                                     <TableCell align="center" sx={{ pr: 3 }}>
                                         <Button size="small" variant="outlined" sx={{ borderRadius: '8px' }}>
                                             View
@@ -216,7 +206,7 @@ const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueList
                                 </TableRow>
                             );
                         })}
-                        {paginatedRows.length === 0 && (
+                        {!loading && rows.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={10} align="center" sx={{ py: 6 }}>
                                     <Typography color="textSecondary">No issues match the current filters.</Typography>
@@ -230,14 +220,11 @@ const IssueListTable = ({ rows, filters, selected, onSelectedChange }: IssueList
             <TablePagination
                 rowsPerPageOptions={[10, 25, 50]}
                 component="div"
-                count={filteredRows.length}
+                count={total}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onPageChange={(_e, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(e) => {
-                    setRowsPerPage(parseInt(e.target.value, 10));
-                    setPage(0);
-                }}
+                onPageChange={(_e, newPage) => onPageChange(newPage)}
+                onRowsPerPageChange={(e) => onRowsPerPageChange(parseInt(e.target.value, 10))}
             />
         </MainCard>
     );
