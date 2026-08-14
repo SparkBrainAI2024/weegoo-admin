@@ -12,7 +12,7 @@ import ProfileSection from './ProfileSection';
 import MobileSection from './MobileSection';
 
 // assets
-import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics } from '@tabler/icons-react';
+import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics, IconMail } from '@tabler/icons-react';
 
 // types
 import { NavItemType, OverrideIcon } from 'types';
@@ -49,7 +49,9 @@ const DETAIL_ROUTES: DetailRoute[] = [
     { pattern: '/payments/:id', title: 'Payment Detail', icon: IconCreditCard },
     { pattern: '/reports/:id', title: 'Report Detail', icon: IconReportAnalytics },
     { pattern: '/page-management/add', title: 'Page Management', icon: IconFileText },
-    { pattern: '/page-management/:slug/edit', title: 'Page Management', icon: IconFileText }
+    { pattern: '/page-management/:slug/edit', title: 'Page Management', icon: IconFileText },
+    { pattern: '/email-template/add', title: 'Email Template', icon: IconMail },
+    { pattern: '/email-template/:slug/edit', title: 'Email Template', icon: IconMail }
 ];
 
 const findDetailRoute = (pathname: string): DetailRoute | undefined => DETAIL_ROUTES.find((route) => matchPath(route.pattern, pathname));
