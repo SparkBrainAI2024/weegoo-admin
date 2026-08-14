@@ -8,6 +8,7 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 
 import { loader as productsLoader, productLoader } from 'api/products';
 import NewPage from 'views/pages/create-new-page';
+import NewEmailTemplate from 'views/pages/create-email-template';
 
 // dashboard routing
 const DashboardAnalytics = Loadable(lazy(() => import('views/dashboard/Analytics')));
@@ -178,6 +179,7 @@ const DriversPage = Loadable(lazy(() => import('views/pages/drivers-list')));
 const PassengersPage = Loadable(lazy(() => import('views/pages/passengers-list')));
 const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
 const PageManagementPage = Loadable(lazy(() => import('views/pages/page-list')));
+const EmailTemplatePage = Loadable(lazy(() => import('views/pages/email-template-list')));
 const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
 const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
@@ -263,6 +265,18 @@ const MainRoutes = {
         {
             path: '/page-management/add',
             element: <NewPage />
+        },
+        {
+            path: '/email-template',
+            element: <EmailTemplatePage />
+        },
+        {
+            path: '/email-template/:id/edit',
+            element: <NewEmailTemplate />
+        },
+        {
+            path: '/email-template/add',
+            element: <NewEmailTemplate />
         },
 
         {

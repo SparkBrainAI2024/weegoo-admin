@@ -1,5 +1,5 @@
 // assets
-import { IconFileDescription, IconSettings } from '@tabler/icons-react';
+import { IconSettings, IconFileDescription, IconMail } from '@tabler/icons-react';
 
 // types
 import { NavItemType } from 'types';
@@ -25,6 +25,14 @@ const settings: NavItemType = {
             type: 'item',
             url: '/page-management',
             icon: IconFileDescription,
+            breadcrumbs: true
+        },
+        {
+            id: 'email-template',
+            title: 'Email Template',
+            type: 'item',
+            url: '/email-template',
+            icon: IconMail,
             breadcrumbs: true
         }
     ]
