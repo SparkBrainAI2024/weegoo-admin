@@ -182,7 +182,7 @@ const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
 const ReportsPage = Loadable(lazy(() => import('views/pages/reports')));
 const OffersPage = Loadable(lazy(() => import('views/pages/offers')));
 const OffersDetailsPage = Loadable(lazy(() => import('views/pages/offers-detail')));
-
+const IssueDetailPage = Loadable(lazy(() => import('views/pages/issue.detail.page')));
 const DriverDetailsPage = Loadable(lazy(() => import('views/pages/driver-detail.page')));
 
 const PassengerDetailsPage = Loadable(lazy(() => import('views/pages/passenger-detail.page')));
@@ -243,6 +243,10 @@ const MainRoutes = {
         {
             path: '/reports',
             element: <ReportsPage />
+        },
+        {
+            path: '/reports/:id',
+            element: <IssueDetailPage />
         },
         {
             path: '/settings',

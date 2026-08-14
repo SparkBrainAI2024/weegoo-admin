@@ -6,7 +6,8 @@
 export enum IssueStatus {
     OPEN = 'OPEN',
     IN_REVIEW = 'IN_REVIEW',
-    RESOLVED = 'RESOLVED'
+    RESOLVED = 'RESOLVED',
+    CLOSED = 'CLOSED'
 }
 
 export enum ReportedByType {
@@ -31,4 +32,27 @@ export interface IssueSummary {
     status: IssueStatus;
     priority: IssuePriority;
     assigneeName?: string | null;
+}
+
+export interface IssuePartyInfo {
+    role: 'PASSENGER' | 'DRIVER';
+    fullName: string;
+    phone: string;
+    displayId: string; // "RID-22041" / "DRV-11002" — from passengerSlugId/driverSlugId
+    userId: string;
+    suspended: boolean;
+}
+
+export interface IssueDetail {
+    _id: string;
+    ticketCode: string | null;
+    status: IssueStatus;
+    priority: IssuePriority;
+    categoryLabel: string; // now just category.parentCategory, per the repo change
+    createdAt: string;
+    rideId?: string | null;
+    description: string;
+    reportedFrom: IssuePartyInfo;
+    // null when there's no related ride (e.g. a general platform complaint)
+    reportedTo?: IssuePartyInfo | null;
 }

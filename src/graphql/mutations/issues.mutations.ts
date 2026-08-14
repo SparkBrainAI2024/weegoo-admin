@@ -14,6 +14,28 @@ export interface ResolveIssueVars {
     resolvedBy: string;
 }
 
+export interface CloseIssueData {
+    closeIssue: {
+        message: string;
+        id: string;
+        status: IssueStatus;
+    };
+}
+export interface CloseIssueVars {
+    id: string;
+    closedBy: string;
+}
+
+export const CLOSE_ISSUE: TypedDocumentNode<CloseIssueData, CloseIssueVars> = gql`
+    mutation CloseIssue($id: ID!, $closedBy: ID!) {
+        closeIssue(id: $id, closedBy: $closedBy) {
+            message
+            id
+            status
+        }
+    }
+`;
+
 export const RESOLVE_ISSUE: TypedDocumentNode<ResolveIssueData, ResolveIssueVars> = gql`
     mutation ResolveIssue($id: ID!, $resolvedBy: ID!) {
         resolveIssue(id: $id, resolvedBy: $resolvedBy) {
