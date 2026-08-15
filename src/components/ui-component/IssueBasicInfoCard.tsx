@@ -60,7 +60,7 @@ const IssueBasicInfoCard = ({ categoryLabel, createdAt, rideId, priority, issueC
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
                             <Field label="Category">
-                                <Typography variant="subtitle1" fontWeight={500}>
+                                <Typography variant="subtitle2" fontWeight={400}>
                                     {issueCategoryType}
                                 </Typography>
                             </Field>
@@ -68,7 +68,7 @@ const IssueBasicInfoCard = ({ categoryLabel, createdAt, rideId, priority, issueC
 
                         <Grid item xs={12} sm={6} md={3}>
                             <Field label="Created At">
-                                <Typography variant="subtitle1" fontWeight={500}>
+                                <Typography variant="subtitle2" fontWeight={400}>
                                     {formatTicketDate(createdAt)}
                                 </Typography>
                             </Field>
@@ -79,7 +79,7 @@ const IssueBasicInfoCard = ({ categoryLabel, createdAt, rideId, priority, issueC
                                 {rideId ? (
                                     <SpaciousChipContainer color="secondary" label={rideId}></SpaciousChipContainer>
                                 ) : (
-                                    <Typography variant="subtitle1" color="textSecondary">
+                                    <Typography variant="subtitle2" color="textSecondary">
                                         —
                                     </Typography>
                                 )}
@@ -92,20 +92,12 @@ const IssueBasicInfoCard = ({ categoryLabel, createdAt, rideId, priority, issueC
                             </Field>
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
-                            <Stack
-                                spacing={1}
-                                sx={{
-                                    pt: 2.5,
-                                    borderTop: '1px solid',
-                                    borderColor: 'divider'
-                                }}
-                            >
+                            <Stack>
                                 <Typography
-                                    variant="caption"
+                                    variant="subtitle2"
                                     color="textSecondary"
                                     sx={{
-                                        fontWeight: 500,
-                                        textTransform: 'uppercase',
+                                        fontWeight: 400,
                                         letterSpacing: 0.4
                                     }}
                                 >
@@ -113,7 +105,7 @@ const IssueBasicInfoCard = ({ categoryLabel, createdAt, rideId, priority, issueC
                                 </Typography>
 
                                 <Stack spacing={0.75}>
-                                    <Typography variant="body2" color="textSecondary" fontWeight={500}>
+                                    <Typography variant="body2" color="textSecondary" fontWeight={400}>
                                         {categoryLabel}
                                     </Typography>
 
