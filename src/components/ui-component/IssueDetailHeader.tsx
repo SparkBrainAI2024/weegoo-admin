@@ -10,6 +10,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Chip from 'components/ui-component/extended/Chip';
 import { IssueStatus } from 'types/issues.types';
 import { statusMeta } from 'utils/issue.utils';
+import { useTheme } from '@mui/material';
 
 interface IssueDetailHeaderProps {
     ticketCode: string;
@@ -25,7 +26,8 @@ const IssueDetailHeader = ({ ticketCode, status, onBack, onResolve, onClose, res
     const meta = statusMeta[status];
     const alreadyResolved = status === IssueStatus.RESOLVED;
     const alreadyClosed = status === IssueStatus.CLOSED;
-
+    const theme = useTheme();
+    const outlineColor = theme.palette.grey[400];
     return (
         <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -38,12 +40,18 @@ const IssueDetailHeader = ({ ticketCode, status, onBack, onResolve, onClose, res
                     Back
                 </Button>
                 <Typography color="textSecondary">Reports /</Typography>
-                <Typography variant="h5">{ticketCode}</Typography>
+
+                <Typography color="textSecondary">{ticketCode} /</Typography>
                 <Chip label={meta.label} size="small" chipcolor={meta.color} />
             </Stack>
 
             <Stack direction="row" spacing={1.5}>
-                <Button variant="outlined" onClick={onClose} disabled={alreadyClosed || closing} sx={{ borderRadius: '8px' }}>
+                <Button
+                    variant="outlined"
+                    onClick={onClose}
+                    disabled={alreadyClosed || closing}
+                    sx={{ borderRadius: '8px !important', px: 2.5, py: 0.5, color: 'text.primary', border: `solid ${outlineColor} 0.5px` }}
+                >
                     {alreadyClosed ? 'Closed' : closing ? 'Closing…' : 'Close'}
                 </Button>
                 <Button
@@ -52,9 +60,10 @@ const IssueDetailHeader = ({ ticketCode, status, onBack, onResolve, onClose, res
                     disabled={alreadyResolved || alreadyClosed || resolving}
                     startIcon={resolving ? <CircularProgress size={16} color="inherit" /> : null}
                     sx={{
-                        borderRadius: '8px',
-                        bgcolor: 'warning.main',
-                        color: 'common.white',
+                        borderRadius: '8px !important',
+                        px: 2.5,
+                        py: 0.5,
+                        bgcolor: 'warning.dark',
                         '&:hover': { bgcolor: 'warning.dark' }
                     }}
                 >

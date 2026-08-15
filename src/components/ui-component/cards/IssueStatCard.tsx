@@ -23,7 +23,7 @@ const IssueStatCard = ({ label, value, chip, chipColor = 'orange', secondaryValu
     <ShadowedCardContainer>
         <Box sx={{ p: 2.5 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1.5 }}>
-                <Typography variant="subtitle2" color="textSecondary">
+                <Typography variant="subtitle1" color="textSecondary">
                     {label}
                 </Typography>
                 {chip && <Chip label={chip} size="small" chipcolor={chipColor} />}
