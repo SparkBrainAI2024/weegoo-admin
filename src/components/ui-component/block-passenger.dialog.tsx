@@ -3,9 +3,10 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, B
 
 import { BLOCK_PASSENGER, UNBLOCK_PASSENGER } from 'graphql/mutations/passenger.mutation';
 import { PassengerListItem } from 'types/passengers.types';
+import { CurrentUserToBlock } from 'views/pages/issue.detail.page';
 
 interface BlockUnblockPassengerDialogProps {
-    passenger: PassengerListItem;
+    passenger: PassengerListItem | CurrentUserToBlock;
     onClose: () => void;
     refetch: () => void; // pass this down from the parent's useQuery
 }

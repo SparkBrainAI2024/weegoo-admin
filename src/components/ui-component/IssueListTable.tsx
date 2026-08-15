@@ -29,6 +29,7 @@ import MainCard from 'components/ui-component/cards/MainCard';
 
 import { IssueSummary } from 'types/issues.types';
 import { formatTicketDate, priorityMeta, reportedByLabel, statusMeta } from '../../utils/issue.utils';
+import { useNavigate } from 'react-router';
 
 type Order = 'asc' | 'desc';
 type SortableKey = 'ticketCode' | 'createdAt' | 'reportedByName' | 'categoryLabel' | 'priority' | 'status';
@@ -65,12 +66,6 @@ const sortableCell = (headCell: HeadCell, order: Order, orderBy: SortableKey, on
     </TableCell>
 );
 
-function descendingComparator(a: IssueSummary, b: IssueSummary, orderBy: SortableKey) {
-    if ((b[orderBy] ?? '') < (a[orderBy] ?? '')) return -1;
-    if ((b[orderBy] ?? '') > (a[orderBy] ?? '')) return 1;
-    return 0;
-}
-
 interface IssueListTableProps {
     rows: IssueSummary[];
     loading: boolean;
@@ -96,7 +91,7 @@ const IssueListTable = ({
 }: IssueListTableProps) => {
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = React.useState<SortableKey>('createdAt');
-
+    const navigate = useNavigate();
     const handleRequestSort = (property: SortableKey) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -105,6 +100,10 @@ const IssueListTable = ({
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         onSelectedChange(event.target.checked ? rows.map((r) => r.id) : []);
+    };
+
+    const handleViewClick = (id: string) => {
+        navigate('/reports/' + id);
     };
 
     const handleRowSelect = (id: string) => {
@@ -179,7 +178,10 @@ const IssueListTable = ({
                                     <TableCell onClick={() => handleRowSelect(row.id)} sx={{ cursor: 'pointer' }}>
                                         <Typography variant="h5">{row.ticketCode}</Typography>
                                     </TableCell>
-                                    <TableCell>{formatTicketDate(row.createdAt)}</TableCell>
+                                    <TableCell>
+                                        {formatTicketDate(row.createdAt)}
+                                        {row.id}
+                                    </TableCell>
                                     <TableCell>{reportedByLabel(row.reportedByName, row.reportedByType)}</TableCell>
                                     <TableCell>{row.rideId ?? '—'}</TableCell>
                                     <TableCell>{row.categoryLabel ?? '—'}</TableCell>
@@ -199,7 +201,12 @@ const IssueListTable = ({
                                     </TableCell>
                                     <TableCell>{row.assigneeName ?? 'Unassigned'}</TableCell>
                                     <TableCell align="center" sx={{ pr: 3 }}>
-                                        <Button size="small" variant="outlined" sx={{ borderRadius: '8px' }}>
+                                        <Button
+                                            size="small"
+                                            variant="outlined"
+                                            sx={{ borderRadius: '8px' }}
+                                            onClick={() => handleViewClick(row.id)}
+                                        >
                                             View
                                         </Button>
                                     </TableCell>

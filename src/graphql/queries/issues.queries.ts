@@ -3,6 +3,9 @@ import { gql, TypedDocumentNode } from '@apollo/client';
 
 import { IssueSummary } from 'types/issues.types';
 
+// graphql/issueDetail.queries.ts
+import { IssuePriority, IssueStatus, ReportedByType } from 'types/issues.types';
+
 export interface IssueListInput {
     page?: number;
     limit?: number;
@@ -67,6 +70,79 @@ export const GET_ISSUES: TypedDocumentNode<GetIssuesQueryResult, GetIssuesVars> 
             totalResolved
             avgFirstResponse
             avgResolution
+        }
+    }
+`;
+
+export interface IssuePartyDetailData {
+    role: ReportedByType;
+    fullName: string;
+    phone?: string | null;
+    displayId?: string | null;
+    userId: string;
+    suspended: boolean;
+    profileImage: string;
+}
+
+export interface GetIssueDetailData {
+    getIssueDetail: {
+        id: string;
+        ticketCode: string;
+        status: IssueStatus;
+        priority: IssuePriority;
+        categoryLabel?: string | null;
+        createdAt: string;
+        issueCategoryType: string;
+        issueContent: string;
+        reporter: IssuePartyDetailData;
+        reportee: IssuePartyDetailData;
+        rideId: {
+            rideUUId: string;
+        };
+    };
+}
+
+export interface GetIssueDetailVars {
+    input: {
+        id: string;
+    };
+}
+export const GET_ISSUE_DETAIL: TypedDocumentNode<GetIssueDetailData, GetIssueDetailVars> = gql`
+    query GetIssueDetail($input: IssueDetailInput!) {
+        getIssueDetail(input: $input) {
+            id
+            status
+            rideId {
+                id
+                rideUUId
+            }
+            priority
+            createdAt
+            issueCategoryType
+            issueContent
+            __typename
+            reporter {
+                role
+                fullName
+                phone
+                displayId
+                userId
+                suspended
+                profileImage
+                __typename
+            }
+            ticketCode
+            categoryLabel
+            reportee {
+                role
+                fullName
+                phone
+                displayId
+                userId
+                suspended
+                profileImage
+                __typename
+            }
         }
     }
 `;
