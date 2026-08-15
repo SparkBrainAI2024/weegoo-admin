@@ -5,8 +5,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import MainCard from 'components/ui-component/cards/MainCard';
 import Chip from 'components/ui-component/extended/Chip';
+import ShadowedCardContainer from './ShadowedContainer';
 
 interface IssueStatCardProps {
     label: string;
@@ -20,7 +20,7 @@ interface IssueStatCardProps {
 }
 
 const IssueStatCard = ({ label, value, chip, chipColor = 'orange', secondaryValue, secondaryLabel }: IssueStatCardProps) => (
-    <MainCard content={false} sx={{ height: '100%' }}>
+    <ShadowedCardContainer>
         <Box sx={{ p: 2.5 }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1.5 }}>
                 <Typography variant="subtitle2" color="textSecondary">
@@ -38,7 +38,7 @@ const IssueStatCard = ({ label, value, chip, chipColor = 'orange', secondaryValu
                 <Typography variant="h3">{value}</Typography>
             )}
         </Box>
-    </MainCard>
+    </ShadowedCardContainer>
 );
 
 export default IssueStatCard;
