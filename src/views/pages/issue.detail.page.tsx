@@ -21,9 +21,18 @@ import IssueDetailHeader from 'components/ui-component/IssueDetailHeader';
 import IssueBasicInfoCard from 'components/ui-component/IssueBasicInfoCard';
 import IssuePartyCard from 'components/ui-component/IssuePartyCard';
 import { useNavigate, useParams } from 'react-router';
+import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
+import { BlockUnblockPassengerDialog } from 'components/ui-component/block-passenger.dialog';
+import useNotification from 'hooks/useNotification';
 
 interface IssueDetailPageProps {
     issueId: string;
+}
+
+export interface CurrentUserToBlock {
+    fullName: string;
+    id: string;
+    suspended: boolean;
 }
 
 const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
@@ -39,6 +48,9 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         },
         skip: !id
     });
+    const [currentUserToBlock, setCurrentUserToBlock] = React.useState<CurrentUserToBlock | null>(null);
+    const [openBlockUnblockDialogDriver, setopenBlockUnblockDialogDriver] = React.useState(false);
+    const [openBlockUnblockDialogPassenger, setopenBlockUnblockDialogPassenger] = React.useState(false);
     const onBack = () => {
         navigate('/reports');
     };
@@ -53,7 +65,9 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
             setSnackbar({ message: 'Failed to resolve issue', severity: 'error' });
         }
     });
-
+    const closeDialogPassengerBlockDialog = () => {
+        setopenBlockUnblockDialogPassenger(false);
+    };
     const [closeIssue, { loading: closing }] = useMutation(CLOSE_ISSUE, {
         onCompleted: (res) => {
             refetch();
@@ -79,24 +93,45 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         }
         resolveIssue({ variables: { id: id, resolvedBy: currentAdminId } });
     };
+    const { notification, showSuccess, showError, clearNotification } = useNotification();
 
     const handleClose = () => {
+        if (!id) {
+            setSnackbar({
+                message: 'No issue id available — cannot resolve',
+                severity: 'error'
+            });
+            return;
+        }
         if (!currentAdminId) {
             setSnackbar({ message: 'No admin id available — cannot close yet', severity: 'error' });
             return;
         }
-        closeIssue({ variables: { id: issueId, closedBy: currentAdminId } });
+        closeIssue({ variables: { id: id, closedBy: currentAdminId } });
     };
 
     const handleOpenProfile = (party: IssuePartyInfo) => {
         // TODO: navigate to /drivers/:id or /passengers/:id once those routes are confirmed
         console.log('open profile', party.userId, party.role);
+        if (party.role === 'DRIVER') {
+            navigate(`/drivers/${party.userId}`);
+        } else {
+            navigate(`/passengers/${party.userId}`);
+        }
     };
 
     const handleToggleBlock = (party: IssuePartyInfo) => {
-        // TODO: call BLOCK_DRIVER/UNBLOCK_DRIVER when party.role === 'DRIVER',
-        // or the equivalent passenger mutation when party.role === 'PASSENGER'
-        console.log('toggle block', party.userId, party.role, !party.suspended);
+        setCurrentUserToBlock({
+            fullName: party.fullName,
+            id: party.userId,
+            suspended: party.suspended
+        });
+
+        if (party.role === 'DRIVER') {
+            setopenBlockUnblockDialogDriver(true);
+        } else if (party.role === 'PASSENGER') {
+            setopenBlockUnblockDialogPassenger(true);
+        }
     };
 
     if (loading && !data) {
@@ -171,6 +206,18 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
                     </Alert>
                 ) : undefined}
             </Snackbar>
+            {openBlockUnblockDialogDriver && currentUserToBlock && (
+                <BlockUnblockDriverDialog
+                    driver={currentUserToBlock}
+                    showError={showError}
+                    showSuccess={showSuccess}
+                    onClose={() => setopenBlockUnblockDialogDriver(false)}
+                    refetch={refetch}
+                />
+            )}
+            {openBlockUnblockDialogPassenger && currentUserToBlock && (
+                <BlockUnblockPassengerDialog passenger={currentUserToBlock} onClose={closeDialogPassengerBlockDialog} refetch={refetch} />
+            )}
         </Stack>
     );
 };

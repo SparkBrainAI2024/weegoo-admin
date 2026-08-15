@@ -11,6 +11,7 @@ export interface DriverListItem {
     rating: number;
     joinedDate: string | null;
 }
+
 export interface DriverDetailItem {
     id: string;
     fullName: string;

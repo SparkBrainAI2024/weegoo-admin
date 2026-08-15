@@ -3,9 +3,10 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, B
 
 import { BLOCK_DRIVER, UNBLOCK_DRIVER } from 'graphql/mutations/driver.mutation';
 import { DriverListItem } from 'types/drivers.types';
+import { CurrentUserToBlock } from 'views/pages/issue.detail.page';
 
 interface BlockUnblockDriverDialogProps {
-    driver: DriverListItem;
+    driver: DriverListItem | CurrentUserToBlock;
     onClose: () => void;
     refetch: () => void; // pass this down from the parent's useQuery
     showSuccess: (message: string) => void;
