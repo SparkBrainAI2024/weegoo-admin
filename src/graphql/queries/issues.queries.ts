@@ -91,9 +91,13 @@ export interface GetIssueDetailData {
         priority: IssuePriority;
         categoryLabel?: string | null;
         createdAt: string;
-        description: string;
+        issueCategoryType: string;
+        issueContent: string;
         reporter: IssuePartyDetailData;
-        reportee?: IssuePartyDetailData | null;
+        reportee: IssuePartyDetailData;
+        rideId: {
+            rideUUId: string;
+        };
     };
 }
 
@@ -107,8 +111,13 @@ export const GET_ISSUE_DETAIL: TypedDocumentNode<GetIssueDetailData, GetIssueDet
         getIssueDetail(input: $input) {
             id
             status
+            rideId {
+                id
+                rideUUId
+            }
             priority
             createdAt
+            issueCategoryType
             issueContent
             __typename
             reporter {

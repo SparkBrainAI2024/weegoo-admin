@@ -132,26 +132,25 @@ const IssueDetailPage = ({ issueId, onBack }: IssueDetailPageProps) => {
             <IssueBasicInfoCard
                 categoryLabel={issue.categoryLabel ?? '—'}
                 createdAt={issue.createdAt}
-                rideId={null}
+                rideId={issue.rideId.rideUUId}
                 priority={issue.priority}
-                description={issue.description}
+                issueContent={issue.issueContent}
+                issueCategoryType={issue.issueCategoryType}
             />
 
-            <Grid container spacing={2.5}>
+            <Grid container spacing={2.5} alignItems="stretch">
                 <Grid item xs={12} md={issue.reportee ? 6 : 12}>
                     <IssuePartyCard title="Reported From" party={toPartyInfo(issue.reporter)} onOpenProfile={handleOpenProfile} />
                 </Grid>
 
-                {issue.reportee && (
-                    <Grid item xs={12} md={6}>
-                        <IssuePartyCard
-                            title="Reported To"
-                            party={toPartyInfo(issue.reportee)}
-                            onOpenProfile={handleOpenProfile}
-                            onToggleBlock={handleToggleBlock}
-                        />
-                    </Grid>
-                )}
+                <Grid item xs={12} md={6}>
+                    <IssuePartyCard
+                        title="Reported To"
+                        party={toPartyInfo(issue.reportee)}
+                        onOpenProfile={handleOpenProfile}
+                        onToggleBlock={handleToggleBlock}
+                    />
+                </Grid>
             </Grid>
 
             <Snackbar open={!!snackbar} autoHideDuration={4000} onClose={() => setSnackbar(null)}>
