@@ -12,7 +12,8 @@ export enum IssueStatus {
 
 export enum ReportedByType {
     PASSENGER = 'PASSENGER',
-    DRIVER = 'DRIVER'
+    DRIVER = 'DRIVER',
+    ADMIN = 'ADMIN'
 }
 
 export enum IssuePriority {
@@ -35,7 +36,7 @@ export interface IssueSummary {
 }
 
 export interface IssuePartyInfo {
-    role: 'PASSENGER' | 'DRIVER';
+    role: 'PASSENGER' | 'DRIVER' | 'ADMIN';
     fullName: string;
     phone: string;
     displayId: string; // "RID-22041" / "DRV-11002" — from passengerSlugId/driverSlugId
@@ -52,7 +53,7 @@ export interface IssueDetail {
     createdAt: string;
     rideId?: string | null;
     description: string;
-    reportedFrom: IssuePartyInfo;
+    reporter: IssuePartyInfo;
     // null when there's no related ride (e.g. a general platform complaint)
-    reportedTo?: IssuePartyInfo | null;
+    reportee?: IssuePartyInfo | null;
 }

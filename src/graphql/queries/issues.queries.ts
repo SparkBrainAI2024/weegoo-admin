@@ -92,8 +92,8 @@ export interface GetIssueDetailData {
         categoryLabel?: string | null;
         createdAt: string;
         description: string;
-        reportedFrom: IssuePartyDetailData;
-        reportedTo?: IssuePartyDetailData | null;
+        reporter: IssuePartyDetailData;
+        reportee?: IssuePartyDetailData | null;
     };
 }
 
@@ -105,35 +105,32 @@ export interface GetIssueDetailVars {
 export const GET_ISSUE_DETAIL: TypedDocumentNode<GetIssueDetailData, GetIssueDetailVars> = gql`
     query GetIssueDetail($input: IssueDetailInput!) {
         getIssueDetail(input: $input) {
-            _id
+            id
             status
             priority
-
             createdAt
             issueContent
-
             __typename
+            reporter {
+                role
+                fullName
+                phone
+                displayId
+                userId
+                suspended
+                __typename
+            }
+            ticketCode
+            categoryLabel
+            reportee {
+                role
+                fullName
+                phone
+                displayId
+                userId
+                suspended
+                __typename
+            }
         }
     }
 `;
-
-// reportedTo {
-//     role
-//     fullName
-//     phone
-//     displayId
-//     userId
-//     suspended
-//     __typename
-// }
-// ticketCode
-// categoryLabel
-// reportedFrom {
-//             role
-//             fullName
-//             phone
-//             displayId
-//             userId
-//             suspended
-//             __typename
-//         }

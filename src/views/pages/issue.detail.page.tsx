@@ -108,7 +108,7 @@ const IssueDetailPage = ({ issueId, onBack }: IssueDetailPageProps) => {
 
     // IssuePartyDetailData -> IssuePartyInfo: same shape, just narrows nullable
     // phone/displayId to the party card's expected type.
-    const toPartyInfo = (p: typeof issue.reportedFrom): IssuePartyInfo => ({
+    const toPartyInfo = (p: typeof issue.reporter): IssuePartyInfo => ({
         role: p.role,
         fullName: p.fullName,
         phone: p.phone ?? '',
@@ -138,15 +138,15 @@ const IssueDetailPage = ({ issueId, onBack }: IssueDetailPageProps) => {
             />
 
             <Grid container spacing={2.5}>
-                <Grid item xs={12} md={issue.reportedTo ? 6 : 12}>
-                    <IssuePartyCard title="Reported From" party={toPartyInfo(issue.reportedFrom)} onOpenProfile={handleOpenProfile} />
+                <Grid item xs={12} md={issue.reportee ? 6 : 12}>
+                    <IssuePartyCard title="Reported From" party={toPartyInfo(issue.reporter)} onOpenProfile={handleOpenProfile} />
                 </Grid>
 
-                {issue.reportedTo && (
+                {issue.reportee && (
                     <Grid item xs={12} md={6}>
                         <IssuePartyCard
                             title="Reported To"
-                            party={toPartyInfo(issue.reportedTo)}
+                            party={toPartyInfo(issue.reportee)}
                             onOpenProfile={handleOpenProfile}
                             onToggleBlock={handleToggleBlock}
                         />
