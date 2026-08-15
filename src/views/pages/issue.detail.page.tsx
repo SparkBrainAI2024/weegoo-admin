@@ -1,6 +1,6 @@
 //
 // Wired to the real API. Ride Details card removed per decision — "Related
-// Trip" still shows as a chip inside Basic Information, that's enough.
+// Trip" still shows as a \ inside Basic Information, that's enough.
 // reportedTo renders whenever the backend returns one; no frontend branching
 // on category/rideId needed, that logic lives server-side now.
 
@@ -20,18 +20,17 @@ import { IssuePartyInfo } from 'types/issues.types';
 import IssueDetailHeader from 'components/ui-component/IssueDetailHeader';
 import IssueBasicInfoCard from 'components/ui-component/IssueBasicInfoCard';
 import IssuePartyCard from 'components/ui-component/IssuePartyCard';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 interface IssueDetailPageProps {
     issueId: string;
-    onBack: () => void;
 }
 
-const IssueDetailPage = ({ issueId, onBack }: IssueDetailPageProps) => {
+const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
     const { id } = useParams();
     const currentAdminId = useCurrentAdminId();
     const [snackbar, setSnackbar] = React.useState<{ message: string; severity: 'success' | 'error' } | null>(null);
-
+    const navigate = useNavigate();
     const { data, loading, error, refetch } = useQuery(GET_ISSUE_DETAIL, {
         variables: {
             input: {
@@ -40,6 +39,9 @@ const IssueDetailPage = ({ issueId, onBack }: IssueDetailPageProps) => {
         },
         skip: !id
     });
+    const onBack = () => {
+        navigate('/reports');
+    };
 
     const [resolveIssue, { loading: resolving }] = useMutation(RESOLVE_ISSUE, {
         onCompleted: (res) => {
@@ -64,11 +66,18 @@ const IssueDetailPage = ({ issueId, onBack }: IssueDetailPageProps) => {
     });
 
     const handleResolve = () => {
+        if (!id) {
+            setSnackbar({
+                message: 'No issue id available — cannot resolve',
+                severity: 'error'
+            });
+            return;
+        }
         if (!currentAdminId) {
             setSnackbar({ message: 'No admin id available — cannot resolve yet', severity: 'error' });
             return;
         }
-        resolveIssue({ variables: { id: issueId, resolvedBy: currentAdminId } });
+        resolveIssue({ variables: { id: id, resolvedBy: currentAdminId } });
     };
 
     const handleClose = () => {
