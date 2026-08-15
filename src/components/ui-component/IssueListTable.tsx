@@ -66,12 +66,6 @@ const sortableCell = (headCell: HeadCell, order: Order, orderBy: SortableKey, on
     </TableCell>
 );
 
-function descendingComparator(a: IssueSummary, b: IssueSummary, orderBy: SortableKey) {
-    if ((b[orderBy] ?? '') < (a[orderBy] ?? '')) return -1;
-    if ((b[orderBy] ?? '') > (a[orderBy] ?? '')) return 1;
-    return 0;
-}
-
 interface IssueListTableProps {
     rows: IssueSummary[];
     loading: boolean;

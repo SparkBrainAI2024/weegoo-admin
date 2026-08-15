@@ -42,6 +42,7 @@ export interface IssuePartyInfo {
     displayId: string; // "RID-22041" / "DRV-11002" — from passengerSlugId/driverSlugId
     userId: string;
     suspended: boolean;
+    profileImage: string;
 }
 
 export interface IssueDetail {

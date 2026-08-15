@@ -158,7 +158,8 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         phone: p.phone ?? '',
         displayId: p.displayId ?? '—',
         userId: p.userId,
-        suspended: p.suspended
+        suspended: p.suspended,
+        profileImage: p.profileImage
     });
 
     return (

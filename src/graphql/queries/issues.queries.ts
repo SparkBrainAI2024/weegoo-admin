@@ -81,6 +81,7 @@ export interface IssuePartyDetailData {
     displayId?: string | null;
     userId: string;
     suspended: boolean;
+    profileImage: string;
 }
 
 export interface GetIssueDetailData {
@@ -127,6 +128,7 @@ export const GET_ISSUE_DETAIL: TypedDocumentNode<GetIssueDetailData, GetIssueDet
                 displayId
                 userId
                 suspended
+                profileImage
                 __typename
             }
             ticketCode
@@ -138,6 +140,7 @@ export const GET_ISSUE_DETAIL: TypedDocumentNode<GetIssueDetailData, GetIssueDet
                 displayId
                 userId
                 suspended
+                profileImage
                 __typename
             }
         }

@@ -34,8 +34,19 @@ const IssuePartyCard = ({ title, party, onOpenProfile, onToggleBlock, blockLoadi
                         <Chip label={roleLabel} size="small" chipcolor={party.role === 'PASSENGER' ? 'success' : 'secondary'} />
                     </Stack>
                     <Stack direction="row" spacing={2} alignItems="center">
-                        <Avatar sx={{ bgcolor: avatarColorFor(party.fullName), width: 44, height: 44, fontWeight: 700 }}>
-                            {getInitials(party.fullName)}
+                        <Avatar
+                            src={party.profileImage ?? undefined}
+                            imgProps={{
+                                referrerPolicy: 'no-referrer'
+                            }}
+                            sx={{
+                                bgcolor: avatarColorFor(party.fullName),
+                                width: 44,
+                                height: 44,
+                                fontWeight: 700
+                            }}
+                        >
+                            {!party.profileImage && getInitials(party.fullName)}
                         </Avatar>
                         <Stack spacing={0.25}>
                             <Typography variant="subtitle1">{party.fullName}</Typography>
