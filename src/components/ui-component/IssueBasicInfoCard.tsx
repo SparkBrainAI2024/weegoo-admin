@@ -1,16 +1,15 @@
 // views/issues/detail/IssueBasicInfoCard.tsx
 import * as React from 'react';
 
+import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import Chip from 'components/ui-component/extended/Chip';
-
 import { IssuePriority } from 'types/issues.types';
 import { formatTicketDate, priorityMeta } from 'utils/issue.utils';
 import ShadowedCardContainer from './cards/ShadowedContainer';
-import { CardContent } from '@mui/material';
+import { SpaciousChipContainer } from './SpaciousChipContainer';
 
 interface IssueBasicInfoCardProps {
     categoryLabel: string;
@@ -22,10 +21,18 @@ interface IssueBasicInfoCardProps {
 }
 
 const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
-    <Stack spacing={0.5}>
-        <Typography variant="caption" color="textSecondary">
+    <Stack spacing={0.75}>
+        <Typography
+            variant="body1"
+            color="textSecondary"
+            sx={{
+                fontWeight: 500,
+                letterSpacing: 0.4
+            }}
+        >
             {label}
         </Typography>
+
         {children}
     </Stack>
 );
@@ -36,41 +43,89 @@ const IssueBasicInfoCard = ({ categoryLabel, createdAt, rideId, priority, issueC
     return (
         <ShadowedCardContainer>
             <CardContent>
-                <Stack spacing={3}>
-                    <Typography variant="h5">Basic Information</Typography>
-
+                <Stack>
+                    {/* Basic details */}
                     <Grid container spacing={3}>
-                        <Grid item xs={6} sm={3}>
+                        <Grid item xs={12}>
+                            <Typography
+                                variant="subtitle1"
+                                color="textSecondary"
+                                sx={{
+                                    fontWeight: 500,
+                                    letterSpacing: 0.4
+                                }}
+                            >
+                                Basic Information
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3}>
                             <Field label="Category">
-                                <Typography variant="subtitle1">{issueCategoryType}</Typography>
+                                <Typography variant="subtitle1" fontWeight={500}>
+                                    {issueCategoryType}
+                                </Typography>
                             </Field>
                         </Grid>
-                        <Grid item xs={6} sm={3}>
+
+                        <Grid item xs={12} sm={6} md={3}>
                             <Field label="Created At">
-                                <Typography variant="subtitle1">{formatTicketDate(createdAt)}</Typography>
+                                <Typography variant="subtitle1" fontWeight={500}>
+                                    {formatTicketDate(createdAt)}
+                                </Typography>
                             </Field>
                         </Grid>
-                        <Grid item xs={6} sm={3}>
+
+                        <Grid item xs={12} sm={6} md={3}>
                             <Field label="Related Trip">
                                 {rideId ? (
-                                    <Chip label={rideId} size="small" chipcolor="secondary" />
+                                    <SpaciousChipContainer color="secondary" label={rideId}></SpaciousChipContainer>
                                 ) : (
-                                    <Typography color="textSecondary">—</Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        —
+                                    </Typography>
                                 )}
                             </Field>
                         </Grid>
-                        <Grid item xs={6} sm={3}>
+
+                        <Grid item xs={12} sm={6} md={3}>
                             <Field label="Priority">
-                                <Chip label={p.label} size="small" chipcolor={p.color} />
+                                <SpaciousChipContainer color={p.color} label={p.label}></SpaciousChipContainer>
                             </Field>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3}>
+                            <Stack
+                                spacing={1}
+                                sx={{
+                                    pt: 2.5,
+                                    borderTop: '1px solid',
+                                    borderColor: 'divider'
+                                }}
+                            >
+                                <Typography
+                                    variant="caption"
+                                    color="textSecondary"
+                                    sx={{
+                                        fontWeight: 500,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: 0.4
+                                    }}
+                                >
+                                    Description
+                                </Typography>
+
+                                <Stack spacing={0.75}>
+                                    <Typography variant="body2" color="textSecondary" fontWeight={500}>
+                                        {categoryLabel}
+                                    </Typography>
+
+                                    <Typography variant="body2" color="textSecondary">
+                                        {issueContent}
+                                    </Typography>
+                                </Stack>
+                            </Stack>
                         </Grid>
                     </Grid>
 
-                    <Field label="Description">
-                        <Typography variant="body1">{categoryLabel}</Typography>
-
-                        <Typography variant="body1">{issueContent}</Typography>
-                    </Field>
+                    {/* Description */}
                 </Stack>
             </CardContent>
         </ShadowedCardContainer>
