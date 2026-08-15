@@ -93,7 +93,7 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         }
         resolveIssue({ variables: { id: id, resolvedBy: currentAdminId } });
     };
-    const { notification, showSuccess, showError, clearNotification } = useNotification();
+    const { showSuccess, showError } = useNotification();
 
     const handleClose = () => {
         if (!id) {
