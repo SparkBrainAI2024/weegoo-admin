@@ -25,7 +25,7 @@ const TIME_RANGE_LABELS: Record<RideTimeRange, string> = {
 };
 
 interface RideRow {
-    id: string;
+    _id: string;
     rideUUId: string;
     rideStatus: RideStatus;
     bookingTime: string;
@@ -98,7 +98,7 @@ const RidesList = () => {
             key: 'action',
             header: 'ACTION',
             render: (row) => (
-                <Button size="small" variant="contained" color="success" onClick={() => navigate(`/rides/${row.id}`)}>
+                <Button size="small" variant="contained" color="success" onClick={() => navigate(`/rides/${row._id}`)}>
                     View Details
                 </Button>
             )
@@ -154,7 +154,7 @@ const RidesList = () => {
                 </Select>
             </Box>
 
-            <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row.id} />
+            <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row._id} />
 
             <TablePagination
                 component="div"
