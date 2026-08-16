@@ -8,7 +8,7 @@ import { RideDetail } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
 import RouteTrackingIcon from '../../assets/images/icons/route_tracking.png';
 import { Icon } from '@mui/material';
-import { FieldAndFieldValue, RideDetailSubtitle, RideDetailSubtitle2 } from './RideDetailSubtitle';
+import { FieldAndFieldValue, RideDetailSubtitle2 } from './RideDetailSubtitle';
 interface RouteTrackingCardProps {
     ride: RideDetail;
 }
