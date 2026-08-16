@@ -12,7 +12,7 @@ import ProfileSection from './ProfileSection';
 import MobileSection from './MobileSection';
 
 // assets
-import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics, IconMail } from '@tabler/icons-react';
+import { IconGift, IconUsers, IconCreditCard, IconReportAnalytics, IconMail, IconCar } from '@tabler/icons-react';
 
 // types
 import { NavItemType, OverrideIcon } from 'types';
