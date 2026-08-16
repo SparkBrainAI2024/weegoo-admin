@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import RouteIcon from '@mui/icons-material/AltRoute';
 import { RideDetail } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
 import RouteTrackingIcon from '../../assets/images/icons/route_tracking.png';

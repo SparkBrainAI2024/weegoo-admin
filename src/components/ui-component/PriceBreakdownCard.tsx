@@ -2,10 +2,9 @@ import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { FareInfo, PaymentDetailsInfo } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
-import { Icon, useTheme } from '@mui/material';
+import { Icon } from '@mui/material';
 import PriceBreakdownIcon from '../../assets/images/icons/price_dark.png';
 
 interface PricingBreakdownCardProps {
@@ -32,7 +31,6 @@ const PricingBreakdownCard = ({ fare, paymentDetails, platformCommissionAmount, 
     // fare and paymentDetails overlap significantly (both have baseAmount/distanceAmount/totalAmount) —
     // using paymentDetails as source of truth per the Rides List convention, falling back to fare.
     const totalAmount = paymentDetails?.totalAmount ?? fare?.totalAmount;
-    const theme = useTheme();
     return (
         <Paper variant="outlined" sx={{ p: 2.5 }}>
             <Stack direction="row" alignItems="center" spacing={1} mb={2}>
