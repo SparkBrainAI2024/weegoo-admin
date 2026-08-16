@@ -8,6 +8,7 @@ import { Column, DataTable } from 'components/ui-component/DataTable';
 import { useDebounce } from '../../hooks/useDebounce';
 import { RideStatus, RideTimeRange, useRidesList } from 'graphql/queries/rides.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
+import MainCard from 'components/ui-component/cards/MainCard';
 
 const STATUS_COLORS: Record<RideStatus, 'warning' | 'success' | 'error' | 'default'> = {
     [RideStatus.ONGOING]: 'warning',
@@ -111,51 +112,70 @@ const RidesList = () => {
                 Rides
             </Typography>
 
-            <Box display="flex" gap={2} mb={3}>
-                <TextField
-                    placeholder="Search by Ride ID, Driver, Rider name...."
-                    size="small"
-                    fullWidth
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon fontSize="small" color="disabled" />
-                            </InputAdornment>
-                        )
-                    }}
-                />
-                <Select
-                    size="small"
-                    value={status}
-                    displayEmpty
-                    onChange={(e) => setStatus(e.target.value as RideStatus | '')}
-                    sx={{ minWidth: 160 }}
-                >
-                    <MenuItem value="">All Status</MenuItem>
-                    {Object.values(RideStatus).map((s) => (
-                        <MenuItem key={s} value={s}>
-                            {s.charAt(0) + s.slice(1).toLowerCase()}
-                        </MenuItem>
-                    ))}
-                </Select>
-                <Select
-                    size="small"
-                    value={timeRange}
-                    onChange={(e) => setTimeRange(e.target.value as RideTimeRange)}
-                    sx={{ minWidth: 160 }}
-                >
-                    {Object.entries(TIME_RANGE_LABELS).map(([value, label]) => (
-                        <MenuItem key={value} value={value}>
-                            {label}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </Box>
+            <MainCard
+                sx={{
+                    mb: '26px',
+                    '& .MuiCardContent-root': {
+                        px: '26px',
+                        py: '13px'
+                    }
+                }}
+            >
+                {' '}
+                <Box display="flex" gap={2}>
+                    <TextField
+                        placeholder="Search by Ride ID, Driver, Rider name...."
+                        size="small"
+                        fullWidth
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon fontSize="small" color="disabled" />
+                                </InputAdornment>
+                            )
+                        }}
+                    />
+                    <Select
+                        size="small"
+                        value={status}
+                        displayEmpty
+                        onChange={(e) => setStatus(e.target.value as RideStatus | '')}
+                        sx={{ minWidth: 160 }}
+                    >
+                        <MenuItem value="">All Status</MenuItem>
+                        {Object.values(RideStatus).map((s) => (
+                            <MenuItem key={s} value={s}>
+                                {s.charAt(0) + s.slice(1).toLowerCase()}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <Select
+                        size="small"
+                        value={timeRange}
+                        onChange={(e) => setTimeRange(e.target.value as RideTimeRange)}
+                        sx={{ minWidth: 160 }}
+                    >
+                        {Object.entries(TIME_RANGE_LABELS).map(([value, label]) => (
+                            <MenuItem key={value} value={value}>
+                                {label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </Box>
+            </MainCard>
 
-            <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row._id} />
-
+            <MainCard
+                sx={{
+                    '& .MuiCardContent-root': {
+                        px: '26px',
+                        py: '13px'
+                    }
+                }}
+            >
+                <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row._id} />
+            </MainCard>
             <TablePagination
                 component="div"
                 count={total}
