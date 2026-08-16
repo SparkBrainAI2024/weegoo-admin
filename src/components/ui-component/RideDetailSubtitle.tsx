@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 
 export const RideDetailSubtitle2 = ({ label }: { label: string }) => {
     return (
@@ -23,8 +23,11 @@ export const RideDetailSubtitle = ({ label }: { label: string }) => {
 export const FieldAndFieldValue = ({ label, value }: { label: string; value: string }) => {
     return (
         <>
-            <RideDetailSubtitle label={label}></RideDetailSubtitle>
-            <Typography variant="body3">{value}</Typography>
+            <Stack gap={1}>
+                {' '}
+                <RideDetailSubtitle label={label}></RideDetailSubtitle>
+                <Typography variant="body3">{value}</Typography>
+            </Stack>
         </>
     );
 };

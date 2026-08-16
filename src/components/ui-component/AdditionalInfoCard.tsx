@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { RideDetail } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
+import { FieldAndFieldValue, RideDetailSubtitle } from './RideDetailSubtitle';
+import { SpaciousChipContainer } from './SpaciousChipContainer';
 
 interface AdditionalInfoCardProps {
     ride: RideDetail;
@@ -24,48 +26,33 @@ const AdditionalInfoCard = ({ ride }: AdditionalInfoCardProps) => {
     return (
         <Paper variant="outlined" sx={{ p: 2.5 }}>
             <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                <InfoOutlinedIcon fontSize="small" color="action" />
                 <RideDetailTitle title="Additional Information"></RideDetailTitle>
             </Stack>
 
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        BOOKING ID
-                    </Typography>
-                    <Typography variant="body2" fontWeight={700}>
-                        {ride.rideUUId || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="BOOKING ID" value={ride.rideUUId || '—'}></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        PAYMENT STATUS
-                    </Typography>
+                    <Typography variant="caption" color="text.secondary" display="block"></Typography>
+                    <RideDetailSubtitle label="  PAYMENT STATUS"></RideDetailSubtitle>
+
                     {paymentStatus ? (
-                        <Chip
+                        <SpaciousChipContainer
                             label={paymentStatus.charAt(0) + paymentStatus.slice(1).toLowerCase()}
-                            size="small"
                             color={PAYMENT_STATUS_COLOR[paymentStatus.toUpperCase()] ?? 'default'}
-                            sx={{ mt: 0.5 }}
                         />
                     ) : (
                         <Typography variant="body2">—</Typography>
                     )}
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        PROMO CODE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={700}>
-                        {promoCode || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="PROMO CODE" value={promoCode || '—'}></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        NOTES
-                    </Typography>
+                    <RideDetailSubtitle label="NOTES"></RideDetailSubtitle>
                     {/* No notes field on Rides schema yet — static placeholder per earlier decision */}
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body3" sx={{ letterSpacing: 0, fontWeight: 400 }}>
                         No additional notes for this ride.
                     </Typography>
                 </Grid>

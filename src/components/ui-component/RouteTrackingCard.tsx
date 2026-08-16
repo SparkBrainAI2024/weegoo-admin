@@ -78,16 +78,22 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
 
             <Grid container spacing={2}>
                 <Grid item xs={6}>
-                    <RideDetailSubtitle label="DISTANCE"></RideDetailSubtitle>
-                    <Typography variant="body3">{ride.distanceInKm != null ? `${ride.distanceInKm} km` : '—'}</Typography>
+                    <FieldAndFieldValue
+                        label="DISTANCE"
+                        value={ride.distanceInKm != null ? `${ride.distanceInKm} km` : '—'}
+                    ></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={6}>
-                    <RideDetailSubtitle label="DURATION"></RideDetailSubtitle>
-                    <Typography variant="body3">{ride.durationInMinutes != null ? `${ride.durationInMinutes} min` : '—'}</Typography>
+                    <FieldAndFieldValue
+                        label="DURATION"
+                        value={ride.durationInMinutes != null ? `${ride.durationInMinutes} min` : '—'}
+                    ></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={6}>
-                    <RideDetailSubtitle label="WAIT TIME"></RideDetailSubtitle>
-                    <Typography variant="body3">{ride.waitTimeInMinutes != null ? `${ride.waitTimeInMinutes} min` : '—'}</Typography>
+                    <FieldAndFieldValue
+                        label="WAIT TIME"
+                        value={ride.waitTimeInMinutes != null ? `${ride.waitTimeInMinutes} min` : '—'}
+                    ></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={6}>
                     <FieldAndFieldValue label="VEHICLE TYPE" value={ride.vehicle?.vehicleType || '—'}></FieldAndFieldValue>
