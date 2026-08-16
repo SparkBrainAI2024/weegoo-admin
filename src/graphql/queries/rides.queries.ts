@@ -159,7 +159,7 @@ export const useRidesList = (params: Parameters<typeof buildRidesListInput>[0]) 
     return useQuery<RidesQueryResult>(RIDES_QUERY, { variables: { input } });
 };
 export interface RideListItem {
-    id: string;
+    _id: string;
     rideUUId: string;
     rideStatus: RideStatus;
     bookingTime: string;
@@ -178,3 +178,181 @@ export interface RidesQueryResult {
         limit: number;
     };
 }
+
+export interface RideLocationInfo {
+    address?: string;
+    fullAddress?: string;
+    city?: string;
+    district?: string;
+    province?: string;
+}
+
+export interface FareInfo {
+    baseAmount: number;
+    trafficCongestionAmount: number;
+    distanceAmount: number;
+    totalAmount: number;
+    subTotal: number;
+    discountAmount: number;
+    promoCodeName?: string;
+}
+
+export interface PaymentDetailsInfo {
+    totalAmount: number;
+    subTotal: number;
+    discountAmount: number;
+    promoCodeName?: string;
+    paymentMethod?: string;
+    paymentStatus?: string;
+    paymentFailedReason?: string;
+    driverCommission: number;
+}
+
+export interface VehicleInfo {
+    model?: string;
+    plateNumber?: string;
+    color?: string;
+    vehicleType?: string;
+}
+
+export interface RideUserSnapshotInfo {
+    userId: string;
+    fullName: string;
+    displayId: string;
+    email: string;
+    phone: string;
+    profileImage?: string;
+    rating: number;
+    suspended: boolean;
+    totalRidesAsDriver?: number;
+    totalTripsAsPassenger?: number;
+}
+
+export interface RideDetail {
+    id: string;
+    rideUUId?: string;
+    rideType: string;
+    rideStatus: string;
+    bookingTime: string;
+    rideStartedAt?: string;
+    rideCompletedAt?: string;
+    distanceInKm?: number;
+    durationInMinutes?: number;
+    waitTimeInMinutes?: number;
+    pickupLocation?: RideLocationInfo;
+    dropoffLocation?: RideLocationInfo;
+    fare?: FareInfo;
+    paymentDetails?: PaymentDetailsInfo;
+    platformCommissionAmount?: number;
+    driverEarningsAmount?: number;
+    vehicle?: VehicleInfo;
+    driver?: RideUserSnapshotInfo;
+    passenger?: RideUserSnapshotInfo;
+}
+
+export interface GetRideDetailResponse {
+    rideDetail: RideDetail;
+}
+
+export interface GetRideDetailVariables {
+    input: {
+        id: string;
+    };
+}
+
+export interface VehicleInfo {
+    name?: string;
+    vehicleModel?: string;
+    year?: number;
+    color?: string;
+    numberPlate?: string;
+    vehicleType?: string;
+}
+
+export const GET_RIDE_DETAIL = gql`
+    query RideDetail($input: RideDetailInput!) {
+        rideDetail(input: $input) {
+            id
+            rideUUId
+            rideType
+            rideStatus
+            bookingTime
+            rideStartedAt
+            rideCompletedAt
+            distanceInKm
+            durationInMinutes
+            waitTimeInMinutes
+
+            pickupLocation {
+                address
+                fullAddress
+                city
+                district
+                province
+            }
+            dropoffLocation {
+                address
+                fullAddress
+                city
+                district
+                province
+            }
+
+            fare {
+                baseAmount
+                trafficCongestionAmount
+                distanceAmount
+                totalAmount
+                subTotal
+                discountAmount
+                promoCodeName
+            }
+
+            paymentDetails {
+                totalAmount
+                subTotal
+                discountAmount
+                promoCodeName
+                paymentMethod
+                paymentStatus
+                paymentFailedReason
+                driverCommission
+            }
+
+            platformCommissionAmount
+            driverEarningsAmount
+            vehicle {
+                name
+                vehicleModel
+                year
+                color
+                numberPlate
+                vehicleType
+            }
+
+            driver {
+                userId
+                fullName
+                displayId
+                email
+                phone
+                profileImage
+                rating
+                suspended
+                totalRidesAsDriver
+            }
+
+            passenger {
+                userId
+                fullName
+                displayId
+                email
+                phone
+                profileImage
+                rating
+                suspended
+                totalTripsAsPassenger
+            }
+        }
+    }
+`;

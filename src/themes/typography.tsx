@@ -6,14 +6,14 @@ import { ThemeMode, FontFamily } from 'types/config';
 const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily): TypographyVariantsOptions => ({
     fontFamily,
     h6: {
-        fontWeight: 500,
+        fontWeight: 400,
         color: theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[600] : theme.palette.grey[900],
         fontSize: '0.75rem'
     },
     h5: {
         fontSize: '0.875rem',
         color: theme.palette.mode === ThemeMode.DARK ? theme.palette.grey[600] : theme.palette.grey[900],
-        fontWeight: 500
+        fontWeight: 600
     },
     h4: {
         fontSize: '1rem',
@@ -64,6 +64,14 @@ const Typography = (theme: Theme, borderRadius: number, fontFamily: FontFamily):
         letterSpacing: '0em',
         fontWeight: 400,
         lineHeight: '1.5em',
+        color: theme.palette.text.primary
+    },
+
+    body3: {
+        fontWeight: 600,
+        fontSize: '0.875rem',
+        lineHeight: '1.5em',
+        letterSpacing: '0.125em',
         color: theme.palette.text.primary
     },
     button: {

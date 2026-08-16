@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Chip, MenuItem, Select, TablePagination, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, Icon, MenuItem, Select, TablePagination, TextField, Typography } from '@mui/material';
 import { InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,10 @@ import { Column, DataTable } from 'components/ui-component/DataTable';
 import { useDebounce } from '../../hooks/useDebounce';
 import { RideStatus, RideTimeRange, useRidesList } from 'graphql/queries/rides.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
-
+import MainCard from 'components/ui-component/cards/MainCard';
+import { SpaciousChipContainer } from 'components/ui-component/SpaciousChipContainer';
+import RidePickupIcon from '../../assets/images/icons/pickup_icon.png';
+import RideDropoffIcon from '../../assets/images/icons/destination_icon.png';
 const STATUS_COLORS: Record<RideStatus, 'warning' | 'success' | 'error' | 'default'> = {
     [RideStatus.ONGOING]: 'warning',
     [RideStatus.COMPLETED]: 'success',
@@ -25,7 +28,7 @@ const TIME_RANGE_LABELS: Record<RideTimeRange, string> = {
 };
 
 interface RideRow {
-    id: string;
+    _id: string;
     rideUUId: string;
     rideStatus: RideStatus;
     bookingTime: string;
@@ -81,8 +84,32 @@ const RidesList = () => {
         { key: 'rideId', header: 'RIDE ID', render: (row) => row.rideUUId },
         { key: 'rider', header: 'RIDER', render: (row) => row.passenger?.fullName ?? '—' },
         { key: 'driver', header: 'DRIVER', render: (row) => row.driver?.fullName ?? '—' },
-        { key: 'pickup', header: 'PICK UP', render: (row) => row.pickupLocation?.address ?? '—' },
-        { key: 'dropoff', header: 'DROP OFF', render: (row) => row.dropoffLocation?.address ?? '—' },
+        {
+            key: 'pickup',
+            header: 'PICK UP',
+            render: (row) => (
+                <Box display="flex" alignItems="center" gap={1}>
+                    <Icon>
+                        {' '}
+                        <img src={RidePickupIcon} alt="Pickup" width="10px" />
+                    </Icon>
+                    {row.pickupLocation?.address ?? '—'}
+                </Box>
+            )
+        },
+        {
+            key: 'dropoff',
+            header: 'DROP OFF',
+            render: (row) => (
+                <Box display="flex" alignItems="center" gap={1}>
+                    <Icon>
+                        {' '}
+                        <img src={RideDropoffIcon} alt="Dropoff" width="21px" />
+                    </Icon>
+                    {row.dropoffLocation?.address ?? '—'}
+                </Box>
+            )
+        },
         { key: 'price', header: 'PRICE', render: (row) => `Rs. ${row.paymentDetails?.totalAmount ?? 0}` },
         {
             key: 'time',
@@ -92,13 +119,24 @@ const RidesList = () => {
         {
             key: 'status',
             header: 'STATUS',
-            render: (row) => <Chip label={row.rideStatus} size="small" color={STATUS_COLORS[row.rideStatus]} sx={{ fontWeight: 600 }} />
+            render: (row) => <SpaciousChipContainer label={row.rideStatus} color={STATUS_COLORS[row.rideStatus]} />
         },
         {
             key: 'action',
             header: 'ACTION',
             render: (row) => (
-                <Button size="small" variant="contained" color="success" onClick={() => navigate(`/rides/${row.id}`)}>
+                <Button
+                    size="small"
+                    variant="contained"
+                    sx={{
+                        backgroundColor: 'secondary.main',
+                        color: 'common.white',
+                        '&:hover': {
+                            backgroundColor: 'secondary.main'
+                        }
+                    }}
+                    onClick={() => navigate(`/rides/${row._id}`)}
+                >
                     View Details
                 </Button>
             )
@@ -111,51 +149,76 @@ const RidesList = () => {
                 Rides
             </Typography>
 
-            <Box display="flex" gap={2} mb={3}>
-                <TextField
-                    placeholder="Search by Ride ID, Driver, Rider name...."
-                    size="small"
-                    fullWidth
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon fontSize="small" color="disabled" />
-                            </InputAdornment>
-                        )
-                    }}
-                />
-                <Select
-                    size="small"
-                    value={status}
-                    displayEmpty
-                    onChange={(e) => setStatus(e.target.value as RideStatus | '')}
-                    sx={{ minWidth: 160 }}
-                >
-                    <MenuItem value="">All Status</MenuItem>
-                    {Object.values(RideStatus).map((s) => (
-                        <MenuItem key={s} value={s}>
-                            {s.charAt(0) + s.slice(1).toLowerCase()}
-                        </MenuItem>
-                    ))}
-                </Select>
-                <Select
-                    size="small"
-                    value={timeRange}
-                    onChange={(e) => setTimeRange(e.target.value as RideTimeRange)}
-                    sx={{ minWidth: 160 }}
-                >
-                    {Object.entries(TIME_RANGE_LABELS).map(([value, label]) => (
-                        <MenuItem key={value} value={value}>
-                            {label}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </Box>
+            <MainCard
+                sx={{
+                    mb: '26px',
+                    '& .MuiCardContent-root': {
+                        px: '26px',
+                        py: '13px'
+                    }
+                }}
+            >
+                {' '}
+                <Box display="flex" gap={2}>
+                    <TextField
+                        placeholder="Search by Ride ID, Driver, Rider name...."
+                        size="small"
+                        fullWidth
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon fontSize="small" color="disabled" />
+                                </InputAdornment>
+                            )
+                        }}
+                    />
+                    <Select
+                        size="small"
+                        value={status}
+                        displayEmpty
+                        onChange={(e) => setStatus(e.target.value as RideStatus | '')}
+                        sx={{ minWidth: 160 }}
+                    >
+                        <MenuItem value="">All Status</MenuItem>
+                        {Object.values(RideStatus).map((s) => (
+                            <MenuItem key={s} value={s}>
+                                {s.charAt(0) + s.slice(1).toLowerCase()}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <Select
+                        size="small"
+                        value={timeRange}
+                        onChange={(e) => setTimeRange(e.target.value as RideTimeRange)}
+                        sx={{ minWidth: 160 }}
+                    >
+                        {Object.entries(TIME_RANGE_LABELS).map(([value, label]) => (
+                            <MenuItem key={value} value={value}>
+                                {label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </Box>
+            </MainCard>
 
-            <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row.id} />
-
+            <MainCard
+                sx={{
+                    '& .MuiCardContent-root': {
+                        px: '0px',
+                        py: '0px'
+                    }
+                }}
+            >
+                {' '}
+                <Box sx={{ px: 3, pt: 3, pb: 2 }}>
+                    <Typography variant="h3" fontWeight={500}>
+                        All Rides
+                    </Typography>
+                </Box>
+                <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row._id} />
+            </MainCard>
             <TablePagination
                 component="div"
                 count={total}

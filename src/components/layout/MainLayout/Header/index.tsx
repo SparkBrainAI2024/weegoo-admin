@@ -12,7 +12,8 @@ import ProfileSection from './ProfileSection';
 import MobileSection from './MobileSection';
 
 // assets
-import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics, IconMail } from '@tabler/icons-react';
+
+import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics, IconMail,IconCar } from '@tabler/icons-react';
 
 // types
 import { NavItemType, OverrideIcon } from 'types';
@@ -48,6 +49,8 @@ const DETAIL_ROUTES: DetailRoute[] = [
     { pattern: '/reports/:id', title: 'Report Detail', icon: IconGift },
     { pattern: '/drivers/:id', title: 'Driver', icon: IconDrivers },
     { pattern: '/passengers/:id', title: 'Rider Detail', icon: IconUsers },
+
+    { pattern: '/rides/:id', title: 'Ride Details', icon: IconCar },
     { pattern: '/payments/:id', title: 'Payment Detail', icon: IconCreditCard },
     { pattern: '/reports/:id', title: 'Report Detail', icon: IconReportAnalytics },
     { pattern: '/page-management/add', title: 'Page Management', icon: IconFileText },

@@ -11,5 +11,6 @@ declare module '@mui/material/Typography' {
         mediumAvatar: true;
         largeAvatar: true;
         pageTitle: true;
+        body3: true;
     }
 }

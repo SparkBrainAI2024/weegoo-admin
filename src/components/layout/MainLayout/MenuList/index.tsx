@@ -1,4 +1,4 @@
-import { memo, useLayoutEffect, useState } from 'react';
+import { memo, useState } from 'react';
 
 // material-ui
 import { Theme } from '@mui/material/styles';
@@ -14,7 +14,6 @@ import NavGroup from './NavGroup';
 import menuItem from 'menu-items';
 import useConfig from 'hooks/useConfig';
 
-import { Menu } from 'menu-items/widget';
 import { HORIZONTAL_MAX_ITEM } from 'config';
 import { useGetMenu, useGetMenuMaster } from 'api/menu';
 
@@ -36,8 +35,6 @@ const MenuList = () => {
     const [selectedID, setSelectedID] = useState<string | undefined>('');
 
     const [menuItems] = useState({ items: [...menuItem.items] });
-    
-    
 
     // last menu-item to show in horizontal menu bar
     const lastItem = isHorizontal ? HORIZONTAL_MAX_ITEM : null;
