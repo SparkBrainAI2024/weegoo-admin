@@ -3,8 +3,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import ScheduleIcon from '@mui/icons-material/Schedule';
-
+import RideTimelineIcon from '../../assets/images/icons/ride_timeline.png';
+import { Icon } from '@mui/material';
 // Timeline has no backing schema field yet (RideStatusHistory not modeled) —
 // kept static per earlier decision. Revisit once that migration happens.
 const STATIC_TIMELINE_STEPS = [
@@ -19,19 +19,9 @@ const RideTimelineCard = () => {
     return (
         <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
             <Stack direction="row" alignItems="center" spacing={1.5} mb={1.5}>
-                <Box
-                    sx={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: '50%',
-                        bgcolor: 'warning.dark',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                >
-                    <ScheduleIcon sx={{ fontSize: 16, color: 'common.white' }} />
-                </Box>
+                <Icon>
+                    <img src={RideTimelineIcon} alt="Ride_Timeline" width="26px" />
+                </Icon>
                 <Typography variant="subtitle1" fontWeight={700}>
                     Ride Timeline
                 </Typography>
