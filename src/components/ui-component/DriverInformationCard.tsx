@@ -9,6 +9,7 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import StarIcon from '@mui/icons-material/Star';
 import { RideUserSnapshotInfo, VehicleInfo } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
+import { FieldAndFieldValue } from './RideDetailSubtitle';
 
 interface DriverInformationCardProps {
     driver?: RideUserSnapshotInfo;
@@ -53,36 +54,19 @@ const DriverInformationCard = ({ driver, vehicle, onOpenProfile }: DriverInforma
 
             <Grid container spacing={2}>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        PHONE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {driver.phone || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="PHONE" value={driver.phone || '—'}></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        VEHICLE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {vehicle ? `${vehicle.name ?? ''} ${vehicle.vehicleModel ?? ''}`.trim() || '—' : '—'}
-                    </Typography>
+                    <FieldAndFieldValue
+                        label="VEHICLE"
+                        value={vehicle ? `${vehicle.name ?? ''} ${vehicle.vehicleModel ?? ''}`.trim() || '—' : '—'}
+                    ></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        LICENSE PLATE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {vehicle?.numberPlate || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="LICENSE PLATE" value={vehicle?.numberPlate || '—'}></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        VEHICLE COLOR
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {vehicle?.color || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="VEHICLE COLOR" value={vehicle?.color || '—'}></FieldAndFieldValue>
                 </Grid>
             </Grid>
         </Paper>

@@ -7,7 +7,9 @@ import Typography from '@mui/material/Typography';
 import RouteIcon from '@mui/icons-material/AltRoute';
 import { RideDetail } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
-
+import RouteTrackingIcon from '../../assets/images/icons/route_tracking.png';
+import { Icon } from '@mui/material';
+import { FieldAndFieldValue, RideDetailSubtitle, RideDetailSubtitle2 } from './RideDetailSubtitle';
 interface RouteTrackingCardProps {
     ride: RideDetail;
 }
@@ -21,7 +23,9 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
     return (
         <Paper variant="outlined" sx={{ p: 2.5 }}>
             <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                <RouteIcon fontSize="small" color="success" />
+                <Icon>
+                    <img src={RouteTrackingIcon} alt="Route tracking" width="26px" />
+                </Icon>
                 <RideDetailTitle title="Route Tracking"></RideDetailTitle>
             </Stack>
 
@@ -46,9 +50,7 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
                 <Stack direction="row" spacing={1.5}>
                     <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'success.main', mt: 0.6 }} />
                     <Box>
-                        <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                            PICKUP LOCATION
-                        </Typography>
+                        <RideDetailSubtitle2 label="PICKUP LOCATION"></RideDetailSubtitle2>
                         <Typography variant="body2" fontWeight={600}>
                             {ride.pickupLocation?.fullAddress || ride.pickupLocation?.address || '—'}
                         </Typography>
@@ -61,9 +63,7 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
                 <Stack direction="row" spacing={1.5}>
                     <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: 'error.main', mt: 0.6 }} />
                     <Box>
-                        <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                            DROP-OFF LOCATION
-                        </Typography>
+                        <RideDetailSubtitle2 label="DROP-OFF LOCATION"></RideDetailSubtitle2>
                         <Typography variant="body2" fontWeight={600}>
                             {ride.dropoffLocation?.fullAddress || ride.dropoffLocation?.address || '—'}
                         </Typography>
@@ -79,36 +79,19 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
 
             <Grid container spacing={2}>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        DISTANCE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {ride.distanceInKm != null ? `${ride.distanceInKm} km` : '—'}
-                    </Typography>
+                    <RideDetailSubtitle label="DISTANCE"></RideDetailSubtitle>
+                    <Typography variant="body3">{ride.distanceInKm != null ? `${ride.distanceInKm} km` : '—'}</Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        DURATION
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {ride.durationInMinutes != null ? `${ride.durationInMinutes} min` : '—'}
-                    </Typography>
+                    <RideDetailSubtitle label="DURATION"></RideDetailSubtitle>
+                    <Typography variant="body3">{ride.durationInMinutes != null ? `${ride.durationInMinutes} min` : '—'}</Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        WAIT TIME
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {ride.waitTimeInMinutes != null ? `${ride.waitTimeInMinutes} min` : '—'}
-                    </Typography>
+                    <RideDetailSubtitle label="WAIT TIME"></RideDetailSubtitle>
+                    <Typography variant="body3">{ride.waitTimeInMinutes != null ? `${ride.waitTimeInMinutes} min` : '—'}</Typography>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        VEHICLE TYPE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {ride.vehicle?.vehicleType || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="VEHICLE TYPE" value={ride.vehicle?.vehicleType || '—'}></FieldAndFieldValue>
                 </Grid>
             </Grid>
         </Paper>

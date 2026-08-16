@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { FareInfo, PaymentDetailsInfo } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
+import { Icon, useTheme } from '@mui/material';
+import PriceBreakdownIcon from '../../assets/images/icons/price_dark.png';
 
 interface PricingBreakdownCardProps {
     fare?: FareInfo;
@@ -30,14 +32,15 @@ const PricingBreakdownCard = ({ fare, paymentDetails, platformCommissionAmount, 
     // fare and paymentDetails overlap significantly (both have baseAmount/distanceAmount/totalAmount) —
     // using paymentDetails as source of truth per the Rides List convention, falling back to fare.
     const totalAmount = paymentDetails?.totalAmount ?? fare?.totalAmount;
-
+    const theme = useTheme();
     return (
         <Paper variant="outlined" sx={{ p: 2.5 }}>
             <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                <ReceiptLongIcon fontSize="small" color="warning" />
+                <Icon>
+                    <img src={PriceBreakdownIcon} alt="Route tracking" width="26px" />
+                </Icon>
                 <RideDetailTitle title="Pricing Breakdown"></RideDetailTitle>
             </Stack>
-
             <Stack spacing={1.25}>
                 <Row label="Base Fare" value={formatCurrency(fare?.baseAmount)} />
                 <Row label="Distance" value={formatCurrency(fare?.distanceAmount)} />

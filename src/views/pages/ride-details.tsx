@@ -11,7 +11,7 @@ import { GET_RIDE_DETAIL, GetRideDetailResponse, GetRideDetailVariables } from '
 
 import RouteTrackingCard from 'components/ui-component/RouteTrackingCard';
 import RideTimelineCard from 'components/ui-component/RideTimelineCard';
-import RiderInformationCard from 'components/ui-component/RideInformationCard';
+import RiderInformationCard from 'components/ui-component/RiderInformationCard';
 import DriverInformationCard from 'components/ui-component/DriverInformationCard';
 import PricingBreakdownCard from 'components/ui-component/PriceBreakdownCard';
 import AdditionalInfoCard from 'components/ui-component/AdditionalInfoCard';

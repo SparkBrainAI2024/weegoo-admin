@@ -9,6 +9,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { RideUserSnapshotInfo } from 'graphql/queries/rides.queries';
 import { Box } from '@mui/material';
 import RideDetailTitle from './RideDetailTitle';
+import { FieldAndFieldValue } from './RideDetailSubtitle';
 
 interface RiderInformationCardProps {
     passenger?: RideUserSnapshotInfo;
@@ -52,20 +53,10 @@ const RiderInformationCard = ({ passenger, onOpenProfile }: RiderInformationCard
 
             <Grid container spacing={2}>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        PHONE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {passenger.phone || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="PHONE" value={passenger.phone || '—'}></FieldAndFieldValue>
                 </Grid>
                 <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                        EMAIL
-                    </Typography>
-                    <Typography variant="body2" fontWeight={600}>
-                        {passenger.email || '—'}
-                    </Typography>
+                    <FieldAndFieldValue label="EMAIL" value={passenger.email || '—'}></FieldAndFieldValue>
                 </Grid>
                 {/* Payment method & special requests aren't on RideUserSnapshotInfo —
                     payment method lives on paymentDetails, not the passenger; special

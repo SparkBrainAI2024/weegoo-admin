@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { SpaciousChipContainer } from './SpaciousChipContainer';
 
 interface RideStatusCardProps {
     status: string;
@@ -32,15 +33,13 @@ const RideStatusCard = ({ status, startedAt }: RideStatusCardProps) => {
     const statusLabel = status ? status.charAt(0) + status.slice(1).toLowerCase() : '—';
 
     return (
-        <Paper variant="outlined" sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Chip label={statusLabel} color={statusColor} size="small" sx={{ fontWeight: 600 }} />
-            <Box textAlign="right">
-                <Typography variant="caption" color="text.secondary" display="block">
+        <Paper variant="outlined" sx={{ p: 2, display: 'flex', gap: 2, alignItems: 'center', justifyContent: 'start' }}>
+            <SpaciousChipContainer label={statusLabel} color={statusColor} />
+            <Box textAlign="left">
+                <Typography variant="body1" color="text.secondary" display="block">
                     Started At
                 </Typography>
-                <Typography variant="body2" fontWeight={600}>
-                    {formatDateTime(startedAt)}
-                </Typography>
+                <Typography variant="subtitle1">{formatDateTime(startedAt)}</Typography>
             </Box>
         </Paper>
     );
