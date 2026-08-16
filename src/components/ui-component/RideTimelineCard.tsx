@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import RideTimelineIcon from '../../assets/images/icons/ride_timeline.png';
 import { Icon } from '@mui/material';
+import RideDetailTitle from './RideDetailTitle';
 // Timeline has no backing schema field yet (RideStatusHistory not modeled) —
 // kept static per earlier decision. Revisit once that migration happens.
 const STATIC_TIMELINE_STEPS = [
@@ -22,9 +23,8 @@ const RideTimelineCard = () => {
                 <Icon>
                     <img src={RideTimelineIcon} alt="Ride_Timeline" width="26px" />
                 </Icon>
-                <Typography variant="subtitle1" fontWeight={700}>
-                    Ride Timeline
-                </Typography>
+
+                <RideDetailTitle title="Ride Timeline"></RideDetailTitle>
             </Stack>
 
             <Divider sx={{ mb: 2 }} />
@@ -60,7 +60,7 @@ const RideTimelineCard = () => {
 
                             {/* time + label */}
                             <Box sx={{ pb: isLast ? 0 : 3 }}>
-                                <Typography variant="body1" fontWeight={700}>
+                                <Typography variant="body1" sx={{ color: 'text.primary' }}>
                                     {step.time}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
