@@ -16,12 +16,17 @@ interface PricingBreakdownCardProps {
 
 const formatCurrency = (amount?: number) => (amount != null ? `Rs. ${amount.toLocaleString('en-IN')}` : '—');
 
-const Row = ({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) => (
-    <Stack direction="row" justifyContent="space-between">
-        <Typography variant="body2" color={bold ? 'text.primary' : 'text.secondary'} fontWeight={bold ? 700 : 400}>
+const Row = ({ label, value, bold = false, color }: { label: string; value: string; bold?: boolean; color?: string }) => (
+    <Stack direction="row" justifyContent="space-between" sx={{ lineHeight: '34px', letterSpacing: '1px' }}>
+        <Typography
+            variant={bold ? 'h4' : 'body1'}
+            sx={{ fontSize: `${bold ? '1rem' : '0.875rem'}`, fontWeight: `${bold ? '600' : '400'}` }}
+            color={bold ? 'text.primary' : 'text.secondary'}
+        >
             {label}
         </Typography>
-        <Typography variant="body2" fontWeight={bold ? 700 : 500}>
+
+        <Typography variant="h4" sx={{ fontSize: `${bold ? '1rem' : '0.875rem'}` }} color={color ? color : 'text.primary'}>
             {value}
         </Typography>
     </Stack>
@@ -52,7 +57,7 @@ const PricingBreakdownCard = ({ fare, paymentDetails, platformCommissionAmount, 
                 ) : null}
 
                 <Divider sx={{ my: 0.5 }} />
-                <Row label="Total Amount" value={formatCurrency(totalAmount)} bold />
+                <Row label="Total Amount" value={formatCurrency(totalAmount)} bold color="secondary.main" />
             </Stack>
 
             <Divider sx={{ my: 2 }} />
@@ -61,8 +66,9 @@ const PricingBreakdownCard = ({ fare, paymentDetails, platformCommissionAmount, 
                 <Row
                     label={`Platform Commission (${paymentDetails?.driverCommission != null ? `${paymentDetails.driverCommission * 100}%` : '—'})`}
                     value={formatCurrency(platformCommissionAmount)}
+                    color="primary.dark"
                 />
-                <Row label="Driver Earnings" value={formatCurrency(driverEarningsAmount)} />
+                <Row label="Driver Earnings" value={formatCurrency(driverEarningsAmount)} color="secondary.main" />
             </Stack>
         </Paper>
     );
