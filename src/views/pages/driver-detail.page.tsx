@@ -115,6 +115,7 @@ export default function DriverDetailsPage() {
         variables: { driverId: driverId! },
         fetchPolicy: 'cache-and-network'
     });
+    console.log(data, 'data fetched');
 
     const [openBlockUnblockDialog, setOpenBlockUnblockDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
@@ -229,6 +230,8 @@ export default function DriverDetailsPage() {
         joinedDate: data.getDriver.joinedDate
     };
     const driver = data?.getDriver;
+    console.log(driver.allDocumentsApproved, 'data alldocs');
+
     if (!driver) return null;
 
     return (

@@ -30,10 +30,10 @@ function VehicleField({ label, value, icon }: { label: string; value: string; ic
     );
 }
 
-export function VehicleInformationCard({ height, vehicle }: { height: number; vehicle?: Vehicle }) {
+export function VehicleInformationCard({ vehicle }: { vehicle?: Vehicle }) {
     if (!vehicle) {
         return (
-            <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
+            <Paper sx={{ p: 3 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>
                     Vehicle Information
                 </Typography>
@@ -44,7 +44,7 @@ export function VehicleInformationCard({ height, vehicle }: { height: number; ve
         );
     }
     return (
-        <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
+        <Paper sx={{ p: 3, overflowY: 'auto' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Vehicle Information
             </Typography>

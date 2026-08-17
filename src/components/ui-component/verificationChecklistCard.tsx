@@ -3,18 +3,12 @@ import { Box, Paper, Typography, Stack, LinearProgress } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
-export function VerificationChecklistCard({
-    height,
-    docWiseStatus
-}: {
-    height: number;
-    docWiseStatus: { label: string; verified: boolean }[];
-}) {
+export function VerificationChecklistCard({ docWiseStatus }: { docWiseStatus: { label: string; verified: boolean }[] }) {
     const verifiedCount = docWiseStatus?.filter((c) => c.verified).length;
     const progress = (verifiedCount / docWiseStatus.length) * 100;
     const sortedChecklist = [...docWiseStatus].sort((a, b) => Number(b.verified) - Number(a.verified));
     return (
-        <Paper sx={{ p: 3, height, overflowY: 'auto' }}>
+        <Paper sx={{ p: 3, overflowY: 'auto' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Verification Checklist
             </Typography>

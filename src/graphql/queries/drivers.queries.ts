@@ -196,6 +196,7 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
                     status
                 }
             }
+
             id
             userId
             fullName
@@ -217,6 +218,7 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
             lastTripDuration
             status
             citizenshipNumber
+            allDocumentsApproved
         }
     }
 `;
