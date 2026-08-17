@@ -9,13 +9,12 @@ import { getChipColorStyle, statusColor } from 'views/pages/driver-detail.page';
 // (DriverDocumentBundleStatus), which this table isn't rendering.
 
 interface KycDocumentsCardProps {
-    height: number;
     documents: DriverDocumentFileRow[];
     selectedDocumentId: string;
     onSelect: (id: string) => void;
 }
 
-export function KycDocumentsCard({ height, documents, selectedDocumentId, onSelect }: KycDocumentsCardProps) {
+export function KycDocumentsCard({ documents, selectedDocumentId, onSelect }: KycDocumentsCardProps) {
     const wrappingLabelSx = {
         height: 'auto',
         borderRadius: 9,
@@ -28,7 +27,7 @@ export function KycDocumentsCard({ height, documents, selectedDocumentId, onSele
     const theme = useTheme();
 
     return (
-        <Paper sx={{ p: 3, height, display: 'flex', flexDirection: 'column' }}>
+        <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ mb: 2 }}>
                 <Typography variant="h6">KYC Documents</Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>

@@ -93,20 +93,14 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
                         <CircularProgress size={24} />
                     </Box>
                 ) : (
-                    <KycDocumentsCard
-                        height={CARD_HEIGHTS.documentsTable}
-                        documents={documentRows}
-                        selectedDocumentId={activeDocumentId}
-                        onSelect={setSelectedDocumentId}
-                    />
+                    <KycDocumentsCard documents={documentRows} selectedDocumentId={activeDocumentId} onSelect={setSelectedDocumentId} />
                 )}
-                <VerificationChecklistCard docWiseStatus={docWiseStatus} height={CARD_HEIGHTS.checklist} />
+                <VerificationChecklistCard docWiseStatus={docWiseStatus} />
             </Box>
 
             <Box sx={{ gridArea: 'detail', display: 'flex', flexDirection: 'column', gap: `${DETAIL_COLUMN_GAP}px` }}>
-                <VehicleInformationCard height={CARD_HEIGHTS.vehicleInfo} vehicle={vehicle} />
+                <VehicleInformationCard vehicle={vehicle} />
                 <DocumentPreviewCard
-                    height={CARD_HEIGHTS.preview}
                     document={selectedDocument}
                     onApprove={handleApprove}
                     onReject={handleReject}

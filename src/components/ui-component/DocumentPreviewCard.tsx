@@ -4,14 +4,13 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import { DriverDocumentFileRow } from 'utils/document.utils';
 
 interface DocumentPreviewCardProps {
-    height: number;
     document: DriverDocumentFileRow | null;
     onApprove: () => void;
     onReject: (rejectionReason: string) => void;
     submitting?: boolean;
 }
 
-export function DocumentPreviewCard({ height, document, onApprove, onReject, submitting }: DocumentPreviewCardProps) {
+export function DocumentPreviewCard({ document, onApprove, onReject, submitting }: DocumentPreviewCardProps) {
     // Local for now — this is the one piece of real interactivity in this
     // pass, the rest of the layout is still static. Once approve/reject
     // call into a mutation, the reason field's value goes along with it,
@@ -26,7 +25,7 @@ export function DocumentPreviewCard({ height, document, onApprove, onReject, sub
     }, [document?.id]);
 
     return (
-        <Paper sx={{ p: 3, height, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
                 Document Preview
             </Typography>
@@ -55,7 +54,7 @@ export function DocumentPreviewCard({ height, document, onApprove, onReject, sub
                         component="img"
                         src={document.viewUrl}
                         alt={document.label}
-                        sx={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                        sx={{ maxWidth: '100%', objectFit: 'contain', padding: 3 }}
                     />
                 ) : (
                     <>
