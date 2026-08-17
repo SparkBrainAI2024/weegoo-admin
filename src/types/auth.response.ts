@@ -70,6 +70,7 @@ export interface SignInResponse {
     refreshToken: string;
     admin: {
         email: string;
+        id: string;
     };
 }
 

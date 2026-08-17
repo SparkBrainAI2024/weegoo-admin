@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
 // third-party
-import { Chance } from 'chance';
 import { jwtDecode } from 'jwt-decode';
 
 // reducer - state management
@@ -9,12 +8,11 @@ import { LOGIN, LOGOUT } from 'store/actions';
 import accountReducer from 'store/accountReducer';
 
 // project imports
-import Loader from 'components/ui-component/Loader';
 import axios from 'utils/axios';
 
 // types
 import { KeyedObject } from 'types';
-import { InitialLoginContextProps, JWTContextType, SignInResponse, SignUpResponse } from 'types/auth.response';
+import { InitialLoginContextProps, JWTContextType, SignInResponse } from 'types/auth.response';
 import client from 'lib/apolloClient';
 import { SIGN_IN } from 'graphql/mutations/auth.mutations';
 
@@ -33,7 +31,6 @@ const verifyToken: (st: string) => { verified: boolean; id?: string } = (service
     /**
      * Property 'exp' does not exist on type '<T = unknown>(token: string, options?: JwtDecodeOptions | undefined) => T'.
      */
-    console.log(decoded, 'decoded');
 
     return { verified: decoded.exp > Date.now() / 1000, id: decoded.id };
 };
@@ -58,6 +55,8 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         const init = async () => {
             const serviceToken = window.localStorage.getItem('serviceToken');
             if (serviceToken && verifyToken(serviceToken).verified) {
+                console.log(verifyToken(serviceToken).id, 'id');
+
                 dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: { id: verifyToken(serviceToken).id } } });
             } else {
                 dispatch({ type: LOGOUT });
@@ -84,6 +83,8 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         }
 
         const { accessToken, admin } = data.adminSignIn;
+        console.log(admin, 'log admin in login');
+
         setSession(accessToken);
         dispatch({
             type: LOGIN,

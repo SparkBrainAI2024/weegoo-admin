@@ -15,7 +15,7 @@ import Stack from '@mui/material/Stack';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_ISSUE_DETAIL } from 'graphql/queries/issues.queries';
 import { CLOSE_ISSUE, RESOLVE_ISSUE } from 'graphql/mutations/issues.mutations';
-import { useCurrentAdminId } from 'hooks/userCurrentAdminId';
+import { useCurrentAdminId } from 'hooks/useCurrentAdminId';
 import { IssuePartyInfo } from 'types/issues.types';
 import IssueDetailHeader from 'components/ui-component/IssueDetailHeader';
 import IssueBasicInfoCard from 'components/ui-component/IssueBasicInfoCard';

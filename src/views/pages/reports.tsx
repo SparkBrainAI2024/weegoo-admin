@@ -11,7 +11,7 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import IssueStatCards from '../../components/ui-component/cards/IssueStatCards';
 import IssueFilters, { IssueFilterValues } from 'components/ui-component/IssueFilters';
 import { GET_ISSUES, IssueListInput } from 'graphql/queries/issues.queries';
-import { useCurrentAdminId } from 'hooks/userCurrentAdminId';
+import { useCurrentAdminId } from 'hooks/useCurrentAdminId';
 import { BULK_RESOLVE_ISSUES } from 'graphql/mutations/issues.mutations';
 import IssueListTable from 'components/ui-component/IssueListTable';
 import IssueStatusTabs, { IssueStatusTab } from 'components/ui-component/IssueStatusTabs';
@@ -53,6 +53,7 @@ const IssuesPage = () => {
     const [statusTab, setStatusTab] = React.useState<IssueStatusTab>('ALL');
 
     const currentAdminId = useCurrentAdminId();
+    console.log(currentAdminId, 'currentadmin');
 
     const { data, loading, error, refetch } = useQuery(GET_ISSUES, {
         variables: { input: buildQueryInput(filters, statusTab, page, rowsPerPage) },
