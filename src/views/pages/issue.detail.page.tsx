@@ -201,7 +201,7 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
                     <IssueBasicInfoCard
                         categoryLabel={issue.categoryLabel ?? '—'}
                         createdAt={issue.createdAt}
-                        rideId={issue.rideId.rideUUId}
+                        rideId={issue?.rideId?.rideUUId ?? '-'}
                         priority={issue.priority}
                         issueContent={issue.issueContent}
                         issueCategoryType={issue.issueCategoryType}

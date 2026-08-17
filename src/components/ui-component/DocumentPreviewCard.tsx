@@ -54,7 +54,7 @@ export function DocumentPreviewCard({ document, onApprove, onReject, submitting 
                         component="img"
                         src={document.viewUrl}
                         alt={document.label}
-                        sx={{ width: '80%', maxWidth: '80%', objectFit: 'contain' }}
+                        sx={{ width: '45%%', maxWidth: '45%', objectFit: 'contain' }}
                     />
                 ) : (
                     <>

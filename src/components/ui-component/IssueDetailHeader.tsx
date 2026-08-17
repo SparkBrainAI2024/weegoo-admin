@@ -41,7 +41,7 @@ const IssueDetailHeader = ({ ticketCode, status, onBack, onResolve, onClose, res
                 </Button>
                 <Typography color="textSecondary">Reports /</Typography>
 
-                <Typography color="textSecondary">{ticketCode} /</Typography>
+                <Typography color="textSecondary">{ticketCode} </Typography>
                 <Chip label={meta.label} size="small" chipcolor={meta.color} />
             </Stack>
 
