@@ -7,7 +7,7 @@ export const SIGN_IN = gql`
             refreshToken
             admin {
                 email
-                id
+                _id
             }
         }
     }

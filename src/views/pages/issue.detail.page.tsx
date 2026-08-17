@@ -14,9 +14,15 @@ import Stack from '@mui/material/Stack';
 
 import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_ISSUE_DETAIL } from 'graphql/queries/issues.queries';
-import { CLOSE_ISSUE, RESOLVE_ISSUE } from 'graphql/mutations/issues.mutations';
+import {
+    CLOSE_ISSUE,
+    RESOLVE_ISSUE,
+    UPDATE_ISSUE_STATUS,
+    UpdateIssueStatusResponse,
+    UpdateIssueStatusVariables
+} from 'graphql/mutations/issues.mutations';
 import { useCurrentAdminId } from 'hooks/useCurrentAdminId';
-import { IssuePartyInfo } from 'types/issues.types';
+import { IssuePartyInfo, IssueStatus } from 'types/issues.types';
 import IssueDetailHeader from 'components/ui-component/IssueDetailHeader';
 import IssueBasicInfoCard from 'components/ui-component/IssueBasicInfoCard';
 import IssuePartyCard from 'components/ui-component/IssuePartyCard';
@@ -94,7 +100,7 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         resolveIssue({ variables: { id: id, resolvedBy: currentAdminId } });
     };
     const { showSuccess, showError } = useNotification();
-
+    const [updateIssueStatus] = useMutation<UpdateIssueStatusResponse, UpdateIssueStatusVariables>(UPDATE_ISSUE_STATUS);
     const handleClose = () => {
         if (!id) {
             setSnackbar({
@@ -134,6 +140,22 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         }
     };
 
+    React.useEffect(() => {
+        const issue = data?.getIssueDetail; // match whatever the query actually returns this as
+        if (issue && issue.status === IssueStatus.OPEN) {
+            updateIssueStatus({
+                variables: {
+                    input: {
+                        id: issue.id,
+                        status: IssueStatus.IN_REVIEW
+                    }
+                }
+            }).catch(() => {
+                // don't surface an error toast for this — it's a background side effect,
+                // shouldn't block the page if it fails
+            });
+        }
+    }, [data]);
     if (loading && !data) {
         return (
             <Stack spacing={2.5}>
@@ -143,7 +165,6 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
             </Stack>
         );
     }
-
     if (error || !data) {
         return <Alert severity="error">Couldn&apos;t load this issue{error ? `: ${error.message}` : ''}.</Alert>;
     }

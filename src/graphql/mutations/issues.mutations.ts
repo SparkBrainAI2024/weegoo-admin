@@ -46,6 +46,39 @@ export const RESOLVE_ISSUE: TypedDocumentNode<ResolveIssueData, ResolveIssueVars
     }
 `;
 
+export const UPDATE_ISSUE_STATUS = gql`
+    mutation UpdateIssueStatus($input: UpdateIssueStatusInput!) {
+        updateIssueStatus(input: $input) {
+            success
+            message
+            issue {
+                _id
+                status
+            }
+        }
+    }
+`;
+
+export interface UpdateIssueStatusInput {
+    id: string;
+    status: IssueStatus;
+}
+
+export interface UpdateIssueStatusResponse {
+    updateIssueStatus: {
+        success: boolean;
+        message: string;
+        issue?: {
+            id: string;
+            status: IssueStatus;
+        } | null;
+    };
+}
+
+export interface UpdateIssueStatusVariables {
+    input: UpdateIssueStatusInput;
+}
+
 export interface BulkResolveIssuesData {
     bulkResolveIssues: {
         message: string;

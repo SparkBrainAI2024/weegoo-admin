@@ -90,7 +90,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
             type: LOGIN,
             payload: {
                 isLoggedIn: true,
-                user: admin
+                user: { ...admin, id: admin._id }
             }
         });
     };
