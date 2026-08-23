@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { Grid, MenuItem, Select, Typography, Box } from '@mui/material';
 import { gridSpacing } from 'store/constant';
 import { PaymentsPeriod } from 'graphql/queries/payments.queries';
-import PaymentsStatCards from 'components/ui-component/payments/PaymentsStatCards';
-import CommissionOverviewCard from 'components/ui-component/payments/CommissionOverviewCard';
-import WalletBalancesCard from 'components/ui-component/payments/WalletBalancesCard';
-import TopupWithdrawalCard from 'components/ui-component/payments/TopupWithdrawalCard';
-import RecentTransactionsTable from 'components/ui-component/payments/RecentTransactionsTable';
-import PendingWithdrawalsCard from 'components/ui-component/payments/PendingWithdrawalsCard';
-
+import PaymentsStatCards from './PaymentsStatCards';
+import CommissionOverviewCard from './CommissionOverviewCard';
+import WalletBalancesCard from './WalletBalancesCard';
+import TopupWithdrawalCard from './TopupWithdrawalCard';
+import RecentTransactionsTable from './RecentTransactionsTable';
+import PendingWithdrawalsCard from './PendingWithdrawalsCard';
 export default function PaymentsDashboard() {
     const [period, setPeriod] = useState<PaymentsPeriod>(PaymentsPeriod.THIS_MONTH);
 
