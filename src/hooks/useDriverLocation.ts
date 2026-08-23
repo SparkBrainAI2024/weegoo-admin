@@ -1,6 +1,6 @@
 // useDriverLocation.ts
 import { useEffect, useRef, useState } from 'react';
-import Ably from 'ably';
+import Ably, { Message } from 'ably';
 
 export interface DriverLocation {
     lat: number;
@@ -21,7 +21,7 @@ export function useDriverLocation(rideId: string | null, apiKey: string) {
         clientRef.current = client;
         const channel = client.channels.get(`ride:${rideId}:location`);
 
-        channel.subscribe('location-update', (msg: Ably.Types.Message) => {
+        channel.subscribe('location-update', (msg: Message) => {
             setLocation(msg.data as DriverLocation);
         });
 
