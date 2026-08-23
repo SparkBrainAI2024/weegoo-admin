@@ -5,9 +5,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { Box, Paper, Typography } from '@mui/material';
 import { useDriverLocation } from 'hooks/useDriverLocation';
 
-const BAATO_KEY = process.env.REACT_APP_BAATO_KEY as string;
+const BAATO_KEY = import.meta.env.VITE_BAATO_KEY as string;
 const BAATO_STYLE_URL = `https://api.baato.io/api/v1/styles/breeze?key=${BAATO_KEY}`;
-
 interface DriverTrackingMapProps {
     rideId: string;
     ablyKey: string;
