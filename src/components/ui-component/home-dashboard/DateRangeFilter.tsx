@@ -3,6 +3,8 @@ import { Button, Popover, Stack, Box } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { IconCalendar, IconChevronDown } from '@tabler/icons-react';
 import dayjs, { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export interface DateRangeValue {
     fromDate: Dayjs | null;
@@ -58,21 +60,23 @@ export function DateRangeFilter({ value, onChange }: DateRangeFilterProps) {
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
                 <Box sx={{ p: 2 }}>
-                    <Stack direction="row" spacing={2}>
-                        <DatePicker
-                            label="From"
-                            value={draft.fromDate}
-                            onChange={(newVal) => setDraft((d) => ({ ...d, fromDate: newVal }))}
-                            maxDate={draft.endDate ?? undefined}
-                        />
-                        <DatePicker
-                            label="To"
-                            value={draft.endDate}
-                            onChange={(newVal) => setDraft((d) => ({ ...d, endDate: newVal }))}
-                            minDate={draft.fromDate ?? undefined}
-                            maxDate={dayjs()}
-                        />
-                    </Stack>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Stack direction="row" spacing={2}>
+                            <DatePicker
+                                label="From"
+                                value={draft.fromDate}
+                                onChange={(newVal) => setDraft((d) => ({ ...d, fromDate: newVal }))}
+                                maxDate={draft.endDate ?? undefined}
+                            />
+                            <DatePicker
+                                label="To"
+                                value={draft.endDate}
+                                onChange={(newVal) => setDraft((d) => ({ ...d, endDate: newVal }))}
+                                minDate={draft.fromDate ?? undefined}
+                                maxDate={dayjs()}
+                            />
+                        </Stack>
+                    </LocalizationProvider>
                     <Stack direction="row" justifyContent="flex-end" spacing={1} mt={2}>
                         <Button size="small" onClick={handleClose}>
                             Cancel
