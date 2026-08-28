@@ -13,12 +13,15 @@ import MobileSection from './MobileSection';
 
 // assets
 
-import { IconGift, IconUser, IconUsers, IconCreditCard, IconReportAnalytics, IconMail,IconCar } from '@tabler/icons-react';
+import { IconGift, IconUsers, IconCreditCard, IconReportAnalytics, IconMail, IconCar } from '@tabler/icons-react';
 
 // types
 import { NavItemType, OverrideIcon } from 'types';
 import { IconFileText } from '@tabler/icons-react';
 import IconDrivers from 'assets/images/icons/DriversIcon';
+import { useUrlParams } from 'hooks/useSearchParams';
+import { DateRangeFilter, DateRangeValue } from 'components/ui-component/home-dashboard/DateRangeFilter';
+import dayjs from 'dayjs';
 
 // ==============================|| FIND CURRENT NAV ITEM ||============================== //
 
@@ -65,16 +68,29 @@ const findDetailRoute = (pathname: string): DetailRoute | undefined => DETAIL_RO
 
 const Header = () => {
     const location = useLocation();
+    const { getParam, updateParams } = useUrlParams();
 
     const currentItem = findNavItem(navigation.items, location.pathname);
     const detailMatch = !currentItem ? findDetailRoute(location.pathname) : undefined;
 
     const Icon = currentItem?.icon || detailMatch?.icon;
     const title = currentItem?.title || detailMatch?.title;
+    const isDashboard = location.pathname === '/dashboard/default';
+
+    const range: DateRangeValue = {
+        fromDate: dayjs(getParam('fromDate', dayjs().subtract(6, 'day').format('YYYY-MM-DD'))),
+        endDate: dayjs(getParam('endDate', dayjs().format('YYYY-MM-DD')))
+    };
+
+    const handleRangeChange = (val: DateRangeValue) => {
+        updateParams({
+            fromDate: val.fromDate!.format('YYYY-MM-DD'),
+            endDate: val.endDate!.format('YYYY-MM-DD')
+        });
+    };
 
     return (
         <>
-            {/* Page Title */}
             <Stack direction="row" alignItems="center" spacing={1.5}>
                 {Icon && <Icon stroke={1.5} size="24px" />}
                 <Typography variant="pageTitle">{title}</Typography>
@@ -82,16 +98,15 @@ const Header = () => {
 
             <Box sx={{ flexGrow: 1 }} />
 
-            {/* Right side */}
+            {isDashboard && <DateRangeFilter value={range} onChange={handleRangeChange} />}
+
             <NotificationSection />
             <ProfileSection />
 
-            {/* Mobile */}
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <MobileSection />
             </Box>
         </>
     );
 };
-
 export default Header;
