@@ -10,8 +10,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-import StatCard from 'components/ui-component/StatCard';
-import { useAdminDashboard } from 'graphql/queries/dashboard.queries';
+import StatCard from 'components/ui-component/home-dashboard/StatCard';
+import { useAdminDashboard } from 'graphql/queries/home-dashboard.queries';
 
 const StatsRow = () => {
     const { data, loading, error } = useAdminDashboard();
