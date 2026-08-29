@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import { IconRefresh, IconUser, IconUsers, IconInfoCircle, IconX } from '@tabler/icons-react';
 
 import { StatCard } from './StatCard';
+import { DEFAULT_END_DATE, DEFAULT_FROM_DATE } from 'utils/dashboard-date-defaults';
 import { useUrlParams } from 'hooks/useSearchParams';
 import { useAdminDashboard } from 'graphql/queries/home-dashboard.queries';
-// adjust to actual path
 
 interface StatConfig {
     key: string;
@@ -20,8 +20,8 @@ interface StatConfig {
 
 export function StatsSection() {
     const { getParam } = useUrlParams();
-    const fromDate = getParam('fromDate', null);
-    const endDate = getParam('endDate', null);
+    const fromDate = getParam('fromDate', DEFAULT_FROM_DATE);
+    const endDate = getParam('endDate', DEFAULT_END_DATE);
 
     const { data, loading } = useAdminDashboard({ fromDate, endDate });
     const stats = data?.adminDashboard;
@@ -74,12 +74,12 @@ export function StatsSection() {
         <Grid container spacing={2}>
             {loading || !cards
                 ? Array.from({ length: 5 }).map((_, i) => (
-                      <Grid key={i} xs={12} sm={6} md={2.4}>
+                      <Grid key={i} item xs={12} sm={6} md={2.4}>
                           <Skeleton variant="rounded" height={140} sx={{ borderRadius: 3 }} />
                       </Grid>
                   ))
                 : cards.map((c) => (
-                      <Grid key={c.key} xs={12} sm={6} md={2.4}>
+                      <Grid key={c.key} item xs={12} sm={6} md={2.4}>
                           <StatCard
                               label={c.label}
                               value={c.value.toLocaleString()}
