@@ -18,14 +18,15 @@ export function StatCard({ label, value, percentageChange, icon, iconBg = 'grey.
     return (
         <Card
             variant="outlined"
-            onClick={onClick}
+            // onClick={onClick}
             sx={{
                 borderRadius: 6,
-                cursor: onClick ? 'pointer' : 'default',
-                borderColor: 'divider',
+                // cursor: onClick ? 'pointer' : 'default',
+                borderColor: '#f3f2f2',
                 borderTopWidth: 8,
-                borderTopColor: highlighted ? 'success.main' : 'divider',
-                transition: 'border-top-color 0.15s ease',
+
+                // borderTopColor: highlighted ? 'success.main' : 'divider',
+                // transition: 'border-top-color 0.15s ease',
                 boxShadow: '0 1px 2px rgba(16,24,40,0.05)',
                 '&:hover': {
                     borderTopColor: 'success.main'
