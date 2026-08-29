@@ -96,9 +96,10 @@ const Header = () => {
                 <Typography variant="pageTitle">{title}</Typography>
             </Stack>
 
+            <Box sx={{ marginLeft: '12px', padding: '0 !important' }}>
+                {isDashboard && <DateRangeFilter value={range} onChange={handleRangeChange} />}
+            </Box>
             <Box sx={{ flexGrow: 1 }} />
-
-            {isDashboard && <DateRangeFilter value={range} onChange={handleRangeChange} />}
 
             <NotificationSection />
             <ProfileSection />

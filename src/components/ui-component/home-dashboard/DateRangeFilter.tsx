@@ -47,7 +47,7 @@ export function DateRangeFilter({ value, onChange }: DateRangeFilterProps) {
                 color="inherit"
                 startIcon={<IconCalendar size={18} stroke={1.5} />}
                 endIcon={<IconChevronDown size={16} stroke={1.5} />}
-                sx={{ borderColor: 'divider', color: 'text.primary', fontWeight: 500, textTransform: 'none' }}
+                sx={{ borderColor: 'divider', color: 'text.primary', fontWeight: 500, textTransform: 'none', height: '48px' }}
             >
                 {label}
             </Button>
