@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import { IconRefresh, IconUser, IconUsers, IconInfoCircle, IconX } from '@tabler/icons-react';
@@ -15,14 +15,14 @@ interface StatConfig {
     percentageChange: number;
     icon: ReactNode;
     iconBg: string;
-    highlighted?: boolean;
 }
 
 export function StatsSection() {
     const { getParam } = useUrlParams();
     const fromDate = getParam('fromDate', DEFAULT_FROM_DATE);
     const endDate = getParam('endDate', DEFAULT_END_DATE);
-    console.log(DEFAULT_END_DATE, 'DEFAULT_END_DATE');
+
+    const [selectedCard, setSelectedCard] = useState<string | null>('rides');
 
     const { data, loading } = useAdminDashboard({ fromDate, endDate });
     const stats = data?.adminDashboard;
@@ -34,8 +34,7 @@ export function StatsSection() {
             value: stats.totalActiveRides,
             percentageChange: stats.percentageChange.totalActiveRides,
             icon: <IconRefresh size={16} />,
-            iconBg: 'success.lighter',
-            highlighted: true
+            iconBg: 'success.lighter'
         },
         {
             key: 'drivers',
@@ -87,7 +86,8 @@ export function StatsSection() {
                               percentageChange={c.percentageChange}
                               icon={c.icon}
                               iconBg={c.iconBg}
-                              highlighted={c.highlighted}
+                              highlighted={selectedCard === c.key}
+                              onClick={() => setSelectedCard((current) => (current === c.key ? null : c.key))}
                           />
                       </Grid>
                   ))}

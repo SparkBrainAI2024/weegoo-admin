@@ -8,20 +8,28 @@ export interface StatCardProps {
     percentageChange: number; // e.g. 10.2 or -16.2
     icon: ReactNode;
     iconBg?: string;
-    highlighted?: boolean; // green border, e.g. "Total Rides (Today)"
+    highlighted?: boolean; // green top-edge cap, e.g. selected card
+    onClick?: () => void;
 }
 
-export function StatCard({ label, value, percentageChange, icon, iconBg = 'grey.100', highlighted }: StatCardProps) {
+export function StatCard({ label, value, percentageChange, icon, iconBg = 'grey.100', highlighted, onClick }: StatCardProps) {
     const isPositive = percentageChange >= 0;
 
     return (
         <Card
             variant="outlined"
+            onClick={onClick}
             sx={{
-                borderRadius: 3,
-                borderColor: highlighted ? 'success.main' : 'divider',
-                borderWidth: highlighted ? 2 : 1,
-                boxShadow: '0 1px 2px rgba(16,24,40,0.05)'
+                borderRadius: 6,
+                cursor: onClick ? 'pointer' : 'default',
+                borderColor: 'divider',
+                borderTopWidth: 8,
+                borderTopColor: highlighted ? 'success.main' : 'divider',
+                transition: 'border-top-color 0.15s ease',
+                boxShadow: '0 1px 2px rgba(16,24,40,0.05)',
+                '&:hover': {
+                    borderTopColor: 'success.main'
+                }
             }}
         >
             <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
