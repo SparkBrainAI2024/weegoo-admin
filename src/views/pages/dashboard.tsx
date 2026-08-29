@@ -5,7 +5,7 @@ import RidersPanel from 'components/ui-component/home-dashboard/RidersPanel';
 import RidersRegistrationChart from 'components/ui-component/home-dashboard/RidersRegistrationChart';
 import RidesPerDayChart from 'components/ui-component/home-dashboard/RidesPerDayChart';
 import RideStatusDonutChart from 'components/ui-component/home-dashboard/RideStatusDonutChart';
-import { StatsSection } from 'components/ui-component/home-dashboard/StatsRow';
+import { StatsSection } from 'components/ui-component/home-dashboard/StatsSection';
 
 const Dashboard = () => {
     return (

@@ -1,4 +1,3 @@
-// utils/dashboardDateDefaults.ts
 import dayjs from 'dayjs';
 
 // Used by Header (writes the picker's initial value) and StatsSection (reads it)

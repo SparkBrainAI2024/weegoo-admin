@@ -4,9 +4,9 @@ import Skeleton from '@mui/material/Skeleton';
 import { IconRefresh, IconUser, IconUsers, IconInfoCircle, IconX } from '@tabler/icons-react';
 
 import { StatCard } from './StatCard';
-import { DEFAULT_END_DATE, DEFAULT_FROM_DATE } from 'utils/dashboard-date-defaults';
-import { useUrlParams } from 'hooks/useSearchParams';
 import { useAdminDashboard } from 'graphql/queries/home-dashboard.queries';
+import { useUrlParams } from 'hooks/useSearchParams';
+import { DEFAULT_END_DATE, DEFAULT_FROM_DATE } from 'utils/dashboard-date-defaults';
 
 interface StatConfig {
     key: string;
@@ -22,6 +22,7 @@ export function StatsSection() {
     const { getParam } = useUrlParams();
     const fromDate = getParam('fromDate', DEFAULT_FROM_DATE);
     const endDate = getParam('endDate', DEFAULT_END_DATE);
+    console.log(DEFAULT_END_DATE, 'DEFAULT_END_DATE');
 
     const { data, loading } = useAdminDashboard({ fromDate, endDate });
     const stats = data?.adminDashboard;
