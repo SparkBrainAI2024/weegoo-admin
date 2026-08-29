@@ -1,72 +1,65 @@
-// components/ui-component/StatCard.tsx
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { ReactNode } from 'react';
+import { Card, CardContent, Stack, Box, Typography, Chip } from '@mui/material';
+import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
 
 export interface StatCardProps {
-    title: string;
+    label: string;
     value: number | string;
-    icon: React.ReactNode;
-    iconBgColor?: string;
-    percentageChange?: number;
-    highlight?: boolean; // green left accent, like "Total Rides (Today)" in the screenshot
+    percentageChange: number; // e.g. 10.2 or -16.2
+    icon: ReactNode;
+    iconBg?: string;
+    highlighted?: boolean; // green border, e.g. "Total Rides (Today)"
 }
 
-const StatCard = ({ title, value, icon, iconBgColor, percentageChange, highlight }: StatCardProps) => {
-    const theme = useTheme();
-    const isPositive = (percentageChange ?? 0) >= 0;
+export function StatCard({ label, value, percentageChange, icon, iconBg = 'grey.100', highlighted }: StatCardProps) {
+    const isPositive = percentageChange >= 0;
 
     return (
         <Card
+            variant="outlined"
             sx={{
-                height: '100%',
-                borderLeft: highlight ? `3px solid ${theme.palette.success.main}` : 'none',
-                boxShadow: theme.shadows[1]
+                borderRadius: 3,
+                borderColor: highlighted ? 'success.main' : 'divider',
+                borderWidth: highlighted ? 2 : 1,
+                boxShadow: '0 1px 2px rgba(16,24,40,0.05)'
             }}
         >
-            <CardContent>
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                    <Typography variant="subtitle2" color="text.secondary">
-                        {title}
+            <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1.5}>
+                    <Typography variant="body2" color="text.secondary" fontWeight={500}>
+                        {label}
                     </Typography>
                     <Box
                         sx={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: 1,
+                            width: 28,
+                            height: 28,
+                            borderRadius: 1.5,
+                            bgcolor: iconBg,
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            bgcolor: iconBgColor ?? theme.palette.grey[100]
+                            justifyContent: 'center'
                         }}
                     >
                         {icon}
                     </Box>
                 </Stack>
 
-                <Typography variant="h3" sx={{ mt: 1.5, fontWeight: 700 }}>
+                <Typography variant="h3" fontWeight={700} mb={1}>
                     {value}
                 </Typography>
 
-                {percentageChange !== undefined && (
-                    <Chip
-                        size="small"
-                        sx={{ mt: 1.5 }}
-                        icon={isPositive ? <KeyboardArrowUpIcon fontSize="small" /> : <KeyboardArrowDownIcon fontSize="small" />}
-                        label={`${Math.abs(percentageChange).toFixed(1)}%`}
-                        color={isPositive ? 'success' : 'error'}
-                    />
-                )}
+                <Chip
+                    size="small"
+                    icon={isPositive ? <IconArrowUpRight size={14} stroke={2} /> : <IconArrowDownRight size={14} stroke={2} />}
+                    label={`${Math.abs(percentageChange)}%`}
+                    sx={{
+                        bgcolor: isPositive ? 'success.lighter' : 'error.lighter',
+                        color: isPositive ? 'success.dark' : 'error.dark',
+                        fontWeight: 600,
+                        '& .MuiChip-icon': { color: 'inherit' }
+                    }}
+                />
             </CardContent>
         </Card>
     );
-};
-
-export default StatCard;
+}

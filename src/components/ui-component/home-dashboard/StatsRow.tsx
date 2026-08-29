@@ -1,84 +1,95 @@
-// components/dashboard/StatsRow.tsx
-import * as React from 'react';
-import Grid from '@mui/material/Grid';
+import { ReactNode } from 'react';
+import Grid from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
-import Alert from '@mui/material/Alert';
+import { IconRefresh, IconUser, IconUsers, IconInfoCircle, IconX } from '@tabler/icons-react';
 
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import PersonIcon from '@mui/icons-material/Person';
-import GroupIcon from '@mui/icons-material/Group';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import CancelIcon from '@mui/icons-material/Cancel';
-
-import StatCard from 'components/ui-component/home-dashboard/StatCard';
+import { StatCard } from './StatCard';
+import { useUrlParams } from 'hooks/useSearchParams';
 import { useAdminDashboard } from 'graphql/queries/home-dashboard.queries';
+// adjust to actual path
 
-const StatsRow = () => {
-    const { data, loading, error } = useAdminDashboard();
+interface StatConfig {
+    key: string;
+    label: string;
+    value: number;
+    percentageChange: number;
+    icon: ReactNode;
+    iconBg: string;
+    highlighted?: boolean;
+}
 
-    if (error) {
-        return <Alert severity="error">Failed to load dashboard stats: {error.message}</Alert>;
-    }
+export function StatsSection() {
+    const { getParam } = useUrlParams();
+    const fromDate = getParam('fromDate', null);
+    const endDate = getParam('endDate', null);
 
-    if (loading || !data) {
-        return (
-            <Grid container spacing={2.5}>
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <Grid item xs={12} sm={6} md={4} lg={2.4} key={i}>
-                        <Skeleton variant="rounded" height={120} />
-                    </Grid>
-                ))}
-            </Grid>
-        );
-    }
+    const { data, loading } = useAdminDashboard({ fromDate, endDate });
+    const stats = data?.adminDashboard;
 
-    const stats = data.adminDashboard;
-
-    const cards = [
+    const cards: StatConfig[] | undefined = stats && [
         {
-            title: 'Total Rides(Today)',
-            value: stats.totalActiveRides.toLocaleString(),
-            icon: <DirectionsCarIcon fontSize="small" color="success" />,
+            key: 'rides',
+            label: 'Total Rides (Today)',
+            value: stats.totalActiveRides,
             percentageChange: stats.percentageChange.totalActiveRides,
-            highlight: true
+            icon: <IconRefresh size={16} />,
+            iconBg: 'success.lighter',
+            highlighted: true
         },
         {
-            // TODO: confirmed as an assumption, not a given fact — flip to
-            // stats.activeRider if this reads backwards once real data shows up.
-            title: 'Active Drivers',
-            value: stats.activePassenger.toLocaleString(),
-            icon: <PersonIcon fontSize="small" sx={{ color: 'warning.main' }} />,
-            percentageChange: stats.percentageChange.activePassenger
+            key: 'drivers',
+            label: 'Active Drivers',
+            value: stats.activeRider,
+            percentageChange: stats.percentageChange.activeRider,
+            icon: <IconUser size={16} />,
+            iconBg: 'warning.lighter'
         },
         {
-            title: 'Active Riders',
-            value: stats.activeRider.toLocaleString(),
-            icon: <GroupIcon fontSize="small" color="success" />,
-            percentageChange: stats.percentageChange.activeRider
+            key: 'riders',
+            label: 'Active Riders',
+            value: stats.activePassenger,
+            percentageChange: stats.percentageChange.activePassenger,
+            icon: <IconUsers size={16} />,
+            iconBg: 'success.lighter'
         },
         {
-            title: 'Total Revenue',
-            value: `Rs. ${stats.totalRevenue.toLocaleString()}`,
-            icon: <AttachMoneyIcon fontSize="small" sx={{ color: 'warning.main' }} />,
-            percentageChange: stats.percentageChange.totalRevenue
+            key: 'revenue',
+            label: 'Total Revenue',
+            value: stats.totalRevenue,
+            percentageChange: stats.percentageChange.totalRevenue,
+            icon: <IconInfoCircle size={16} />,
+            iconBg: 'warning.lighter'
         },
         {
-            title: 'Cancelled Rides',
-            value: stats.totalCancelledRides.toLocaleString(),
-            icon: <CancelIcon fontSize="small" color="error" />,
-            percentageChange: stats.percentageChange.totalCancelledRides
+            key: 'cancelled',
+            label: 'Cancelled Rides',
+            value: stats.totalCancelledRides,
+            percentageChange: stats.percentageChange.totalCancelledRides,
+            icon: <IconX size={16} />,
+            iconBg: 'error.lighter'
         }
     ];
 
     return (
-        <Grid container spacing={2.5}>
-            {cards.map((card) => (
-                <Grid item xs={12} sm={6} md={4} lg={2.4} key={card.title}>
-                    <StatCard {...card} />
-                </Grid>
-            ))}
+        <Grid container spacing={2}>
+            {loading || !cards
+                ? Array.from({ length: 5 }).map((_, i) => (
+                      <Grid key={i} size={{ xs: 12, sm: 6, md: 2.4 }}>
+                          <Skeleton variant="rounded" height={140} sx={{ borderRadius: 3 }} />
+                      </Grid>
+                  ))
+                : cards.map((c) => (
+                      <Grid key={c.key} size={{ xs: 12, sm: 6, md: 2.4 }}>
+                          <StatCard
+                              label={c.label}
+                              value={c.value.toLocaleString()}
+                              percentageChange={c.percentageChange}
+                              icon={c.icon}
+                              iconBg={c.iconBg}
+                              highlighted={c.highlighted}
+                          />
+                      </Grid>
+                  ))}
         </Grid>
     );
-};
-
-export default StatsRow;
+}
