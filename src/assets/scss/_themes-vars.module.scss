@@ -6,6 +6,7 @@ $primaryLight: #fff9c4; // yellow-50
 $primaryMain: #fbc02d; // yellow-600 ✓
 $primaryDark: #f9a825; // yellow-800
 $primary200: #fff176; // yellow-200
+$primary300: #f4e3d0; // yellow-200
 $primary800: #f57f17; // yellow-900
 
 // secondary
@@ -26,6 +27,8 @@ $successDark: #00c853;
 
 // error
 $errorLight: #f3c1c1;
+$errorLightest: #fdf1f1;
+
 $errorMain: #f44336;
 $errorDark: #c62828;
 
@@ -36,6 +39,7 @@ $orangeDark: #d84315;
 
 // warning
 $warningLight: #fff8e1;
+$warningLightest: #f9f5e6;
 $warningMain: #ffe57f;
 $warningDark: #ffc107;
 
@@ -91,6 +95,7 @@ $darkTextSecondary: #8492c4;
     primaryMain: $primaryMain;
     primaryDark: $primaryDark;
     primary800: $primary800;
+    primary300: $primary300;
     contentBackground: $contentBackground;
     // secondary
     secondaryLight: $secondaryLight;
@@ -108,6 +113,7 @@ $darkTextSecondary: #8492c4;
 
     // error
     errorLight: $errorLight;
+    errorLightest: $errorLightest;
     errorMain: $errorMain;
     errorDark: $errorDark;
 
@@ -120,6 +126,7 @@ $darkTextSecondary: #8492c4;
     warningLight: $warningLight;
     warningMain: $warningMain;
     warningDark: $warningDark;
+    warningLightest: $warningLightest;
 
     // grey
     grey50: $grey50;

@@ -7,34 +7,47 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Alert from '@mui/material/Alert';
-
+import MuiLink from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
-import PaymentIcon from '@mui/icons-material/Payment';
 import { HighPriorityIssueItem, useHighPriorityIssues } from 'graphql/queries/home-dashboard.queries';
+import { Icon } from '@mui/material';
+import ReportsIcon from '../../../assets/images/icons/reports.png';
 
 // Maps backend categoryLabel -> icon + color. Fallback covers any category
 // value not explicitly known — categoryLabel is a free-form backend string.
 const CATEGORY_STYLE: Record<string, { icon: React.ReactNode; color: string }> = {
-    KYC: { icon: <WarningAmberIcon fontSize="small" />, color: 'warning' },
-    CANCELLATION: { icon: <ReportProblemIcon fontSize="small" />, color: 'error' },
-    TICKET: { icon: <HeadsetMicIcon fontSize="small" />, color: 'error' },
-    PAYMENT: { icon: <PaymentIcon fontSize="small" />, color: 'warning' }
+    MEDIUM: { icon: <WarningAmberIcon fontSize="small" />, color: 'warning' },
+    HIGH: { icon: <ReportProblemIcon fontSize="small" />, color: 'error' },
+    LOW: { icon: <HeadsetMicIcon fontSize="small" />, color: 'error' }
 };
 
-const DEFAULT_STYLE = { icon: <WarningAmberIcon fontSize="small" />, color: 'warning' as const };
+const DEFAULT_STYLE = { icon: <WarningAmberIcon fontSize="small" />, color: 'warning.' as const };
 
 const ReportRow = ({ item }: { item: HighPriorityIssueItem }) => {
-    const style = CATEGORY_STYLE[item.categoryLabel] ?? DEFAULT_STYLE;
+    const style = CATEGORY_STYLE[item.priority] ?? DEFAULT_STYLE;
 
     return (
-        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ py: 1 }}>
+        <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1.5}
+            sx={{
+                py: 1,
+                pl: 1.5,
+                borderLeft: 4,
+                bgcolor: `${style.color}.lightest`,
+                borderColor: `${style.color}.main`,
+                borderRadius: 2.5 // rounds the left edge's top/bottom corners, same idea as the card's top corners
+            }}
+        >
             <Box
                 sx={{
                     width: 32,
                     height: 32,
-                    borderRadius: 1,
+                    borderRadius: 3,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -69,16 +82,43 @@ const ReportsPanel = () => {
         <Card sx={{ height: '100%' }}>
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-                    <WarningAmberIcon fontSize="small" color="action" />
+                    <Icon>
+                        <img src={ReportsIcon} alt="Reports" width="26px" />
+                    </Icon>{' '}
                     <Typography variant="h5">Reports</Typography>
+                    <Box flexGrow={1} textAlign="right">
+                        <MuiLink
+                            component={RouterLink}
+                            to="/reports"
+                            sx={{
+                                textDecoration: 'none',
+                                color: 'inherit'
+                            }}
+                        >
+                            <Typography variant="h5" color="warning.dark">
+                                View All
+                            </Typography>
+                        </MuiLink>
+                    </Box>
                 </Stack>
 
                 {items.length === 0 ? (
-                    <Typography variant="body2" color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                            py: 4,
+                            textAlign: 'center'
+                        }}
+                    >
                         No open issues
                     </Typography>
                 ) : (
-                    items.map((item) => <ReportRow key={item.id} item={item} />)
+                    <Stack spacing={1}>
+                        {items.map((item) => (
+                            <ReportRow key={item.id} item={item} />
+                        ))}
+                    </Stack>
                 )}
             </CardContent>
         </Card>

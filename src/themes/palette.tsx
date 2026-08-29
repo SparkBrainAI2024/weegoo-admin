@@ -53,6 +53,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
                 main: mode === ThemeMode.DARK ? colors.darkPrimaryMain : colors.primaryMain,
                 dark: mode === ThemeMode.DARK ? colors.darkPrimaryDark : colors.primaryDark,
                 200: mode === ThemeMode.DARK ? colors.darkPrimary200 : colors.primary200,
+                300: mode === ThemeMode.DARK ? colors.darkPrimary300 : colors.primary300,
                 800: mode === ThemeMode.DARK ? colors.darkPrimary800 : colors.primary800
             },
             secondary: {
@@ -67,7 +68,8 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
             error: {
                 light: colors.errorLight,
                 main: colors.errorMain,
-                dark: colors.errorDark
+                dark: colors.errorDark,
+                lightest: colors.errorLightest
             },
             orange: {
                 light: colors.orangeLight,
@@ -77,7 +79,8 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
             warning: {
                 light: colors.warningLight,
                 main: colors.warningMain,
-                dark: colors.warningDark
+                dark: colors.warningDark,
+                lightest: colors.warningLightest
             },
             success: {
                 light: colors.successLight,

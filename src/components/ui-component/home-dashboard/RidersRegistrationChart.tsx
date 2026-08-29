@@ -9,10 +9,11 @@ import Skeleton from '@mui/material/Skeleton';
 import Alert from '@mui/material/Alert';
 
 import Chart from 'react-apexcharts';
-import GroupIcon from '@mui/icons-material/Group';
 import { usePassengerRegistrationChart } from 'graphql/queries/home-dashboard.queries';
 import dayjs from 'dayjs';
 import { useUrlParams } from 'hooks/useSearchParams';
+import { Icon } from '@mui/material';
+import RidersIcon from '../../../assets/images/icons/riders.png';
 
 // Local to this chart only — intentionally not the shared StatsSection defaults
 const LOCAL_DEFAULT_FROM_DATE = dayjs().subtract(6, 'day').format('YYYY-MM-DD');
@@ -66,7 +67,9 @@ const RidersRegistrationChart = () => {
         <Card sx={{ height: '100%' }}>
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-                    <GroupIcon fontSize="small" color="action" />
+                    <Icon>
+                        <img src={RidersIcon} alt="Riders Registration Chart" width="26px" />
+                    </Icon>
                     <Typography variant="h5">Riders</Typography>
                 </Stack>
 

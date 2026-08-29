@@ -8,8 +8,9 @@ import Divider from '@mui/material/Divider';
 import Skeleton from '@mui/material/Skeleton';
 import Alert from '@mui/material/Alert';
 
-import PersonIcon from '@mui/icons-material/Person';
+import ActiveDriverIcon from '../../../assets/images/icons/active_driver.png';
 import { useDriverStatusCounts } from 'graphql/queries/home-dashboard.queries';
+import { Icon } from '@mui/material';
 
 const StatRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
     <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ py: 1.25 }}>
@@ -39,7 +40,9 @@ const DriversPanel = () => {
         <Card sx={{ height: '100%' }}>
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-                    <PersonIcon fontSize="small" color="action" />
+                    <Icon>
+                        <img src={ActiveDriverIcon} alt="Driver" width="26px" />
+                    </Icon>
                     <Typography variant="h5">Drivers</Typography>
                 </Stack>
 

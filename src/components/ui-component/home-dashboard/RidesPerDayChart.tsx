@@ -7,12 +7,12 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import Alert from '@mui/material/Alert';
-
 import Chart from 'react-apexcharts';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { useCompletedRideChart } from 'graphql/queries/home-dashboard.queries';
 import dayjs from 'dayjs';
 import { useUrlParams } from 'hooks/useSearchParams';
+import { Icon } from '@mui/material';
+import RidesPerDayIcon from '../../../assets/images/icons/rides_per_day.png';
 
 // Local to this chart only — intentionally not the shared StatsSection defaults
 const LOCAL_DEFAULT_FROM_DATE = dayjs().subtract(6, 'day').format('YYYY-MM-DD');
@@ -70,7 +70,9 @@ const RidesPerDayChart = () => {
         <Card sx={{ height: '100%' }}>
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-                    <TrendingUpIcon fontSize="small" color="action" />
+                    <Icon>
+                        <img src={RidesPerDayIcon} alt="Rides per day" width="26px" />
+                    </Icon>
                     <Typography variant="h5">Rides per Day {groupBy ? `(${groupBy})` : ''}</Typography>
                 </Stack>
 

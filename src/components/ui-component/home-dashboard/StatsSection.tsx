@@ -1,12 +1,18 @@
 import { ReactNode, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
-import { IconRefresh, IconUser, IconUsers, IconInfoCircle, IconX } from '@tabler/icons-react';
+import { IconUser, IconUsers, IconInfoCircle, IconX } from '@tabler/icons-react';
 
 import { StatCard } from './StatCard';
 import { useAdminDashboard } from 'graphql/queries/home-dashboard.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
 import { DEFAULT_END_DATE, DEFAULT_FROM_DATE } from 'utils/dashboard-date-defaults';
+import { Icon } from '@mui/material';
+import RouteTrackingIcon from '../../../assets/images/icons/route_tracking.png';
+import ActiveDriverIcon from '../../../assets/images/icons/active_driver.png';
+import ActiveRiderIcon from '../../../assets/images/icons/active_riders.png';
+import TotalRevenueIcon from '../../../assets/images/icons/total_revenue.png';
+import CancelledRidesIcon from '../../../assets/images/icons/cancelled_rides.png';
 
 interface StatConfig {
     key: string;
@@ -33,40 +39,60 @@ export function StatsSection() {
             label: 'Total Rides (Today)',
             value: stats.totalActiveRides,
             percentageChange: stats.percentageChange.totalActiveRides,
-            icon: <IconRefresh size={16} />,
-            iconBg: 'success.lighter'
+            icon: (
+                <Icon>
+                    <img src={RouteTrackingIcon} alt="Route tracking" width="26px" />
+                </Icon>
+            ),
+            iconBg: 'success.light'
         },
         {
             key: 'drivers',
             label: 'Active Drivers',
             value: stats.activeRider,
             percentageChange: stats.percentageChange.activeRider,
-            icon: <IconUser size={16} />,
-            iconBg: 'warning.lighter'
+            icon: (
+                <Icon>
+                    <img src={ActiveDriverIcon} alt="Active driver" width="26px" />
+                </Icon>
+            ),
+            iconBg: 'primary.300'
         },
         {
             key: 'riders',
             label: 'Active Riders',
             value: stats.activePassenger,
             percentageChange: stats.percentageChange.activePassenger,
-            icon: <IconUsers size={16} />,
-            iconBg: 'success.lighter'
+            icon: (
+                <Icon>
+                    <img src={ActiveRiderIcon} alt="Active Rider" width="26px" />
+                </Icon>
+            ),
+            iconBg: 'success.light'
         },
         {
             key: 'revenue',
             label: 'Total Revenue',
             value: stats.totalRevenue,
             percentageChange: stats.percentageChange.totalRevenue,
-            icon: <IconInfoCircle size={16} />,
-            iconBg: 'warning.lighter'
+            icon: (
+                <Icon>
+                    <img src={TotalRevenueIcon} alt="Total Revenue" width="26px" />
+                </Icon>
+            ),
+            iconBg: 'primary.300'
         },
         {
             key: 'cancelled',
             label: 'Cancelled Rides',
             value: stats.totalCancelledRides,
             percentageChange: stats.percentageChange.totalCancelledRides,
-            icon: <IconX size={16} />,
-            iconBg: 'error.lighter'
+            icon: (
+                <Icon>
+                    <img src={CancelledRidesIcon} alt="Cancelled Rides" width="26px" />
+                </Icon>
+            ),
+            iconBg: 'error.light'
         }
     ];
 

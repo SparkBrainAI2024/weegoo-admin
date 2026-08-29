@@ -7,11 +7,14 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Skeleton from '@mui/material/Skeleton';
 import Alert from '@mui/material/Alert';
+import MuiLink from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
-import GroupIcon from '@mui/icons-material/Group';
+import ActiveRidersIcon from '../../../assets/images/icons/active_riders.png';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useTotalRidersChart } from 'graphql/queries/home-dashboard.queries';
 import { Link } from 'react-router-dom';
+import { Icon } from '@mui/material';
 
 const StatRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
     <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ py: 1.25 }}>
@@ -41,7 +44,9 @@ const RidersPanel = () => {
         <Card sx={{ height: '100%' }}>
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-                    <GroupIcon fontSize="small" color="action" />
+                    <Icon>
+                        <img src={ActiveRidersIcon} alt="Riders" width="26px" />
+                    </Icon>{' '}
                     <Typography variant="h5">Riders</Typography>
                 </Stack>
 
@@ -60,9 +65,18 @@ const RidersPanel = () => {
                     to="/reports/financial"
                     sx={{ mt: 1.5, color: 'warning.dark', textDecoration: 'none', fontWeight: 600, fontSize: '0.8125rem' }}
                 >
-                    <Typography variant="body2" sx={{ fontWeight: 600, color: 'inherit' }}>
-                        View detail financial reports
-                    </Typography>
+                    <MuiLink
+                        component={RouterLink}
+                        to="/payments"
+                        sx={{
+                            textDecoration: 'none',
+                            color: 'inherit'
+                        }}
+                    >
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'inherit' }}>
+                            View detail financial reports
+                        </Typography>
+                    </MuiLink>
                     <ArrowForwardIcon sx={{ fontSize: 14 }} />
                 </Stack>
             </CardContent>

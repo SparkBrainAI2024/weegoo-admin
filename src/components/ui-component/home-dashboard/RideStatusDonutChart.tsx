@@ -10,10 +10,11 @@ import Alert from '@mui/material/Alert';
 import Chip from '@mui/material/Chip';
 
 import Chart from 'react-apexcharts';
-import PieChartOutlineIcon from '@mui/icons-material/PieChartOutline';
+import RideStatusDistributionIcon from '../../../assets/images/icons/ride_status_distribution.png';
 import { useRideStatusChart } from 'graphql/queries/home-dashboard.queries';
 import dayjs from 'dayjs';
 import { useUrlParams } from 'hooks/useSearchParams';
+import { Icon } from '@mui/material';
 
 // Local to this chart only — intentionally not the shared StatsSection defaults
 const LOCAL_DEFAULT_FROM_DATE = dayjs().subtract(6, 'day').format('YYYY-MM-DD');
@@ -71,7 +72,9 @@ const RideStatusDonutChart = () => {
         <Card sx={{ height: '100%' }}>
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-                    <PieChartOutlineIcon fontSize="small" color="action" />
+                    <Icon>
+                        <img src={RideStatusDistributionIcon} alt="Ride Status Distribution" width="26px" />
+                    </Icon>{' '}
                     <Typography variant="h5">Ride Status Distribution</Typography>
                 </Stack>
 
