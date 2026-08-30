@@ -15,6 +15,7 @@ import {
     Typography
 } from '@mui/material';
 import { TransactionStatus, TransactionType, useRecentTransactions } from 'graphql/queries/payments.queries';
+import { useUrlParams } from 'hooks/useSearchParams';
 import MainCard from '../cards/MainCard';
 
 const formatCurrency = (value: number, direction: 'DEBIT' | 'CREDIT') =>
@@ -43,9 +44,12 @@ const formatDateTime = (iso: string) => {
 
 export default function RecentTransactionsTable() {
     const theme = useTheme();
+    const { getParam } = useUrlParams();
     const [page, setPage] = useState(0);
     const limit = 5;
-    const { data, loading } = useRecentTransactions({ page, limit });
+    const fromDate = getParam('fromDate', '');
+    const endDate = getParam('endDate', '');
+    const { data, loading } = useRecentTransactions({ page, limit, fromDate, endDate });
     const result = data?.recentTransactions;
 
     const pageCount = result ? Math.max(1, Math.ceil(result.total / limit)) : 1;

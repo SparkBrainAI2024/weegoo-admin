@@ -2,14 +2,18 @@ import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, Divider, Grid, Skeleton, Typography } from '@mui/material';
 import Chart from 'react-apexcharts';
 import { IconArrowUp, IconArrowDown, IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
-import { PaymentsPeriod, useTopupVsWithdrawals } from 'graphql/queries/payments.queries';
+import { useTopupVsWithdrawals } from 'graphql/queries/payments.queries';
+import { useUrlParams } from 'hooks/useSearchParams';
 import MainCard from '../cards/MainCard';
 
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
-export default function TopupWithdrawalCard({ period }: { period: PaymentsPeriod }) {
+export default function TopupWithdrawalCard() {
     const theme = useTheme();
-    const { data, loading } = useTopupVsWithdrawals(period);
+    const { getParam } = useUrlParams();
+    const fromDate = getParam('fromDate', '');
+    const endDate = getParam('endDate', '');
+    const { data, loading } = useTopupVsWithdrawals(fromDate, endDate);
     const flow = data?.topupVsWithdrawals;
 
     const trendValues = flow?.netFlowTrend?.map((p) => p.amount) ?? [];

@@ -3,14 +3,6 @@ import { gql } from '@apollo/client';
 
 // ---- Enums / shared types -----------------------------------------------
 
-export enum PaymentsPeriod {
-    TODAY = 'TODAY',
-    THIS_WEEK = 'THIS_WEEK',
-    THIS_MONTH = 'THIS_MONTH',
-    THIS_YEAR = 'THIS_YEAR',
-    CUSTOM = 'CUSTOM'
-}
-
 export enum TransactionType {
     RIDE_PAYMENT = 'RIDE_PAYMENT',
     TOPUP = 'TOPUP',
@@ -30,14 +22,20 @@ export enum TransactionDirection {
 }
 
 export interface PaymentsOverviewInput {
-    period?: PaymentsPeriod;
-    startDate?: string;
-    endDate?: string;
+    fromDate: string | null;
+    endDate: string | null;
 }
 
-export const buildPaymentsOverviewInput = ({ period }: { period?: PaymentsPeriod }): PaymentsOverviewInput => {
+export const buildPaymentsOverviewInput = ({
+    fromDate,
+    endDate
+}: {
+    fromDate: string | null;
+    endDate: string | null;
+}): PaymentsOverviewInput => {
     return {
-        period: period ?? PaymentsPeriod.THIS_MONTH
+        fromDate,
+        endDate
     };
 };
 
@@ -83,8 +81,8 @@ export interface PaymentsSummaryResponse {
     };
 }
 
-export const usePaymentsSummary = (period: PaymentsPeriod) => {
-    const input = buildPaymentsOverviewInput({ period });
+export const usePaymentsSummary = (fromDate: string | null, endDate: string | null) => {
+    const input = buildPaymentsOverviewInput({ fromDate, endDate });
     return useQuery<PaymentsSummaryResponse>(PAYMENTS_SUMMARY_QUERY, { variables: { input } });
 };
 
@@ -116,8 +114,8 @@ export interface CommissionOverviewResponse {
     };
 }
 
-export const useCommissionOverview = (period: PaymentsPeriod) => {
-    const input = buildPaymentsOverviewInput({ period });
+export const useCommissionOverview = (fromDate: string | null, endDate: string | null) => {
+    const input = buildPaymentsOverviewInput({ fromDate, endDate });
     return useQuery<CommissionOverviewResponse>(COMMISSION_OVERVIEW_QUERY, { variables: { input } });
 };
 
@@ -200,8 +198,8 @@ export interface TopupWithdrawalResponse {
     };
 }
 
-export const useTopupVsWithdrawals = (period: PaymentsPeriod) => {
-    const input = buildPaymentsOverviewInput({ period });
+export const useTopupVsWithdrawals = (fromDate: string | null, endDate: string | null) => {
+    const input = buildPaymentsOverviewInput({ fromDate, endDate });
     return useQuery<TopupWithdrawalResponse>(TOPUP_WITHDRAWAL_QUERY, { variables: { input } });
 };
 
@@ -220,20 +218,26 @@ export const buildRecentTransactionsInput = ({
     limit,
     type,
     status,
-    searchText
+    searchText,
+    fromDate,
+    endDate
 }: {
     page?: number;
     limit?: number;
     type?: TransactionType | '';
     status?: TransactionStatus | '';
     searchText?: string;
+    fromDate: string | null;
+    endDate: string | null;
 }): RecentTransactionsInput => {
     return {
         page: page ?? 0,
         limit: limit ?? 5,
         type: type || undefined,
         status: status || undefined,
-        searchText: searchText || undefined
+        searchText: searchText || undefined,
+        fromDate,
+        endDate
     };
 };
 

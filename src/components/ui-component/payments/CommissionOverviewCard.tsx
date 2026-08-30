@@ -1,14 +1,18 @@
 import { useTheme } from '@mui/material/styles';
 import { Box, Skeleton, Typography } from '@mui/material';
 import Chart from 'react-apexcharts';
-import { PaymentsPeriod, useCommissionOverview } from 'graphql/queries/payments.queries';
+import { useCommissionOverview } from 'graphql/queries/payments.queries';
+import { useUrlParams } from 'hooks/useSearchParams';
 import MainCard from '../cards/MainCard';
 
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
-export default function CommissionOverviewCard({ period }: { period: PaymentsPeriod }) {
+export default function CommissionOverviewCard() {
     const theme = useTheme();
-    const { data, loading } = useCommissionOverview(period);
+    const { getParam } = useUrlParams();
+    const fromDate = getParam('fromDate', '');
+    const endDate = getParam('endDate', '');
+    const { data, loading } = useCommissionOverview(fromDate, endDate);
     const overview = data?.commissionOverview;
 
     const categories = overview?.series.map((p) => p.date) ?? [];
