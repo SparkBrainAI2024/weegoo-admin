@@ -3,14 +3,15 @@ import { IconCoin, IconWallet, IconUsers, IconArrowsExchange } from '@tabler/ico
 import StatCard from './StatCard';
 import { usePaymentsSummary } from 'graphql/queries/payments.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
+import { DEFAULT_END_DATE, DEFAULT_FROM_DATE } from 'utils/payments.utils';
 
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export default function PaymentsStatCards() {
     const { getParam } = useUrlParams();
 
-    const fromDate = getParam('fromDate', '');
-    const endDate = getParam('endDate', '');
+    const fromDate = getParam('fromDate', DEFAULT_FROM_DATE);
+    const endDate = getParam('endDate', DEFAULT_END_DATE);
     const { data, loading } = usePaymentsSummary(fromDate, endDate);
     const summary = data?.paymentsSummary;
 
