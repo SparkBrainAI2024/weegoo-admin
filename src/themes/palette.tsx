@@ -53,6 +53,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
                 main: mode === ThemeMode.DARK ? colors.darkPrimaryMain : colors.primaryMain,
                 dark: mode === ThemeMode.DARK ? colors.darkPrimaryDark : colors.primaryDark,
                 200: mode === ThemeMode.DARK ? colors.darkPrimary200 : colors.primary200,
+                300: mode === ThemeMode.DARK ? colors.darkPrimary300 : colors.primary300,
                 800: mode === ThemeMode.DARK ? colors.darkPrimary800 : colors.primary800
             },
             secondary: {
