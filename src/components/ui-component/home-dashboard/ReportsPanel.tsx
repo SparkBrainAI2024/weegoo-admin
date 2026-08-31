@@ -38,7 +38,7 @@ const ReportRow = ({ item }: { item: HighPriorityIssueItem }) => {
                 py: 1,
                 pl: 1.5,
                 borderLeft: 4,
-                bgcolor: `${style.color}.lightest`,
+                bgcolor: `${style.color}.light`,
                 borderColor: `${style.color}.main`,
                 borderRadius: 2.5 // rounds the left edge's top/bottom corners, same idea as the card's top corners
             }}
