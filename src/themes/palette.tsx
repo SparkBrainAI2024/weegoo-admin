@@ -68,8 +68,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
             error: {
                 light: colors.errorLight,
                 main: colors.errorMain,
-                dark: colors.errorDark,
-                lightest: colors.errorLightest
+                dark: colors.errorDark
             },
             orange: {
                 light: colors.orangeLight,
@@ -79,8 +78,7 @@ const Palette = (mode: ThemeMode, presetColor: PresetColor) => {
             warning: {
                 light: colors.warningLight,
                 main: colors.warningMain,
-                dark: colors.warningDark,
-                lightest: colors.warningLightest
+                dark: colors.warningDark
             },
             success: {
                 light: colors.successLight,
