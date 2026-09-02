@@ -36,9 +36,19 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
                 <DriverTrackingMap
                     rideId={ride.id}
                     ablyKey={ABLY_KEY}
+                    driverId={'6a5b57f1b7e3ec6040e0469b'}
                     height={400}
-                    // showDebug={true} // Show debug panel
-                />{' '}
+                    pickupLocation={{
+                        lat: 27.66627,
+                        lng: 85.43459,
+                        address: 'Hanuman Petrol Pump'
+                    }}
+                    dropoffLocation={{
+                        lat: 27.68966,
+                        lng: 85.334,
+                        address: 'New Baneswor'
+                    }}
+                />
             </Box>
 
             <Stack spacing={1.5} mb={2}>
