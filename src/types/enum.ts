@@ -14,3 +14,13 @@ export enum PageType {
     INFO = 'INFO',
     LEGAL = 'LEGAL'
 }
+
+export enum RideStatus {
+    CONFIRMED = 'CONFIRMED',
+    ONGOING = 'ONGOING',
+    PICKUP = 'PICKUP',
+    COMPLETED = 'COMPLETED',
+    CANCELLED = 'CANCELLED',
+    PENDING = 'PENDING',
+    BOOKING = 'BOOKING'
+}

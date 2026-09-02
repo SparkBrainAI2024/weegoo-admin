@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { useDriverLocation } from 'hooks/useDriverLocation';
+import { RideStatus } from 'types/enum';
 
 declare global {
     interface Window {
@@ -11,14 +12,14 @@ declare global {
 
 // Temporary visual-testing position for completed/remaining route sections.
 // Set to false once live-route progress should be shown again.
-const USE_TEST_DRIVER_LOCATION = true;
-const TEST_DRIVER_LOCATION = {
-    lat: 27.6735,
-    lng: 85.4045,
-    heading: 0,
-    moving: false,
-    ts: Date.now()
-};
+// const USE_TEST_DRIVER_LOCATION = false;
+// const TEST_DRIVER_LOCATION = {
+//     lat: 27.6735,
+//     lng: 85.4045,
+//     heading: 0,
+//     moving: false,
+//     ts: Date.now()
+// };
 
 const BAATO_KEY = import.meta.env.VITE_BAATO_KEY as string | undefined;
 const BAATO_STYLE_URL = BAATO_KEY ? `https://api.baato.io/api/v1/styles/breeze?key=${encodeURIComponent(BAATO_KEY)}` : undefined;
@@ -45,12 +46,6 @@ const loadMaplibre = () => {
     });
 };
 
-// Baato Directions API - fetch route
-// Fetch route from Baato API using direct fetch
-// Fetch route from Baato API using direct fetch with better error handling
-// Fetch route from Baato API - CORRECT FORMAT
-// Fetch route from Baato API - CORRECT FORMAT with 'mode' parameter
-// Fetch route from Baato API
 const fetchBaatoRoute = async (startLat: number, startLng: number, endLat: number, endLng: number) => {
     if (!BAATO_KEY) {
         console.error('❌ Baato API key is missing');
@@ -75,6 +70,7 @@ const fetchBaatoRoute = async (startLat: number, startLng: number, endLat: numbe
 };
 
 interface DriverTrackingMapProps {
+    rideStatus: RideStatus;
     rideId: string;
     ablyKey?: string;
     height?: number;
@@ -84,6 +80,7 @@ interface DriverTrackingMapProps {
 }
 
 export default function DriverTrackingMap({
+    rideStatus,
     rideId,
     ablyKey,
     height = 220,
@@ -106,9 +103,13 @@ export default function DriverTrackingMap({
     const [route, setRoute] = useState<any>(null);
     const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
-    // Location channels are keyed by driver ID, not ride ID.
-    const location = useDriverLocation(propDriverId || rideId, ablyKey);
-    const driverLocation = USE_TEST_DRIVER_LOCATION ? TEST_DRIVER_LOCATION : location;
+    const supportsDriverLocation = rideStatus === RideStatus.CONFIRMED || rideStatus === RideStatus.ONGOING;
+    const isOngoingRide = rideStatus === RideStatus.ONGOING;
+
+    // Location channels are keyed by driver ID. Only confirmed and ongoing rides
+    // can have a driver assigned, so other statuses do not subscribe at all.
+    const location = useDriverLocation(supportsDriverLocation ? propDriverId ?? null : null, ablyKey);
+    const driverLocation = location;
 
     // Fetch route from Baato when pickup/dropoff locations are available
     // Fetch route from Baato when pickup/dropoff locations are available
@@ -225,7 +226,7 @@ export default function DriverTrackingMap({
             let completedCoordinates: [number, number][] = [];
             let remainingCoordinates: [number, number][] = coordinates;
 
-            if (driverLocation) {
+            if (isOngoingRide && driverLocation) {
                 const closestIndex = findClosestPointOnRoute(coordinates, driverLocation.lat, driverLocation.lng);
 
                 // Split the route at the closest point
@@ -295,16 +296,8 @@ export default function DriverTrackingMap({
 
             routeAddedRef.current = true;
             console.log('✅ Route with completed/remaining sections added successfully');
-
-            // Fit map
-            if (pickupLocation && dropoffLocation) {
-                const bounds = new window.maplibregl.LngLatBounds()
-                    .extend([pickupLocation.lng, pickupLocation.lat])
-                    .extend([dropoffLocation.lng, dropoffLocation.lat]);
-                map.fitBounds(bounds, { padding: 50, duration: 1000 });
-            }
         },
-        [pickupLocation, dropoffLocation]
+        [isOngoingRide]
     );
     // Helper function to find the closest point on the route
     // Helper function to find the closest point on the route
@@ -407,18 +400,6 @@ export default function DriverTrackingMap({
                     .setLngLat([dropoffLocation.lng, dropoffLocation.lat])
                     .addTo(map);
             }
-
-            // Fit map to show both markers
-            if (pickupLocation && dropoffLocation) {
-                const bounds = new maplibregl.LngLatBounds()
-                    .extend([pickupLocation.lng, pickupLocation.lat])
-                    .extend([dropoffLocation.lng, dropoffLocation.lat]);
-
-                map.fitBounds(bounds, {
-                    padding: 50,
-                    duration: 1000
-                });
-            }
         },
         [pickupLocation, dropoffLocation]
     );
@@ -451,7 +432,7 @@ export default function DriverTrackingMap({
             const map = new maplibregl.Map({
                 container: mapContainerRef.current,
                 style: BAATO_STYLE_URL,
-                center: [85.324, 27.7172],
+                center: pickupLocation ? [pickupLocation.lng, pickupLocation.lat] : [85.324, 27.7172],
                 zoom: 13,
                 attributionControl: false
             });
@@ -498,15 +479,15 @@ export default function DriverTrackingMap({
             // Re-draw the route with updated driver position
             // Reset flag so it re-adds
             routeAddedRef.current = false;
-            addRouteToMap(mapRef.current, route, driverLocation);
+            addRouteToMap(mapRef.current, route, isOngoingRide ? driverLocation : undefined);
         }
-    }, [driverLocation, route, isMapReady, addRouteToMap]);
+    }, [driverLocation, route, isMapReady, addRouteToMap, isOngoingRide]);
     // Initialize map
     useEffect(() => {
         if (route && isMapReady && mapRef.current && !routeAddedRef.current) {
-            addRouteToMap(mapRef.current, route, driverLocation || undefined);
+            addRouteToMap(mapRef.current, route, isOngoingRide ? driverLocation || undefined : undefined);
         }
-    }, [route, isMapReady, addRouteToMap, driverLocation]);
+    }, [route, isMapReady, addRouteToMap, driverLocation, isOngoingRide]);
     // When route is fetched and map is ready, add it
     useEffect(() => {
         console.log('🔍 Route state changed:', {
@@ -543,7 +524,14 @@ export default function DriverTrackingMap({
             if (!hasDriverPositionRef.current) {
                 marker.setLngLat([lng, lat]).addTo(mapRef.current);
                 hasDriverPositionRef.current = true;
+                if (isOngoingRide) {
+                    mapRef.current.easeTo({ center: [lng, lat], duration: 500 });
+                }
                 return;
+            }
+
+            if (isOngoingRide) {
+                mapRef.current.easeTo({ center: [lng, lat], duration: 500 });
             }
 
             const from = marker.getLngLat();
@@ -584,7 +572,7 @@ export default function DriverTrackingMap({
                 rafRef.current = null;
             }
         };
-    }, [driverLocation, isMapReady]);
+    }, [driverLocation, isMapReady, isOngoingRide]);
 
     const displayLocation = driverLocation;
 
@@ -625,7 +613,7 @@ export default function DriverTrackingMap({
 
             {mapError && <MapMessage message={mapError} />}
             {isLoadingRoute && <MapMessage message="Calculating route..." />}
-            {(!displayLocation || !isMapReady) && !mapError && !isLoadingRoute && (
+            {supportsDriverLocation && (!displayLocation || !isMapReady) && !mapError && !isLoadingRoute && (
                 <MapMessage message={ablyKey ? 'Waiting for driver location…' : 'Add VITE_ABLY_KEY for live tracking.'} />
             )}
 
