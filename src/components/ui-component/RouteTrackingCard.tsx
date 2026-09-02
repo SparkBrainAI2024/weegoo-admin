@@ -12,7 +12,7 @@ import { FieldAndFieldValue, RideDetailSubtitle2 } from './RideDetailSubtitle';
 import DriverTrackingMap from './DriverTrackingMap';
 // import DriverTrackingMap from './DriverTrackingMap';
 
-const ABLY_KEY = import.meta.env.VITE_ABLY_KEY as string | undefined;
+const ABLY_KEY = import.meta.env.VITE_ABLY_KEY as string;
 interface RouteTrackingCardProps {
     ride: RideDetail;
 }

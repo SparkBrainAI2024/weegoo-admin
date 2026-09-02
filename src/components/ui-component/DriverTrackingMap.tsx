@@ -2,15 +2,23 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { useDriverLocation } from 'hooks/useDriverLocation';
-import * as Ably from 'ably';
-import Baato from '@baatomaps/baato-js-client';
-import polyline from '@mapbox/polyline';
 
 declare global {
     interface Window {
         maplibregl: any;
     }
 }
+
+// Temporary visual-testing position for completed/remaining route sections.
+// Set to false once live-route progress should be shown again.
+const USE_TEST_DRIVER_LOCATION = true;
+const TEST_DRIVER_LOCATION = {
+    lat: 27.6735,
+    lng: 85.4045,
+    heading: 0,
+    moving: false,
+    ts: Date.now()
+};
 
 const BAATO_KEY = import.meta.env.VITE_BAATO_KEY as string | undefined;
 const BAATO_STYLE_URL = BAATO_KEY ? `https://api.baato.io/api/v1/styles/breeze?key=${encodeURIComponent(BAATO_KEY)}` : undefined;
@@ -95,45 +103,12 @@ export default function DriverTrackingMap({
     const [mapError, setMapError] = useState<string | null>(null);
     const [isMapReady, setIsMapReady] = useState(false);
     const [maplibreLoaded, setMaplibreLoaded] = useState(false);
-    const [currentLocation, setCurrentLocation] = useState<any>(null);
     const [route, setRoute] = useState<any>(null);
     const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
-    // Use the hook for driver location
-    const location = useDriverLocation(rideId, ablyKey);
-
-    // Direct Ably subscription for driver location
-    useEffect(() => {
-        if (!ablyKey) return;
-
-        const driverId = propDriverId || rideId;
-        const channelName = `WG-DRIVER-${driverId}-driver-location`;
-
-        console.log('📡 Subscribing to channel:', channelName);
-
-        const realtime = new Ably.Realtime(ablyKey);
-        const channel = realtime.channels.get(channelName);
-
-        channel.subscribe('driver-location', (message) => {
-            console.log('📍 Driver location received:', message.data);
-            const data = message.data;
-
-            if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
-                setCurrentLocation({
-                    lat: data.lat,
-                    lng: data.lng,
-                    ts: Date.now(),
-                    heading: data.heading || 0,
-                    moving: data.moving || false
-                });
-            }
-        });
-
-        return () => {
-            channel.unsubscribe();
-            realtime.close();
-        };
-    }, [ablyKey, rideId, propDriverId]);
+    // Location channels are keyed by driver ID, not ride ID.
+    const location = useDriverLocation(propDriverId || rideId, ablyKey);
+    const driverLocation = USE_TEST_DRIVER_LOCATION ? TEST_DRIVER_LOCATION : location;
 
     // Fetch route from Baato when pickup/dropoff locations are available
     // Fetch route from Baato when pickup/dropoff locations are available
@@ -163,110 +138,54 @@ export default function DriverTrackingMap({
 
         getRoute();
     }, [pickupLocation, dropoffLocation]);
-    // Create a curved fallback route when API fails
-    const createCurvedRoute = (startLat: number, startLng: number, endLat: number, endLng: number) => {
-        const steps = 30;
-        const coordinates = [];
 
-        for (let i = 0; i <= steps; i++) {
-            const t = i / steps;
-            // Linear interpolation
-            const lat = startLat + (endLat - startLat) * t;
-            const lng = startLng + (endLng - startLng) * t;
-
-            // Add a curve using sine wave
-            const curveAmount = 0.008;
-            const curveOffset = Math.sin(t * Math.PI) * curveAmount;
-
-            // Offset perpendicular to the line
-            const dx = endLng - startLng;
-            const dy = endLat - startLat;
-            const len = Math.sqrt(dx * dx + dy * dy);
-
-            if (len > 0) {
-                const perpX = (-dy / len) * curveOffset;
-                const perpY = (dx / len) * curveOffset;
-                coordinates.push([lng + perpX, lat + perpY]);
-            } else {
-                coordinates.push([lng, lat]);
-            }
-        }
-
-        return {
-            routes: [
-                {
-                    geometry: {
-                        type: 'LineString',
-                        coordinates: coordinates
-                    },
-                    distance: 2000,
-                    duration: 180
-                }
-            ]
-        };
-    };
-    // Add this fallback route in the route fetching useEffect if the API fails
-    // This creates a curved route between pickup and dropoff for testing
-    const createFallbackRoute = (startLat: number, startLng: number, endLat: number, endLng: number) => {
-        const steps = 20;
-        const coordinates = [];
-        for (let i = 0; i <= steps; i++) {
-            const t = i / steps;
-            const lat = startLat + (endLat - startLat) * t;
-            const lng = startLng + (endLng - startLng) * t;
-            // Add a slight curve
-            const curveOffset = Math.sin(t * Math.PI) * 0.005;
-            coordinates.push([lng + curveOffset, lat - curveOffset]);
-        }
-        return {
-            routes: [
-                {
-                    geometry: {
-                        type: 'LineString',
-                        coordinates: coordinates
-                    },
-                    distance: 2000,
-                    duration: 180
-                }
-            ]
-        };
-    }; // Add this before the component
-    // Simple polyline decoder (no package needed)
     // Simple polyline decoder with null/empty checking
     // Simple polyline decoder
     // Simple polyline decoder - just copy this
+    // Decode Google-style encoded polyline with proper typing
     const decodePolyline = (encoded: string): [number, number][] => {
-        let index = 0;
-        let lat = 0;
-        let lng = 0;
-        const coords: [number, number][] = [];
-        const factor = 1e5;
-
-        while (index < encoded.length) {
-            let result = 0;
-            let shift = 0;
-            let b;
-            do {
-                b = encoded.charCodeAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            const dlat = result & 1 ? ~(result >> 1) : result >> 1;
-            lat += dlat;
-
-            result = 0;
-            shift = 0;
-            do {
-                b = encoded.charCodeAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            const dlng = result & 1 ? ~(result >> 1) : result >> 1;
-            lng += dlng;
-
-            coords.push([lat / factor, lng / factor]);
+        if (!encoded || typeof encoded !== 'string' || encoded.length === 0) {
+            console.warn('⚠️ Empty or invalid polyline string');
+            return [];
         }
-        return coords;
+
+        try {
+            let index = 0;
+            let lat = 0;
+            let lng = 0;
+            const coordinates: [number, number][] = [];
+            const factor = 1e5;
+
+            while (index < encoded.length) {
+                let result = 0;
+                let shift = 0;
+                let b;
+                do {
+                    b = encoded.charCodeAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                const dlat = result & 1 ? ~(result >> 1) : result >> 1;
+                lat += dlat;
+
+                result = 0;
+                shift = 0;
+                do {
+                    b = encoded.charCodeAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                const dlng = result & 1 ? ~(result >> 1) : result >> 1;
+                lng += dlng;
+
+                // Explicitly create a tuple [number, number]
+                coordinates.push([lat / factor, lng / factor] as [number, number]);
+            }
+            return coordinates;
+        } catch (error) {
+            console.error('❌ Error decoding polyline:', error);
+            return [];
+        }
     };
     // Import polyline decoder at the top
 
@@ -275,8 +194,10 @@ export default function DriverTrackingMap({
     // Add route to map with proper null checks
     // Add route to map - FORCE use API route
     // Add route to map - SIMPLE
+    // Add route to map with completed/remaining sections
+    // Add route to map with completed/remaining sections
     const addRouteToMap = useCallback(
-        (map: any, routeData: any) => {
+        (map: any, routeData: any, driverLocation?: { lat: number; lng: number }) => {
             // Get the polyline from API response
             const encodedPolyline = routeData?.data?.[0]?.encodedPolyline;
 
@@ -289,57 +210,91 @@ export default function DriverTrackingMap({
             const decoded = decodePolyline(encodedPolyline);
 
             // Convert to [lng, lat] for MapLibre
-            const coordinates = decoded.map(([lat, lng]) => [lng, lat]);
+            const coordinates: [number, number][] = decoded.map(([lat, lng]: [number, number]) => [lng, lat] as [number, number]);
 
             console.log(`🎯 Drawing actual road path with ${coordinates.length} points`);
 
             // Remove old layers
-            ['route-layer', 'route-outline'].forEach((id) => {
+            ['route-completed', 'route-remaining', 'route-outline', 'route-completed-outline', 'route-remaining-outline'].forEach((id) => {
                 if (map.getLayer(id)) map.removeLayer(id);
             });
-            if (map.getSource('route')) map.removeSource('route');
+            if (map.getSource('route-completed')) map.removeSource('route-completed');
+            if (map.getSource('route-remaining')) map.removeSource('route-remaining');
 
-            // Add source
-            map.addSource('route', {
-                type: 'geojson',
-                data: {
-                    type: 'Feature',
-                    geometry: {
-                        type: 'LineString',
-                        coordinates: coordinates
-                    },
-                    properties: {}
-                }
-            });
+            // If we have driver location, split the route
+            let completedCoordinates: [number, number][] = [];
+            let remainingCoordinates: [number, number][] = coordinates;
 
-            // Add outline
-            map.addLayer({
-                id: 'route-outline',
-                type: 'line',
-                source: 'route',
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: {
-                    'line-color': '#ffffff',
-                    'line-width': 6,
-                    'line-opacity': 0.5
-                }
-            });
+            if (driverLocation) {
+                const closestIndex = findClosestPointOnRoute(coordinates, driverLocation.lat, driverLocation.lng);
 
-            // Add main route
-            map.addLayer({
-                id: 'route-layer',
-                type: 'line',
-                source: 'route',
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: {
-                    'line-color': '#2563eb',
-                    'line-width': 4,
-                    'line-opacity': 0.95
-                }
-            });
+                // Split the route at the closest point
+                completedCoordinates = coordinates.slice(0, closestIndex + 1);
+                remainingCoordinates = coordinates.slice(closestIndex);
+
+                console.log(`📍 Driver at index ${closestIndex}/${coordinates.length}`);
+                console.log(`✅ Completed: ${completedCoordinates.length} points`);
+                console.log(`🔄 Remaining: ${remainingCoordinates.length} points`);
+            }
+
+            // --- Add completed route (green) ---
+            if (completedCoordinates.length > 0) {
+                map.addSource('route-completed', {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: completedCoordinates
+                        },
+                        properties: {}
+                    }
+                });
+
+                // Completed route (green)
+                map.addLayer({
+                    id: 'route-completed',
+                    type: 'line',
+                    source: 'route-completed',
+                    layout: { 'line-join': 'round', 'line-cap': 'round' },
+                    paint: {
+                        'line-color': '#22c55e',
+                        'line-width': 4,
+                        'line-opacity': 0.9
+                    }
+                });
+            }
+
+            // --- Add remaining route (blue) ---
+            if (remainingCoordinates.length > 0) {
+                map.addSource('route-remaining', {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: remainingCoordinates
+                        },
+                        properties: {}
+                    }
+                });
+
+                // Remaining route (blue)
+                map.addLayer({
+                    id: 'route-remaining',
+                    type: 'line',
+                    source: 'route-remaining',
+                    layout: { 'line-join': 'round', 'line-cap': 'round' },
+                    paint: {
+                        'line-color': '#2563eb',
+                        'line-width': 4,
+                        'line-opacity': 0.95
+                    }
+                });
+            }
 
             routeAddedRef.current = true;
-            console.log('✅ Route added successfully');
+            console.log('✅ Route with completed/remaining sections added successfully');
 
             // Fit map
             if (pickupLocation && dropoffLocation) {
@@ -351,6 +306,24 @@ export default function DriverTrackingMap({
         },
         [pickupLocation, dropoffLocation]
     );
+    // Helper function to find the closest point on the route
+    // Helper function to find the closest point on the route
+    const findClosestPointOnRoute = (routeCoordinates: [number, number][], driverLat: number, driverLng: number): number => {
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+
+        routeCoordinates.forEach((coord, index) => {
+            const [lng, lat] = coord;
+            const distance = Math.sqrt(Math.pow(lat - driverLat, 2) + Math.pow(lng - driverLng, 2));
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = index;
+            }
+        });
+
+        return closestIndex;
+    };
     // Monitor route and map readiness
     // When route is ready and map is ready, add it
     useEffect(() => {
@@ -463,11 +436,10 @@ export default function DriverTrackingMap({
             });
     }, []);
 
-    // Initialize map
+    // Create the map as soon as MapLibre has loaded. Without this effect,
+    // isMapReady remains false and the waiting overlay never clears.
     useEffect(() => {
-        if (!maplibreLoaded || !mapContainerRef.current || mapRef.current) {
-            return;
-        }
+        if (!maplibreLoaded || !mapContainerRef.current || mapRef.current) return;
 
         if (!BAATO_STYLE_URL) {
             setMapError('Baato API key is missing');
@@ -476,9 +448,8 @@ export default function DriverTrackingMap({
 
         try {
             const maplibregl = window.maplibregl;
-
             const map = new maplibregl.Map({
-                container: mapContainerRef.current!,
+                container: mapContainerRef.current,
                 style: BAATO_STYLE_URL,
                 center: [85.324, 27.7172],
                 zoom: 13,
@@ -487,99 +458,55 @@ export default function DriverTrackingMap({
 
             map.addControl(new maplibregl.NavigationControl(), 'top-right');
             map.addControl(new maplibregl.AttributionControl(), 'bottom-right');
-
             map.on('load', () => {
                 setIsMapReady(true);
                 map.resize();
-                console.log('Map loaded successfully');
-
-                // Add markers
                 addPickupDropoffMarkers(map);
-
-                // Add route if available
-                if (route && !routeAddedRef.current) {
-                    addRouteToMap(map, route);
-                }
+                if (route && !routeAddedRef.current) addRouteToMap(map, route);
             });
-
-            map.on('error', (e: any) => {
-                if (e.error && e.error.status !== 403) {
-                    console.error('Map error:', e);
+            map.on('error', (event: any) => {
+                if (event.error?.status !== 403) {
+                    console.error('Map error:', event);
                     setMapError('Unable to load the map.');
-                } else {
-                    console.warn('Tile loading issue (403):', e);
                 }
             });
-
             mapRef.current = map;
 
-            // Create driver marker
-            const el = document.createElement('div');
-            el.style.width = '32px';
-            el.style.height = '32px';
-            el.style.borderRadius = '50%';
-            el.style.background = '#1976d2';
-            el.style.border = '3px solid white';
-            el.style.boxShadow = '0 0 8px rgba(0,0,0,0.4)';
-            el.style.cursor = 'pointer';
-            el.style.position = 'relative';
-
-            const pulse = document.createElement('div');
-            pulse.style.position = 'absolute';
-            pulse.style.inset = '-8px';
-            pulse.style.borderRadius = '50%';
-            pulse.style.background = 'rgba(25, 118, 210, 0.3)';
-            pulse.style.animation = 'pulse 1.5s ease-out infinite';
-            el.appendChild(pulse);
-
-            const centerDot = document.createElement('div');
-            centerDot.style.position = 'absolute';
-            centerDot.style.top = '50%';
-            centerDot.style.left = '50%';
-            centerDot.style.transform = 'translate(-50%, -50%)';
-            centerDot.style.width = '8px';
-            centerDot.style.height = '8px';
-            centerDot.style.borderRadius = '50%';
-            centerDot.style.background = '#ffffff';
-            centerDot.style.border = '1px solid #1976d2';
-            el.appendChild(centerDot);
-
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes pulse {
-                    0% { transform: scale(0.5); opacity: 1; }
-                    100% { transform: scale(2); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-
-            markerRef.current = new maplibregl.Marker({
-                element: el,
-                rotationAlignment: 'map'
-            });
+            const markerElement = document.createElement('div');
+            markerElement.style.cssText =
+                'width:32px;height:32px;border-radius:50%;background:#1976d2;border:3px solid white;box-shadow:0 0 8px rgba(0,0,0,.4);';
+            markerRef.current = new maplibregl.Marker({ element: markerElement, rotationAlignment: 'map' });
 
             return () => {
-                if (rafRef.current !== null) {
-                    cancelAnimationFrame(rafRef.current);
-                }
-                if (mapRef.current) {
-                    mapRef.current.remove();
-                    mapRef.current = null;
-                }
+                if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+                map.remove();
+                mapRef.current = null;
                 markerRef.current = null;
                 hasDriverPositionRef.current = false;
-                setIsMapReady(false);
                 routeAddedRef.current = false;
-                if (style.parentNode) {
-                    style.parentNode.removeChild(style);
-                }
+                setIsMapReady(false);
             };
         } catch (error) {
             console.error('Error initializing map:', error);
             setMapError('Failed to initialize map');
         }
-    }, [maplibreLoaded, addPickupDropoffMarkers, addRouteToMap, route]);
+    }, [maplibreLoaded, addPickupDropoffMarkers, addRouteToMap]);
 
+    // Update route colors when driver moves
+    useEffect(() => {
+        if (route && isMapReady && mapRef.current && driverLocation) {
+            // Re-draw the route with updated driver position
+            // Reset flag so it re-adds
+            routeAddedRef.current = false;
+            addRouteToMap(mapRef.current, route, driverLocation);
+        }
+    }, [driverLocation, route, isMapReady, addRouteToMap]);
+    // Initialize map
+    useEffect(() => {
+        if (route && isMapReady && mapRef.current && !routeAddedRef.current) {
+            addRouteToMap(mapRef.current, route, driverLocation || undefined);
+        }
+    }, [route, isMapReady, addRouteToMap, driverLocation]);
     // When route is fetched and map is ready, add it
     useEffect(() => {
         console.log('🔍 Route state changed:', {
@@ -599,7 +526,7 @@ export default function DriverTrackingMap({
 
     // Update marker when location changes
     useEffect(() => {
-        const locationData = location || currentLocation;
+        const locationData = driverLocation;
 
         if (!locationData || !mapRef.current || !markerRef.current || !isMapReady) {
             return;
@@ -657,9 +584,9 @@ export default function DriverTrackingMap({
                 rafRef.current = null;
             }
         };
-    }, [location, currentLocation, isMapReady]);
+    }, [driverLocation, isMapReady]);
 
-    const displayLocation = location || currentLocation;
+    const displayLocation = driverLocation;
 
     // Get route info
     const getRouteInfo = () => {

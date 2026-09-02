@@ -29,10 +29,7 @@ export function useDriverLocation(driverId: string | null, apiKey?: string) {
             const realtime = new Ably.Realtime(apiKey);
             clientRef.current = realtime;
 
-            // Bug was here: this used to call channels.get('your_channel_name') —
-            // a literal placeholder string instead of the computed channelName —
-            // so it was listening on the wrong channel entirely.
-            const channel = realtime.channels.get('WG-DRIVER-6a5b57f1b7e3ec6040e0469b-driver-location');
+            const channel = realtime.channels.get(channelName);
 
             // Bug was also here: subscribing to a specific event name
             // (`WG-DRIVER-$<id>-driver-location`, with a stray `$` that was never
