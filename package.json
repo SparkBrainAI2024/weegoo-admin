@@ -32,7 +32,7 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@tabler/icons-react": "^2.47.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "ably": "^2.27.0",
+    "ably": "^2.28.0",
     "amazon-cognito-identity-js": "^6.3.7",
     "apexcharts": "^3.46.0",
     "axios": "^1.6.7",

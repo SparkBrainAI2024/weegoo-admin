@@ -1,63 +1,76 @@
-// // useDriverLocation.ts
-// import { useEffect, useRef, useState } from 'react';
-// import Ably, { Message } from 'ably';
+// hooks/useDriverLocation.ts
+import { useEffect, useRef, useState } from 'react';
+import * as Ably from 'ably';
 
-// export interface DriverLocation {
-//     lat: number;
-//     lng: number;
-//     heading?: number;
-//     speed?: number;
-//     ts: number;
-// }
+export interface DriverLocation {
+    lat: number;
+    lng: number;
+    heading?: number;
+    speed?: number;
+    ts: number;
+    driverId?: string;
+    moving?: boolean;
+}
 
-// const isValidLocation = (value: unknown): value is DriverLocation => {
-//     if (!value || typeof value !== 'object') return false;
+export function useDriverLocation(driverId: string | null, apiKey?: string) {
+    const [location, setLocation] = useState<DriverLocation | null>(null);
+    const clientRef = useRef<Ably.Realtime | null>(null);
 
-//     const { lat, lng } = value as Partial<DriverLocation>;
-//     return (
-//         typeof lat === 'number' &&
-//         Number.isFinite(lat) &&
-//         lat >= -90 &&
-//         lat <= 90 &&
-//         typeof lng === 'number' &&
-//         Number.isFinite(lng) &&
-//         lng >= -180 &&
-//         lng <= 180
-//     );
-// };
+    useEffect(() => {
+        if (!driverId || !apiKey) {
+            console.log('No driverId or apiKey provided');
+            return;
+        }
 
-// export function useDriverLocation(rideId: string | null, apiKey?: string) {
-//     const [location, setLocation] = useState<DriverLocation | null>(null);
-//     const clientRef = useRef<Ably.Realtime | null>(null);
+        const channelName = `WG-DRIVER-${driverId}-driver-location`;
+        console.log('📡 Subscribing to channel:', channelName);
 
-//     useEffect(() => {
-//         if (!rideId || !apiKey) return;
+        try {
+            const realtime = new Ably.Realtime(apiKey);
+            clientRef.current = realtime;
 
-//         const client = new Ably.Realtime({ key: apiKey });
-//         clientRef.current = client;
-//         const channel = client.channels.get(`ride:${rideId}:location`);
+            // Bug was here: this used to call channels.get('your_channel_name') —
+            // a literal placeholder string instead of the computed channelName —
+            // so it was listening on the wrong channel entirely.
+            const channel = realtime.channels.get('WG-DRIVER-6a5b57f1b7e3ec6040e0469b-driver-location');
 
-//         channel.subscribe('location-update', (msg: Message) => {
-//             let data: unknown = msg.data;
-//             if (typeof data === 'string') {
-//                 try {
-//                     data = JSON.parse(data);
-//                 } catch {
-//                     return;
-//                 }
-//             }
+            // Bug was also here: subscribing to a specific event name
+            // (`WG-DRIVER-$<id>-driver-location`, with a stray `$` that was never
+            // interpolated) meant the filter never matched what the publisher
+            // actually sends. Subscribing with no event name catches every
+            // message on the channel, then we validate the payload shape
+            // ourselves — this mirrors the "static" version that was working.
+            channel.subscribe((message) => {
+                console.log('📨 Received message:', message.name, message.data);
+                const data = message.data;
 
-//             if (isValidLocation(data)) {
-//                 setLocation({ ...data, ts: typeof data.ts === 'number' ? data.ts : Date.now() });
-//             }
-//         });
+                if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
+                    setLocation({
+                        lat: data.lat,
+                        lng: data.lng,
+                        ts: Date.now(),
+                        heading: data.heading || 0,
+                        moving: data.moving || false,
+                        driverId: data.driverId
+                    });
+                }
+            });
 
-//         return () => {
-//             channel.unsubscribe();
-//             client.close();
-//             clientRef.current = null;
-//         };
-//     }, [rideId, apiKey]);
+            return () => {
+                channel.unsubscribe();
+                realtime.close();
+                clientRef.current = null;
+            };
+        } catch (error) {
+            console.error('Error initializing Ably:', error);
+            return () => {
+                if (clientRef.current) {
+                    clientRef.current.close();
+                    clientRef.current = null;
+                }
+            };
+        }
+    }, [driverId, apiKey]);
 
-//     return location;
-// }
+    return location;
+}
