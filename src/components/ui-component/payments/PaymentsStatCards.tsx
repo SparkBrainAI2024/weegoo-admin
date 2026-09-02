@@ -10,9 +10,7 @@ const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', {
 export default function PaymentsStatCards() {
     const { getParam } = useUrlParams();
 
-    const fromDate = getParam('fromDate', DEFAULT_FROM_DATE);
-    const endDate = getParam('endDate', DEFAULT_END_DATE);
-    const { data, loading } = usePaymentsSummary(fromDate, endDate);
+    const { data, loading } = usePaymentsSummary();
     const summary = data?.paymentsSummary;
 
     if (loading && !summary) {
@@ -33,8 +31,8 @@ export default function PaymentsStatCards() {
                 <StatCard
                     title="Total Commission"
                     value={formatCurrency(summary?.totalCommission.value ?? 0)}
-                    percentChange={summary?.totalCommission.percentChange}
-                    isIncrease={summary?.totalCommission.isIncrease}
+                    // percentChange={summary?.totalCommission.percentChange}
+                    // isIncrease={summary?.totalCommission.isIncrease}
                     caption="This period"
                     icon={<IconCoin size={22} />}
                 />
@@ -59,8 +57,8 @@ export default function PaymentsStatCards() {
                 <StatCard
                     title="Total Transactions"
                     value={(summary?.totalTransactions.value ?? 0).toLocaleString('en-IN')}
-                    percentChange={summary?.totalTransactions.percentChange}
-                    isIncrease={summary?.totalTransactions.isIncrease}
+                    // percentChange={summary?.totalTransactions.percentChange}
+                    // isIncrease={summary?.totalTransactions.isIncrease}
                     caption="All payment transactions"
                     icon={<IconArrowsExchange size={22} />}
                 />

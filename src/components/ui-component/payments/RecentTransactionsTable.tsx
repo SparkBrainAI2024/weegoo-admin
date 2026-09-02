@@ -55,7 +55,11 @@ export default function RecentTransactionsTable() {
     const pageCount = result ? Math.max(1, Math.ceil(result.total / limit)) : 1;
 
     return (
-        <MainCard title="Recent Transactions" contentSX={{ p: 0 }}>
+        <MainCard
+            title="Recent Transactions"
+            sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
+            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+        >
             <TableContainer>
                 <Table>
                     <TableHead>

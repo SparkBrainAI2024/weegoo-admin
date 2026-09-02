@@ -1,32 +1,49 @@
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, Divider, Grid, Skeleton, Typography } from '@mui/material';
-import Chart from 'react-apexcharts';
 import { IconArrowUp, IconArrowDown, IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
 import { useTopupVsWithdrawals } from 'graphql/queries/payments.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
 import MainCard from '../cards/MainCard';
+import { TimeRangeFilter } from 'types/enum';
+import TimeRangeSelect from './TimeRangeSelect';
 
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
+function ChangeBadge({ percentChange, isIncrease }: { percentChange?: number; isIncrease?: boolean }) {
+    const theme = useTheme();
+    if (percentChange === undefined || percentChange === null) return null;
+    const up = isIncrease ?? percentChange >= 0;
+    return (
+        <Box display="flex" alignItems="center" gap={0.5}>
+            {up ? (
+                <IconArrowUpRight size={14} color={theme.palette.success.dark} />
+            ) : (
+                <IconArrowDownRight size={14} color={theme.palette.error.main} />
+            )}
+            <Typography variant="caption" sx={{ color: up ? theme.palette.success.dark : theme.palette.error.main }}>
+                {Math.abs(percentChange).toFixed(1)}%
+            </Typography>
+        </Box>
+    );
+}
+
 export default function TopupWithdrawalCard() {
     const theme = useTheme();
-    const { getParam } = useUrlParams();
-    const fromDate = getParam('fromDate', '');
-    const endDate = getParam('endDate', '');
-    const { data, loading } = useTopupVsWithdrawals(fromDate, endDate);
+    const { getParam, updateParams } = useUrlParams();
+    const filter = getParam('topupFilter', TimeRangeFilter.LAST_7_DAYS) as TimeRangeFilter;
+
+    const { data, loading } = useTopupVsWithdrawals(filter);
     const flow = data?.topupVsWithdrawals;
 
-    const trendValues = flow?.netFlowTrend?.map((p) => p.amount) ?? [];
-    const sparklineOptions: ApexCharts.ApexOptions = {
-        chart: { type: 'line', sparkline: { enabled: true } },
-        stroke: { curve: 'smooth', width: 2, colors: [theme.palette.success.dark] },
-        tooltip: { enabled: false }
-    };
-
     return (
-        <MainCard title="Topup vs Withdrawals">
+        <MainCard
+            title="Topup vs Withdrawals"
+            secondary={<TimeRangeSelect value={filter} onChange={(val) => updateParams({ topupFilter: val })} />}
+            sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
+            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+        >
             {loading && !flow ? (
-                <Skeleton variant="rounded" height={280} />
+                <Skeleton variant="rounded" height={220} />
             ) : (
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -40,14 +57,7 @@ export default function TopupWithdrawalCard() {
                                 </Typography>
                                 <Typography variant="h4">{formatCurrency(flow?.totalTopups.value ?? 0)}</Typography>
                             </Box>
-                            {flow?.totalTopups.percentChange !== undefined && (
-                                <Box display="flex" alignItems="center" gap={0.5}>
-                                    <IconArrowUpRight size={14} color={theme.palette.success.dark} />
-                                    <Typography variant="caption" sx={{ color: theme.palette.success.dark }}>
-                                        {flow.totalTopups.percentChange}%
-                                    </Typography>
-                                </Box>
-                            )}
+                            <ChangeBadge percentChange={flow?.totalTopups.percentChange} isIncrease={flow?.totalTopups.isIncrease} />
                         </Box>
                     </Grid>
                     <Grid item xs={12}>
@@ -61,55 +71,23 @@ export default function TopupWithdrawalCard() {
                                 </Typography>
                                 <Typography variant="h4">{formatCurrency(flow?.totalWithdrawals.value ?? 0)}</Typography>
                             </Box>
-                            {flow?.totalWithdrawals.percentChange !== undefined && (
-                                <Box display="flex" alignItems="center" gap={0.5}>
-                                    <IconArrowUpRight size={14} color={theme.palette.success.dark} />
-                                    <Typography variant="caption" sx={{ color: theme.palette.success.dark }}>
-                                        {flow.totalWithdrawals.percentChange}%
-                                    </Typography>
-                                </Box>
-                            )}
+                            <ChangeBadge
+                                percentChange={flow?.totalWithdrawals.percentChange}
+                                isIncrease={flow?.totalWithdrawals.isIncrease}
+                            />
                         </Box>
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
                     </Grid>
                     <Grid item xs={12}>
-                        <Grid container alignItems="center" justifyContent="space-between">
-                            <Grid item>
-                                <Typography variant="body2" color="textSecondary">
-                                    Net Flow
-                                </Typography>
-                                <Box display="flex" alignItems="center" gap={1}>
-                                    <Typography variant="h4">{formatCurrency(flow?.netFlow ?? 0)}</Typography>
-                                    {flow?.netFlowPercentChange !== undefined && (
-                                        <Box display="flex" alignItems="center">
-                                            {flow.netFlowPercentChange >= 0 ? (
-                                                <IconArrowUpRight size={14} color={theme.palette.success.dark} />
-                                            ) : (
-                                                <IconArrowDownRight size={14} color={theme.palette.error.main} />
-                                            )}
-                                            <Typography
-                                                variant="caption"
-                                                sx={{
-                                                    color:
-                                                        flow.netFlowPercentChange >= 0
-                                                            ? theme.palette.success.dark
-                                                            : theme.palette.error.main
-                                                }}
-                                            >
-                                                {Math.abs(flow.netFlowPercentChange)}%
-                                            </Typography>
-                                        </Box>
-                                    )}
-                                </Box>
-                            </Grid>
-                            <Grid item xs={5}>
-                                {trendValues.length > 0 && (
-                                    <Chart options={sparklineOptions} series={[{ data: trendValues }]} type="line" height={50} />
-                                )}
-                            </Grid>
-                        </Grid>
+                        <Typography variant="body2" color="textSecondary">
+                            Net Flow
+                        </Typography>
+                        <Box display="flex" alignItems="center" gap={1}>
+                            <Typography variant="h4">{formatCurrency(flow?.netFlow ?? 0)}</Typography>
+                            <ChangeBadge percentChange={flow?.netFlowPercentChange} />
+                        </Box>
                     </Grid>
                 </Grid>
             )}

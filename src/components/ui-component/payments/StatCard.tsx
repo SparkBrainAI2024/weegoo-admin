@@ -21,12 +21,17 @@ export default function StatCard({ title, value, percentChange, isIncrease, capt
         <MainCard contentSX={{ p: 2.25 }}>
             <Stack direction="row" alignItems="center">
                 <Box>
-                    <Stack>
+                    <Stack spacing={1}>
                         <Typography variant="subtitle2" color="textSecondary">
                             {title}
                         </Typography>{' '}
                         <Typography variant="h3">{value}</Typography>
-                        {percentChange !== undefined && (
+                        {caption && (
+                            <Typography variant="caption" color="textSecondary">
+                                {caption}
+                            </Typography>
+                        )}
+                        {/* {percentChange !== undefined && (
                             <Stack justifyContent="left" gap={0.5}>
                                 {isIncrease ? (
                                     <IconArrowUpRight size={16} color={theme.palette.success.dark} />
@@ -50,7 +55,7 @@ export default function StatCard({ title, value, percentChange, isIncrease, capt
                                     </Typography>
                                 )}
                             </Stack>
-                        )}
+                        )} */}
                     </Stack>
                 </Box>
             </Stack>

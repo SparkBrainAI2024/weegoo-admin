@@ -22,7 +22,11 @@ export default function PendingWithdrawalsCard() {
     const result = data?.pendingWithdrawals;
 
     return (
-        <MainCard title="Pending Withdrawals">
+        <MainCard
+            title="Pending Withdrawals"
+            sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
+            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+        >
             {loading && !result ? (
                 <Skeleton variant="rounded" height={280} />
             ) : (

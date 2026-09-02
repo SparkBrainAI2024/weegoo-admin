@@ -48,7 +48,11 @@ export default function WalletBalancesCard() {
     const series = segments.map((s) => s.value);
 
     return (
-        <MainCard title="Wallet Balances">
+        <MainCard
+            title="Wallet Balances"
+            sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
+            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+        >
             {loading && !balances ? (
                 <Skeleton variant="rounded" height={280} />
             ) : (

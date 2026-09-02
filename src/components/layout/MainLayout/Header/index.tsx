@@ -76,7 +76,7 @@ const Header = () => {
 
     const Icon = currentItem?.icon || detailMatch?.icon;
     const title = currentItem?.title || detailMatch?.title;
-    const isDashboardOrPayments = location.pathname === '/dashboard/default' || location.pathname === '/payments';
+    const isDashboardOrPayments = location.pathname === '/dashboard/default';
 
     const range: DateRangeValue = {
         fromDate: dayjs(getParam('fromDate', dayjs().subtract(6, 'day').format('YYYY-MM-DD'))),

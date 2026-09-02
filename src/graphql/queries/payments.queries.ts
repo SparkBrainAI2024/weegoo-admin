@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
+import { TimeRangeFilter } from 'types/enum';
 
 // ---- Enums / shared types -----------------------------------------------
 
@@ -50,8 +51,8 @@ export interface StatCard {
 // ---- Payments summary -----------------------------------------------------
 
 export const PAYMENTS_SUMMARY_QUERY = gql`
-    query PaymentsSummary($input: PaymentsOverviewInput) {
-        paymentsSummary(input: $input) {
+    query PaymentsSummary {
+        paymentsSummary {
             totalCommission {
                 value
                 percentChange
@@ -81,9 +82,8 @@ export interface PaymentsSummaryResponse {
     };
 }
 
-export const usePaymentsSummary = (fromDate: string | null, endDate: string | null) => {
-    const input = buildPaymentsOverviewInput({ fromDate, endDate });
-    return useQuery<PaymentsSummaryResponse>(PAYMENTS_SUMMARY_QUERY, { variables: { input } });
+export const usePaymentsSummary = () => {
+    return useQuery<PaymentsSummaryResponse>(PAYMENTS_SUMMARY_QUERY, {});
 };
 
 // ---- Commission overview (line chart) --------------------------------------
@@ -93,7 +93,7 @@ export const COMMISSION_OVERVIEW_QUERY = gql`
         commissionOverview(input: $input) {
             totalCommission
             percentChange
-            series {
+            dataPoints {
                 date
                 amount
             }
@@ -107,16 +107,15 @@ export interface ChartPoint {
 }
 
 export interface CommissionOverviewResponse {
-    commissionOverview: {
-        totalCommission: number;
-        percentChange?: number;
-        series: ChartPoint[];
-    };
+    totalCommission: number;
+    percentChange?: number;
+    dataPoints: ChartPoint[];
 }
 
-export const useCommissionOverview = (fromDate: string | null, endDate: string | null) => {
-    const input = buildPaymentsOverviewInput({ fromDate, endDate });
-    return useQuery<CommissionOverviewResponse>(COMMISSION_OVERVIEW_QUERY, { variables: { input } });
+export const useCommissionOverview = (filter: { filter: TimeRangeFilter }) => {
+    return useQuery<{ commissionOverview: CommissionOverviewResponse }>(COMMISSION_OVERVIEW_QUERY, {
+        variables: { input: { period: filter.filter } }
+    });
 };
 
 // ---- Wallet balances (donut) ------------------------------------------------
@@ -180,27 +179,22 @@ export const TOPUP_WITHDRAWAL_QUERY = gql`
             }
             netFlow
             netFlowPercentChange
-            netFlowTrend {
-                date
-                amount
-            }
         }
     }
 `;
 
 export interface TopupWithdrawalResponse {
-    topupVsWithdrawals: {
-        totalTopups: StatCard;
-        totalWithdrawals: StatCard;
-        netFlow: number;
-        netFlowPercentChange?: number;
-        netFlowTrend?: ChartPoint[];
-    };
+    totalTopups: StatCard;
+    totalWithdrawals: StatCard;
+    netFlow: number;
+    netFlowPercentChange?: number;
+    netFlowTrend?: ChartPoint[];
 }
 
-export const useTopupVsWithdrawals = (fromDate: string | null, endDate: string | null) => {
-    const input = buildPaymentsOverviewInput({ fromDate, endDate });
-    return useQuery<TopupWithdrawalResponse>(TOPUP_WITHDRAWAL_QUERY, { variables: { input } });
+export const useTopupVsWithdrawals = (filter: TimeRangeFilter) => {
+    return useQuery<{ topupVsWithdrawals: TopupWithdrawalResponse }>(TOPUP_WITHDRAWAL_QUERY, {
+        variables: { input: { period: filter } }
+    });
 };
 
 // ---- Recent transactions (table) -------------------------------------------

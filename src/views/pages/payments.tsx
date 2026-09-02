@@ -10,30 +10,30 @@ import PendingWithdrawalsCard from 'components/ui-component/payments/PendingWith
 export default function PaymentsDashboard() {
     return (
         <Grid container spacing={gridSpacing}>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ display: 'flex' }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Typography variant="h3">Payments</Typography>
                 </Box>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ display: 'flex' }}>
                 <PaymentsStatCards />
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} sx={{ display: 'flex' }} md={5}>
                 <CommissionOverviewCard />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} sx={{ display: 'flex' }} md={3.5}>
                 <WalletBalancesCard />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} sx={{ display: 'flex' }} md={3.5}>
                 <TopupWithdrawalCard />
             </Grid>
 
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} sx={{ display: 'flex' }} md={8}>
                 <RecentTransactionsTable />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} sx={{ display: 'flex' }} md={4}>
                 <PendingWithdrawalsCard />
             </Grid>
         </Grid>
