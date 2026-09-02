@@ -57,7 +57,7 @@ export default function WalletBalancesCard() {
                 <Skeleton variant="rounded" height={280} />
             ) : (
                 <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={7}>
                         <Box position="relative" display="flex" justifyContent="center">
                             <Chart options={chartOptions} series={series} type="donut" height={220} />
                             <Box position="absolute" top="50%" left="50%" sx={{ transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
@@ -68,12 +68,12 @@ export default function WalletBalancesCard() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={5}>
                         <Grid container direction="column" spacing={1.5}>
                             {segments.map((s) => (
                                 <Grid item key={s.key}>
                                     <Box display="flex" alignItems="center" gap={1}>
-                                        <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: s.color }} />
+                                        <Box sx={{ width: 6, height: 10, borderRadius: '50%', bgcolor: s.color }} />
                                         <Box>
                                             <Typography variant="body2" color="textSecondary">
                                                 {s.label} ({s.percentage}%)
