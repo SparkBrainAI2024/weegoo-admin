@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
-import { TimeRangeFilter } from 'types/enum';
+import { TimeRangeFilter, USER_TYPE } from 'types/enum';
 
 // ---- Enums / shared types -----------------------------------------------
 
@@ -199,7 +199,7 @@ export const useTopupVsWithdrawals = (filter: TimeRangeFilter) => {
 
 // ---- Recent transactions (table) -------------------------------------------
 
-export interface RecentTransactionsInput extends PaymentsOverviewInput {
+export interface RecentTransactionsInput {
     page?: number;
     limit?: number;
     type?: TransactionType;
@@ -212,26 +212,20 @@ export const buildRecentTransactionsInput = ({
     limit,
     type,
     status,
-    searchText,
-    fromDate,
-    endDate
+    searchText
 }: {
     page?: number;
     limit?: number;
     type?: TransactionType | '';
     status?: TransactionStatus | '';
     searchText?: string;
-    fromDate: string | null;
-    endDate: string | null;
 }): RecentTransactionsInput => {
     return {
         page: page ?? 0,
         limit: limit ?? 5,
         type: type || undefined,
         status: status || undefined,
-        searchText: searchText || undefined,
-        fromDate,
-        endDate
+        searchText: searchText || undefined
     };
 };
 
@@ -263,10 +257,10 @@ export const RECENT_TRANSACTIONS_QUERY = gql`
 `;
 
 export interface TransactionUserInfo {
-    userId?: string;
-    fullName?: string;
-    displayId?: string;
-    userType?: 'DRIVER' | 'PASSENGER' | 'ADMIN';
+    userId: string;
+    fullName: string;
+    displayId: string;
+    userType: USER_TYPE;
 }
 
 export interface TransactionRow {

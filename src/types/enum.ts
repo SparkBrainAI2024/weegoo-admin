@@ -21,3 +21,8 @@ export enum TimeRangeFilter {
     LAST_6_MONTHS = 'LAST_6_MONTHS',
     THIS_YEAR = 'THIS_YEAR'
 }
+export enum USER_TYPE {
+    DRIVER = 'DRIVER',
+    PASSENGER = 'PASSENGER',
+    ADMIN = 'ADMIN'
+}
