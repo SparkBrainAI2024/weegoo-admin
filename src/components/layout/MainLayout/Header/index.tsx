@@ -20,8 +20,10 @@ import { NavItemType, OverrideIcon } from 'types';
 import { IconFileText } from '@tabler/icons-react';
 import IconDrivers from 'assets/images/icons/DriversIcon';
 import { useUrlParams } from 'hooks/useSearchParams';
-import { DateRangeFilter, DateRangeValue } from 'components/ui-component/home-dashboard/DateRangeFilter';
+
 import dayjs from 'dayjs';
+import { DateRangeFilter, DateRangeValue } from 'components/ui-component/DateRangeFilter';
+
 
 // ==============================|| FIND CURRENT NAV ITEM ||============================== //
 
@@ -75,7 +77,9 @@ const Header = () => {
 
     const Icon = currentItem?.icon || detailMatch?.icon;
     const title = currentItem?.title || detailMatch?.title;
+
     const isDashboard = location.pathname === '/dashboard/default';
+
 
     const range: DateRangeValue = {
         fromDate: dayjs(getParam('fromDate', dayjs().subtract(6, 'day').format('YYYY-MM-DD'))),
@@ -97,6 +101,7 @@ const Header = () => {
             </Stack>
 
             <Box sx={{ marginLeft: '12px', padding: '0 !important' }}>
+
                 {isDashboard && <DateRangeFilter value={range} onChange={handleRangeChange} />}
             </Box>
             <Box sx={{ flexGrow: 1 }} />
