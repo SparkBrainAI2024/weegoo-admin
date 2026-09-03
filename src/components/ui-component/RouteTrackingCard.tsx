@@ -9,6 +9,10 @@ import RideDetailTitle from './RideDetailTitle';
 import RouteTrackingIcon from '../../assets/images/icons/route_tracking.png';
 import { Icon } from '@mui/material';
 import { FieldAndFieldValue, RideDetailSubtitle2 } from './RideDetailSubtitle';
+import DriverTrackingMap from './DriverTrackingMap';
+// import DriverTrackingMap from './DriverTrackingMap';
+
+const ABLY_KEY = import.meta.env.VITE_ABLY_KEY as string;
 interface RouteTrackingCardProps {
     ride: RideDetail;
 }
@@ -28,21 +32,23 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
                 <RideDetailTitle title="Route Tracking"></RideDetailTitle>
             </Stack>
 
-            {/* Map integration not wired yet — placeholder until we pick a maps provider */}
-            <Box
-                sx={{
-                    height: 220,
-                    borderRadius: 1,
-                    bgcolor: 'grey.100',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    mb: 2
-                }}
-            >
-                <Typography variant="caption" color="text.secondary">
-                    Map view coming soon
-                </Typography>
+            <Box sx={{ mb: 2 }}>
+                <DriverTrackingMap
+                    rideId={ride.id}
+                    ablyKey={ABLY_KEY}
+                    driverId={'6a5b57f1b7e3ec6040e0469b'}
+                    height={400}
+                    pickupLocation={{
+                        lat: 27.66627,
+                        lng: 85.43459,
+                        address: 'Hanuman Petrol Pump'
+                    }}
+                    dropoffLocation={{
+                        lat: 27.68966,
+                        lng: 85.334,
+                        address: 'New Baneswor'
+                    }}
+                />
             </Box>
 
             <Stack spacing={1.5} mb={2}>
