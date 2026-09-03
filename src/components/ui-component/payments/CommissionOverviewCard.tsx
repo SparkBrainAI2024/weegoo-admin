@@ -80,8 +80,14 @@ export default function CommissionOverviewCard() {
                     }
                 />
             }
-            sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
-            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+            sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                '& .MuiCardHeader-root': { py: 1.5, px: 2 },
+                '& .MuiCardContent-root': { pt: 1.5, px: 2, pb: 1.5 }
+            }}
+            contentSX={{ display: 'flex', flexDirection: 'column' }}
         >
             {loading && !overview ? (
                 <Skeleton variant="rounded" height={280} />
@@ -91,7 +97,7 @@ export default function CommissionOverviewCard() {
                 </Typography>
             ) : (
                 <>
-                    <Box mb={1}>
+                    <Box>
                         <Typography variant="caption" color="textSecondary">
                             Total Commission
                         </Typography>

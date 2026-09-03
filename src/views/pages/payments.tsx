@@ -30,10 +30,10 @@ export default function PaymentsDashboard() {
                 <TopupWithdrawalCard />
             </Grid>
 
-            <Grid item xs={12} sx={{ display: 'flex' }} md={8}>
+            <Grid item xs={12} sx={{ display: 'flex' }} md={8.5}>
                 <RecentTransactionsTable />
             </Grid>
-            <Grid item xs={12} sx={{ display: 'flex' }} md={4}>
+            <Grid item xs={12} sx={{ display: 'flex' }} md={3.5}>
                 <PendingWithdrawalsCard />
             </Grid>
         </Grid>
