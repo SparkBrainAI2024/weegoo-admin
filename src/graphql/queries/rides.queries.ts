@@ -16,9 +16,13 @@ export const RIDE_DETAIL_QUERY = gql`
             estimatedTimeInMinutes
             pickupLocation {
                 address
+                type
+                coordinates
             }
             dropoffLocation {
                 address
+                type
+                coordinates
             }
             paymentDetails {
                 baseAmount
@@ -185,6 +189,8 @@ export interface RideLocationInfo {
     city?: string;
     district?: string;
     province?: string;
+    coordinates: number[];
+    type: string;
 }
 
 export interface FareInfo {
@@ -232,15 +238,15 @@ export interface RideDetail {
     id: string;
     rideUUId?: string;
     rideType: string;
-    rideStatus: string;
+    rideStatus: RideStatus;
     bookingTime: string;
     rideStartedAt?: string;
     rideCompletedAt?: string;
     distanceInKm?: number;
     durationInMinutes?: number;
     waitTimeInMinutes?: number;
-    pickupLocation?: RideLocationInfo;
-    dropoffLocation?: RideLocationInfo;
+    pickupLocation: RideLocationInfo;
+    dropoffLocation: RideLocationInfo;
     fare?: FareInfo;
     paymentDetails?: PaymentDetailsInfo;
     platformCommissionAmount?: number;
@@ -289,6 +295,8 @@ export const GET_RIDE_DETAIL = gql`
                 city
                 district
                 province
+                type
+                coordinates
             }
             dropoffLocation {
                 address
@@ -296,6 +304,8 @@ export const GET_RIDE_DETAIL = gql`
                 city
                 district
                 province
+                type
+                coordinates
             }
 
             fare {

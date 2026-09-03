@@ -59,6 +59,7 @@ const RideDetailsPage = () => {
     }
 
     const ride = data.rideDetail;
+    console.log(data, 'data');
 
     return (
         <Stack spacing={2.5}>
