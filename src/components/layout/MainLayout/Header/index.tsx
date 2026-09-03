@@ -14,6 +14,7 @@ import MobileSection from './MobileSection';
 // assets
 
 import { IconGift, IconUsers, IconCreditCard, IconReportAnalytics, IconMail, IconCar } from '@tabler/icons-react';
+import { IconGift, IconUsers, IconCreditCard, IconReportAnalytics, IconMail, IconCar } from '@tabler/icons-react';
 
 // types
 import { NavItemType, OverrideIcon } from 'types';
@@ -69,6 +70,7 @@ const findDetailRoute = (pathname: string): DetailRoute | undefined => DETAIL_RO
 
 const Header = () => {
     const location = useLocation();
+    const { getParam, updateParams } = useUrlParams();
     const { getParam, updateParams } = useUrlParams();
 
     const currentItem = findNavItem(navigation.items, location.pathname);
