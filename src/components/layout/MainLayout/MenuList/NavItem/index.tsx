@@ -174,7 +174,7 @@ const NavItem = ({ item, level, isParents = false, setSelectedID }: NavItemProps
                                         textOverflow="ellipsis"
                                         variant={isSelected ? 'h5' : 'body1'}
                                         color="#E5E2E2"
-                                        width={102}
+                                        width={"100%"}
                                     >
                                         {item.title}
                                     </Typography>
