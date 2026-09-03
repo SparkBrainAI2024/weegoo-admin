@@ -59,17 +59,17 @@ export default function RecentTransactionsTable() {
         {
             key: 'id',
             header: 'ID',
-            width: '12%',
+            width: '15%',
             render: (row) => <Typography sx={{ fontSize: 11, fontWeight: 600 }}>{row.id}</Typography>
         },
         {
             key: 'type',
             header: 'TYPE',
-            width: '10%',
+            width: '12%',
             render: (row) => (
                 <Box display="flex" alignItems="center" gap={0.75} sx={{ whiteSpace: 'normal' }}>
                     <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: typeConfig[row.type].color, flexShrink: 0 }} />
-                    <Typography sx={{ fontSize: 10 }}>{typeConfig[row.type].label}</Typography>
+                    <Typography sx={{ fontSize: 11 }}>{typeConfig[row.type].label}</Typography>
                 </Box>
             )
         },
@@ -92,7 +92,7 @@ export default function RecentTransactionsTable() {
                         </Avatar>
                         <Box>
                             <Typography sx={{ fontSize: 11, fontWeight: 600 }}>{row.user.fullName ?? '—'}</Typography>
-                            <Typography sx={{ fontSize: 10, color: 'text.secondary' }}>ID: {row.user.displayId ?? '—'}</Typography>
+                            <Typography sx={{ fontSize: 11, color: 'text.secondary' }}>ID: {row.user.displayId ?? '—'}</Typography>
                         </Box>
                     </Box>
                 );
@@ -105,7 +105,7 @@ export default function RecentTransactionsTable() {
             render: (row) => (
                 <Typography
                     sx={{
-                        fontSize: 10,
+                        fontSize: 11,
                         whiteSpace: 'normal',
                         color: userTypeColor[row.user.userType ?? ''] ?? theme.palette.text.secondary
                     }}
@@ -117,9 +117,9 @@ export default function RecentTransactionsTable() {
         {
             key: 'description',
             header: 'DESCRIPTION',
-            width: '18%',
+            width: '13%',
             render: (row) => (
-                <Typography sx={{ fontSize: 10, whiteSpace: 'normal', color: 'text.secondary' }}>{row.description ?? '—'}</Typography>
+                <Typography sx={{ fontSize: 11, whiteSpace: 'normal', color: 'text.secondary' }}>{row.description ?? '—'}</Typography>
             )
         },
         {
@@ -129,7 +129,7 @@ export default function RecentTransactionsTable() {
             render: (row) => (
                 <Typography
                     sx={{
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: 600,
                         whiteSpace: 'normal',
                         color: row.direction === 'DEBIT' ? theme.palette.error.main : theme.palette.success.dark
