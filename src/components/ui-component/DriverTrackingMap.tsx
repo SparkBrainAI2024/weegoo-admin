@@ -459,15 +459,11 @@ export default function DriverTrackingMap({
 
             markerElement.style.cssText = `
 
-    font-size: 36px;
+    font-size: 40px;
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-        background: transparent !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
 `;
 
             markerElement.innerHTML = vehicleType
@@ -479,18 +475,6 @@ export default function DriverTrackingMap({
                 element: markerElement,
                 rotationAlignment: 'map'
             });
-            markerRef.current = new maplibregl.Marker({
-                element: markerElement,
-                rotationAlignment: 'map',
-                anchor: 'center' // Ensures it rotates perfectly around the center of the emoji
-            });
-            const parentElement = markerRef.current.getElement();
-            if (parentElement) {
-                parentElement.style.background = 'transparent';
-                parentElement.style.backgroundColor = 'transparent';
-                parentElement.style.border = 'none';
-                parentElement.style.boxShadow = 'none';
-            }
             return () => {
                 if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
                 map.remove();
