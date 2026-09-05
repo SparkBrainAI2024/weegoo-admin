@@ -239,9 +239,9 @@ export interface RideDetail {
     rideUUId?: string;
     rideType: string;
     rideStatus: RideStatus;
-    bookingTime: string;
-    rideStartedAt?: string;
-    rideCompletedAt?: string;
+    bookingTime: string | null;
+    rideStartedAt: string | null;
+    rideCompletedAt: string | null;
     distanceInKm?: number;
     durationInMinutes?: number;
     waitTimeInMinutes?: number;

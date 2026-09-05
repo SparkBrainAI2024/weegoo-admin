@@ -36,6 +36,7 @@ const RidesPerDayChart = () => {
 
     const { data: points, groupBy } = data.getCompletedRideDashboardChart;
     const categories = points.map((p) => p.label);
+    const tickAmount = categories.length > 15 ? Math.ceil(categories.length / 2) : undefined;
     const series = [{ name: 'Completed Rides', data: points.map((p) => p.value) }];
 
     const options = {
@@ -55,6 +56,7 @@ const RidesPerDayChart = () => {
         grid: { borderColor: theme.palette.divider },
         xaxis: {
             categories,
+            tickAmount,
             axisBorder: { show: false },
             axisTicks: { show: false }
         },

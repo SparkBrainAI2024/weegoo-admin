@@ -10,17 +10,13 @@ import RouteTrackingIcon from '../../assets/images/icons/route_tracking.png';
 import { Icon } from '@mui/material';
 import { FieldAndFieldValue, RideDetailSubtitle2 } from './RideDetailSubtitle';
 import DriverTrackingMap from './DriverTrackingMap';
+import { formatNepalTime } from 'utils/date';
 // import DriverTrackingMap from './DriverTrackingMap';
 
 const ABLY_KEY = import.meta.env.VITE_ABLY_KEY as string;
 interface RouteTrackingCardProps {
     ride: RideDetail;
 }
-
-const formatTime = (iso?: string) => {
-    if (!iso) return '—';
-    return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-};
 
 const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
     return (
@@ -61,7 +57,7 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
                             {ride.pickupLocation?.fullAddress || ride.pickupLocation?.address || '—'}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
-                            {formatTime(ride.bookingTime)}
+                            {formatNepalTime(ride.bookingTime)}
                         </Typography>
                     </Box>
                 </Stack>
@@ -75,7 +71,7 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
                         </Typography>
                         {/* "Expected" time isn't a stored field — showing completed time if the ride finished */}
                         <Typography variant="caption" color="text.secondary">
-                            {ride.rideCompletedAt ? formatTime(ride.rideCompletedAt) : 'Expected — not tracked yet'}
+                            {ride.rideCompletedAt ? formatNepalTime(ride.rideCompletedAt) : 'Expected — not tracked yet'}
                         </Typography>
                     </Box>
                 </Stack>

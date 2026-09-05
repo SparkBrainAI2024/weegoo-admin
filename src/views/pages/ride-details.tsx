@@ -81,7 +81,11 @@ const RideDetailsPage = () => {
                         platformCommissionAmount={ride.platformCommissionAmount}
                         driverEarningsAmount={ride.driverEarningsAmount}
                     />
-                    <RideTimelineCard />
+                    <RideTimelineCard
+                        bookingTime={ride?.bookingTime}
+                        rideStartedAt={ride?.rideStartedAt}
+                        rideCompletedAt={ride?.rideCompletedAt}
+                    />
                     <AdditionalInfoCard ride={ride} />
                 </Box>
             </Box>
