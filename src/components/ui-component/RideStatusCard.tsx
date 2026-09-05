@@ -5,7 +5,7 @@ import { SpaciousChipContainer } from './SpaciousChipContainer';
 
 interface RideStatusCardProps {
     status: string;
-    startedAt?: string;
+    startedAt: string | null;
 }
 
 const STATUS_COLOR_MAP: Record<string, 'warning' | 'success' | 'error' | 'info' | 'default'> = {
@@ -14,10 +14,11 @@ const STATUS_COLOR_MAP: Record<string, 'warning' | 'success' | 'error' | 'info' 
     CANCELLED: 'error',
     PENDING: 'info'
 };
-
-const formatDateTime = (iso?: string) => {
+const formatDateTime = (iso: string | null) => {
     if (!iso) return '—';
+
     return new Date(iso).toLocaleString('en-US', {
+        timeZone: 'Asia/Kathmandu',
         month: 'short',
         day: 'numeric',
         year: 'numeric',
@@ -26,7 +27,6 @@ const formatDateTime = (iso?: string) => {
         hour12: true
     });
 };
-
 const RideStatusCard = ({ status, startedAt }: RideStatusCardProps) => {
     const statusColor = STATUS_COLOR_MAP[status?.toUpperCase()] ?? 'default';
     const statusLabel = status ? status.charAt(0) + status.slice(1).toLowerCase() : '—';
