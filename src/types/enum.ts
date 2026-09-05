@@ -36,3 +36,11 @@ export enum USER_TYPE {
     PASSENGER = 'PASSENGER',
     ADMIN = 'ADMIN'
 }
+
+export enum VehicleType {
+    JEEP = 'JEEP',
+    MICRO = 'MICRO',
+    CAR = 'CAR',
+    MOTORBIKE = 'MOTORBIKE',
+    SCOOTER = 'SCOOTER'
+}
