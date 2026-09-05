@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { SpaciousChipContainer } from './SpaciousChipContainer';
+import { formatDateTime } from 'utils/date';
 
 interface RideStatusCardProps {
     status: string;
@@ -14,19 +15,7 @@ const STATUS_COLOR_MAP: Record<string, 'warning' | 'success' | 'error' | 'info' 
     CANCELLED: 'error',
     PENDING: 'info'
 };
-const formatDateTime = (iso: string | null) => {
-    if (!iso) return '—';
 
-    return new Date(iso).toLocaleString('en-US', {
-        timeZone: 'Asia/Kathmandu',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-    });
-};
 const RideStatusCard = ({ status, startedAt }: RideStatusCardProps) => {
     const statusColor = STATUS_COLOR_MAP[status?.toUpperCase()] ?? 'default';
     const statusLabel = status ? status.charAt(0) + status.slice(1).toLowerCase() : '—';

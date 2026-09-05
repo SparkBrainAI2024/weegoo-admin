@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid, Icon, Stack, Typography } from '@mui/material';
+import { Card, CardContent, Grid, Icon, Stack, Typography } from '@mui/material';
 import DriversPanel from 'components/ui-component/home-dashboard/DriversPanel';
 import ReportsPanel from 'components/ui-component/home-dashboard/ReportsPanel';
 import RidersPanel from 'components/ui-component/home-dashboard/RidersPanel';

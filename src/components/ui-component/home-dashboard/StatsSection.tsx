@@ -1,7 +1,6 @@
 import { ReactNode, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
-import { IconUser, IconUsers, IconInfoCircle, IconX } from '@tabler/icons-react';
 
 import { StatCard } from './StatCard';
 import { useAdminDashboard } from 'graphql/queries/home-dashboard.queries';
@@ -60,7 +59,7 @@ export function StatsSection() {
         },
         {
             key: 'riders',
-            label: 'Active Riders',
+            label: 'Active Passengers',
             value: stats.activePassenger,
             percentageChange: stats.percentageChange.activePassenger,
             icon: (
