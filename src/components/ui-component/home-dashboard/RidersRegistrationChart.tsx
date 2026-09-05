@@ -37,6 +37,8 @@ const RidersRegistrationChart = () => {
 
     const { data: points } = data.passengerRegistrationChart;
     const categories = points.map((p) => p.label);
+    const tickAmount = categories.length > 15 ? Math.ceil(categories.length / 2) : undefined;
+
     const series = [{ name: 'New Riders', data: points.map((p) => p.value) }];
 
     const options = {
@@ -52,6 +54,7 @@ const RidersRegistrationChart = () => {
         grid: { borderColor: theme.palette.divider },
         xaxis: {
             categories,
+            tickAmount,
             axisBorder: { show: false },
             axisTicks: { show: false }
         },
