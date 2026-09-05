@@ -459,7 +459,7 @@ export default function DriverTrackingMap({
 
             markerElement.style.cssText = `
 
-    font-size: 40px;
+    font-size: 36px;
     line-height: 1;
     display: flex;
     align-items: center;
