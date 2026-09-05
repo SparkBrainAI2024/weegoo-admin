@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
+import { VehicleType } from 'types/enum';
 
 // ---- Query -------------------------------------------------------------
 
@@ -218,7 +219,7 @@ export interface VehicleInfo {
     model?: string;
     plateNumber?: string;
     color?: string;
-    vehicleType?: string;
+    vehicleType?: VehicleType;
 }
 
 export interface RideUserSnapshotInfo {
@@ -272,7 +273,7 @@ export interface VehicleInfo {
     year?: number;
     color?: string;
     numberPlate?: string;
-    vehicleType?: string;
+    vehicleType?: VehicleType;
 }
 
 export const GET_RIDE_DETAIL = gql`

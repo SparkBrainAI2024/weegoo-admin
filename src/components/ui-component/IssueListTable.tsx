@@ -178,10 +178,7 @@ const IssueListTable = ({
                                     <TableCell onClick={() => handleRowSelect(row.id)} sx={{ cursor: 'pointer' }}>
                                         <Typography variant="h5">{row.ticketCode}</Typography>
                                     </TableCell>
-                                    <TableCell>
-                                        {formatTicketDate(row.createdAt)}
-                                        {row.id}
-                                    </TableCell>
+                                    <TableCell>{formatTicketDate(row.createdAt)}</TableCell>
                                     <TableCell>{reportedByLabel(row.reportedByName, row.reportedByType)}</TableCell>
                                     <TableCell>{row.rideId ?? '—'}</TableCell>
                                     <TableCell>{row.categoryLabel ?? '—'}</TableCell>

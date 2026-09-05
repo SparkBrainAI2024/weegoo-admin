@@ -55,7 +55,7 @@ const RideTimelineCard = ({ bookingTime, rideStartedAt, rideCompletedAt }: RideT
                                         width: 10,
                                         height: 10,
                                         borderRadius: '50%',
-                                        bgcolor: 'success.main',
+                                        bgcolor: !step?.time ? 'grey.300' : 'success.main',
                                         flexShrink: 0,
                                         mt: 0.6
                                     }}

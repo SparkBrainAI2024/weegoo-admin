@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import { useDriverLocation } from 'hooks/useDriverLocation';
-import { RideStatus } from 'types/enum';
+import { RideStatus, VehicleType } from 'types/enum';
 
 declare global {
     interface Window {
@@ -70,6 +70,7 @@ const fetchBaatoRoute = async (startLat: number, startLng: number, endLat: numbe
 };
 
 interface DriverTrackingMapProps {
+    vehicleType?: VehicleType;
     rideStatus: RideStatus;
     rideId: string;
     ablyKey?: string;
@@ -86,7 +87,8 @@ export default function DriverTrackingMap({
     height = 220,
     driverId: propDriverId,
     pickupLocation,
-    dropoffLocation
+    dropoffLocation,
+    vehicleType
 }: DriverTrackingMapProps) {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<any | null>(null);
@@ -454,10 +456,41 @@ export default function DriverTrackingMap({
             mapRef.current = map;
 
             const markerElement = document.createElement('div');
-            markerElement.style.cssText =
-                'width:32px;height:32px;border-radius:50%;background:#1976d2;border:3px solid white;box-shadow:0 0 8px rgba(0,0,0,.4);';
-            markerRef.current = new maplibregl.Marker({ element: markerElement, rotationAlignment: 'map' });
 
+            markerElement.style.cssText = `
+
+    font-size: 36px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+        background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+`;
+
+            markerElement.innerHTML = vehicleType
+                ? vehicleType === VehicleType.MOTORBIKE || vehicleType === VehicleType.SCOOTER
+                    ? '🏍️'
+                    : '🚗'
+                : '🏍️';
+            markerRef.current = new maplibregl.Marker({
+                element: markerElement,
+                rotationAlignment: 'map'
+            });
+            markerRef.current = new maplibregl.Marker({
+                element: markerElement,
+                rotationAlignment: 'map',
+                anchor: 'center' // Ensures it rotates perfectly around the center of the emoji
+            });
+            const parentElement = markerRef.current.getElement();
+            if (parentElement) {
+                parentElement.style.background = 'transparent';
+                parentElement.style.backgroundColor = 'transparent';
+                parentElement.style.border = 'none';
+                parentElement.style.boxShadow = 'none';
+            }
             return () => {
                 if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
                 map.remove();
