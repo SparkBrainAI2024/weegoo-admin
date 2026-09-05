@@ -43,8 +43,10 @@ export function useDriverLocation(driverId: string | null, apiKey?: string) {
 
                 if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
                     setLocation({
-                        lat: data.lat,
-                        lng: data.lng,
+                        // lat: data.lat,
+                        lat: 85.4383,
+                        // lng: data.lng,
+                        lng: 27.6677,
                         ts: Date.now(),
                         heading: data.heading || 0,
                         moving: data.moving || false,
