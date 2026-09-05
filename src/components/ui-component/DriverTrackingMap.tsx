@@ -70,7 +70,7 @@ const fetchBaatoRoute = async (startLat: number, startLng: number, endLat: numbe
 };
 
 interface DriverTrackingMapProps {
-    vehicleType: VehicleType;
+    vehicleType?: VehicleType;
     rideStatus: RideStatus;
     rideId: string;
     ablyKey?: string;
@@ -459,15 +459,18 @@ export default function DriverTrackingMap({
 
             markerElement.style.cssText = `
 
-    font-size: 36x;
+    font-size: 40x;
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
 `;
 
-            markerElement.innerHTML = vehicleType === VehicleType.MOTORBIKE || VehicleType.SCOOTER ? '🏍️' : '🚗';
-
+            markerElement.innerHTML = vehicleType
+                ? vehicleType === VehicleType.MOTORBIKE || vehicleType === VehicleType.SCOOTER
+                    ? '🏍️'
+                    : '🚗'
+                : '🏍️';
             markerRef.current = new maplibregl.Marker({
                 element: markerElement,
                 rotationAlignment: 'map'

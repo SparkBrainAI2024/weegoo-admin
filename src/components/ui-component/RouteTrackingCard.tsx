@@ -30,6 +30,7 @@ const RouteTrackingCard = ({ ride }: RouteTrackingCardProps) => {
 
             <Box sx={{ mb: 2 }}>
                 <DriverTrackingMap
+                    vehicleType={ride?.vehicle?.vehicleType}
                     rideStatus={ride.rideStatus}
                     rideId={ride.id}
                     ablyKey={ABLY_KEY}
