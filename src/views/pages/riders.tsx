@@ -1,4 +1,4 @@
- const Riders = ()=>{
-    return <>Riders Page</>
-}
+const Riders = () => {
+    return <>Riders Page</>;
+};
 export default Riders;

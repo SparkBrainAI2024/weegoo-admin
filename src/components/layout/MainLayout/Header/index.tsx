@@ -24,7 +24,6 @@ import { useUrlParams } from 'hooks/useSearchParams';
 import dayjs from 'dayjs';
 import { DateRangeFilter, DateRangeValue } from 'components/ui-component/DateRangeFilter';
 
-
 // ==============================|| FIND CURRENT NAV ITEM ||============================== //
 
 const findNavItem = (items: NavItemType[], pathname: string): NavItemType | undefined => {
@@ -53,7 +52,7 @@ const DETAIL_ROUTES: DetailRoute[] = [
 
     { pattern: '/reports/:id', title: 'Report Detail', icon: IconGift },
     { pattern: '/drivers/:id', title: 'Driver', icon: IconDrivers },
-    { pattern: '/passengers/:id', title: 'Rider Detail', icon: IconUsers },
+    { pattern: '/passengers/:id', title: 'Passenger Detail', icon: IconUsers },
 
     { pattern: '/rides/:id', title: 'Ride Details', icon: IconCar },
     { pattern: '/payments/:id', title: 'Payment Detail', icon: IconCreditCard },
@@ -80,7 +79,6 @@ const Header = () => {
 
     const isDashboard = location.pathname === '/dashboard/default';
 
-
     const range: DateRangeValue = {
         fromDate: dayjs(getParam('fromDate', dayjs().subtract(6, 'day').format('YYYY-MM-DD'))),
         endDate: dayjs(getParam('endDate', dayjs().format('YYYY-MM-DD')))
@@ -101,7 +99,6 @@ const Header = () => {
             </Stack>
 
             <Box sx={{ marginLeft: '12px', padding: '0 !important' }}>
-
                 {isDashboard && <DateRangeFilter value={range} onChange={handleRangeChange} />}
             </Box>
             <Box sx={{ flexGrow: 1 }} />

@@ -39,7 +39,7 @@ const RidersRegistrationChart = () => {
     const categories = points.map((p) => p.label);
     const tickAmount = categories.length > 15 ? Math.ceil(categories.length / 2) : undefined;
 
-    const series = [{ name: 'New Riders', data: points.map((p) => p.value) }];
+    const series = [{ name: 'New Passengers', data: points.map((p) => p.value) }];
 
     const options = {
         chart: {
@@ -71,9 +71,9 @@ const RidersRegistrationChart = () => {
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                     <Icon>
-                        <img src={RidersIcon} alt="Riders Registration Chart" width="26px" />
+                        <img src={RidersIcon} alt="Passengers Registration Chart" width="26px" />
                     </Icon>
-                    <Typography variant="h5">Riders</Typography>
+                    <Typography variant="h5">Passengers</Typography>
                 </Stack>
 
                 {points.length === 0 ? (

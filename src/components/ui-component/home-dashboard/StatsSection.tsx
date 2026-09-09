@@ -64,7 +64,7 @@ export function StatsSection() {
             percentageChange: stats.percentageChange.activePassenger,
             icon: (
                 <Icon>
-                    <img src={ActiveRiderIcon} alt="Active Rider" width="26px" />
+                    <img src={ActiveRiderIcon} alt="Active Passenger" width="26px" />
                 </Icon>
             ),
             iconBg: 'success.light'

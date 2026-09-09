@@ -24,7 +24,7 @@ const RiderInformationCard = ({ passenger, onOpenProfile }: RiderInformationCard
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
                 <Stack direction="row" alignItems="center" spacing={1}>
                     <PersonIcon fontSize="small" color="success" />
-                    <RideDetailTitle title="Rider Information"></RideDetailTitle>
+                    <RideDetailTitle title="Passenger Information"></RideDetailTitle>
                 </Stack>
                 <Button size="small" onClick={() => onOpenProfile?.(passenger.userId, 'PASSENGER')}>
                     View

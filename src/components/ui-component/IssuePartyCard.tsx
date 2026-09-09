@@ -23,7 +23,7 @@ interface IssuePartyCardProps {
 
 const IssuePartyCard = ({ title, party, onOpenProfile, onToggleBlock, blockLoading }: IssuePartyCardProps) => {
     const roleLabel = party.role;
-    const openLabel = party.role === 'PASSENGER' ? 'Open Rider' : 'Open Driver';
+    const openLabel = party.role === 'PASSENGER' ? 'Open Passenger' : 'Open Driver';
 
     return (
         <ShadowedCardContainer>
