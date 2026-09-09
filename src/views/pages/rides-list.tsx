@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Chip, Icon, MenuItem, Select, TablePagination, TextField, Typography } from '@mui/material';
+import { Box, Button, Icon, MenuItem, Select, TablePagination, TextField, Typography } from '@mui/material';
 import { InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
@@ -82,7 +82,7 @@ const RidesList = () => {
 
     const columns: Column<RideRow>[] = [
         { key: 'rideId', header: 'RIDE ID', render: (row) => row.rideUUId },
-        { key: 'rider', header: 'RIDER', render: (row) => row.passenger?.fullName ?? '—' },
+        { key: 'passeger', header: 'PASSENGER', render: (row) => row.passenger?.fullName ?? '—' },
         { key: 'driver', header: 'DRIVER', render: (row) => row.driver?.fullName ?? '—' },
         {
             key: 'pickup',
@@ -161,7 +161,7 @@ const RidesList = () => {
                 {' '}
                 <Box display="flex" gap={2}>
                     <TextField
-                        placeholder="Search by Ride ID, Driver, Rider name...."
+                        placeholder="Search by Ride ID, Driver, Passenger name...."
                         size="small"
                         fullWidth
                         value={searchInput}

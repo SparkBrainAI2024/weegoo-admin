@@ -20,7 +20,7 @@ const RideTimelineCard = ({ bookingTime, rideStartedAt, rideCompletedAt }: RideT
     const timelineSteps = [
         {
             time: bookingTime,
-            label: 'Ride requested by rider'
+            label: 'Ride requested by passenger'
         },
         {
             time: rideStartedAt,

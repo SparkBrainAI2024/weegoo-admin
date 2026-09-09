@@ -31,7 +31,7 @@ const RidersPanel = () => {
     const { data, loading, error } = useTotalRidersChart();
 
     if (error) {
-        return <Alert severity="error">Failed to load rider stats: {error.message}</Alert>;
+        return <Alert severity="error">Failed to load passenger stats: {error.message}</Alert>;
     }
 
     if (loading || !data) {
@@ -45,15 +45,15 @@ const RidersPanel = () => {
             <CardContent>
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
                     <Icon>
-                        <img src={ActiveRidersIcon} alt="Riders" width="26px" />
+                        <img src={ActiveRidersIcon} alt="Passengers" width="26px" />
                     </Icon>{' '}
-                    <Typography variant="h5">Riders</Typography>
+                    <Typography variant="h5">Passengers</Typography>
                 </Stack>
 
                 <Divider />
-                <StatRow label="Total Riders" value={totalNoOfUsers.toLocaleString()} />
+                <StatRow label="Total Passengers" value={totalNoOfUsers.toLocaleString()} />
                 <Divider />
-                <StatRow label="New Riders Today" value={usersJoinedToday.toLocaleString()} />
+                <StatRow label="New Passengers Today" value={usersJoinedToday.toLocaleString()} />
                 <Divider />
                 <StatRow label="Blocked Users" value={blockedUsers.toLocaleString()} />
 

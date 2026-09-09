@@ -20,7 +20,7 @@ const RiderOverviewTab = ({ rider }: Props) => (
             Basic Information
         </Typography>
         <Typography variant="body2" color="text.secondary" mb={2}>
-            Rider profile details
+            Passenger profile details
         </Typography>
 
         <Stack direction="row" spacing={2} alignItems="center" mb={3}>
