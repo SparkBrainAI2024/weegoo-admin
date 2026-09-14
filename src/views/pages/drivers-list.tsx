@@ -294,7 +294,7 @@ const DriverList = () => {
                                         UserStatusChip's internals aren't shown here — make sure its label
                                         Typography uses variant="subtitle2" and its status→color map matches
                                         success.main/light, warning.main/light, error.main/light. */}
-                                    <UserStatusChip status={driver.suspended ? 'BLOCKED' : driver.status} />
+                                    <UserStatusChip status={driver.status} />
                                 </TableCell>
                                 <TableCell>
                                     <Typography variant="body2" color="text.primary">
