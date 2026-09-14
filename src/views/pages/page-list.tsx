@@ -4,12 +4,17 @@ import { useNavigate } from 'react-router-dom';
 // material-ui
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 
 // graphql
 import { GET_PAGES } from 'graphql/queries/pages.queries';
@@ -17,54 +22,6 @@ import { useQuery } from '@apollo/client/react';
 import { Page, PagesResponse } from 'types/pages.response';
 import { PAGE_STATUS_COLORS } from 'constants/pages';
 import PagePreviewModal from 'components/ui-component/PagePreviewModal';
-
-// ==============================|| STATUS BADGE ||============================== //
-
-// ==============================|| HEADER ROW ||============================== //
-
-const TableHeader = () => (
-    <Box
-        sx={{
-            bgcolor: '#EDEDED',
-            px: 3,
-            py: 1.5,
-            borderRadius: '8px 8px 0 0'
-        }}
-    >
-        <Grid container alignItems="center">
-            <Grid item xs={3}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Page Title
-                </Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Slug
-                </Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Type
-                </Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Status
-                </Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Updated
-                </Typography>
-            </Grid>
-            <Grid item xs={1}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Action
-                </Typography>
-            </Grid>
-        </Grid>
-    </Box>
-);
 
 // ==============================|| PAGE ROW ||============================== //
 
@@ -74,70 +31,78 @@ const PageRow = ({ page }: { page: Page }) => {
 
     return (
         <>
-            <PagePreviewModal open={previewOpen} onClose={() => setPreviewOpen(false)} title={page.title} content={page.content} />{' '}
-            <Card
+            <TableRow
+                hover
                 sx={{
-                    px: 3,
-                    py: 2,
-                    borderRadius: 1,
-                    boxShadow: 'none',
-                    border: '1px solid',
-                    borderColor: 'grey.100',
-                    '&:hover': { bgcolor: 'grey.50' }
+                    '&:last-child td': {
+                        borderBottom: 0
+                    }
                 }}
             >
-                <Grid container alignItems="center">
-                    <Grid item xs={3}>
-                        <Stack spacing={0.5}>
-                            <Typography variant="subtitle1" fontWeight={500}>
-                                {page.title}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                {page.title.toLowerCase()}
-                            </Typography>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Typography variant="body2" color="text.secondary">
-                            {page.slug}
+                {/* Page Title */}
+                <TableCell>
+                    <Stack spacing={0.5}>
+                        <Typography variant="subtitle1" fontWeight={500}>
+                            {page.title}
                         </Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Typography variant="body2">{page.type.charAt(0) + page.type.slice(1).toLowerCase()}</Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Chip
-                            label={page.status.charAt(0) + page.status.slice(1).toLowerCase()}
-                            size="small"
-                            sx={{
-                                borderRadius: '20px',
-                                p: 2,
-                                backgroundColor: PAGE_STATUS_COLORS[page.status].bg,
-                                color: PAGE_STATUS_COLORS[page.status].text
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Typography variant="body2" color="text.secondary">
-                            {new Date(page.updatedAt).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: '2-digit',
-                                year: 'numeric'
-                            })}
+
+                        <Typography variant="caption" color="text.secondary">
+                            {page.title.toLowerCase()}
                         </Typography>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Stack direction="row" spacing={1}>
-                            <Button size="small" variant="outlined" onClick={() => setPreviewOpen(true)}>
-                                View
-                            </Button>
-                            <Button size="small" variant="contained" onClick={() => navigate(`/page-management/${page.slug}/edit`)}>
-                                Edit
-                            </Button>
-                        </Stack>
-                    </Grid>
-                </Grid>
-            </Card>
+                    </Stack>
+                </TableCell>
+
+                {/* Slug */}
+                <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                        {page.slug}
+                    </Typography>
+                </TableCell>
+
+                {/* Type */}
+                <TableCell>
+                    <Typography variant="body2">{page.type.charAt(0) + page.type.slice(1).toLowerCase()}</Typography>
+                </TableCell>
+
+                {/* Status */}
+                <TableCell>
+                    <Chip
+                        label={page.status.charAt(0) + page.status.slice(1).toLowerCase()}
+                        size="small"
+                        sx={{
+                            borderRadius: '20px',
+                            px: 1,
+                            backgroundColor: PAGE_STATUS_COLORS[page.status].bg,
+                            color: PAGE_STATUS_COLORS[page.status].text
+                        }}
+                    />
+                </TableCell>
+
+                {/* Updated */}
+                <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                        {new Date(page.updatedAt).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: '2-digit',
+                            year: 'numeric'
+                        })}
+                    </Typography>
+                </TableCell>
+
+                {/* Actions */}
+                <TableCell align="right">
+                    <Stack direction="row" spacing={1} justifyContent="flex-end">
+                        <Button size="small" variant="outlined" onClick={() => setPreviewOpen(true)}>
+                            View
+                        </Button>
+
+                        <Button size="small" variant="contained" onClick={() => navigate(`/page-management/${page.slug}/edit`)}>
+                            Edit
+                        </Button>
+                    </Stack>
+                </TableCell>
+            </TableRow>
+
             <PagePreviewModal open={previewOpen} onClose={() => setPreviewOpen(false)} title={page.title} content={page.content} />
         </>
     );
@@ -147,6 +112,7 @@ const PageRow = ({ page }: { page: Page }) => {
 
 const Content = () => {
     const navigate = useNavigate();
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -172,26 +138,88 @@ const Content = () => {
             </Box>
 
             {/* Table */}
-            <Box sx={{ borderRadius: 2, border: '1px solid', borderColor: 'grey.100' }}>
-                <Box sx={{ overflowX: 'auto' }}>
-                    <Box sx={{ minWidth: 1500 }}>
-                        <TableHeader />
+            <Box
+                sx={{
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'grey.100',
+                    overflow: 'hidden'
+                }}
+            >
+                <TableContainer sx={{ overflowX: 'auto' }}>
+                    <Table sx={{ minWidth: 900 }}>
+                        {/* Header */}
+                        <TableHead>
+                            <TableRow
+                                sx={{
+                                    backgroundColor: '#EDEDED'
+                                }}
+                            >
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Page Title
+                                    </Typography>
+                                </TableCell>
 
-                        <Stack spacing={1} sx={{ p: 1 }}>
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Slug
+                                    </Typography>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Type
+                                    </Typography>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Status
+                                    </Typography>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Updated
+                                    </Typography>
+                                </TableCell>
+
+                                <TableCell align="right">
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Action
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+
+                        {/* Body */}
+                        <TableBody>
                             {loading ? (
-                                <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
-                                    Loading...
-                                </Typography>
+                                Array.from({ length: rowsPerPage }).map((_, i) => (
+                                    <TableRow key={i}>
+                                        {Array.from({ length: 6 }).map((__, j) => (
+                                            <TableCell key={j}>
+                                                <Skeleton variant="text" />
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
                             ) : pagesList.length === 0 ? (
-                                <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
-                                    No pages found.
-                                </Typography>
+                                <TableRow>
+                                    <TableCell colSpan={6}>
+                                        <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
+                                            No pages found.
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
                             ) : (
-                                pagesList.map((page, index) => <PageRow key={index} page={page} />)
+                                pagesList.map((page) => <PageRow key={page.slug} page={page} />)
                             )}
-                        </Stack>
-                    </Box>
-                </Box>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
                 {/* Pagination */}
                 <TablePagination
                     component="div"
