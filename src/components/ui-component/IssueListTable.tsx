@@ -30,6 +30,7 @@ import MainCard from 'components/ui-component/cards/MainCard';
 import { IssueSummary } from 'types/issues.types';
 import { formatTicketDate, priorityMeta, reportedByLabel, statusMeta } from '../../utils/issue.utils';
 import { useNavigate } from 'react-router';
+import { Skeleton } from '@mui/material';
 
 type Order = 'asc' | 'desc';
 type SortableKey = 'ticketCode' | 'createdAt' | 'reportedByName' | 'categoryLabel' | 'priority' | 'status';
@@ -122,8 +123,6 @@ const IssueListTable = ({
 
     return (
         <MainCard content={false}>
-            {loading && <LinearProgress />}
-
             <TableContainer>
                 <Table sx={{ minWidth: 900 }} aria-labelledby="issuesTableTitle">
                     <TableHead>
@@ -154,70 +153,82 @@ const IssueListTable = ({
                             </TableCell>
                         </TableRow>
                     </TableHead>
-
-                    <TableBody>
-                        {rows.map((row) => {
-                            const isItemSelected = isSelected(row.id);
-                            const status = statusMeta[row.status];
-                            const priority = priorityMeta[row.priority];
-                            console.log(priority, 'priority');
-                            console.log(status, 'status');
-
-                            return (
-                                <TableRow
-                                    hover
-                                    role="checkbox"
-                                    aria-checked={isItemSelected}
-                                    tabIndex={-1}
-                                    key={row.id}
-                                    selected={isItemSelected}
-                                >
-                                    <TableCell padding="checkbox" sx={{ pl: 3 }} onClick={() => handleRowSelect(row.id)}>
-                                        <Checkbox color="primary" checked={isItemSelected} />
+                    {loading &&
+                        Array.from({ length: rowsPerPage }).map((_, i) => (
+                            <TableRow key={i}>
+                                {Array.from({ length: 7 }).map((__, j) => (
+                                    <TableCell key={j}>
+                                        <Skeleton variant="text" />
                                     </TableCell>
-                                    <TableCell onClick={() => handleRowSelect(row.id)} sx={{ cursor: 'pointer' }}>
-                                        <Typography variant="h5">{row.ticketCode}</Typography>
-                                    </TableCell>
-                                    <TableCell>{formatTicketDate(row.createdAt)}</TableCell>
-                                    <TableCell>{reportedByLabel(row.reportedByName, row.reportedByType)}</TableCell>
-                                    <TableCell>{row.rideId ?? '—'}</TableCell>
-                                    <TableCell>{row.categoryLabel ?? '—'}</TableCell>
-                                    {/* <TableCell align="center">
+                                ))}
+                            </TableRow>
+                        ))}
+
+                    {!loading && (
+                        <TableBody>
+                            {rows.map((row) => {
+                                const isItemSelected = isSelected(row.id);
+                                const status = statusMeta[row.status];
+                                const priority = priorityMeta[row.priority];
+                                console.log(priority, 'priority');
+                                console.log(status, 'status');
+
+                                return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.id}
+                                        selected={isItemSelected}
+                                    >
+                                        <TableCell padding="checkbox" sx={{ pl: 3 }} onClick={() => handleRowSelect(row.id)}>
+                                            <Checkbox color="primary" checked={isItemSelected} />
+                                        </TableCell>
+                                        <TableCell onClick={() => handleRowSelect(row.id)} sx={{ cursor: 'pointer' }}>
+                                            <Typography variant="h5">{row.ticketCode}</Typography>
+                                        </TableCell>
+                                        <TableCell>{formatTicketDate(row.createdAt)}</TableCell>
+                                        <TableCell>{reportedByLabel(row.reportedByName, row.reportedByType)}</TableCell>
+                                        <TableCell>{row.rideId ?? '—'}</TableCell>
+                                        <TableCell>{row.categoryLabel ?? '—'}</TableCell>
+                                        {/* <TableCell align="center">
                                         <Chip label={priority.label} size="small" chipcolor={priority.color} />
                                     </TableCell>
                                      */}
-                                    <TableCell align="center">
-                                        <Chip
-                                            label={row.priority ?? '—'}
-                                            size="small"
-                                            // chipcolor={priority.color}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <Chip label={status.label} size="small" chipcolor={status.color} />
-                                    </TableCell>
-                                    <TableCell>{row.assigneeName ?? 'Unassigned'}</TableCell>
-                                    <TableCell align="center" sx={{ pr: 3 }}>
-                                        <Button
-                                            size="small"
-                                            variant="outlined"
-                                            sx={{ borderRadius: '8px' }}
-                                            onClick={() => handleViewClick(row.id)}
-                                        >
-                                            View
-                                        </Button>
+                                        <TableCell align="center">
+                                            <Chip
+                                                label={row.priority ?? '—'}
+                                                size="small"
+                                                // chipcolor={priority.color}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Chip label={status.label} size="small" chipcolor={status.color} />
+                                        </TableCell>
+                                        <TableCell>{row.assigneeName ?? 'Unassigned'}</TableCell>
+                                        <TableCell align="center" sx={{ pr: 3 }}>
+                                            <Button
+                                                size="small"
+                                                variant="outlined"
+                                                sx={{ borderRadius: '8px' }}
+                                                onClick={() => handleViewClick(row.id)}
+                                            >
+                                                View
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                            {!loading && rows.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={10} align="center" sx={{ py: 6 }}>
+                                        <Typography color="textSecondary">No issues match the current filters.</Typography>
                                     </TableCell>
                                 </TableRow>
-                            );
-                        })}
-                        {!loading && rows.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={10} align="center" sx={{ py: 6 }}>
-                                    <Typography color="textSecondary">No issues match the current filters.</Typography>
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
+                            )}
+                        </TableBody>
+                    )}
                 </Table>
             </TableContainer>
 
