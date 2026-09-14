@@ -3,8 +3,8 @@ import { useTheme } from '@mui/material/styles';
 
 // types
 import { ThemeMode } from 'types/config';
- import logoDark from 'assets/images/logo-dark.png';
- import logo from 'assets/images/logo.png';
+import logoDark from 'assets/images/logo-dark.png';
+import logo from 'assets/images/logo.png';
 /**
  * if you want to use image instead of <svg> uncomment following.
  *
@@ -22,7 +22,7 @@ const Logo = () => {
         /**
          * if you want to use image instead of svg uncomment following, and comment out <svg> element.
          *
-         * 
+         *
          *
          */
         // <svg width="92" height="32" viewBox="0 0 92 32" fill="none" xmlns="http://www.w3.org/2000/svg">

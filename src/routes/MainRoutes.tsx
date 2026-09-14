@@ -20,7 +20,7 @@ const RidesPage = Loadable(lazy(() => import('views/pages/rides-list')));
 const DriversPage = Loadable(lazy(() => import('views/pages/drivers-list')));
 
 const PassengersPage = Loadable(lazy(() => import('views/pages/passengers-list')));
-const SettingsPage = Loadable(lazy(() => import('views/pages/settings')));
+const SettingsPage = Loadable(lazy(() => import('views/pages/settings-page')));
 const PageManagementPage = Loadable(lazy(() => import('views/pages/page-list')));
 const EmailTemplatePage = Loadable(lazy(() => import('views/pages/email-template-list')));
 const PaymentsPage = Loadable(lazy(() => import('views/pages/payments')));
