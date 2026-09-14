@@ -12,6 +12,7 @@ import MainCard from 'components/ui-component/cards/MainCard';
 import { SpaciousChipContainer } from 'components/ui-component/SpaciousChipContainer';
 import RidePickupIcon from '../../assets/images/icons/pickup_icon.png';
 import RideDropoffIcon from '../../assets/images/icons/destination_icon.png';
+import { CustomPaginationActions } from 'components/ui-component/actionsComponent';
 const STATUS_COLORS: Record<RideStatus, 'warning' | 'success' | 'error' | 'default'> = {
     [RideStatus.ONGOING]: 'warning',
     [RideStatus.COMPLETED]: 'success',
@@ -42,13 +43,13 @@ interface RideRow {
 const RidesList = () => {
     const navigate = useNavigate();
     const { getParam, updateParams } = useUrlParams();
+    const [limit, setLimit] = useState(10);
 
     // URL-derived filter/pagination state — single source of truth
     const status = getParam<RideStatus | ''>('status', '');
     const timeRange = getParam<RideTimeRange>('timeRange', RideTimeRange.LAST_24_HOURS);
     const search = getParam<string>('search', '');
-    const page = getParam<number>('page', 1, Number);
-    const limit = 10;
+    const page = getParam<number>('page', 0, Number);
 
     // Local input state so typing doesn't rewrite the URL on every keystroke;
     // debounce feeds the URL/query instead.
@@ -70,9 +71,9 @@ const RidesList = () => {
         timeRange,
         search: debouncedSearch
     });
+    const total = data?.rides?.pagination?.total ?? 0;
 
-    const rides: RideRow[] = data?.rides?.rides ?? [];
-    const total = data?.rides?.total ?? 0;
+    const rides: RideRow[] = data?.rides?.data ?? [];
 
     const setStatus = (value: RideStatus | '') => updateParams({ status: value }, { resetKeys: ['page'] });
 
@@ -145,10 +146,6 @@ const RidesList = () => {
 
     return (
         <Box>
-            <Typography variant="h5" fontWeight={600} mb={3}>
-                Rides
-            </Typography>
-
             <MainCard
                 sx={{
                     mb: '26px',
@@ -219,13 +216,19 @@ const RidesList = () => {
                 </Box>
                 <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row._id} />
             </MainCard>
+
             <TablePagination
                 component="div"
                 count={total}
-                page={page - 1}
+                page={page}
                 rowsPerPage={limit}
-                rowsPerPageOptions={[limit]}
-                onPageChange={(_, newPage) => setPage(newPage + 1)}
+                onPageChange={(_, newPage) => setPage(newPage)}
+                onRowsPerPageChange={(e) => {
+                    setLimit(parseInt(e.target.value, 10));
+                    setPage(0);
+                }}
+                rowsPerPageOptions={[10, 25, 50]}
+                ActionsComponent={CustomPaginationActions}
             />
         </Box>
     );

@@ -2,11 +2,8 @@
 import { useState, MouseEvent, useEffect } from 'react';
 import {
     Box,
-    Card,
     Stack,
-    Tabs,
     TextField,
-    InputAdornment,
     TableHead,
     TableBody,
     TableRow,

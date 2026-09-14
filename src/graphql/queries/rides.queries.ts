@@ -98,7 +98,7 @@ export interface RidesListInput {
 export const RIDES_QUERY = gql`
     query Rides($input: RidesListInput!) {
         rides(input: $input) {
-            rides {
+            data {
                 _id
                 rideUUId
                 rideStatus
@@ -119,9 +119,15 @@ export const RIDES_QUERY = gql`
                     fullName
                 }
             }
-            total
-            page
-            limit
+            pagination {
+                page
+                limit
+                hasNextPage
+                hasPreviousPage
+                nextPage
+                previousPage
+                total
+            }
         }
     }
 `;
@@ -177,10 +183,16 @@ export interface RideListItem {
 
 export interface RidesQueryResult {
     rides: {
-        rides: RideListItem[];
-        total: number;
-        page: number;
-        limit: number;
+        data: RideListItem[];
+        pagination: {
+            page: number;
+            limit: number;
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            nextPage: number | null;
+            previousPage: number | null;
+            total: number;
+        };
     };
 }
 
