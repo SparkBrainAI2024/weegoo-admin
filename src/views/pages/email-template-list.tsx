@@ -4,12 +4,17 @@ import { useNavigate } from 'react-router-dom';
 // material-ui
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 
 // graphql
 import { GET_EMAIL_TEMPLATES } from 'graphql/queries/email-templates.queries';
@@ -17,47 +22,6 @@ import { useQuery } from '@apollo/client/react';
 import { EmailTemplate, EmailTemplatesResponse } from 'types/email-templates.response';
 import { EMAIL_TEMPLATE_STATUS_COLORS } from 'constants/email-templates';
 import EmailTemplatePreviewModal from 'components/ui-component/EmailTemplatePreviewModal';
-
-// ==============================|| HEADER ROW ||============================== //
-
-const TableHeader = () => (
-    <Box
-        sx={{
-            bgcolor: '#EDEDED',
-            px: 3,
-            py: 1.5,
-            borderRadius: '8px 8px 0 0'
-        }}
-    >
-        <Grid container alignItems="center">
-            <Grid item xs={3}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Template Title
-                </Typography>
-            </Grid>
-            <Grid item xs={3}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Slug
-                </Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Status
-                </Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Updated
-                </Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                    Action
-                </Typography>
-            </Grid>
-        </Grid>
-    </Box>
-);
 
 // ==============================|| EMAIL TEMPLATE ROW ||============================== //
 
@@ -67,72 +31,79 @@ const EmailTemplateRow = ({ template }: { template: EmailTemplate }) => {
 
     return (
         <>
+            <TableRow
+                hover
+                sx={{
+                    '&:last-child td': {
+                        borderBottom: 0
+                    }
+                }}
+            >
+                {/* Template Title */}
+                <TableCell>
+                    <Stack spacing={0.5}>
+                        <Typography variant="subtitle1" fontWeight={500}>
+                            {template.title}
+                        </Typography>
+
+                        <Typography variant="caption" color="text.secondary">
+                            {template.title.toLowerCase()}
+                        </Typography>
+                    </Stack>
+                </TableCell>
+
+                {/* Slug */}
+                <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                        {template.slug}
+                    </Typography>
+                </TableCell>
+
+                {/* Status */}
+                <TableCell>
+                    <Chip
+                        label={template.status.charAt(0) + template.status.slice(1).toLowerCase()}
+                        size="small"
+                        sx={{
+                            borderRadius: '20px',
+                            px: 1,
+                            backgroundColor: EMAIL_TEMPLATE_STATUS_COLORS[template.status].bg,
+                            color: EMAIL_TEMPLATE_STATUS_COLORS[template.status].text
+                        }}
+                    />
+                </TableCell>
+
+                {/* Updated */}
+                <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                        {new Date(template.updatedAt).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: '2-digit',
+                            year: 'numeric'
+                        })}
+                    </Typography>
+                </TableCell>
+
+                {/* Actions */}
+                <TableCell align="right">
+                    <Stack direction="row" spacing={1} justifyContent="flex-end">
+                        <Button size="small" variant="outlined" onClick={() => setPreviewOpen(true)}>
+                            View
+                        </Button>
+
+                        <Button size="small" variant="contained" onClick={() => navigate(`/email-template/${template._id}/edit`)}>
+                            Edit
+                        </Button>
+                    </Stack>
+                </TableCell>
+            </TableRow>
+
             <EmailTemplatePreviewModal
                 open={previewOpen}
                 onClose={() => setPreviewOpen(false)}
                 title={template.title}
                 content={template.pageContent}
             />
-            <Card
-                sx={{
-                    px: 3,
-                    py: 2,
-                    borderRadius: 1,
-                    boxShadow: 'none',
-                    border: '1px solid',
-                    borderColor: 'grey.100',
-                    '&:hover': { bgcolor: 'grey.50' }
-                }}
-            >
-                <Grid container alignItems="center">
-                    <Grid item xs={3}>
-                        <Stack spacing={0.5}>
-                            <Typography variant="subtitle1" fontWeight={500}>
-                                {template.title}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                {template.title.toLowerCase()}
-                            </Typography>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Typography variant="body2" color="text.secondary">
-                            {template.slug}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Chip
-                            label={template.status.charAt(0) + template.status.slice(1).toLowerCase()}
-                            size="small"
-                            sx={{
-                                borderRadius: '20px',
-                                p: 2,
-                                backgroundColor: EMAIL_TEMPLATE_STATUS_COLORS[template.status].bg,
-                                color: EMAIL_TEMPLATE_STATUS_COLORS[template.status].text
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Typography variant="body2" color="text.secondary">
-                            {new Date(template.updatedAt).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: '2-digit',
-                                year: 'numeric'
-                            })}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Stack direction="row" spacing={1}>
-                            <Button size="small" variant="outlined" onClick={() => setPreviewOpen(true)}>
-                                View
-                            </Button>
-                            <Button size="small" variant="contained" onClick={() => navigate(`/email-template/${template._id}/edit`)}>
-                                Edit
-                            </Button>
-                        </Stack>
-                    </Grid>
-                </Grid>
-            </Card>
         </>
     );
 };
@@ -141,6 +112,7 @@ const EmailTemplateRow = ({ template }: { template: EmailTemplate }) => {
 
 const EmailTemplateList = () => {
     const navigate = useNavigate();
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -154,6 +126,7 @@ const EmailTemplateList = () => {
     });
 
     const templatesList: EmailTemplate[] = data?.emailTemplates?.data || [];
+
     const total: number = data?.emailTemplates?.pagination?.total || 0;
 
     return (
@@ -166,26 +139,78 @@ const EmailTemplateList = () => {
             </Box>
 
             {/* Table */}
-            <Box sx={{ borderRadius: 2, border: '1px solid', borderColor: 'grey.100' }}>
-                <Box sx={{ overflowX: 'auto' }}>
-                    <Box sx={{ minWidth: 1500 }}>
-                        <TableHeader />
+            <Box
+                sx={{
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'grey.100',
+                    overflow: 'hidden'
+                }}
+            >
+                <TableContainer sx={{ overflowX: 'auto' }}>
+                    <Table sx={{ minWidth: 900 }}>
+                        {/* Header */}
+                        <TableHead>
+                            <TableRow sx={{ backgroundColor: '#EDEDED' }}>
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Template Title
+                                    </Typography>
+                                </TableCell>
 
-                        <Stack spacing={1} sx={{ p: 1 }}>
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Slug
+                                    </Typography>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Status
+                                    </Typography>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Updated
+                                    </Typography>
+                                </TableCell>
+
+                                <TableCell align="right">
+                                    <Typography variant="subtitle2" color="text.secondary">
+                                        Action
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+
+                        {/* Body */}
+                        <TableBody>
                             {loading ? (
-                                <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
-                                    Loading...
-                                </Typography>
+                                Array.from({ length: rowsPerPage }).map((_, i) => (
+                                    <TableRow key={i}>
+                                        {Array.from({ length: 5 }).map((__, j) => (
+                                            <TableCell key={j}>
+                                                <Skeleton variant="text" />
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
                             ) : templatesList.length === 0 ? (
-                                <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
-                                    No email templates found.
-                                </Typography>
+                                <TableRow>
+                                    <TableCell colSpan={5}>
+                                        <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
+                                            No email templates found.
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
                             ) : (
-                                templatesList.map((template, index) => <EmailTemplateRow key={index} template={template} />)
+                                templatesList.map((template) => <EmailTemplateRow key={template._id} template={template} />)
                             )}
-                        </Stack>
-                    </Box>
-                </Box>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
                 {/* Pagination */}
                 <TablePagination
                     component="div"

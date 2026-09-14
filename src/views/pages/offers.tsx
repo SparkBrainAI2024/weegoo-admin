@@ -24,6 +24,7 @@ import { PromoStatus } from 'constants/enum';
 import { useQuery } from '@apollo/client/react';
 import CreateOfferForm from './forms/create-offer-form';
 import { PromoCode, PromoCodesResponse, STATUS_COLORS } from 'types/offers.type';
+import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 // ==============================|| TYPES ||============================== //
 
@@ -76,60 +77,64 @@ export const StatCard = ({ label, value, chip }: { label: string; value: string;
 
 const OfferRow = ({ offer, onEditClick }: { offer: PromoCode; onEditClick: (offer: PromoCode) => void }) => {
     const navigate = useNavigate();
-    // in Offers component
 
     return (
-        <Card sx={{ px: 2.5, py: 1.75, borderRadius: 0, boxShadow: 'none', borderBottom: '1px solid', borderColor: 'grey.100' }}>
-            <Grid container alignItems="center">
-                <Grid item xs={3}>
-                    <Typography variant="subtitle1" fontWeight={500}>
-                        {offer.name}
-                    </Typography>
-                </Grid>
-                <Grid item xs={3}>
-                    <Typography variant="body2" color="text.secondary">
-                        {formatDiscount(offer)}
-                    </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                    <Typography variant="body2" color="text.secondary">
-                        {formatExpiry(offer.expiryDateTime)}
-                    </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                    <Typography variant="body2" color="text.secondary">
-                        {offer.totalUsageLimit}
-                    </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                    <Typography variant="body2" color="text.secondary">
-                        {offer.promoCodeUsedCount}
-                    </Typography>
-                </Grid>
-                <Grid item xs={1}>
-                    <Chip
-                        label={formatStatus(offer.status)}
-                        size="small"
-                        sx={{
-                            bgcolor: STATUS_COLORS[offer.status].bg,
-                            color: STATUS_COLORS[offer.status].text,
-                            fontWeight: 500,
-                            borderRadius: '20px'
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={1}>
-                    <Stack direction="row" spacing={0.5}>
-                        <IconButton size="small" onClick={() => navigate(`/offers/${offer._id}`)}>
-                            <IconEye size={16} />
-                        </IconButton>
-                        <IconButton size="small" color="warning" onClick={() => onEditClick(offer)}>
-                            <IconEdit size={16} />
-                        </IconButton>
-                    </Stack>
-                </Grid>
-            </Grid>
-        </Card>
+        <TableRow hover>
+            <TableCell>
+                <Typography variant="subtitle1" fontWeight={500}>
+                    {offer.name}
+                </Typography>
+            </TableCell>
+
+            <TableCell>
+                <Typography variant="body2" color="text.secondary">
+                    {formatDiscount(offer)}
+                </Typography>
+            </TableCell>
+
+            <TableCell>
+                <Typography variant="body2" color="text.secondary">
+                    {formatExpiry(offer.expiryDateTime)}
+                </Typography>
+            </TableCell>
+
+            <TableCell>
+                <Typography variant="body2" color="text.secondary">
+                    {offer.totalUsageLimit}
+                </Typography>
+            </TableCell>
+
+            <TableCell>
+                <Typography variant="body2" color="text.secondary">
+                    {offer.promoCodeUsedCount}
+                </Typography>
+            </TableCell>
+
+            <TableCell>
+                <Chip
+                    label={formatStatus(offer.status)}
+                    size="small"
+                    sx={{
+                        bgcolor: STATUS_COLORS[offer.status].bg,
+                        color: STATUS_COLORS[offer.status].text,
+                        fontWeight: 500,
+                        borderRadius: '20px'
+                    }}
+                />
+            </TableCell>
+
+            <TableCell>
+                <Stack direction="row" spacing={0.5}>
+                    <IconButton size="small" onClick={() => navigate(`/offers/${offer._id}`)}>
+                        <IconEye size={16} />
+                    </IconButton>
+
+                    <IconButton size="small" color="warning" onClick={() => onEditClick(offer)}>
+                        <IconEdit size={16} />
+                    </IconButton>
+                </Stack>
+            </TableCell>
+        </TableRow>
     );
 };
 
@@ -224,63 +229,45 @@ const OfferList = ({
             </Box>
 
             {/* Table */}
-            <Box sx={{ overflowX: 'auto' }}>
-                <Box sx={{ minWidth: 700 }}>
-                    {/* Table header */}
-                    <Box sx={{ bgcolor: '#EDEDED', px: 2.5, py: 1.25 }}>
-                        <Grid container alignItems="center">
-                            <Grid item xs={3}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Code
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Discount
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Expiry
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Limit
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Used
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Status
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Action
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Box>
+            <TableContainer sx={{ overflowX: 'auto' }}>
+                <Table sx={{ minWidth: 700 }}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Code</TableCell>
+                            <TableCell>Discount</TableCell>
+                            <TableCell>Expiry</TableCell>
+                            <TableCell>Limit</TableCell>
+                            <TableCell>Used</TableCell>
+                            <TableCell>Status</TableCell>
+                            <TableCell>Action</TableCell>
+                        </TableRow>
+                    </TableHead>
 
-                    {/* Table rows */}
-                    {loading ? (
-                        <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
-                            Loading...
-                        </Typography>
-                    ) : offers.length === 0 ? (
-                        <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
-                            No offers found.
-                        </Typography>
-                    ) : (
-                        offers.map((offer) => <OfferRow key={offer._id} offer={offer} onEditClick={onEditClick} />)
-                    )}
-                </Box>
-            </Box>
+                    <TableBody>
+                        {loading ? (
+                            Array.from({ length: rowsPerPage }).map((_, i) => (
+                                <TableRow key={i}>
+                                    {Array.from({ length: 7 }).map((__, j) => (
+                                        <TableCell key={j}>
+                                            <Skeleton variant="text" />
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : offers.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={7}>
+                                    <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
+                                        No offers found.
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            offers.map((offer) => <OfferRow key={offer._id} offer={offer} onEditClick={onEditClick} />)
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
             {/* Pagination */}
             <TablePagination
