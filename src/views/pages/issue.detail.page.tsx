@@ -13,7 +13,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 
 import { useMutation, useQuery } from '@apollo/client/react';
-import { GET_ISSUE_DETAIL } from 'graphql/queries/issues.queries';
+import { GET_ISSUE_DETAIL, GET_ISSUES } from 'graphql/queries/issues.queries';
 import {
     CLOSE_ISSUE,
     RESOLVE_ISSUE,
@@ -62,6 +62,7 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
     };
 
     const [resolveIssue, { loading: resolving }] = useMutation(RESOLVE_ISSUE, {
+        refetchQueries: [{ query: GET_ISSUES }],
         onCompleted: (res) => {
             refetch();
             setSnackbar({ message: res.resolveIssue.message, severity: 'success' });
@@ -75,6 +76,7 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         setopenBlockUnblockDialogPassenger(false);
     };
     const [closeIssue, { loading: closing }] = useMutation(CLOSE_ISSUE, {
+        refetchQueries: [{ query: GET_ISSUES }],
         onCompleted: (res) => {
             refetch();
             setSnackbar({ message: res.closeIssue.message, severity: 'success' });
@@ -100,7 +102,9 @@ const IssueDetailPage = ({ issueId }: IssueDetailPageProps) => {
         resolveIssue({ variables: { id: id, resolvedBy: currentAdminId } });
     };
     const { showSuccess, showError } = useNotification();
-    const [updateIssueStatus] = useMutation<UpdateIssueStatusResponse, UpdateIssueStatusVariables>(UPDATE_ISSUE_STATUS);
+    const [updateIssueStatus] = useMutation<UpdateIssueStatusResponse, UpdateIssueStatusVariables>(UPDATE_ISSUE_STATUS, {
+        refetchQueries: [{ query: GET_ISSUES }]
+    });
     const handleClose = () => {
         if (!id) {
             setSnackbar({
