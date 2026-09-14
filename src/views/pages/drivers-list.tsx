@@ -39,9 +39,7 @@ import { DeleteUserDialog } from 'components/ui-component/extended/notistack/Del
 import { DELETE_DRIVER } from 'graphql/mutations/driver.mutation';
 import { BlockUnblockDriverDialog } from 'components/ui-component/block-driver-dialog';
 import { useLocation, useNavigate } from 'react-router';
-import { useUrlParams } from 'hooks/useSearchParams';
 import ResponsiveTableLayoutCustom from 'components/ui-component/responsive-layout';
-import CustomTab from 'components/ui-component/extended/notistack/CustomTab';
 import NotificationBanner from 'components/ui-component/snackbar/AppSnackBar';
 import useNotification from 'hooks/useNotification';
 import { CustomPaginationActions } from 'components/ui-component/actionsComponent';
@@ -52,8 +50,6 @@ const TABS = [
     { key: 'BLOCKED', label: 'Blocked' }
 ] as const;
 
-const DEFAULT_TAB = 'ACTIVE';
-const DEFAULT_LIMIT = 10;
 enum DRIVER_TABS_ENUM {
     ACTIVE = 'ACTIVE',
     PENDING = 'PENDING',
