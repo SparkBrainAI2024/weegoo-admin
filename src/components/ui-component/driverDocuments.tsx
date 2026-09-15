@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Alert, CircularProgress } from '@mui/material';
+import { Box, Alert, Skeleton } from '@mui/material';
 import { useQuery, useMutation } from '@apollo/client/react';
 import KycDocumentsCard from './KYCDocumentsCard';
 import VerificationChecklistCard from './verificationChecklistCard';
@@ -30,7 +30,148 @@ const CARD_HEIGHTS = {
     vehicleInfo: 196,
     preview: 404
 };
+const DocumentsTabSkeleton = () => {
+    return (
+        <Box
+            sx={{
+                display: 'grid',
+                gap: 3,
+                gridTemplateAreas: {
+                    xs: `"list" "detail"`,
+                    md: `"list detail"`
+                },
+                gridTemplateColumns: {
+                    xs: '1fr',
+                    md: '5fr 4fr'
+                }
+            }}
+        >
+            {/* Left column */}
+            <Box
+                sx={{
+                    gridArea: 'list',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: `${LIST_COLUMN_GAP}px`
+                }}
+            >
+                {/* Documents table skeleton */}
+                <Box
+                    sx={{
+                        height: CARD_HEIGHTS.documentsTable,
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 2,
+                        p: 2
+                    }}
+                >
+                    <Skeleton variant="text" width="35%" height={32} />
 
+                    <Box sx={{ mt: 2 }}>
+                        {[1, 2, 3, 4, 5, 6].map((item) => (
+                            <Box
+                                key={item}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 2,
+                                    py: 1.5
+                                }}
+                            >
+                                <Skeleton variant="rounded" width={42} height={42} />
+                                <Box sx={{ flex: 1 }}>
+                                    <Skeleton variant="text" width="55%" />
+                                    <Skeleton variant="text" width="35%" />
+                                </Box>
+                                <Skeleton variant="rounded" width={70} height={24} />
+                            </Box>
+                        ))}
+                    </Box>
+                </Box>
+
+                {/* Checklist skeleton */}
+                <Box
+                    sx={{
+                        height: CARD_HEIGHTS.checklist,
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 2,
+                        p: 2
+                    }}
+                >
+                    <Skeleton variant="text" width="35%" height={28} />
+
+                    <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                        <Skeleton variant="rounded" width={80} height={28} />
+                        <Skeleton variant="rounded" width={80} height={28} />
+                        <Skeleton variant="rounded" width={80} height={28} />
+                    </Box>
+                </Box>
+            </Box>
+
+            {/* Right column */}
+            <Box
+                sx={{
+                    gridArea: 'detail',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: `${DETAIL_COLUMN_GAP}px`
+                }}
+            >
+                {/* Vehicle skeleton */}
+                <Box
+                    sx={{
+                        height: CARD_HEIGHTS.vehicleInfo,
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 2,
+                        p: 2
+                    }}
+                >
+                    <Skeleton variant="text" width="40%" height={30} />
+
+                    <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                        <Skeleton variant="rounded" width={100} height={100} />
+
+                        <Box sx={{ flex: 1 }}>
+                            <Skeleton variant="text" width="70%" />
+                            <Skeleton variant="text" width="55%" />
+                            <Skeleton variant="text" width="65%" />
+                            <Skeleton variant="text" width="45%" />
+                        </Box>
+                    </Box>
+                </Box>
+
+                {/* Preview skeleton */}
+                <Box
+                    sx={{
+                        height: CARD_HEIGHTS.preview,
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 2,
+                        p: 2
+                    }}
+                >
+                    <Skeleton variant="text" width="35%" height={30} />
+
+                    <Skeleton
+                        variant="rounded"
+                        sx={{
+                            width: '100%',
+                            height: 280,
+                            mt: 2
+                        }}
+                    />
+
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
+                        <Skeleton variant="rounded" width={90} height={36} />
+                        <Skeleton variant="rounded" width={90} height={36} />
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
+    );
+};
 export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
     const { data, loading, error } = useQuery<GetDriverDocumentsData, GetDriverVars>(GET_DRIVER_DOCUMENTS, {
         variables: { driverId },
@@ -69,7 +210,7 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
     }
     const vehicle = data?.getDriver?.vehicle;
     if (loading) {
-        return <CircularProgress size={24} />;
+        return <DocumentsTabSkeleton />;
     }
 
     return (
@@ -88,13 +229,8 @@ export function DocumentsTabLayout({ driverId }: DocumentsTabLayoutProps) {
             }}
         >
             <Box sx={{ gridArea: 'list', display: 'flex', flexDirection: 'column', gap: `${LIST_COLUMN_GAP}px` }}>
-                {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', p: 4, height: CARD_HEIGHTS.documentsTable }}>
-                        <CircularProgress size={24} />
-                    </Box>
-                ) : (
-                    <KycDocumentsCard documents={documentRows} selectedDocumentId={activeDocumentId} onSelect={setSelectedDocumentId} />
-                )}
+                <KycDocumentsCard documents={documentRows} selectedDocumentId={activeDocumentId} onSelect={setSelectedDocumentId} />
+
                 <VerificationChecklistCard docWiseStatus={docWiseStatus} />
             </Box>
 
