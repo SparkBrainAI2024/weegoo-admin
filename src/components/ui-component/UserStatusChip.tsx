@@ -10,6 +10,8 @@ const statusConfig: Record<string, { label: string; bg: string; text: string }> 
 export const UserStatusChip = ({ status }: { status: string }) => {
     const config = statusConfig[status] ?? statusConfig.PENDING;
 
+    console.log(status, 'status');
+
     return (
         <Chip
             label={
