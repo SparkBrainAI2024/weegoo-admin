@@ -48,7 +48,7 @@ export default function TopupWithdrawalCard() {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box display="flex" alignItems="center" gap={1.5}>
-                            <Avatar sx={{ bgcolor: theme.palette.success.light, color: theme.palette.success.dark }}>
+                            <Avatar sx={{ bgcolor: '#F0FDF4', color: '#22C55E' }}>
                                 <IconArrowUp size={20} />
                             </Avatar>
                             <Box flexGrow={1}>
@@ -62,7 +62,7 @@ export default function TopupWithdrawalCard() {
                     </Grid>
                     <Grid item xs={12}>
                         <Box display="flex" alignItems="center" gap={1.5}>
-                            <Avatar sx={{ bgcolor: theme.palette.primary.light, color: theme.palette.primary.dark }}>
+                            <Avatar sx={{ bgcolor: '#EFF6FF', color: '#3B82F6' }}>
                                 <IconArrowDown size={20} />
                             </Avatar>
                             <Box flexGrow={1}>

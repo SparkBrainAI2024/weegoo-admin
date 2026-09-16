@@ -43,7 +43,7 @@ const RideStatusDonutChart = () => {
     const options = {
         chart: { type: 'donut' as const },
         labels: ['Completed', 'Cancelled', 'In Progress'],
-        colors: [theme.palette.success.main, theme.palette.error.dark, theme.palette.warning.dark],
+        colors: ['#336B29', '#911C34', '#A15408'],
         legend: { show: false },
         dataLabels: { enabled: false },
         stroke: { width: 0 },
