@@ -36,9 +36,10 @@ const RidesPerDayChart = () => {
 
     const { data: points, groupBy } = data.getCompletedRideDashboardChart;
     const categories = points.map((p) => p.label);
-    const tickAmount = categories.length > 15 ? Math.ceil(categories.length / 2) : undefined;
     const series = [{ name: 'Completed Rides', data: points.map((p) => p.value) }];
-
+    const values = points.map((p) => p.value);
+    const maxVal = Math.max(...points.map((p) => p.value), 0);
+    const yMax = maxVal + 1;
     const options = {
         chart: {
             type: 'area' as const,
@@ -56,16 +57,20 @@ const RidesPerDayChart = () => {
         grid: { borderColor: theme.palette.divider },
         xaxis: {
             categories,
-            tickAmount,
+            tickAmount: categories.length > 15 ? Math.ceil(categories.length / 2) : undefined,
             axisBorder: { show: false },
             axisTicks: { show: false }
         },
         yaxis: {
-            labels: { formatter: (val: number) => val.toLocaleString() }
+            min: 0,
+            max: yMax,
+            tickAmount: yMax, // e.g., max 2 → ticks at 0, 1, 2
+            labels: { formatter: (val) => val.toFixed(0) }
         },
         tooltip: {
             y: { formatter: (val: number) => `${val} rides` }
-        }
+        },
+        series: [{ name: 'Completed Rides', data: values }]
     };
 
     return (

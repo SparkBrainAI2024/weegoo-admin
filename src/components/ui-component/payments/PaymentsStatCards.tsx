@@ -37,6 +37,7 @@ export default function PaymentsStatCards() {
                     // isIncrease={summary?.totalCommission.isIncrease}
                     caption="This period"
                     icon={<FaDollarSign size={32} color={theme.palette.success.main} />}
+                    iconBgColor="#F0FDF4"
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -45,6 +46,7 @@ export default function PaymentsStatCards() {
                     value={formatCurrency(summary?.driverWalletBalance.value ?? 0)}
                     caption="Total balance in driver wallets"
                     icon={<IconWallet size={32} color="#8B5CF6" />}
+                    iconBgColor="#F5F3FF"
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -53,6 +55,7 @@ export default function PaymentsStatCards() {
                     value={formatCurrency(summary?.customerWalletBalance.value ?? 0)}
                     caption="Total balance in customer wallets"
                     icon={<IconUsers size={32} color="#3B82F6" />}
+                    iconBgColor="#EFF6FF"
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -63,6 +66,7 @@ export default function PaymentsStatCards() {
                     // isIncrease={summary?.totalTransactions.isIncrease}
                     caption="All payment transactions"
                     icon={<IconArrowsExchange size={32} color={theme.palette.warning.main} />}
+                    iconBgColor="#FFF7ED"
                 />
             </Grid>
         </Grid>

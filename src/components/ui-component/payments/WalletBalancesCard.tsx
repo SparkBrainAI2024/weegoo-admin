@@ -17,21 +17,21 @@ export default function WalletBalancesCard() {
             label: balances?.driverWallet.label ?? 'Driver Wallet Balance',
             value: balances?.driverWallet.value ?? 0,
             percentage: balances?.driverWallet.percentage ?? 0,
-            color: theme.palette.secondary.main
+            color: '#8B5CF6'
         },
         {
             key: 'customer',
             label: balances?.customerWallet.label ?? 'Customer Wallet Balance',
             value: balances?.customerWallet.value ?? 0,
             percentage: balances?.customerWallet.percentage ?? 0,
-            color: theme.palette.primary.main
+            color: '#3B82F6'
         },
         {
             key: 'commission',
             label: balances?.commission.label ?? 'Commission',
             value: balances?.commission.value ?? 0,
             percentage: balances?.commission.percentage ?? 0,
-            color: theme.palette.success.dark
+            color: '#42C018'
         }
     ];
 

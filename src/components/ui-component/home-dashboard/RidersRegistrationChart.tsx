@@ -38,6 +38,8 @@ const RidersRegistrationChart = () => {
     const { data: points } = data.passengerRegistrationChart;
     const categories = points.map((p) => p.label);
     const tickAmount = categories.length > 15 ? Math.ceil(categories.length / 2) : undefined;
+    const maxVal = Math.max(...points.map((p) => p.value), 0);
+    const yMax = maxVal + 1;
 
     const series = [{ name: 'New Passengers', data: points.map((p) => p.value) }];
 
@@ -59,7 +61,10 @@ const RidersRegistrationChart = () => {
             axisTicks: { show: false }
         },
         yaxis: {
-            labels: { formatter: (val: number) => val.toLocaleString() }
+            min: 0,
+            max: yMax,
+            tickAmount: yMax, // one label per integer
+            labels: { formatter: (val) => val.toFixed(0) }
         },
         tooltip: {
             y: { formatter: (val: number) => `${val.toLocaleString()} riders` }

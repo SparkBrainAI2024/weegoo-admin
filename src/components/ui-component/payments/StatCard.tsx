@@ -33,7 +33,7 @@ export default function StatCard({ title, value, percentChange, isIncrease, capt
                         )}
                     </Stack>
                 </Box>
-                {icon}
+                <Avatar sx={{ bgcolor: iconBgColor, color: '#22C55E', width: 54, height: 54 }}>{icon}</Avatar>
             </Stack>
         </MainCard>
     );
