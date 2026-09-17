@@ -48,8 +48,6 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
 
     const occasions = occasionData?.occasion || [];
 
-    if (occasionLoading) return <>Loading...</>;
-
     return (
         <Formik
             initialValues={{
@@ -215,7 +213,7 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                                     helperText={touched.occasionId && errors.occasionId}
                                                 >
                                                     <MenuItem value="">
-                                                        <em>Choose occasion</em>
+                                                        <em>{occasionLoading ? 'Loading occasions...' : 'Choose occasion'}</em>
                                                     </MenuItem>
                                                     {occasions.map((o) => (
                                                         <MenuItem key={o._id} value={o._id}>
