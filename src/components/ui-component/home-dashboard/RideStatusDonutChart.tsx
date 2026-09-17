@@ -21,7 +21,6 @@ const LOCAL_DEFAULT_FROM_DATE = dayjs().subtract(6, 'day').format('YYYY-MM-DD');
 const LOCAL_DEFAULT_END_DATE = dayjs().format('YYYY-MM-DD');
 
 const RideStatusDonutChart = () => {
-    const theme = useTheme();
     const { getParam } = useUrlParams();
     const fromDate = getParam('fromDate', LOCAL_DEFAULT_FROM_DATE);
     const endDate = getParam('endDate', LOCAL_DEFAULT_END_DATE);
