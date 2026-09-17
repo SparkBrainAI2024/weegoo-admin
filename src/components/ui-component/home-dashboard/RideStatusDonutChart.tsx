@@ -63,9 +63,9 @@ const RideStatusDonutChart = () => {
     };
 
     const legendItems = [
-        { label: 'Completed', value: completed, color: theme.palette.success.main },
-        { label: 'Cancelled', value: cancelled, color: theme.palette.error.dark },
-        { label: 'In Progress', value: ongoing, color: theme.palette.warning.dark }
+        { label: 'Completed', value: completed, color: '#336B29' },
+        { label: 'Cancelled', value: cancelled, color: '#911C34' },
+        { label: 'In Progress', value: ongoing, color: '#A15408' }
     ];
 
     return (
