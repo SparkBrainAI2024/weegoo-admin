@@ -8,6 +8,7 @@ import { TimeRangeFilter } from 'types/enum';
 
 import MainCard from '../cards/MainCard';
 import TimeRangeSelect from './TimeRangeSelect';
+import { Height } from '@mui/icons-material';
 
 const formatCurrency = (value: number) =>
     `Rs. ${value.toLocaleString('en-IN', {
@@ -49,13 +50,13 @@ export default function CommissionOverviewCard() {
             categories,
             tickAmount: filter === TimeRangeFilter.LAST_MONTH ? 6 : undefined,
             labels: {
-                style: { colors: theme.palette.text.secondary },
+                style: { colors: theme.palette.text.secondary, fontSize: '9px' },
                 rotate: filter === TimeRangeFilter.LAST_MONTH ? -45 : 0
             },
             axisBorder: { show: false },
             axisTicks: { show: false }
         }, // ← replaced block ends here
-        yaxis: { labels: { style: { colors: theme.palette.text.secondary } } },
+        yaxis: { labels: { style: { colors: theme.palette.text.secondary, fontSize: '9px' } } },
         grid: { borderColor: theme.palette.divider },
         tooltip: { y: { formatter: (val: number) => formatCurrency(val) } }
     };
@@ -81,16 +82,27 @@ export default function CommissionOverviewCard() {
                 />
             }
             sx={{
+                height: '100%',
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                '& .MuiCardHeader-root': { py: 1.5, px: 2 },
-                '& .MuiCardContent-root': { pt: 1.5, px: 2, pb: 1.5 }
+                '& .MuiCardHeader-root': { py: 0.2, px: 0.2 },
+                '& .MuiCardContent-root': {
+                    pt: 0.2,
+                    px: 0.2,
+                    pb: 0.2,
+                    flex: 1
+                }
             }}
-            contentSX={{ display: 'flex', flexDirection: 'column' }}
+            contentSX={{
+                display: 'flex',
+                flexDirection: 'column',
+                padding: 0,
+                flex: 1
+            }}
         >
             {loading && !overview ? (
-                <Skeleton variant="rounded" height={280} />
+                <Skeleton variant="rounded" />
             ) : !hasData ? (
                 <Typography variant="body2" color="textSecondary">
                     No data for this period
@@ -98,12 +110,14 @@ export default function CommissionOverviewCard() {
             ) : (
                 <>
                     <Box>
-                        <Typography variant="caption" color="textSecondary">
+                        <Typography variant="caption" color="textSecondary" sx={{ fontSize: '11px' }}>
                             Total Commission
                         </Typography>
 
                         <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="h3">{formatCurrency(overview?.totalCommission ?? 0)}</Typography>
+                            <Typography variant="h3" sx={{ fontSize: '19px' }}>
+                                {formatCurrency(overview?.totalCommission ?? 0)}
+                            </Typography>
 
                             {overview?.percentChange !== undefined && (
                                 <Typography
@@ -118,7 +132,7 @@ export default function CommissionOverviewCard() {
                         </Stack>
                     </Box>
 
-                    <Chart key={filter} options={chartOptions} series={series} type="area" width="100%" height={280} />
+                    <Chart key={filter} options={chartOptions} series={series} type="area" width="100%" height="78%" />
                 </>
             )}
         </MainCard>

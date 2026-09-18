@@ -20,7 +20,7 @@ function ChangeBadge({ percentChange, isIncrease }: { percentChange?: number; is
             ) : (
                 <IconArrowDownRight size={14} color={theme.palette.error.main} />
             )}
-            <Typography variant="caption" sx={{ color: up ? theme.palette.success.dark : theme.palette.error.main }}>
+            <Typography variant="caption" sx={{ color: up ? theme.palette.success.dark : theme.palette.error.main, fontSize: '11px' }}>
                 {Math.abs(percentChange).toFixed(1)}%
             </Typography>
         </Box>
@@ -39,11 +39,18 @@ export default function TopupWithdrawalCard() {
         <MainCard
             title="Topup vs Withdrawals"
             secondary={<TimeRangeSelect value={filter} onChange={(val) => updateParams({ topupFilter: val })} />}
-            sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}
-            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+            sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                fontSize: '13px',
+                '& .MuiCardHeader-root': { py: 0.2, px: 0.2 },
+                '& .MuiCardContent-root': { pt: 0.2, px: 0.2, pb: 0.2 }
+            }}
+            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column', padding: 0 }}
         >
             {loading && !flow ? (
-                <Skeleton variant="rounded" height={220} />
+                <Skeleton variant="rounded" />
             ) : (
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -52,10 +59,12 @@ export default function TopupWithdrawalCard() {
                                 <IconArrowUp size={20} />
                             </Avatar>
                             <Box flexGrow={1}>
-                                <Typography variant="body2" color="textSecondary">
+                                <Typography sx={{ fontSize: '11px' }} color="textSecondary">
                                     Total Topups
                                 </Typography>
-                                <Typography variant="h4">{formatCurrency(flow?.totalTopups.value ?? 0)}</Typography>
+                                <Typography variant="h4" sx={{ fontSize: '16px' }}>
+                                    {formatCurrency(flow?.totalTopups.value ?? 0)}
+                                </Typography>
                             </Box>
                             <ChangeBadge percentChange={flow?.totalTopups.percentChange} isIncrease={flow?.totalTopups.isIncrease} />
                         </Box>
