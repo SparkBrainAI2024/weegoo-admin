@@ -28,7 +28,6 @@ function ChangeBadge({ percentChange, isIncrease }: { percentChange?: number; is
 }
 
 export default function TopupWithdrawalCard() {
-    const theme = useTheme();
     const { getParam, updateParams } = useUrlParams();
     const filter = getParam('topupFilter', TimeRangeFilter.LAST_7_DAYS) as TimeRangeFilter;
 

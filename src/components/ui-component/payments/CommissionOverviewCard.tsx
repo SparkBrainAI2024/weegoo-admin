@@ -8,7 +8,6 @@ import { TimeRangeFilter } from 'types/enum';
 
 import MainCard from '../cards/MainCard';
 import TimeRangeSelect from './TimeRangeSelect';
-import { Height } from '@mui/icons-material';
 
 const formatCurrency = (value: number) =>
     `Rs. ${value.toLocaleString('en-IN', {

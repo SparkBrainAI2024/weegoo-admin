@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material/styles';
 import { Box, Grid, Skeleton, Typography } from '@mui/material';
 import Chart from 'react-apexcharts';
 import { useWalletBalances } from 'graphql/queries/payments.queries';
@@ -7,7 +6,6 @@ import MainCard from '../cards/MainCard';
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
 export default function WalletBalancesCard() {
-    const theme = useTheme();
     const { data, loading } = useWalletBalances();
     const balances = data?.walletBalances;
 
