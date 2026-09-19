@@ -11,7 +11,7 @@ export default function PaymentChartLevelCard({ title, action, children }: Props
     return (
         <Card sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardHeader
-                title={<Typography variant="subtitle1">{title}</Typography>}
+                title={<Typography variant="h4">{title}</Typography>}
                 action={action}
                 sx={{ p: 1.5, '& .MuiCardHeader-action': { m: 0, alignSelf: 'center' } }}
             />
