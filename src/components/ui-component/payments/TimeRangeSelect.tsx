@@ -10,7 +10,19 @@ const OPTIONS: { value: TimeRangeFilter; label: string }[] = [
 
 export default function TimeRangeSelect({ value, onChange }: { value: TimeRangeFilter; onChange: (value: TimeRangeFilter) => void }) {
     return (
-        <Select size="small" value={value} onChange={(e: SelectChangeEvent) => onChange(e.target.value as TimeRangeFilter)}>
+        <Select
+            sx={{
+                height: 24,
+                fontSize: '13px',
+                '& .MuiSelect-select': {
+                    padding: '2px 28px 2px 8px',
+                    display: 'flex',
+                    alignItems: 'center'
+                }
+            }}
+            value={value}
+            onChange={(e: SelectChangeEvent) => onChange(e.target.value as TimeRangeFilter)}
+        >
             {OPTIONS.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                     {opt.label}

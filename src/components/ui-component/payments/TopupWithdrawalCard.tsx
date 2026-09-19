@@ -44,8 +44,23 @@ export default function TopupWithdrawalCard() {
                 display: 'flex',
                 flexDirection: 'column',
                 fontSize: '13px',
-                '& .MuiCardHeader-root': { py: 0.2, px: 0.2 },
-                '& .MuiCardContent-root': { pt: 0.2, px: 0.2, pb: 0.2 }
+                paddingX: '8px',
+
+                '& .MuiCardHeader-root': {
+                    px: 0.2,
+                    py: 0,
+                    alignItems: 'center'
+                },
+
+                '& .MuiCardHeader-action': {
+                    margin: 0,
+                    alignSelf: 'center'
+                },
+
+                '& .MuiCardContent-root': {
+                    px: 0.2,
+                    pb: 0.2
+                }
             }}
             contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column', padding: 0 }}
         >

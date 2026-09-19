@@ -21,7 +21,7 @@ export default function PaymentsDashboard() {
                 </Grid>{' '}
             </Grid>
 
-            <Grid container sx={{ height: '270px', border: '1px solid red' }}>
+            <Grid container sx={{ height: '270px' }} spacing={gridSpacing}>
                 <Grid item xs={12} md={5} sx={{ display: 'flex' }}>
                     <CommissionOverviewCard />
                 </Grid>
@@ -33,7 +33,7 @@ export default function PaymentsDashboard() {
                     <TopupWithdrawalCard />
                 </Grid>
             </Grid>
-            <Grid container sx={{ border: '1px solid blue' }}>
+            <Grid container>
                 <Grid item xs={12} sx={{ display: 'flex' }} md={8}>
                     <RecentTransactionsTable />
                 </Grid>

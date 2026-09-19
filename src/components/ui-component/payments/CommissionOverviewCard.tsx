@@ -85,13 +85,25 @@ export default function CommissionOverviewCard() {
                 height: '100%',
                 width: '100%',
                 display: 'flex',
+                paddingX: '8px',
+                paddingY: '8px',
+
                 flexDirection: 'column',
-                '& .MuiCardHeader-root': { py: 0.2, px: 0.2 },
-                '& .MuiCardContent-root': {
-                    pt: 0.2,
+
+                '& .MuiCardHeader-root': {
                     px: 0.2,
-                    pb: 0.2,
-                    flex: 1
+                    py: 0,
+                    alignItems: 'center'
+                },
+
+                '& .MuiCardHeader-action': {
+                    margin: 0,
+                    alignSelf: 'center'
+                },
+
+                '& .MuiCardContent-root': {
+                    px: 0.2,
+                    pb: 0.2
                 }
             }}
             contentSX={{

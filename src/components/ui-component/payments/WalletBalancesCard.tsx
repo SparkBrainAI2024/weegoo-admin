@@ -41,7 +41,7 @@ export default function WalletBalancesCard() {
         colors: segments.map((s) => s.color),
         legend: { show: false },
         dataLabels: { enabled: false },
-        plotOptions: { pie: { donut: { size: '75%', labels: { show: false } } } },
+        plotOptions: { pie: { customScale: 1, donut: { size: '75%', labels: { show: false } } } },
         stroke: { width: 0 }
     };
 
@@ -54,6 +54,8 @@ export default function WalletBalancesCard() {
                 width: '100%',
                 display: 'flex',
                 height: '100%',
+                paddingX: '8px',
+                paddingY: '8px',
                 flexDirection: 'column',
                 fontSize: '13px',
                 '& .MuiCardHeader-root': { py: 0.2, px: 0.2 },
@@ -66,14 +68,7 @@ export default function WalletBalancesCard() {
             ) : (
                 <Grid container spacing={0} alignItems="stretch" height="100%">
                     <Grid item xs={12} sm={7} sx={{ display: 'flex' }}>
-                        <Box
-                            position="relative"
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                            flexGrow={1}
-                            sx={{ border: '1px solid red' }}
-                        >
+                        <Box position="relative" display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
                             <Chart options={chartOptions} series={series} type="donut" />
                             <Box position="absolute" top="50%" left="50%" sx={{ transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                                 <Typography variant="caption" color="textSecondary" sx={{ fontSize: '9.5px' }}>
