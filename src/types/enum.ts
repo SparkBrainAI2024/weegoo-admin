@@ -27,7 +27,7 @@ export enum RideStatus {
 
 export enum TimeRangeFilter {
     LAST_7_DAYS = 'LAST_7_DAYS',
-    LAST_MONTH = 'LAST_MONTH',
+    LAST_30_DAYS = 'LAST_30_DAYS',
     LAST_6_MONTHS = 'LAST_6_MONTHS',
     THIS_YEAR = 'THIS_YEAR'
 }

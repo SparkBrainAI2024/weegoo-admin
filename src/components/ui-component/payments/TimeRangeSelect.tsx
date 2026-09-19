@@ -3,7 +3,7 @@ import { TimeRangeFilter } from 'types/enum';
 
 const OPTIONS: { value: TimeRangeFilter; label: string }[] = [
     { value: TimeRangeFilter.LAST_7_DAYS, label: 'Last 7 Days' },
-    { value: TimeRangeFilter.LAST_MONTH, label: 'Last Month' },
+    { value: TimeRangeFilter.LAST_30_DAYS, label: 'Last 30 Days' },
     { value: TimeRangeFilter.LAST_6_MONTHS, label: 'Last 6 Months' },
     { value: TimeRangeFilter.THIS_YEAR, label: 'This Year' }
 ];
