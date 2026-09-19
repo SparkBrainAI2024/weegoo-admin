@@ -40,7 +40,8 @@ export default function PaymentsStatCards() {
                     iconBgColor="#F0FDF4"
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
+                {' '}
                 <StatCard
                     title="Driver Wallet Balance"
                     value={formatCurrency(summary?.driverWalletBalance.value ?? 0)}
@@ -49,7 +50,8 @@ export default function PaymentsStatCards() {
                     iconBgColor="#F5F3FF"
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
+                {' '}
                 <StatCard
                     title="Customer Wallet Balance"
                     value={formatCurrency(summary?.customerWalletBalance.value ?? 0)}
@@ -58,7 +60,8 @@ export default function PaymentsStatCards() {
                     iconBgColor="#EFF6FF"
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
+                {' '}
                 <StatCard
                     title="Total Transactions"
                     value={(summary?.totalTransactions.value ?? 0).toLocaleString('en-IN')}
