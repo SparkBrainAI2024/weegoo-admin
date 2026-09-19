@@ -18,7 +18,7 @@ export default function PaymentsDashboard() {
                 </Grid>
                 <Grid item xs={12} sx={{ display: 'flex' }}>
                     <PaymentsStatCards />
-                </Grid>{' '}
+                </Grid>
             </Grid>
 
             <Grid container sx={{ height: '270px' }} spacing={gridSpacing}>
