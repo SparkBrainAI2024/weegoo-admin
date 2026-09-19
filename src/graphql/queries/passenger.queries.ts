@@ -26,6 +26,8 @@ export const GET_PASSENGERS = gql`
                 previousPage
                 total
             }
+            totalPending
+            totalBlocked
         }
     }
 `;
@@ -134,5 +136,7 @@ export interface GetPassengersQueryResult {
     getPassengers: {
         data: PassengerListItem[];
         pagination: Pagination;
+        totalPending: number;
+        totalBlocked: number;
     };
 }

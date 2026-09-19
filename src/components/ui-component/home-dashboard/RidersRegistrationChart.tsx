@@ -64,7 +64,7 @@ const RidersRegistrationChart = () => {
             min: 0,
             max: yMax,
             tickAmount: yMax, // one label per integer
-            labels: { formatter: (val) => val.toFixed(0) }
+            labels: { formatter: (val: number) => val.toFixed(0) }
         },
         tooltip: {
             y: { formatter: (val: number) => `${val.toLocaleString()} riders` }

@@ -1,4 +1,4 @@
-import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useTheme } from '@mui/material';
+import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 // components/ui-component/DataTable.tsx
 
@@ -19,13 +19,21 @@ export interface Column<T> {
 }
 
 export const DataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, skeletonRows = 10 }: DataTableProps<T>) => {
-    const theme = useTheme();
-    const contentBackground = theme.palette.background.default;
     return (
         <TableContainer sx={{ padding: 0 }}>
             {' '}
             <Table>
-                <TableHead sx={{ backgroundColor: `${contentBackground}` }}>
+                <TableHead
+                    sx={{
+                        backgroundColor: `#F2F3F5`,
+                        '& .MuiTableCell-root': {
+                            padding: '6px 16px',
+                            fontSize: 12,
+                            fontWeight: 400,
+                            color: '#2A2A2A'
+                        }
+                    }}
+                >
                     <TableRow>
                         {columns.map((c) => (
                             <TableCell
@@ -33,6 +41,7 @@ export const DataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, s
                                 align={c.align}
                                 sx={{ width: c.width, fontSize: 12, fontWeight: 400, color: '#2A2A2A', py: 1 }}
                             >
+                                {' '}
                                 {c.header}
                             </TableCell>
                         ))}

@@ -1,4 +1,4 @@
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, Stack } from '@mui/material';
 import { gridSpacing } from 'store/constant';
 import PaymentsStatCards from 'components/ui-component/payments/PaymentsStatCards';
 import CommissionOverviewCard from 'components/ui-component/payments/CommissionOverviewCard';
@@ -9,33 +9,38 @@ import PendingWithdrawalsCard from 'components/ui-component/payments/PendingWith
 
 export default function PaymentsDashboard() {
     return (
-        <Grid container spacing={gridSpacing}>
-            <Grid item xs={12} sx={{ display: 'flex' }}>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h3">Payments</Typography>
-                </Box>
+        <Stack gap={2}>
+            <Grid container spacing={gridSpacing}>
+                <Grid item xs={12} sx={{ display: 'flex' }}>
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <Typography variant="h3">Payments</Typography>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sx={{ display: 'flex' }}>
+                    <PaymentsStatCards />
+                </Grid>{' '}
             </Grid>
 
-            <Grid item xs={12} sx={{ display: 'flex' }}>
-                <PaymentsStatCards />
-            </Grid>
+            <Grid container sx={{ height: '270px' }} spacing={gridSpacing}>
+                <Grid item xs={12} md={5} sx={{ display: 'flex' }}>
+                    <CommissionOverviewCard />
+                </Grid>
 
-            <Grid item xs={12} sx={{ display: 'flex' }} md={5}>
-                <CommissionOverviewCard />
+                <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
+                    <WalletBalancesCard />
+                </Grid>
+                <Grid item xs={12} sx={{ display: 'flex' }} md={3}>
+                    <TopupWithdrawalCard />
+                </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ display: 'flex' }} md={3.5}>
-                <WalletBalancesCard />
+            <Grid container spacing={gridSpacing}>
+                <Grid item xs={12} sx={{ display: 'flex' }} md={8}>
+                    <RecentTransactionsTable />
+                </Grid>
+                <Grid item xs={12} sx={{ display: 'flex' }} md={4}>
+                    <PendingWithdrawalsCard />
+                </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ display: 'flex' }} md={3.5}>
-                <TopupWithdrawalCard />
-            </Grid>
-
-            <Grid item xs={12} sx={{ display: 'flex' }} md={8.5}>
-                <RecentTransactionsTable />
-            </Grid>
-            <Grid item xs={12} sx={{ display: 'flex' }} md={3.5}>
-                <PendingWithdrawalsCard />
-            </Grid>
-        </Grid>
+        </Stack>
     );
 }

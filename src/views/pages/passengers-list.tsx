@@ -1,7 +1,6 @@
 // components/passengers/PassengerList.tsx
 import { useState, MouseEvent } from 'react';
 import {
-    Card,
     Stack,
     Box,
     ToggleButtonGroup,
@@ -119,6 +118,8 @@ const PassengerList = () => {
         });
     };
     const passengers: PassengerListItem[] = data?.getPassengers?.data ?? [];
+    const totalPending = data?.getPassengers?.totalPending;
+    const totalBlocked = data?.getPassengers?.totalBlocked;
     const total = data?.getPassengers?.pagination?.total ?? 0;
     const selectedPassenger = passengers.find((d) => d.id === selectedId);
     const handleTabChange = (_: React.SyntheticEvent, value: string) => {
@@ -175,7 +176,7 @@ const PassengerList = () => {
                                     size="small"
                                     label={
                                         <Typography variant="caption" color="grey.700" fontWeight={600}>
-                                            {key === 'PENDING' ? 58 : 12}
+                                            {key === 'PENDING' ? totalPending : totalBlocked}
                                         </Typography>
                                     }
                                     sx={{ ml: 0.75, bgcolor: 'grey.100' }}

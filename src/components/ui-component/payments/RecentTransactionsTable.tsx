@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, Chip, Pagination, Typography } from '@mui/material';
+import { Avatar, Box, Pagination, Typography } from '@mui/material';
 import { Column, DataTable } from 'components/ui-component/DataTable';
 import { TransactionStatus, TransactionType, useRecentTransactions } from 'graphql/queries/payments.queries';
 import MainCard from '../cards/MainCard';

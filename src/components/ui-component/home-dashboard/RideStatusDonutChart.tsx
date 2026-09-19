@@ -1,6 +1,5 @@
 // components/dashboard/RideStatusDonutChart.tsx
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
@@ -21,7 +20,6 @@ const LOCAL_DEFAULT_FROM_DATE = dayjs().subtract(6, 'day').format('YYYY-MM-DD');
 const LOCAL_DEFAULT_END_DATE = dayjs().format('YYYY-MM-DD');
 
 const RideStatusDonutChart = () => {
-    const theme = useTheme();
     const { getParam } = useUrlParams();
     const fromDate = getParam('fromDate', LOCAL_DEFAULT_FROM_DATE);
     const endDate = getParam('endDate', LOCAL_DEFAULT_END_DATE);
@@ -63,9 +61,9 @@ const RideStatusDonutChart = () => {
     };
 
     const legendItems = [
-        { label: 'Completed', value: completed, color: theme.palette.success.main },
-        { label: 'Cancelled', value: cancelled, color: theme.palette.error.dark },
-        { label: 'In Progress', value: ongoing, color: theme.palette.warning.dark }
+        { label: 'Completed', value: completed, color: '#336B29' },
+        { label: 'Cancelled', value: cancelled, color: '#911C34' },
+        { label: 'In Progress', value: ongoing, color: '#A15408' }
     ];
 
     return (

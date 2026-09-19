@@ -65,7 +65,7 @@ const RidesPerDayChart = () => {
             min: 0,
             max: yMax,
             tickAmount: yMax, // e.g., max 2 → ticks at 0, 1, 2
-            labels: { formatter: (val) => val.toFixed(0) }
+            labels: { formatter: (val: number) => val.toFixed(0) }
         },
         tooltip: {
             y: { formatter: (val: number) => `${val} rides` }
