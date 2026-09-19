@@ -29,7 +29,7 @@ export default function PaymentsStatCards() {
 
     return (
         <Grid container spacing={gridSpacing}>
-            <Grid item xs={2} sm={6} md={3}>
+            <Grid item xs={2} sm={6} md={3} sx={{ display: 'flex' }}>
                 <StatCard
                     title="Total Commission"
                     value={formatCurrency(summary?.totalCommission.value ?? 0)}

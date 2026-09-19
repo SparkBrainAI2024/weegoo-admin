@@ -15,10 +15,8 @@ interface StatCardProps {
 }
 
 export default function StatCard({ title, value, percentChange, isIncrease, caption, icon, iconBgColor, iconColor }: StatCardProps) {
-    const theme = useTheme();
-
     return (
-        <MainCard contentSX={{ p: 2.25 }}>
+        <MainCard contentSX={{ p: 2.25 }} sx={{ height: '10%' }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Box>
                     <Stack spacing={1}>
