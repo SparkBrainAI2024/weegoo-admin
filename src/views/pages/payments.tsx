@@ -21,7 +21,7 @@ export default function PaymentsDashboard() {
                 </Grid>
             </Grid>
 
-            <Grid container sx={{ height: '270px' }} spacing={gridSpacing}>
+            <Grid container sx={{ height: { md: '270px', lg: '340px' } }} spacing={gridSpacing}>
                 <Grid item xs={12} md={5} sx={{ display: 'flex' }}>
                     <CommissionOverviewCard />
                 </Grid>

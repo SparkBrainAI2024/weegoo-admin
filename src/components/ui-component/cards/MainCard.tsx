@@ -42,9 +42,6 @@ export interface AuthCardWrapperProps extends MainCardProps {
     page: 'login' | 'forgot-password' | 'reset-password' | 'verify-otp' | string;
 }
 
-
-
-
 const MainCard = React.forwardRef(
     (
         {

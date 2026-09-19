@@ -1,6 +1,4 @@
-import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, Grid, Stack, Typography } from '@mui/material';
-import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
+import { Avatar, Box, Stack, Typography } from '@mui/material';
 import MainCard from '../cards/MainCard';
 
 interface StatCardProps {
