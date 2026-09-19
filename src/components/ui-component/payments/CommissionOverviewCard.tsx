@@ -47,10 +47,10 @@ export default function CommissionOverviewCard() {
         colors: [theme.palette.success.dark],
         xaxis: {
             categories,
-            tickAmount: filter === TimeRangeFilter.LAST_MONTH ? 6 : undefined,
+            tickAmount: filter === TimeRangeFilter.LAST_30_DAYS ? 6 : undefined,
             labels: {
                 style: { colors: theme.palette.text.secondary, fontSize: '9px' },
-                rotate: filter === TimeRangeFilter.LAST_MONTH ? -45 : 0
+                rotate: filter === TimeRangeFilter.LAST_30_DAYS ? -45 : 0
             },
             axisBorder: { show: false },
             axisTicks: { show: false }
