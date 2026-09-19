@@ -1,7 +1,9 @@
-import { Box, Grid, Skeleton, Typography } from '@mui/material';
+import { Box, Grid, Skeleton, Stack, Typography } from '@mui/material';
 import Chart from 'react-apexcharts';
+
 import { useWalletBalances } from 'graphql/queries/payments.queries';
-import MainCard from '../cards/MainCard';
+
+import PaymentChartLevelCard from '../PaymentChartLevelCard';
 
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
@@ -46,29 +48,33 @@ export default function WalletBalancesCard() {
     const series = segments.map((s) => s.value);
 
     return (
-        <MainCard
-            title="Wallet Balances"
-            sx={{
-                width: '100%',
-                display: 'flex',
-                height: '100%',
-                paddingX: '8px',
-                paddingY: '8px',
-                flexDirection: 'column',
-                fontSize: '13px',
-                '& .MuiCardHeader-root': { py: 0.2, px: 0.2 },
-                '& .MuiCardContent-root': { pt: 0.2, px: 0.2 }
-            }}
-            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column', padding: 0 }}
-        >
+        <PaymentChartLevelCard title="Wallet Balances">
             {loading && !balances ? (
-                <Skeleton variant="rounded" />
+                <Skeleton variant="rounded" height="100%" />
             ) : (
-                <Grid container spacing={0} alignItems="stretch" height="100%">
+                <Grid container sx={{ height: '100%' }}>
+                    {/* Donut chart */}
                     <Grid item xs={12} sm={7} sx={{ display: 'flex' }}>
-                        <Box position="relative" display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
+                        <Box
+                            sx={{
+                                position: 'relative',
+                                flex: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
                             <Chart options={chartOptions} series={series} type="donut" />
-                            <Box position="absolute" top="50%" left="50%" sx={{ transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+
+                            <Box
+                                sx={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    textAlign: 'center'
+                                }}
+                            >
                                 <Typography variant="caption" color="textSecondary" sx={{ fontSize: '9.5px' }}>
                                     Total Balance
                                 </Typography>
@@ -78,27 +84,36 @@ export default function WalletBalancesCard() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={5}>
-                        <Grid container direction="column" spacing={0.8}>
+
+                    {/* Legend */}
+                    <Grid item xs={12} sm={5} sx={{ display: 'flex' }}>
+                        <Stack spacing={0.8} sx={{ flex: 1, justifyContent: 'center' }}>
                             {segments.map((s) => (
-                                <Grid item key={s.key}>
-                                    <Box display="flex" alignItems="center" gap={1}>
-                                        <Box sx={{ borderRadius: '50%', bgcolor: s.color }} />
-                                        <Box>
-                                            <Typography variant="body2" sx={{ fontSize: '11px' }} color="textSecondary">
-                                                {s.label} ({s.percentage}%)
-                                            </Typography>
-                                            <Typography variant="subtitle1" sx={{ fontSize: '13px' }}>
-                                                {formatCurrency(s.value)}
-                                            </Typography>
-                                        </Box>
+                                <Box key={s.key} display="flex" alignItems="center" gap={1}>
+                                    <Box
+                                        sx={{
+                                            width: 8,
+                                            height: 8,
+                                            borderRadius: '50%',
+                                            bgcolor: s.color,
+                                            flexShrink: 0
+                                        }}
+                                    />
+
+                                    <Box>
+                                        <Typography variant="body2" color="textSecondary" sx={{ fontSize: '11px' }}>
+                                            {s.label} ({s.percentage}%)
+                                        </Typography>
+                                        <Typography variant="subtitle1" sx={{ fontSize: '13px' }}>
+                                            {formatCurrency(s.value)}
+                                        </Typography>
                                     </Box>
-                                </Grid>
+                                </Box>
                             ))}
-                        </Grid>
+                        </Stack>
                     </Grid>
                 </Grid>
             )}
-        </MainCard>
+        </PaymentChartLevelCard>
     );
 }

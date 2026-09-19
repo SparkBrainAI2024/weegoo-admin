@@ -3,9 +3,9 @@ import { Avatar, Box, Divider, Grid, Skeleton, Typography } from '@mui/material'
 import { IconArrowUp, IconArrowDown, IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
 import { useTopupVsWithdrawals } from 'graphql/queries/payments.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
-import MainCard from '../cards/MainCard';
 import { TimeRangeFilter } from 'types/enum';
 import TimeRangeSelect from './TimeRangeSelect';
+import PaymentChartLevelCard from '../PaymentChartLevelCard';
 
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
@@ -35,33 +35,9 @@ export default function TopupWithdrawalCard() {
     const flow = data?.topupVsWithdrawals;
 
     return (
-        <MainCard
+        <PaymentChartLevelCard
             title="Topup vs Withdrawals"
-            secondary={<TimeRangeSelect value={filter} onChange={(val) => updateParams({ topupFilter: val })} />}
-            sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                fontSize: '13px',
-                paddingX: '8px',
-
-                '& .MuiCardHeader-root': {
-                    px: 0.2,
-                    py: 0,
-                    alignItems: 'center'
-                },
-
-                '& .MuiCardHeader-action': {
-                    margin: 0,
-                    alignSelf: 'center'
-                },
-
-                '& .MuiCardContent-root': {
-                    px: 0.2,
-                    pb: 0.2
-                }
-            }}
-            contentSX={{ flexGrow: 1, display: 'flex', flexDirection: 'column', padding: 0 }}
+            action={<TimeRangeSelect value={filter} onChange={(val) => updateParams({ topupFilter: val })} />}
         >
             {loading && !flow ? (
                 <Skeleton variant="rounded" />
@@ -114,6 +90,6 @@ export default function TopupWithdrawalCard() {
                     </Grid>
                 </Grid>
             )}
-        </MainCard>
+        </PaymentChartLevelCard>
     );
 }
