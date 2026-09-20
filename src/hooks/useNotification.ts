@@ -13,17 +13,17 @@ const useNotification = () => {
         severity: SeverityEnum.INFO
     });
 
-    const showSuccess = (message: string) =>
+    const showSuccess = (message: string) => {
+        console.log('show success called');
+
         setNotification({ message, severity: SeverityEnum.SUCCESS });
+    };
 
-    const showError = (message: string) =>
-        setNotification({ message, severity: SeverityEnum.ERROR });
+    const showError = (message: string) => setNotification({ message, severity: SeverityEnum.ERROR });
 
-    const showInfo = (message: string) =>
-        setNotification({ message, severity: SeverityEnum.INFO });
+    const showInfo = (message: string) => setNotification({ message, severity: SeverityEnum.INFO });
 
-    const clearNotification = () =>
-        setNotification({ message: '', severity: SeverityEnum.INFO });
+    const clearNotification = () => setNotification({ message: '', severity: SeverityEnum.INFO });
 
     return { notification, showSuccess, showError, showInfo, clearNotification };
 };

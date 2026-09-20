@@ -1,139 +1,165 @@
-import { useEffect, useState } from 'react';
-import { Grid, TextField, Typography, Box, Button, Paper, Skeleton, MenuItem, InputAdornment } from '@mui/material';
-import { usePricingFees } from 'hooks/usePricingFees';
+import {
+    Box,
+    Typography,
+    Button,
+    Paper,
+    Skeleton,
+    Switch,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TextField
+} from '@mui/material';
+import { Formik, Form, FieldArray, Field } from 'formik';
 import { VehiclePricing } from 'graphql/queries/settings.queries';
+import useNotification from 'hooks/useNotification';
+import { usePricingFees } from 'hooks/usePricingFess';
+import NotificationBanner from '../snackbar/AppSnackBar';
+
+const VEHICLE_LABELS: Record<string, string> = {
+    BIKE: 'Bike',
+    CAR: 'Car',
+    MOTORCYCLE: 'Motorcycle',
+    VAN: 'Van',
+    SUV: 'SUV',
+    BUS: 'Bus'
+};
 
 export default function PricingFeesSection() {
-    const { configs, loading, saving, save } = usePricingFees();
-    const [selectedType, setSelectedType] = useState<VehiclePricing['vehicleType']>('car');
-    const [form, setForm] = useState<VehiclePricing | null>(null);
+    const { initialValues, loading, saving, save } = usePricingFees();
+    const { showError, showSuccess, notification, clearNotification } = useNotification();
 
-    useEffect(() => {
-        if (configs.length) {
-            const current = configs.find((c) => c.vehicleType === selectedType) ?? configs[0];
-            setForm(current);
-            setSelectedType(current.vehicleType);
-        }
-    }, [configs, selectedType]);
-
-    const handleTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const type = e.target.value as VehiclePricing['vehicleType'];
-        setSelectedType(type);
-        const match = configs.find((c) => c.vehicleType === type);
-        if (match) setForm(match);
-    };
-
-    const handleFieldChange = (field: keyof VehiclePricing) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!form) return;
-        setForm({ ...form, [field]: Number(e.target.value) });
-    };
-
-    const handleCancel = () => {
-        const original = configs.find((c) => c.vehicleType === selectedType);
-        if (original) setForm(original);
-    };
-
-    const handleSave = () => {
-        if (form) save(form);
-    };
-
-    if (loading || !form) {
+    if (loading || !initialValues) {
         return (
             <Box>
                 <Skeleton height={40} width={220} />
-                <Skeleton height={56} sx={{ mt: 2 }} />
+                <Skeleton height={300} sx={{ mt: 2 }} />
             </Box>
         );
     }
 
     return (
-        <Box>
-            <Typography variant="h5" fontWeight={600}>
-                Pricing & Fees
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Configure platform commission and basic charges
-            </Typography>
-
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={2.4}>
-                    <TextField select label="Vehicle type" fullWidth value={selectedType} onChange={handleTypeChange}>
-                        <MenuItem value="car">Car</MenuItem>
-                        <MenuItem value="bike">Bike</MenuItem>
-                        <MenuItem value="auto">Auto</MenuItem>
-                    </TextField>
-                </Grid>
-                <Grid item xs={12} sm={6} md={2.4}>
-                    <TextField
-                        label="Commission (%)"
-                        fullWidth
-                        type="number"
-                        value={form.commission}
-                        onChange={handleFieldChange('commission')}
-                        InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={2.4}>
-                    <TextField
-                        label="Base Fare"
-                        fullWidth
-                        type="number"
-                        value={form.baseFare}
-                        onChange={handleFieldChange('baseFare')}
-                        InputProps={{ startAdornment: <InputAdornment position="start">Rs</InputAdornment> }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={2.4}>
-                    <TextField
-                        label="Amount Per Km"
-                        fullWidth
-                        type="number"
-                        value={form.amountPerKm}
-                        onChange={handleFieldChange('amountPerKm')}
-                        InputProps={{ startAdornment: <InputAdornment position="start">Rs</InputAdornment> }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={2.4}>
-                    <TextField
-                        label="Amount Per Min"
-                        fullWidth
-                        type="number"
-                        value={form.amountPerMin}
-                        onChange={handleFieldChange('amountPerMin')}
-                        InputProps={{ startAdornment: <InputAdornment position="start">Rs</InputAdornment> }}
-                    />
-                </Grid>
-            </Grid>
-
-            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2 }}>
-                Note: Commission applies to both Wallet and Cash rides.
-            </Typography>
-
-            <Paper
-                elevation={0}
-                sx={{
-                    mt: 4,
-                    p: 2,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    borderRadius: 2
+        <>
+            {' '}
+            <NotificationBanner
+                open={Boolean(notification?.message)}
+                message={notification?.message ?? ''}
+                onClose={clearNotification}
+                severity={notification?.severity ?? 'success'}
+            />
+            <Formik
+                initialValues={initialValues}
+                enableReinitialize
+                onSubmit={async (values, { setStatus }) => {
+                    try {
+                        await save(values);
+                        setStatus({ success: true });
+                        showSuccess('Pricing updated successfully');
+                    } catch {
+                        setStatus({ success: false });
+                        showError('Pricing updated failed');
+                    }
                 }}
             >
-                <Typography variant="body2" color="text.secondary">
-                    Save changes to apply Pricing settings for {selectedType}.
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                    <Button variant="outlined" color="inherit" onClick={handleCancel} disabled={saving}>
-                        Cancel
-                    </Button>
-                    <Button variant="contained" color="warning" onClick={handleSave} disabled={saving}>
-                        {saving ? 'Saving...' : 'Save Changes'}
-                    </Button>
-                </Box>
-            </Paper>
-        </Box>
+                {({ values, setFieldValue }) => (
+                    <Form>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+                            <Box>
+                                <Typography variant="h5" fontWeight={600}>
+                                    Pricing & Fees
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    Configure platform commission and basic charges for different vehicle types.
+                                </Typography>
+                            </Box>
+                            <Button type="submit" variant="contained" color="success" disabled={saving}>
+                                {saving ? 'Saving...' : 'Save Changes'}
+                            </Button>
+                        </Box>
+
+                        <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>VEHICLE TYPE</TableCell>
+                                        <TableCell>COMMISSION (%)</TableCell>
+                                        <TableCell>BASE FARE (Rs)</TableCell>
+                                        <TableCell>AMOUNT PER KM (Rs)</TableCell>
+                                        <TableCell>AMOUNT PER MIN (Rs)</TableCell>
+                                        <TableCell>ENABLED</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <FieldArray name="pricingList">
+                                        {() =>
+                                            values.pricingList.map((row: VehiclePricing, index: number) => (
+                                                <TableRow key={row.vehicleType}>
+                                                    <TableCell>{VEHICLE_LABELS[row.vehicleType] ?? row.vehicleType}</TableCell>
+
+                                                    <TableCell>
+                                                        <Field
+                                                            as={TextField}
+                                                            name={`pricingList.${index}.commission`}
+                                                            type="number"
+                                                            size="small"
+                                                            sx={{ width: 100 }}
+                                                        />
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        <Field
+                                                            as={TextField}
+                                                            name={`pricingList.${index}.baseFare`}
+                                                            type="number"
+                                                            size="small"
+                                                            sx={{ width: 100 }}
+                                                        />
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        <Field
+                                                            as={TextField}
+                                                            name={`pricingList.${index}.amountPerKm`}
+                                                            type="number"
+                                                            size="small"
+                                                            sx={{ width: 100 }}
+                                                        />
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        <Field
+                                                            as={TextField}
+                                                            name={`pricingList.${index}.amountPerMinute`}
+                                                            type="number"
+                                                            size="small"
+                                                            sx={{ width: 100 }}
+                                                        />
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                        <Switch
+                                                            checked={row.isEnabled}
+                                                            onChange={(e) =>
+                                                                setFieldValue(`pricingList.${index}.isEnabled`, e.target.checked)
+                                                            }
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        }
+                                    </FieldArray>
+                                </TableBody>
+                            </Table>
+                        </Paper>
+
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                            Showing 1–{values.pricingList.length} of {values.pricingList.length} vehicle types
+                        </Typography>
+                    </Form>
+                )}
+            </Formik>
+        </>
     );
 }
