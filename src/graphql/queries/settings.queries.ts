@@ -1,20 +1,12 @@
-import { gql } from '@apollo/client';
-export interface CompanyInfo {
-    companyName: string;
-    supportEmail: string;
-}
+import { gql, TypedDocumentNode } from '@apollo/client';
+
 export interface GetAllPricingResult {
     adminRidePricings: VehiclePricing[];
 }
 
 // Mocked result for now — swap body for an Apollo query later,
 // signature/return shape stays the same
-export async function getCompanyInfo(): Promise<CompanyInfo> {
-    return Promise.resolve({
-        companyName: 'Ride Hailing Pvt. Ltd.',
-        supportEmail: 'support@ridehailing.com'
-    });
-}
+
 export interface VehiclePricing {
     vehicleType: string;
     commission: number;
@@ -23,6 +15,32 @@ export interface VehiclePricing {
     amountPerMinute: number;
     isEnabled: boolean;
 }
+
+export interface MaintenanceInfo {
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    deleted: boolean;
+    message: string;
+}
+
+export interface GetMaintenanceInfoResult {
+    maintenanceInfo: MaintenanceInfo;
+}
+
+export const GET_MAINTENANCE_INFO: TypedDocumentNode<GetMaintenanceInfoResult, Record<string, never>> = gql`
+    query MaintenanceInfo {
+        maintenanceInfo {
+            _id
+            createdAt
+            updatedAt
+            deletedAt
+            deleted
+            message
+        }
+    }
+`;
 
 export interface MaintenanceStatus {
     enabled: boolean;
@@ -45,6 +63,34 @@ export const GET_ALL_PRICING = gql`
             amountPerKm
             amountPerMinute
             isEnabled
+        }
+    }
+`;
+
+export interface CompanyInfo {
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    deleted: boolean;
+    companyName: string;
+    supportEmail: string;
+}
+
+export interface GetCompanyInfoResult {
+    adminCompanyInfo: CompanyInfo;
+}
+
+export const GET_COMPANY_INFO: TypedDocumentNode<GetCompanyInfoResult, Record<string, never>> = gql`
+    query AdminCompanyInfo {
+        adminCompanyInfo {
+            _id
+            createdAt
+            updatedAt
+            deletedAt
+            deleted
+            companyName
+            supportEmail
         }
     }
 `;

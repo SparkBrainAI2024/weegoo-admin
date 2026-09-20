@@ -1,31 +1,18 @@
-// hooks/useNotification.ts
-import { useState } from 'react';
-import { SeverityEnum } from 'types/enum';
+import { useMutation, useQuery } from '@apollo/client/react';
+import { UPSERT_MAINTENANCE_INFO, UpsertMaintenanceInfoInput } from 'graphql/mutations/settings.mutation';
+import { GET_MAINTENANCE_INFO } from 'graphql/queries/settings.queries';
 
-interface NotificationState {
-    message: string;
-    severity: SeverityEnum;
-}
+export function useMaintenanceStatus() {
+    const { data, loading } = useQuery(GET_MAINTENANCE_INFO, { fetchPolicy: 'network-only' });
+    const [upsertMaintenanceInfo, { loading: saving }] = useMutation(UPSERT_MAINTENANCE_INFO);
 
-const useNotification = () => {
-    const [notification, setNotification] = useState<NotificationState>({
-        message: '',
-        severity: SeverityEnum.INFO
-    });
-
-    const showSuccess = (message: string) => {
-        console.log('show success called');
-
-        setNotification({ message, severity: SeverityEnum.SUCCESS });
+    const save = async (input: UpsertMaintenanceInfoInput) => {
+        const { data: res } = await upsertMaintenanceInfo({
+            variables: { input },
+            refetchQueries: [{ query: GET_MAINTENANCE_INFO }]
+        });
+        return res?.upsertMaintenanceInfo;
     };
 
-    const showError = (message: string) => setNotification({ message, severity: SeverityEnum.ERROR });
-
-    const showInfo = (message: string) => setNotification({ message, severity: SeverityEnum.INFO });
-
-    const clearNotification = () => setNotification({ message: '', severity: SeverityEnum.INFO });
-
-    return { notification, showSuccess, showError, showInfo, clearNotification };
-};
-
-export default useNotification;
+    return { data: data?.maintenanceInfo, loading, saving, save };
+}

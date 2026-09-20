@@ -4,6 +4,7 @@ import CompanyInfoSection from 'components/ui-component/settings/CompanyInfoSect
 import PricingFeesSection from 'components/ui-component/settings/PricingFeesSection';
 import MaintenanceSection from 'components/ui-component/settings/MaintenanceSection';
 import NotificationsSection from 'components/ui-component/settings/NotificationsSection';
+import { SETTINGS_TAB_ICONS } from 'components/ui-component/settings/constants/settingsTabIcons';
 
 const TABS = [
     { label: 'Company Info', value: 'company' },
@@ -47,9 +48,18 @@ export default function SettingsPage() {
                             '& .MuiTabs-indicator': { left: 0, right: 'auto', width: 3 }
                         }}
                     >
-                        {TABS.map((tab) => (
-                            <Tab key={tab.value} label={tab.label} value={tab.value} />
-                        ))}
+                        {TABS.map((tab) => {
+                            const Icon = SETTINGS_TAB_ICONS[tab.value];
+                            return (
+                                <Tab
+                                    key={tab.value}
+                                    value={tab.value}
+                                    label={tab.label}
+                                    icon={<Icon fontSize="medium" />}
+                                    iconPosition="start"
+                                />
+                            );
+                        })}
                     </Tabs>
                 </Stack>
                 <Box sx={{ flex: 1 }}>

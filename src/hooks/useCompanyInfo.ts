@@ -1,26 +1,18 @@
-import { updateCompanyInfo } from 'graphql/mutations/settings.mutation';
-import { CompanyInfo, getCompanyInfo } from 'graphql/queries/settings.queries';
-import { useEffect, useState, useCallback } from 'react';
+import { useMutation, useQuery } from '@apollo/client/react';
+import { UPSERT_COMPANY_INFO, UpsertCompanyInfoInput } from 'graphql/mutations/settings.mutation';
+import { GET_COMPANY_INFO } from 'graphql/queries/settings.queries';
 
 export function useCompanyInfo() {
-    const [data, setData] = useState<CompanyInfo | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
+    const { data, loading } = useQuery(GET_COMPANY_INFO, { fetchPolicy: 'network-only' });
+    const [upsertCompanyInfo, { loading: saving }] = useMutation(UPSERT_COMPANY_INFO);
 
-    useEffect(() => {
-        getCompanyInfo().then((res) => {
-            setData(res);
-            setLoading(false);
+    const save = async (input: UpsertCompanyInfoInput) => {
+        const { data: res } = await upsertCompanyInfo({
+            variables: { input },
+            refetchQueries: [{ query: GET_COMPANY_INFO }]
         });
-    }, []);
+        return res?.upsertAdminCompanyInfo;
+    };
 
-    const save = useCallback(async (input: CompanyInfo) => {
-        setSaving(true);
-        const res = await updateCompanyInfo(input);
-        setData(res);
-        setSaving(false);
-        return res;
-    }, []);
-
-    return { data, loading, saving, save };
+    return { data: data?.adminCompanyInfo, loading, saving, save };
 }
