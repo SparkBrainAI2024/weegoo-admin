@@ -1,6 +1,10 @@
+import { gql } from '@apollo/client';
 export interface CompanyInfo {
     companyName: string;
     supportEmail: string;
+}
+export interface GetAllPricingResult {
+    adminRidePricings: VehiclePricing[];
 }
 
 // Mocked result for now — swap body for an Apollo query later,
@@ -12,21 +16,12 @@ export async function getCompanyInfo(): Promise<CompanyInfo> {
     });
 }
 export interface VehiclePricing {
-    vehicleType: 'car' | 'bike' | 'auto';
+    vehicleType: string;
     commission: number;
     baseFare: number;
     amountPerKm: number;
-    amountPerMin: number;
-}
-
-const MOCK_DB: VehiclePricing[] = [
-    { vehicleType: 'car', commission: 10, baseFare: 100, amountPerKm: 50, amountPerMin: 5 },
-    { vehicleType: 'bike', commission: 8, baseFare: 50, amountPerKm: 20, amountPerMin: 2 },
-    { vehicleType: 'auto', commission: 12, baseFare: 70, amountPerKm: 30, amountPerMin: 3 }
-];
-
-export async function getPricingFees(): Promise<VehiclePricing[]> {
-    return Promise.resolve(MOCK_DB);
+    amountPerMinute: number;
+    isEnabled: boolean;
 }
 
 export interface MaintenanceStatus {
@@ -40,3 +35,16 @@ export async function getMaintenanceStatus(): Promise<MaintenanceStatus> {
         message: 'We are updating the service. Please try again soon.'
     });
 }
+
+export const GET_ALL_PRICING = gql`
+    query AdminRidePricings {
+        adminRidePricings {
+            vehicleType
+            commission
+            baseFare
+            amountPerKm
+            amountPerMinute
+            isEnabled
+        }
+    }
+`;
