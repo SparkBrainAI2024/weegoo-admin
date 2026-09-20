@@ -3,6 +3,7 @@ import { Box, Typography, Chip, TextField, Button, Paper, Stack } from '@mui/mat
 import { PushNotificationTarget } from 'graphql/mutations/settings.mutation';
 import { useSendNotification } from 'hooks/useSendNotification';
 import NotificationBanner from '../snackbar/AppSnackBar';
+import useNotification from 'hooks/useNotification';
 
 const AUDIENCE_OPTIONS: { value: PushNotificationTarget; label: string }[] = [
     { value: PushNotificationTarget.USER, label: 'All Passengers' },

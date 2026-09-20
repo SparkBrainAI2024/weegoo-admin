@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Grid, TextField, Typography, Box, Button, Paper, Skeleton, Stack } from '@mui/material';
 import { useCompanyInfo } from 'hooks/useCompanyInfo';
 import NotificationBanner from '../snackbar/AppSnackBar';
+import useNotification from 'hooks/useNotification';
 
 export default function CompanyInfoSection() {
     const { data, loading, saving, save } = useCompanyInfo();

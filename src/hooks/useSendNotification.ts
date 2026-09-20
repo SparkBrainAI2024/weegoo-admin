@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { SEND_PUSH_NOTIFICATION, SendPushNotificationInput } from 'graphql/mutations/settings.mutation';
 
 export function useSendNotification() {
