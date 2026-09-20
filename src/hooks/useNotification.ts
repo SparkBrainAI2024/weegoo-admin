@@ -13,11 +13,7 @@ const useNotification = () => {
         severity: SeverityEnum.INFO
     });
 
-    const showSuccess = (message: string) => {
-        console.log('show success called');
-
-        setNotification({ message, severity: SeverityEnum.SUCCESS });
-    };
+    const showSuccess = (message: string) => setNotification({ message, severity: SeverityEnum.SUCCESS });
 
     const showError = (message: string) => setNotification({ message, severity: SeverityEnum.ERROR });
 
