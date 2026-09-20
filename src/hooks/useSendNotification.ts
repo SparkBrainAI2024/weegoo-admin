@@ -1,17 +1,13 @@
-import { BroadcastNotificationInput, sendBroadcastNotification } from 'graphql/mutations/settings.mutation';
-import { useState, useCallback } from 'react';
+import { useMutation } from '@apollo/client';
+import { SEND_PUSH_NOTIFICATION, SendPushNotificationInput } from 'graphql/mutations/settings.mutation';
 
 export function useSendNotification() {
-    const [sending, setSending] = useState(false);
-    const [lastSentAt, setLastSentAt] = useState<string | null>(null);
+    const [sendPushNotification, { loading: sending }] = useMutation(SEND_PUSH_NOTIFICATION);
 
-    const send = useCallback(async (input: BroadcastNotificationInput) => {
-        setSending(true);
-        const res = await sendBroadcastNotification(input);
-        setSending(false);
-        if (res.success) setLastSentAt(res.sentAt);
-        return res;
-    }, []);
+    const send = async (input: SendPushNotificationInput) => {
+        const { data } = await sendPushNotification({ variables: { input } });
+        return data?.sendPushNotification;
+    };
 
-    return { send, sending, lastSentAt };
+    return { send, sending };
 }

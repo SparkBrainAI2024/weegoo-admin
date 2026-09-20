@@ -1,4 +1,5 @@
 import { CompanyInfo, MaintenanceInfo, MaintenanceStatus, VehiclePricing } from 'graphql/queries/settings.queries';
+
 import { gql, TypedDocumentNode } from '@apollo/client';
 export async function updateCompanyInfo(input: CompanyInfo): Promise<CompanyInfo> {
     // Mocked — pretend the server accepted it
@@ -98,6 +99,38 @@ export const UPSERT_MAINTENANCE_INFO: TypedDocumentNode<UpsertMaintenanceInfoRes
             deletedAt
             deleted
             message
+        }
+    }
+`;
+
+export enum PushNotificationTarget {
+    USER = 'USER',
+    DRIVER = 'DRIVER',
+    ALL = 'ALL'
+}
+
+export interface SendPushNotificationInput {
+    target: PushNotificationTarget;
+    title: string;
+    message: string;
+}
+
+export interface SendPushNotificationResult {
+    sendPushNotification: {
+        success: boolean;
+        notifiedCount: number;
+    };
+}
+
+export interface SendPushNotificationVars {
+    input: SendPushNotificationInput;
+}
+
+export const SEND_PUSH_NOTIFICATION: TypedDocumentNode<SendPushNotificationResult, SendPushNotificationVars> = gql`
+    mutation SendPushNotification($input: SendPushNotificationInput!) {
+        sendPushNotification(input: $input) {
+            success
+            notifiedCount
         }
     }
 `;
