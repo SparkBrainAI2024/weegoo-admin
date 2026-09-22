@@ -44,3 +44,8 @@ export enum VehicleType {
     MOTORBIKE = 'MOTORBIKE',
     SCOOTER = 'SCOOTER'
 }
+
+export enum DiscountType {
+    FLAT = 'FLAT',
+    PERCENTAGE = 'PERCENTAGE'
+}

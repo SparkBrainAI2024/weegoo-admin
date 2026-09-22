@@ -18,6 +18,7 @@ import { toDateTimeLocal } from 'utils/date';
 import { OffersMessages } from './offers.messages';
 import * as Yup from 'yup';
 import { GET_PROMO_CODES } from 'graphql/queries/promoCode.queries';
+import { DiscountType } from 'types/enum';
 
 const validationSchema = Yup.object({
     name: Yup.string().required('Promo code is required'),
@@ -263,23 +264,25 @@ const CreateOfferForm = ({ onClose, initialData }: { onClose: () => void; initia
                                             </Stack>
                                         </Grid>
 
-                                        <Grid item xs={12}>
-                                            <Stack spacing={1}>
-                                                <Typography variant="body2" fontWeight={500}>
-                                                    Max Discount (optional)
-                                                </Typography>
-                                                <TextField
-                                                    fullWidth
-                                                    size="small"
-                                                    name="maxDiscount"
-                                                    placeholder="e.g. Rs 100"
-                                                    value={values.maxDiscount}
-                                                    onChange={handleChange}
-                                                    error={touched.maxDiscount && Boolean(errors.maxDiscount)}
-                                                    helperText={touched.maxDiscount && errors.maxDiscount}
-                                                />
-                                            </Stack>
-                                        </Grid>
+                                        {values.discountType === DiscountType.PERCENTAGE && (
+                                            <Grid item xs={12}>
+                                                <Stack spacing={1}>
+                                                    <Typography variant="body2" fontWeight={500}>
+                                                        Max Discount (optional)
+                                                    </Typography>
+                                                    <TextField
+                                                        fullWidth
+                                                        size="small"
+                                                        name="maxDiscount"
+                                                        placeholder="e.g. Rs 100"
+                                                        value={values.maxDiscount}
+                                                        onChange={handleChange}
+                                                        error={touched.maxDiscount && Boolean(errors.maxDiscount)}
+                                                        helperText={touched.maxDiscount && errors.maxDiscount}
+                                                    />
+                                                </Stack>
+                                            </Grid>
+                                        )}
 
                                         <Grid item xs={12} sm={6}>
                                             <Stack spacing={1}>

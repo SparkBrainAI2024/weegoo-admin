@@ -1,9 +1,7 @@
-import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { RideDetail } from 'graphql/queries/rides.queries';
 import RideDetailTitle from './RideDetailTitle';
 import { FieldAndFieldValue, RideDetailSubtitle } from './RideDetailSubtitle';
@@ -21,6 +19,8 @@ const PAYMENT_STATUS_COLOR: Record<string, 'success' | 'warning' | 'error' | 'de
 
 const AdditionalInfoCard = ({ ride }: AdditionalInfoCardProps) => {
     const paymentStatus = ride.paymentDetails?.paymentStatus;
+    const paymentMethodText = ride.paymentDetails?.paymentMethod !== undefined ? '( ' + ride.paymentDetails?.paymentMethod + ' )' : '';
+
     const promoCode = ride.paymentDetails?.promoCodeName ?? ride.fare?.promoCodeName;
 
     return (
@@ -38,10 +38,14 @@ const AdditionalInfoCard = ({ ride }: AdditionalInfoCardProps) => {
                     <RideDetailSubtitle label="  PAYMENT STATUS"></RideDetailSubtitle>
 
                     {paymentStatus ? (
-                        <SpaciousChipContainer
-                            label={paymentStatus.charAt(0) + paymentStatus.slice(1).toLowerCase()}
-                            color={PAYMENT_STATUS_COLOR[paymentStatus.toUpperCase()] ?? 'default'}
-                        />
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                            <SpaciousChipContainer
+                                label={paymentStatus.charAt(0) + paymentStatus.slice(1).toLowerCase()}
+                                color={PAYMENT_STATUS_COLOR[paymentStatus.toUpperCase()] ?? 'default'}
+                            />
+
+                            <Typography variant="body1">{paymentMethodText}</Typography>
+                        </Stack>
                     ) : (
                         <Typography variant="body2">—</Typography>
                     )}
