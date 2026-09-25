@@ -105,7 +105,7 @@ export default function DriverTrackingMap({
     const [route, setRoute] = useState<any>(null);
     const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
-    const supportsDriverLocation = rideStatus === RideStatus.CONFIRMED || rideStatus === RideStatus.ONGOING;
+    const supportsDriverLocation = rideStatus === RideStatus.ONGOING;
     const isOngoingRide = rideStatus === RideStatus.ONGOING;
 
     // Location channels are keyed by driver ID. Only confirmed and ongoing rides
@@ -113,11 +113,6 @@ export default function DriverTrackingMap({
     const location = useDriverLocation(supportsDriverLocation ? propDriverId ?? null : null, ablyKey);
     const driverLocation = location;
 
-    // Fetch route from Baato when pickup/dropoff locations are available
-    // Fetch route from Baato when pickup/dropoff locations are available
-    // Fetch route from Baato when pickup/dropoff locations are available
-    // Fetch route from Baato when pickup/dropoff locations are available
-    // Fetch route from Baato when pickup/dropoff locations are available
     // Fetch route when locations are available
     useEffect(() => {
         if (!pickupLocation || !dropoffLocation || !BAATO_KEY) return;
@@ -348,7 +343,7 @@ export default function DriverTrackingMap({
                 pickupEl.style.cursor = 'pointer';
 
                 const label = document.createElement('div');
-                label.textContent = 'Pickup';
+                // label.textContent = 'Pickup';
                 label.style.position = 'absolute';
                 label.style.top = '100%';
                 label.style.left = '50%';
@@ -382,7 +377,7 @@ export default function DriverTrackingMap({
                 dropoffEl.style.cursor = 'pointer';
 
                 const label = document.createElement('div');
-                label.textContent = 'Dropoff';
+                // label.textContent = 'Dropoff';
                 label.style.position = 'absolute';
                 label.style.top = '100%';
                 label.style.left = '50%';
@@ -459,7 +454,7 @@ export default function DriverTrackingMap({
 
             markerElement.style.cssText = `
 
-    font-size: 36px;
+    font-size: 27px;
     line-height: 1;
     display: flex;
     align-items: center;
@@ -475,6 +470,9 @@ export default function DriverTrackingMap({
                 element: markerElement,
                 rotationAlignment: 'map'
             });
+            if (rideStatus === RideStatus.COMPLETED && dropoffLocation) {
+                markerRef.current.setLngLat([dropoffLocation.lng, dropoffLocation.lat]).addTo(map);
+            }
             return () => {
                 if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
                 map.remove();

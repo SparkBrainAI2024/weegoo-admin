@@ -11,7 +11,6 @@ import { Icon } from '@mui/material';
 import { FieldAndFieldValue, RideDetailSubtitle2 } from './RideDetailSubtitle';
 import DriverTrackingMap from './DriverTrackingMap';
 import { formatNepalTime } from 'utils/date';
-// import DriverTrackingMap from './DriverTrackingMap';
 
 const ABLY_KEY = import.meta.env.VITE_ABLY_KEY as string;
 interface RouteTrackingCardProps {
