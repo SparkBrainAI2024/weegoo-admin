@@ -224,6 +224,7 @@ export default function DriverDetailsPage() {
         profileImage: data.getDriver.profileImage,
         status: data.getDriver.status,
         suspended: data.getDriver.suspended,
+        displayIdAsDriver: data.getDriver.displayIdAsDriver,
         totalRidesAsDriver: data.getDriver.totalRidesAsDriver,
         totalEarnings: data.getDriver.totalEarnings,
         rating: data.getDriver.rating,
@@ -276,7 +277,7 @@ export default function DriverDetailsPage() {
                                         <Box display="flex" flexDirection="column" gap={1}>
                                             <Typography variant="h6">{driver.fullName}</Typography>
                                             <Typography variant="body2" color="text.secondary">
-                                                {driver.id}
+                                                {driver.displayIdAsDriver}
                                             </Typography>
                                             <Box>
                                                 <Chip
