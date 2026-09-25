@@ -144,6 +144,7 @@ export interface GetDriverOverviewData {
         userId: string;
         gender: string;
         fullName: string;
+        displayIdAsDriver: string;
         profileImage?: string;
         rating: number;
         email: string;
@@ -210,6 +211,7 @@ export const GET_DRIVER_OVERVIEW: TypedDocumentNode<GetDriverOverviewData, GetDr
             joinedDate
             gender
             totalRidesAsDriver
+            displayIdAsDriver
             totalEarnings
             amountDueToCompany
             lastTripAt
