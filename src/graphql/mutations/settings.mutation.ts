@@ -39,7 +39,7 @@ export const BULK_UPSERT_PRICING: TypedDocumentNode<BulkUpsertPricingResult, Bul
 export async function updateMaintenanceStatus(input: MaintenanceStatus): Promise<MaintenanceStatus> {
     return Promise.resolve(input);
 }
-export type NotificationAudience = 'riders' | 'drivers' | 'both';
+export type NotificationAudience = 'passengers' | 'drivers' | 'both';
 
 export interface BroadcastNotificationInput {
     audience: NotificationAudience;

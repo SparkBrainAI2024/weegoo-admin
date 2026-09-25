@@ -58,7 +58,7 @@ export function StatsSection() {
             iconBg: 'primary.300'
         },
         {
-            key: 'riders',
+            key: 'passengers',
             label: 'Active Passengers',
             value: stats.activePassenger,
             percentageChange: stats.percentageChange.activePassenger,

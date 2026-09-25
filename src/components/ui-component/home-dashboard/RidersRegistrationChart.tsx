@@ -28,7 +28,7 @@ const RidersRegistrationChart = () => {
     const { data, loading, error } = usePassengerRegistrationChart({ fromDate, endDate });
 
     if (error) {
-        return <Alert severity="error">Failed to load riders chart: {error.message}</Alert>;
+        return <Alert severity="error">Failed to load passengers chart: {error.message}</Alert>;
     }
 
     if (loading || !data) {
@@ -67,7 +67,7 @@ const RidersRegistrationChart = () => {
             labels: { formatter: (val: number) => val.toFixed(0) }
         },
         tooltip: {
-            y: { formatter: (val: number) => `${val.toLocaleString()} riders` }
+            y: { formatter: (val: number) => `${val.toLocaleString()} passengers` }
         }
     };
 
