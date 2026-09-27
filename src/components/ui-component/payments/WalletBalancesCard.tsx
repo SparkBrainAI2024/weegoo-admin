@@ -20,8 +20,8 @@ export default function WalletBalancesCard() {
             color: '#8B5CF6'
         },
         {
-            key: 'customer',
-            label: balances?.customerWallet.label ?? 'Customer Wallet Balance',
+            key: 'passenger',
+            label: balances?.customerWallet.label ?? 'Passenger Wallet Balance',
             value: balances?.customerWallet.value ?? 0,
             percentage: balances?.customerWallet.percentage ?? 0,
             color: '#3B82F6'

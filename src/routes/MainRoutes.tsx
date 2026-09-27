@@ -11,7 +11,6 @@ import NewEmailTemplate from 'views/pages/create-email-template';
 // dashboard routing
 
 // widget routing
-const WidgetStatistics = Loadable(lazy(() => import('views/widget/Statistics')));
 const WidgetData = Loadable(lazy(() => import('views/widget/Data')));
 const WidgetChart = Loadable(lazy(() => import('views/widget/Chart')));
 
@@ -122,10 +121,6 @@ const MainRoutes = {
             element: <NewEmailTemplate />
         },
 
-        {
-            path: '/widget/statistics',
-            element: <WidgetStatistics />
-        },
         {
             path: '/widget/data',
             element: <WidgetData />

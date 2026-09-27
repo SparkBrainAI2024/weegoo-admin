@@ -23,12 +23,11 @@ import ActiveTickets from './ActiveTickets';
 import LatestPosts from './LatestPosts';
 
 import FeedsCard from './FeedsCard';
-import LatestCustomers from './LatestCustomers';
+
 import LatestOrder from './LatestOrder';
 
 import IncomingRequests from './IncomingRequests';
 import TotalRevenue from './TotalRevenue';
-import NewCustomers from './NewCustomers';
 import RecentTickets from './RecentTickets';
 
 import MainCard from 'components/ui-component/cards/MainCard';
@@ -89,9 +88,6 @@ const WidgetData = () => (
         <Grid item xs={12} md={5} lg={4}>
             <FeedsCard />
         </Grid>
-        <Grid item xs={12} md={7} lg={8}>
-            <LatestCustomers />
-        </Grid>
 
         <Grid item xs={12}>
             <LatestOrder />
@@ -102,9 +98,6 @@ const WidgetData = () => (
         </Grid>
         <Grid item xs={12} lg={4} md={6}>
             <TotalRevenue />
-        </Grid>
-        <Grid item xs={12} lg={4} md={12}>
-            <NewCustomers />
         </Grid>
 
         <Grid item xs={12} md={12} lg={8}>

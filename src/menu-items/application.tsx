@@ -154,52 +154,7 @@ const application: NavItemType = {
                 }
             ]
         },
-        {
-            id: 'customer',
-            title: <FormattedMessage id="customer" />,
-            type: 'collapse',
-            icon: icons.IconBasket,
-            children: [
-                {
-                    id: 'customer-list',
-                    title: <FormattedMessage id="customer-list" />,
-                    type: 'item',
-                    url: '/apps/customer/customer-list'
-                },
-                {
-                    id: 'order-list',
-                    title: <FormattedMessage id="order-list" />,
-                    type: 'item',
-                    url: '/apps/customer/order-list'
-                },
-                {
-                    id: 'create-invoice',
-                    title: <FormattedMessage id="create-invoice" />,
-                    type: 'item',
-                    url: '/apps/customer/create-invoice',
-                    breadcrumbs: false
-                },
-                {
-                    id: 'order-details',
-                    title: <FormattedMessage id="order-details" />,
-                    type: 'item',
-                    url: '/apps/customer/order-details'
-                },
-                {
-                    id: 'product',
-                    title: <FormattedMessage id="product" />,
-                    type: 'item',
-                    url: '/apps/customer/product'
-                },
-                {
-                    id: 'product-review',
-                    title: <FormattedMessage id="product-review" />,
-                    type: 'item',
-                    url: '/apps/customer/product-review',
-                    breadcrumbs: false
-                }
-            ]
-        },
+
         {
             id: 'chat',
             title: <FormattedMessage id="chat" />,
