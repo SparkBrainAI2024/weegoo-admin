@@ -12,7 +12,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import LinearProgress from '@mui/material/LinearProgress';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -31,6 +30,7 @@ import { IssueSummary } from 'types/issues.types';
 import { formatTicketDate, priorityMeta, reportedByLabel, statusMeta } from '../../utils/issue.utils';
 import { useNavigate } from 'react-router';
 import { Skeleton } from '@mui/material';
+import { IssueStatusTab } from './IssueStatusTabs';
 
 type Order = 'asc' | 'desc';
 type SortableKey = 'ticketCode' | 'createdAt' | 'reportedByName' | 'categoryLabel' | 'priority' | 'status';
@@ -68,6 +68,7 @@ const sortableCell = (headCell: HeadCell, order: Order, orderBy: SortableKey, on
 );
 
 interface IssueListTableProps {
+    statusTab: IssueStatusTab;
     rows: IssueSummary[];
     loading: boolean;
     selected: string[];
@@ -88,7 +89,8 @@ const IssueListTable = ({
     rowsPerPage,
     total,
     onPageChange,
-    onRowsPerPageChange
+    onRowsPerPageChange,
+    statusTab
 }: IssueListTableProps) => {
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = React.useState<SortableKey>('createdAt');
@@ -127,15 +129,17 @@ const IssueListTable = ({
                 <Table sx={{ minWidth: 900 }} aria-labelledby="issuesTableTitle">
                     <TableHead>
                         <TableRow>
-                            <TableCell padding="checkbox" sx={{ pl: 3 }}>
-                                <Checkbox
-                                    color="primary"
-                                    indeterminate={selected.length > 0 && selected.length < rows.length}
-                                    checked={rows.length > 0 && selected.length === rows.length}
-                                    onChange={handleSelectAllClick}
-                                    inputProps={{ 'aria-label': 'select all issues' }}
-                                />
-                            </TableCell>
+                            {statusTab !== 'RESOLVED' && (
+                                <TableCell padding="checkbox" sx={{ pl: 3 }}>
+                                    <Checkbox
+                                        color="primary"
+                                        indeterminate={selected.length > 0 && selected.length < rows.length}
+                                        checked={rows.length > 0 && selected.length === rows.length}
+                                        onChange={handleSelectAllClick}
+                                        inputProps={{ 'aria-label': 'select all issues' }}
+                                    />
+                                </TableCell>
+                            )}
                             {sortableCell(headCells[0], order, orderBy, handleRequestSort) /* Ticket */}
                             {sortableCell(headCells[1], order, orderBy, handleRequestSort) /* Date */}
                             {sortableCell(headCells[2], order, orderBy, handleRequestSort) /* From */}
@@ -182,9 +186,11 @@ const IssueListTable = ({
                                         key={row.id}
                                         selected={isItemSelected}
                                     >
-                                        <TableCell padding="checkbox" sx={{ pl: 3 }} onClick={() => handleRowSelect(row.id)}>
-                                            <Checkbox color="primary" checked={isItemSelected} />
-                                        </TableCell>
+                                        {statusTab !== 'RESOLVED' && (
+                                            <TableCell padding="checkbox" sx={{ pl: 3 }} onClick={() => handleRowSelect(row.id)}>
+                                                <Checkbox color="primary" checked={isItemSelected} />
+                                            </TableCell>
+                                        )}
                                         <TableCell onClick={() => handleRowSelect(row.id)} sx={{ cursor: 'pointer' }}>
                                             <Typography variant="h5">{row.ticketCode}</Typography>
                                         </TableCell>

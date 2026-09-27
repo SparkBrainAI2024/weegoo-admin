@@ -125,6 +125,7 @@ const IssuesPage = () => {
                 <Grid item xs={12}>
                     <IssueListTable
                         rows={items}
+                        statusTab={statusTab}
                         loading={loading}
                         selected={selected}
                         onSelectedChange={setSelected}
