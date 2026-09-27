@@ -25,8 +25,7 @@ import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 // types
 import { MenuOrientation } from 'types/config';
 import { IconButton, Typography } from '@mui/material';
-import { Menu } from "@mui/icons-material";
-
+import { Menu } from '@mui/icons-material';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
@@ -36,17 +35,21 @@ const Sidebar = () => {
 
     const logo = useMemo(
         () => (
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: drawerOpen ? 'space-between' : 'center',
-                p: 2,
-                background: '#414141'
-            }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: drawerOpen ? 'space-between' : 'center',
+                    p: 2,
+                    background: '#414141'
+                }}
+            >
                 {drawerOpen && (
                     <Stack direction="row" alignItems="center" spacing={1}>
                         <LogoSection />
-                        <Typography variant="h2" color="#ffffff">WEEGOO</Typography>
+                        <Typography variant="h2" color="#ffffff">
+                            eYatra
+                        </Typography>
                     </Stack>
                 )}
                 <IconButton onClick={() => handlerDrawerOpen(!drawerOpen)} sx={{ color: '#ffffff' }}>
@@ -79,4 +82,3 @@ const Sidebar = () => {
 };
 
 export default memo(Sidebar);
-
