@@ -107,7 +107,7 @@ export function StatsSection() {
                       <Grid key={c.key} item xs={12} sm={6} md={2.4}>
                           <StatCard
                               label={c.label}
-                              value={c.value.toLocaleString()}
+                              value={c.key === 'revenue' ? `Rs. ${c.value.toLocaleString()}` : c.value.toLocaleString()}
                               percentageChange={c.percentageChange}
                               icon={c.icon}
                               iconBg={c.iconBg}
