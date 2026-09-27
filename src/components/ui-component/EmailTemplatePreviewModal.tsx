@@ -7,10 +7,10 @@ import carIcon from 'assets/images/car-icon.svg';
 import shieldIcon from 'assets/images/shield.png';
 
 interface Props {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  content: string;
+    open: boolean;
+    onClose: () => void;
+    title: string;
+    content: string;
 }
 
 const EmailTemplatePreviewModal = ({ open, onClose, title, content }: Props) => {
@@ -110,7 +110,7 @@ const EmailTemplatePreviewModal = ({ open, onClose, title, content }: Props) => 
                         <Box
                             component="img"
                             src={carIcon}
-                            alt="WeeGoo"
+                            alt="eYatra"
                             sx={{
                                 width: 110,
                                 objectFit: 'contain'
@@ -130,7 +130,7 @@ const EmailTemplatePreviewModal = ({ open, onClose, title, content }: Props) => 
                             sx={{
                                 display: 'flex',
                                 alignItems: 'flex-start',
-                           
+
                                 px: '12px',
                                 pt: '24px',
                                 pb: '32px'
@@ -220,7 +220,7 @@ const EmailTemplatePreviewModal = ({ open, onClose, title, content }: Props) => 
                                     textAlign: 'left'
                                 }}
                             >
-                                WeeGoo Team
+                                eYatra Team
                             </Typography>
 
                             <Typography
@@ -265,7 +265,7 @@ const EmailTemplatePreviewModal = ({ open, onClose, title, content }: Props) => 
                                     lineHeight: 1.4
                                 }}
                             >
-                                © 2026 WeeGoo. All rights reserved.
+                                © 2026 eYatra. All rights reserved.
                             </Typography>
                         </Box>
                     </Box>
