@@ -114,8 +114,8 @@ const RidesList = () => {
         { key: 'price', header: 'PRICE', render: (row) => `Rs. ${row.paymentDetails?.totalAmount ?? 0}` },
         {
             key: 'time',
-            header: 'TIME',
-            render: (row) => new Date(row.bookingTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            header: 'BOOKING DATETIME',
+            render: (row) => new Date(row.bookingTime).toLocaleString()
         },
         {
             key: 'status',
