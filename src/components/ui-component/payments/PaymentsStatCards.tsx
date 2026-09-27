@@ -1,16 +1,13 @@
 import { Grid, Skeleton } from '@mui/material';
-import { IconCoin, IconWallet, IconUsers, IconArrowsExchange, IconBellDollar } from '@tabler/icons-react';
+import { IconWallet, IconUsers, IconArrowsExchange } from '@tabler/icons-react';
 import StatCard from './StatCard';
 import { usePaymentsSummary } from 'graphql/queries/payments.queries';
-import { useUrlParams } from 'hooks/useSearchParams';
-import { DEFAULT_END_DATE, DEFAULT_FROM_DATE } from 'utils/payments.utils';
 import { gridSpacing } from 'store/constant';
 import { useTheme } from '@mui/material/styles';
 import { FaDollarSign } from 'react-icons/fa6';
 const formatCurrency = (value: number) => `Rs. ${value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export default function PaymentsStatCards() {
-    const { getParam } = useUrlParams();
     const theme = useTheme();
     const { data, loading } = usePaymentsSummary();
     const summary = data?.paymentsSummary;
@@ -53,9 +50,9 @@ export default function PaymentsStatCards() {
             <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
                 {' '}
                 <StatCard
-                    title="Customer Wallet Balance"
+                    title="Passenger Wallet Balance"
                     value={formatCurrency(summary?.customerWalletBalance.value ?? 0)}
-                    caption="Total balance in customer wallets"
+                    caption="Total balance in passenger wallets"
                     icon={<IconUsers size={32} color="#3B82F6" />}
                     iconBgColor="#EFF6FF"
                 />
