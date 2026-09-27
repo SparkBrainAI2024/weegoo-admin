@@ -156,7 +156,7 @@ const RidesList = () => {
                 }}
             >
                 {' '}
-                <Box display="flex" gap={2}>
+                <Box display="grid" gridTemplateColumns="3fr 1fr 1fr 1fr" gap={2}>
                     <TextField
                         placeholder="Search by Ride ID, Driver, Passenger name...."
                         size="small"
@@ -171,12 +171,16 @@ const RidesList = () => {
                             )
                         }}
                     />
+
+                    {/* 1 part empty */}
+                    <Box />
+
                     <Select
                         size="small"
+                        fullWidth
                         value={status}
                         displayEmpty
                         onChange={(e) => setStatus(e.target.value as RideStatus | '')}
-                        sx={{ minWidth: 160 }}
                     >
                         <MenuItem value="">All Status</MenuItem>
                         {Object.values(RideStatus).map((s) => (
@@ -185,12 +189,8 @@ const RidesList = () => {
                             </MenuItem>
                         ))}
                     </Select>
-                    <Select
-                        size="small"
-                        value={timeRange}
-                        onChange={(e) => setTimeRange(e.target.value as RideTimeRange)}
-                        sx={{ minWidth: 160 }}
-                    >
+
+                    <Select size="small" fullWidth value={timeRange} onChange={(e) => setTimeRange(e.target.value as RideTimeRange)}>
                         {Object.entries(TIME_RANGE_LABELS).map(([value, label]) => (
                             <MenuItem key={value} value={value}>
                                 {label}

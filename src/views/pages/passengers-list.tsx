@@ -21,7 +21,9 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
-    Skeleton
+    Skeleton,
+    useTheme,
+    useMediaQuery
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -55,7 +57,7 @@ const COLUMNS = [
 ];
 
 const PassengerList = () => {
-    const [tab, setTab] = useState<string>('ACTIVE');
+    const [tab, setTab] = useState('ACTIVE');
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
     const [page, setPage] = useState(0);
@@ -136,19 +138,30 @@ const PassengerList = () => {
     const closeMenu = () => {
         setMenuAnchor(null);
     };
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <Stack gap={2.5}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Box
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '3fr 1fr 2fr',
+                    alignItems: 'center',
+                    gap: 2,
+                    paddingTop: '24px'
+                }}
+            >
+                {/* 3 parts */}
                 <TextField
                     placeholder="Search passenger..."
                     size="small"
+                    fullWidth
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
                         setPage(0);
                     }}
-                    sx={{ width: 320 }}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -158,7 +171,31 @@ const PassengerList = () => {
                     }}
                 />
 
-                <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>
+                {/* 1 part empty */}
+                <Box />
+
+                {/* 2 parts */}
+                <ToggleButtonGroup
+                    exclusive
+                    value={tab}
+                    onChange={handleTabChange}
+                    orientation={isMobile ? 'vertical' : 'horizontal'}
+                    fullWidth
+                    sx={{
+                        '& .MuiToggleButton-root': {
+                            textTransform: 'none',
+                            padding: '8px 20px',
+                            backgroundColor: theme.palette.background.paper,
+                            '&.Mui-selected': {
+                                backgroundColor: theme.palette.background.paper,
+                                borderColor: `${theme.palette.secondary.main} !important`,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.background.paper
+                                }
+                            }
+                        }
+                    }}
+                >
                     {TABS.map(({ key, label }) => (
                         <ToggleButton key={key} value={key}>
                             <Typography
@@ -171,6 +208,7 @@ const PassengerList = () => {
                             >
                                 {label}
                             </Typography>
+
                             {key !== 'ACTIVE' && (
                                 <Chip
                                     size="small"
@@ -185,7 +223,7 @@ const PassengerList = () => {
                         </ToggleButton>
                     ))}
                 </ToggleButtonGroup>
-            </Stack>
+            </Box>
             <ResponsiveTableLayoutCustom>
                 <TableHead>
                     <TableRow>
