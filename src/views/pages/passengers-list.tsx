@@ -21,7 +21,9 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
-    Skeleton
+    Skeleton,
+    useTheme,
+    useMediaQuery
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -55,7 +57,7 @@ const COLUMNS = [
 ];
 
 const PassengerList = () => {
-    const [tab, setTab] = useState<string>('ACTIVE');
+    const [tab, setTab] = useState('ACTIVE');
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
     const [page, setPage] = useState(0);
@@ -136,6 +138,8 @@ const PassengerList = () => {
     const closeMenu = () => {
         setMenuAnchor(null);
     };
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <Stack gap={2.5}>
@@ -175,11 +179,20 @@ const PassengerList = () => {
                     exclusive
                     value={tab}
                     onChange={handleTabChange}
+                    orientation={isMobile ? 'vertical' : 'horizontal'}
                     fullWidth
                     sx={{
                         '& .MuiToggleButton-root': {
                             textTransform: 'none',
-                            padding: '8px 20px'
+                            padding: '8px 20px',
+                            backgroundColor: theme.palette.background.paper,
+                            '&.Mui-selected': {
+                                backgroundColor: theme.palette.background.paper,
+                                borderColor: `${theme.palette.secondary.main} !important`,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.background.paper
+                                }
+                            }
                         }
                     }}
                 >
