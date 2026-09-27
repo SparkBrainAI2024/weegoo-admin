@@ -22,7 +22,8 @@ import {
     Chip,
     TablePagination,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    InputAdornment
 } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -171,29 +172,42 @@ const DriverList = () => {
             />
             <Box
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
+                    display: 'grid',
+                    gridTemplateColumns: '3fr 1fr 2fr',
                     alignItems: 'center',
-                    paddingTop: '24px',
-                    gap: 5
+                    gap: 2,
+                    paddingTop: '24px'
                 }}
             >
+                {/* 3 parts */}
                 <TextField
                     placeholder="Search driver..."
                     size="small"
-                    InputProps={{ startAdornment: <SearchIcon /> }}
-                    sx={{ width: '50%', minWidth: 200 }}
-                    onChange={(e) => setSearch(e.target.value)} // secondaryText → placeholder color already comes from MuiInputBase override (text.secondary)
+                    fullWidth
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon fontSize="small" color="disabled" />
+                            </InputAdornment>
+                        )
+                    }}
                 />
+
+                {/* 1 part empty */}
+                <Box />
+
+                {/* 2 parts */}
                 <ToggleButtonGroup
                     exclusive
                     value={tab}
                     onChange={handleTabChange}
                     orientation={isMobile ? 'vertical' : 'horizontal'}
-                    fullWidth={isMobile}
+                    fullWidth
                     sx={{
                         '& .MuiToggleButton-root': {
-                            textTransform: 'none' as const,
+                            textTransform: 'none',
                             padding: '8px 20px',
                             backgroundColor: theme.palette.background.paper,
                             '&.Mui-selected': {

@@ -139,16 +139,25 @@ const PassengerList = () => {
 
     return (
         <Stack gap={2.5}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Box
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '3fr 1fr 2fr',
+                    alignItems: 'center',
+                    gap: 2,
+                    paddingTop: '24px'
+                }}
+            >
+                {/* 3 parts */}
                 <TextField
                     placeholder="Search passenger..."
                     size="small"
+                    fullWidth
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
                         setPage(0);
                     }}
-                    sx={{ width: 320 }}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -158,7 +167,22 @@ const PassengerList = () => {
                     }}
                 />
 
-                <ToggleButtonGroup exclusive value={tab} onChange={handleTabChange}>
+                {/* 1 part empty */}
+                <Box />
+
+                {/* 2 parts */}
+                <ToggleButtonGroup
+                    exclusive
+                    value={tab}
+                    onChange={handleTabChange}
+                    fullWidth
+                    sx={{
+                        '& .MuiToggleButton-root': {
+                            textTransform: 'none',
+                            padding: '8px 20px'
+                        }
+                    }}
+                >
                     {TABS.map(({ key, label }) => (
                         <ToggleButton key={key} value={key}>
                             <Typography
@@ -171,6 +195,7 @@ const PassengerList = () => {
                             >
                                 {label}
                             </Typography>
+
                             {key !== 'ACTIVE' && (
                                 <Chip
                                     size="small"
@@ -185,7 +210,7 @@ const PassengerList = () => {
                         </ToggleButton>
                     ))}
                 </ToggleButtonGroup>
-            </Stack>
+            </Box>
             <ResponsiveTableLayoutCustom>
                 <TableHead>
                     <TableRow>
