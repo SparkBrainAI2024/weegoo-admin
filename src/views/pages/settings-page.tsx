@@ -46,13 +46,16 @@ const SettingsPage = () => {
                         value={activeTab}
                         onChange={handleChange}
                         sx={{
-                            gap: 1,
                             '& .MuiTab-root': {
                                 alignItems: 'flex-start',
                                 justifyContent: 'flex-start',
                                 textAlign: 'left',
                                 minHeight: 48
                             },
+                            '& .MuiTab-root + .MuiTab-root': {
+                                marginTop: '8px'
+                            },
+
                             '& .MuiTabs-indicator': {
                                 left: 0,
                                 right: 'auto',
