@@ -5,17 +5,19 @@ import PricingFeesSection from 'components/ui-component/settings/PricingFeesSect
 import MaintenanceSection from 'components/ui-component/settings/MaintenanceSection';
 import NotificationsSection from 'components/ui-component/settings/NotificationsSection';
 import { SETTINGS_TAB_ICONS } from 'components/ui-component/settings/constants/settingsTabIcons';
+import LocationsSection from 'components/ui-component/settings/locations/LocationSection';
 
 const TABS = [
     { label: 'Company Info', value: 'company' },
     { label: 'Pricing & Fees', value: 'pricing' },
     { label: 'Maintenance', value: 'maintenance' },
-    { label: 'Notifications', value: 'notifications' }
+    { label: 'Notifications', value: 'notifications' },
+    { label: 'Locations & Bus Stations', value: 'location' }
 ] as const;
 
 type TabValue = (typeof TABS)[number]['value'];
 
-export default function SettingsPage() {
+const SettingsPage = () => {
     const [activeTab, setActiveTab] = useState<TabValue>('company');
 
     const handleChange = (_: SyntheticEvent, newValue: TabValue) => setActiveTab(newValue);
@@ -44,8 +46,18 @@ export default function SettingsPage() {
                         value={activeTab}
                         onChange={handleChange}
                         sx={{
-                            '& .MuiTab-root': { alignItems: 'flex-start', textAlign: 'left', minHeight: 48 },
-                            '& .MuiTabs-indicator': { left: 0, right: 'auto', width: 3 }
+                            gap: 1,
+                            '& .MuiTab-root': {
+                                alignItems: 'flex-start',
+                                justifyContent: 'flex-start',
+                                textAlign: 'left',
+                                minHeight: 48
+                            },
+                            '& .MuiTabs-indicator': {
+                                left: 0,
+                                right: 'auto',
+                                width: 3
+                            }
                         }}
                     >
                         {TABS.map((tab) => {
@@ -67,8 +79,10 @@ export default function SettingsPage() {
                     {activeTab === 'pricing' && <PricingFeesSection />}
                     {activeTab === 'maintenance' && <MaintenanceSection />}
                     {activeTab === 'notifications' && <NotificationsSection />}
+                    {activeTab === 'location' && <LocationsSection />}
                 </Box>
             </Stack>
         </Paper>
     );
-}
+};
+export default SettingsPage;
