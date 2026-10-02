@@ -31,7 +31,7 @@ export default function LocationsSection() {
     const handleAddLocation = () => {};
 
     return (
-        <Stack gap={3} p={3}>
+        <Stack gap={3} p={2}>
             <Stack direction="row" justifyContent="space-between" alignItems="flex-start" flexWrap="wrap" gap={2}>
                 <Stack gap={0.5} maxWidth={520}>
                     <Typography variant="h4">Locations & Bus Stations</Typography>

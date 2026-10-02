@@ -35,7 +35,7 @@ export default function PricingFeesSection() {
 
     if (loading || !initialValues) {
         return (
-            <Box sx={{ p: 3 }}>
+            <Box sx={{ p: 2 }}>
                 <Skeleton height={32} width={220} />
                 <Skeleton height={20} width={360} sx={{ mt: 1 }} />
                 <Skeleton height={300} sx={{ mt: 3 }} />

@@ -8,10 +8,10 @@ import { SETTINGS_TAB_ICONS } from 'components/ui-component/settings/constants/s
 import LocationsSection from 'components/ui-component/settings/locations/LocationSection';
 
 const TABS = [
-    { label: 'Company Info', value: 'company' },
+    { label: 'Company Information', value: 'company' },
     { label: 'Pricing & Fees', value: 'pricing' },
-    { label: 'Maintenance', value: 'maintenance' },
-    { label: 'Notifications', value: 'notifications' },
+    { label: 'Maintenance Mode', value: 'maintenance' },
+    { label: 'Push Notifications', value: 'notifications' },
     { label: 'Locations & Bus Stations', value: 'location' }
 ] as const;
 
@@ -39,7 +39,7 @@ const SettingsPage = () => {
                 sx={{ alignItems: 'stretch', gap: 3 }}
             >
                 {' '}
-                <Stack gap={3} padding={2}>
+                <Stack gap={3} paddingY={2}>
                     <Typography variant="h3">Configuration</Typography>
                     <Tabs
                         orientation="vertical"
@@ -47,7 +47,7 @@ const SettingsPage = () => {
                         onChange={handleChange}
                         sx={{
                             '& .MuiTab-root': {
-                                alignItems: 'flex-start',
+                                alignItems: 'flex-center',
                                 justifyContent: 'flex-start',
                                 textAlign: 'left',
                                 minHeight: 48
