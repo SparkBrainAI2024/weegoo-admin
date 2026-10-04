@@ -31,18 +31,39 @@ export default function LocationsSection() {
     const handleAddLocation = () => {};
 
     return (
-        <Stack gap={3} p={2}>
-            <Stack direction="row" justifyContent="space-between" alignItems="flex-start" flexWrap="wrap" gap={2}>
+        <Stack gap={3} p={1}>
+            <Stack direction="row" justifyContent="space-between" alignItems="flex-start" gap={2}>
                 <Stack gap={0.5} maxWidth={520}>
-                    <Typography variant="h4">Locations & Bus Stations</Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h5">Locations & Bus Stations</Typography>
+                    <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{
+                            fontSize: '0.625rem',
+                            letterSpacing: '0.02rem'
+                        }}
+                    >
                         Manage ride locations and bus stations. Drivers can set their availability from these points, and customers can book
                         rides using the same locations.
                     </Typography>
                 </Stack>
 
                 <Stack direction="row" gap={1.5} alignItems="center">
-                    <Button variant="outlined" color="success" startIcon={<AddIcon />} onClick={handleAddLocation}>
+                    <Button
+                        variant="outlined"
+                        color="success"
+                        startIcon={<AddIcon />}
+                        onClick={handleAddLocation}
+                        sx={{
+                            fontWeight: 400,
+                            fontSize: '0.75rem',
+                            whiteSpace: 'nowrap',
+                            '& .MuiButton-startIcon': {
+                                marginRight: 0.5,
+                                marginLeft: 0
+                            }
+                        }}
+                    >
                         Add Location
                     </Button>
                     <TextField
@@ -50,7 +71,13 @@ export default function LocationsSection() {
                         placeholder="Search location or bus station..."
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
-                        sx={{ minWidth: 280 }}
+                        sx={{
+                            minWidth: 280,
+                            '& .MuiInputBase-input::placeholder': {
+                                fontSize: '0.75rem',
+                                opacity: 1
+                            }
+                        }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -62,8 +89,8 @@ export default function LocationsSection() {
                 </Stack>
             </Stack>
 
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={3}>
                     <LocationList
                         locations={locations}
                         total={total}
@@ -72,7 +99,7 @@ export default function LocationsSection() {
                         onSelect={(id) => updateParams({ locationId: id })}
                     />
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={9}>
                     <LocationDetailPanel location={location} loading={detailLoading} />
                 </Grid>
             </Grid>

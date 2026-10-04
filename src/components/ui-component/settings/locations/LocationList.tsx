@@ -13,27 +13,57 @@ interface Props {
 
 export default function LocationList({ locations, total, selectedId, loading, onSelect }: Props) {
     return (
-        <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 3, overflow: 'hidden' }}>
-            <Typography variant="h5" sx={{ px: 2.5, py: 2 }}>
+        <Box
+            sx={{
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 3,
+                overflow: 'hidden'
+            }}
+        >
+            <Typography
+                variant="h6"
+                sx={{
+                    fontWeight: 600,
+                    fontSize: '0.875rem',
+                    px: 2.5,
+                    py: 2
+                }}
+            >
                 Locations ({total})
             </Typography>
 
             <List disablePadding>
                 {loading
                     ? Array.from({ length: 6 }).map((_, i) => (
-                          <Stack key={i} direction="row" alignItems="center" gap={2} sx={{ px: 2.5, py: 1.5 }}>
+                          <Stack
+                              key={i}
+                              direction="row"
+                              alignItems="center"
+                              gap={2}
+                              sx={{
+                                  px: 2.5,
+                                  py: 1.5
+                              }}
+                          >
                               <Skeleton variant="circular" width={40} height={40} />
                               <Skeleton variant="text" width="50%" />
                           </Stack>
                       ))
                     : locations.map((loc) => {
                           const selected = loc._id === selectedId;
+
                           return (
                               <ListItemButton
                                   key={loc._id}
                                   selected={selected}
                                   onClick={() => onSelect(loc._id)}
-                                  sx={{ px: 2.5, py: 1.5, borderTop: '1px solid', borderColor: 'divider' }}
+                                  sx={{
+                                      px: 1,
+                                      py: 0.75,
+                                      borderTop: '1px solid',
+                                      borderColor: 'divider'
+                                  }}
                               >
                                   <ListItemAvatar>
                                       <Avatar
@@ -45,12 +75,20 @@ export default function LocationList({ locations, total, selectedId, loading, on
                                           <LocationOnIcon fontSize="small" />
                                       </Avatar>
                                   </ListItemAvatar>
+
                                   <ListItemText
                                       primary={loc.name}
                                       secondary={`${loc.subLocations.length} bus stations`}
-                                      primaryTypographyProps={{ variant: 'subtitle1' }}
-                                      secondaryTypographyProps={{ variant: 'caption' }}
+                                      primaryTypographyProps={{
+                                          fontSize: '0.75rem',
+                                          fontWeight: 500
+                                      }}
+                                      secondaryTypographyProps={{
+                                          fontSize: '0.75rem',
+                                          color: 'text.secondary'
+                                      }}
                                   />
+
                                   <ChevronRightIcon fontSize="small" color="action" />
                               </ListItemButton>
                           );

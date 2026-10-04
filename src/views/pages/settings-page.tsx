@@ -29,18 +29,18 @@ const SettingsPage = () => {
                 minWidth: 220,
                 border: '1px solid',
                 borderColor: 'divider',
-                borderRadius: 4
+                borderRadius: 4,
+                paddingX: 2.5
             }}
         >
             <Stack
                 direction="row"
                 borderRadius={3}
                 divider={<Divider orientation="vertical" flexItem />}
-                sx={{ alignItems: 'stretch', gap: 3 }}
+                sx={{ alignItems: 'stretch', gap: 1 }}
             >
-                {' '}
-                <Stack gap={3} paddingY={2}>
-                    <Typography variant="h3">Configuration</Typography>
+                <Stack gap={2} paddingY={2}>
+                    <Typography variant="h4">Configuration</Typography>
                     <Tabs
                         orientation="vertical"
                         value={activeTab}
@@ -67,6 +67,9 @@ const SettingsPage = () => {
                             const Icon = SETTINGS_TAB_ICONS[tab.value];
                             return (
                                 <Tab
+                                    sx={{
+                                        fontSize: '0.75rem'
+                                    }}
                                     key={tab.value}
                                     value={tab.value}
                                     label={tab.label}

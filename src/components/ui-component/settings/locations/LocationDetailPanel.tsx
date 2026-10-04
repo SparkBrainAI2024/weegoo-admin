@@ -38,10 +38,17 @@ export default function LocationDetailPanel({ location, loading }: Props) {
     const count = location.subLocations.length;
 
     return (
-        <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3 }}>
-            <Stack gap={3}>
+        <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 3 }}>
+            <Stack gap={1.5}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h4">{location.name}</Typography>
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            fontWeight: '500'
+                        }}
+                    >
+                        {location.name}
+                    </Typography>
                     <Stack direction="row" gap={1}>
                         <Button size="small" variant="outlined" color="inherit" startIcon={<EditOutlinedIcon />} onClick={noop}>
                             Edit
@@ -58,7 +65,9 @@ export default function LocationDetailPanel({ location, loading }: Props) {
                             <LocationOnIcon fontSize="small" />
                         </Avatar>
                         <Stack>
-                            <Typography variant="subtitle1">{location.name}</Typography>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                {location.name}
+                            </Typography>
                             <Typography variant="caption" color="text.secondary">
                                 {count} bus stations
                             </Typography>
@@ -68,8 +77,21 @@ export default function LocationDetailPanel({ location, loading }: Props) {
 
                 <Stack gap={1.5}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h5">Bus Stations ({count})</Typography>
-                        <Button size="small" variant="contained" color="success" startIcon={<AddIcon />} onClick={noop}>
+                        <Typography variant="h6" sx={{ fontWeight: '450' }}>
+                            Bus Stations ({count})
+                        </Typography>
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            startIcon={<AddIcon />}
+                            sx={{
+                                fontSize: '0.75rem', // 13px
+                                py: 0.5,
+                                px: 1.5
+                            }}
+                            onClick={noop}
+                        >
                             Add Bus Station
                         </Button>
                     </Stack>

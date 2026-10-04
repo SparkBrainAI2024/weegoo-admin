@@ -28,7 +28,7 @@ export const DataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, s
                         backgroundColor: `#F2F3F5`,
                         '& .MuiTableCell-root': {
                             padding: '6px 16px',
-                            fontSize: 12,
+                            fontSize: '0.75rem',
                             fontWeight: 400,
                             color: '#2A2A2A'
                         }
@@ -39,7 +39,7 @@ export const DataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, s
                             <TableCell
                                 key={c.key}
                                 align={c.align}
-                                sx={{ width: c.width, fontSize: 12, fontWeight: 400, color: '#2A2A2A', py: 1 }}
+                                sx={{ width: c.width, fontSize: '0.75rem', fontWeight: 400, color: '#2A2A2A', py: 1 }}
                             >
                                 {' '}
                                 {c.header}
@@ -70,9 +70,95 @@ export const DataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, s
                                     <TableCell
                                         key={c.key}
                                         align={c.align}
-                                        sx={{ width: c.width, fontSize: 12, fontWeight: 400, color: '#2A2A2A', py: 1 }}
+                                        sx={{ width: c.width, fontSize: '0.75rem', fontWeight: 400, color: '#2A2A2A', py: 1 }}
                                     >
                                         {c.render(row)}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
+};
+
+interface CompactDataTableProps<T> {
+    columns: Column<T>[];
+    rows: T[];
+    loading: boolean;
+    getRowKey: (row: T) => string;
+    onRowClick?: (row: T) => void;
+    skeletonRows?: number;
+}
+
+export interface Column<T> {
+    key: string;
+    header: string;
+    render: (row: T) => React.ReactNode;
+    align?: 'left' | 'right' | 'center';
+    width?: string;
+}
+
+export const CompactDataTable = <T,>({ columns, rows, loading, getRowKey, onRowClick, skeletonRows = 10 }: CompactDataTableProps<T>) => {
+    return (
+        <TableContainer sx={{ padding: 0 }}>
+            <Table>
+                <TableHead
+                    sx={{
+                        backgroundColor: '#F2F3F5',
+                        '& .MuiTableCell-root': {
+                            padding: '6px 16px',
+                            fontSize: '0.6rem',
+                            fontWeight: 600,
+                            color: '#2A2A2A'
+                        }
+                    }}
+                >
+                    <TableRow>
+                        {columns.map((column) => (
+                            <TableCell key={column.key} align={column.align} sx={{ width: column.width }}>
+                                {column.header}
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                </TableHead>
+
+                <TableBody>
+                    {loading &&
+                        Array.from({ length: skeletonRows }).map((_, index) => (
+                            <TableRow key={index}>
+                                {columns.map((column) => (
+                                    <TableCell key={column.key} sx={{ width: column.width }}>
+                                        <Skeleton variant="text" />
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
+
+                    {!loading &&
+                        rows.map((row) => (
+                            <TableRow
+                                key={getRowKey(row)}
+                                hover={!!onRowClick}
+                                onClick={() => onRowClick?.(row)}
+                                sx={{
+                                    cursor: onRowClick ? 'pointer' : 'default'
+                                }}
+                            >
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.key}
+                                        align={column.align}
+                                        sx={{
+                                            width: column.width,
+                                            fontSize: '0.625rem',
+                                            fontWeight: 400,
+                                            color: '#2A2A2A',
+                                            py: 1
+                                        }}
+                                    >
+                                        {column.render(row)}
                                     </TableCell>
                                 ))}
                             </TableRow>

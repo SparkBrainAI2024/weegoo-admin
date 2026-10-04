@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { Box, Chip, IconButton, Stack, Typography } from '@mui/material';
+import { Chip, IconButton, Stack, Typography } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { Column, DataTable } from 'components/ui-component/DataTable';
+import { Column, CompactDataTable } from 'components/ui-component/DataTable';
 import { SubLocation } from 'graphql/queries/locations.queries';
 
 type StationRow = SubLocation & { index: number };
@@ -19,7 +19,12 @@ export default function BusStationsTable({ stations, loading, onEdit, onDelete }
 
     const columns: Column<StationRow>[] = [
         { key: 'index', header: '#', width: '8%', render: (row) => row.index },
-        { key: 'address', header: 'Bus Station Name', width: '32%', render: (row) => <Box fontWeight={600}>{row.address}</Box> },
+        {
+            key: 'address',
+            header: 'Bus Station Name',
+            width: '32%',
+            render: (row) => row.address
+        },
         { key: 'latitude', header: 'Latitude', width: '15%', render: (row) => row.latitude },
         { key: 'longitude', header: 'Longitude', width: '15%', render: (row) => row.longitude },
         {
@@ -32,7 +37,7 @@ export default function BusStationsTable({ stations, loading, onEdit, onDelete }
                     label={row.status === 'ACTIVE' ? 'Active' : 'Inactive'}
                     color={row.status === 'ACTIVE' ? 'success' : 'default'}
                     variant="outlined"
-                    sx={{ fontSize: 11 }}
+                    sx={{ fontSize: '0.6875rem' }}
                 />
             )
         },
@@ -52,10 +57,10 @@ export default function BusStationsTable({ stations, loading, onEdit, onDelete }
             )
         }
     ];
-
     return (
         <>
-            <DataTable columns={columns} rows={rows} loading={loading} getRowKey={(row) => row._id} skeletonRows={5} />
+            <CompactDataTable columns={columns} rows={rows} loading={loading} getRowKey={(row) => row._id} skeletonRows={5} />
+
             {!loading && rows.length === 0 && (
                 <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 4 }}>
                     No bus stations added yet
