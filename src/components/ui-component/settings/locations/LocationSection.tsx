@@ -8,11 +8,13 @@ import LocationList from './LocationList';
 import { useLocations } from 'hooks/useLocations';
 import { useLocation } from 'hooks/useLocation';
 import LocationDetailPanel from './LocationDetailPanel';
+import { LOCATION_ROUTES } from '../constants/routes';
+import { useNavigate } from 'react-router';
 
 export default function LocationsSection() {
     const { getParam, updateParams } = useUrlParams();
     const selectedId = getParam<string>('locationId', '') || null;
-
+    const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState('');
     const debouncedSearch = useDebounce(searchInput, 400);
 
@@ -28,7 +30,9 @@ export default function LocationsSection() {
     }, [selectedId, locations]);
 
     // TODO: open dialogs + wire mutations once shared
-    const handleAddLocation = () => {};
+    const handleAddLocation = () => {
+        navigate(LOCATION_ROUTES.new);
+    };
 
     return (
         <Stack gap={3} p={1}>

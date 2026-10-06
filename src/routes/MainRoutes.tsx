@@ -7,6 +7,14 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 
 import NewPage from 'views/pages/create-new-page';
 import NewEmailTemplate from 'views/pages/create-email-template';
+import { Navigate } from 'react-router';
+import CompanyInfoSection from 'components/ui-component/settings/CompanyInfoSection';
+import PricingFeesSection from 'components/ui-component/settings/PricingFeesSection';
+import MaintenanceSection from 'components/ui-component/settings/MaintenanceSection';
+import NotificationsSection from 'components/ui-component/settings/NotificationsSection';
+import LocationsSection from 'components/ui-component/settings/locations/LocationSection';
+import LocationFormPage from 'components/ui-component/settings/locations/LocationFormPage';
+import StationFormPage from 'components/ui-component/settings/locations/StationFormPage';
 
 // dashboard routing
 
@@ -93,7 +101,19 @@ const MainRoutes = {
         },
         {
             path: '/settings',
-            element: <SettingsPage />
+            element: <SettingsPage />,
+            children: [
+                { index: true, element: <Navigate to="/settings/company" replace /> },
+                { path: 'company', element: <CompanyInfoSection /> },
+                { path: 'pricing', element: <PricingFeesSection /> },
+                { path: 'maintenance', element: <MaintenanceSection /> },
+                { path: 'notifications', element: <NotificationsSection /> },
+                { path: 'location', element: <LocationsSection /> },
+                { path: 'location/new', element: <LocationFormPage /> },
+                { path: 'location/:locationId/edit', element: <LocationFormPage /> },
+                { path: 'location/:locationId/stations/new', element: <StationFormPage /> },
+                { path: 'location/:locationId/stations/:stationId/edit', element: <StationFormPage /> }
+            ]
         },
         {
             path: '/page-management',

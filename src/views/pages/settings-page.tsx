@@ -1,11 +1,8 @@
-import { useState, SyntheticEvent } from 'react';
+import { SyntheticEvent } from 'react';
 import { Box, Tabs, Tab, Paper, Typography, Stack, Divider } from '@mui/material';
-import CompanyInfoSection from 'components/ui-component/settings/CompanyInfoSection';
-import PricingFeesSection from 'components/ui-component/settings/PricingFeesSection';
-import MaintenanceSection from 'components/ui-component/settings/MaintenanceSection';
-import NotificationsSection from 'components/ui-component/settings/NotificationsSection';
+
 import { SETTINGS_TAB_ICONS } from 'components/ui-component/settings/constants/settingsTabIcons';
-import LocationsSection from 'components/ui-component/settings/locations/LocationSection';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 
 const TABS = [
     { label: 'Company Information', value: 'company' },
@@ -18,10 +15,12 @@ const TABS = [
 type TabValue = (typeof TABS)[number]['value'];
 
 const SettingsPage = () => {
-    const [activeTab, setActiveTab] = useState<TabValue>('company');
+    const { pathname } = useLocation();
+    const navigate = useNavigate();
 
-    const handleChange = (_: SyntheticEvent, newValue: TabValue) => setActiveTab(newValue);
+    const activeTab = TABS.find((t) => pathname.startsWith(`/settings/${t.value}`))?.value ?? false;
 
+    const handleChange = (_: SyntheticEvent, value: TabValue) => navigate(`/settings/${value}`);
     return (
         <Paper
             elevation={0}
@@ -80,12 +79,8 @@ const SettingsPage = () => {
                         })}
                     </Tabs>
                 </Stack>
-                <Box sx={{ flex: 1 }}>
-                    {activeTab === 'company' && <CompanyInfoSection />}
-                    {activeTab === 'pricing' && <PricingFeesSection />}
-                    {activeTab === 'maintenance' && <MaintenanceSection />}
-                    {activeTab === 'notifications' && <NotificationsSection />}
-                    {activeTab === 'location' && <LocationsSection />}
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Outlet />
                 </Box>
             </Stack>
         </Paper>

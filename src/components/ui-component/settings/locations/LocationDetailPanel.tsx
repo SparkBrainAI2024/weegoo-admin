@@ -5,6 +5,8 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BusStationsTable from './BusStationsTable';
 import { LocationDetail } from 'graphql/queries/locations.queries';
+import { LOCATION_ROUTES } from '../constants/routes';
+import { useNavigate } from 'react-router';
 
 interface Props {
     location?: LocationDetail;
@@ -14,6 +16,7 @@ interface Props {
 export default function LocationDetailPanel({ location, loading }: Props) {
     // TODO: wire to dialogs + mutations
     const noop = () => {};
+    const navigate = useNavigate();
 
     if (loading) {
         return (
@@ -50,7 +53,13 @@ export default function LocationDetailPanel({ location, loading }: Props) {
                         {location.name}
                     </Typography>
                     <Stack direction="row" gap={1}>
-                        <Button size="small" variant="outlined" color="inherit" startIcon={<EditOutlinedIcon />} onClick={noop}>
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            color="inherit"
+                            startIcon={<EditOutlinedIcon />}
+                            onClick={() => navigate(LOCATION_ROUTES.edit(location._id))}
+                        >
                             Edit
                         </Button>
                         <Button size="small" variant="outlined" color="error" startIcon={<DeleteOutlineIcon />} onClick={noop}>
@@ -90,7 +99,7 @@ export default function LocationDetailPanel({ location, loading }: Props) {
                                 py: 0.5,
                                 px: 1.5
                             }}
-                            onClick={noop}
+                            onClick={() => navigate(LOCATION_ROUTES.newStation(location._id))}
                         >
                             Add Bus Station
                         </Button>
