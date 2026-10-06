@@ -109,7 +109,7 @@ export const CompactDataTable = <T,>({ columns, rows, loading, getRowKey, onRowC
                         backgroundColor: '#F2F3F5',
                         '& .MuiTableCell-root': {
                             padding: '6px 16px',
-                            fontSize: '0.6rem',
+                            fontSize: '11px',
                             fontWeight: 600,
                             color: '#2A2A2A'
                         }
