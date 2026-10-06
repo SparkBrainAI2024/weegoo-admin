@@ -4,9 +4,11 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BusStationsTable from './BusStationsTable';
-import { LocationDetail } from 'graphql/queries/locations.queries';
+import { LocationDetail, SubLocation } from 'graphql/queries/locations.queries';
 import { LOCATION_ROUTES } from '../constants/routes';
 import { useNavigate } from 'react-router';
+import DeleteLocationDialog from './DeleteLocationDialog';
+import { useState } from 'react';
 
 interface Props {
     location?: LocationDetail;
@@ -17,7 +19,8 @@ export default function LocationDetailPanel({ location, loading }: Props) {
     // TODO: wire to dialogs + mutations
     const noop = () => {};
     const navigate = useNavigate();
-
+    const [deleteLocationOpen, setDeleteLocationOpen] = useState(false);
+    const [stationToDelete, setStationToDelete] = useState<SubLocation | null>(null);
     if (loading) {
         return (
             <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3 }}>
@@ -62,7 +65,13 @@ export default function LocationDetailPanel({ location, loading }: Props) {
                         >
                             Edit
                         </Button>
-                        <Button size="small" variant="outlined" color="error" startIcon={<DeleteOutlineIcon />} onClick={noop}>
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            color="error"
+                            startIcon={<DeleteOutlineIcon />}
+                            onClick={() => setDeleteLocationOpen(true)}
+                        >
                             Delete
                         </Button>
                     </Stack>
@@ -107,6 +116,13 @@ export default function LocationDetailPanel({ location, loading }: Props) {
                     <BusStationsTable stations={location.subLocations} loading={false} onEdit={noop} onDelete={noop} />
                 </Stack>
             </Stack>
+            {deleteLocationOpen && (
+                <DeleteLocationDialog
+                    location={location}
+                    onClose={() => setDeleteLocationOpen(false)}
+                    onDeleted={() => navigate(LOCATION_ROUTES.list, { replace: true })}
+                />
+            )}
         </Paper>
     );
 }

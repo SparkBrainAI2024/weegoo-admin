@@ -1,11 +1,34 @@
 import { gql, TypedDocumentNode } from '@apollo/client';
-import { LocationStatus } from 'graphql/queries/locations.queries';
+import { LocationDetail, LocationStatus } from 'graphql/queries/locations.queries';
 
 export interface LocationInput {
     name: string;
     status: LocationStatus;
 }
 
+export const REMOVE_LOCATION: TypedDocumentNode<{ removeLocation: boolean }, { removeLocationId: string }> = gql`
+    mutation RemoveLocation($removeLocationId: ID!) {
+        removeLocation(id: $removeLocationId)
+    }
+`;
+
+export const REMOVE_SUB_LOCATION: TypedDocumentNode<{ removeSubLocation: LocationDetail }, { locationId: string; subLocationId: string }> =
+    gql`
+        mutation RemoveSubLocation($locationId: ID!, $subLocationId: ID!) {
+            removeSubLocation(locationId: $locationId, subLocationId: $subLocationId) {
+                _id
+                name
+                status
+                subLocations {
+                    _id
+                    address
+                    latitude
+                    longitude
+                    status
+                }
+            }
+        }
+    `;
 export interface LocationSummary {
     _id: string;
     createdAt: string;
