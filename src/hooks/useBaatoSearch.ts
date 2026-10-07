@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlaceSuggestion, searchBaato } from '../api/baato';
 
 export function useBaatoSearch(query: string) {
     const [results, setResults] = useState<PlaceSuggestion[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [resolving, setResolving] = useState(false);
-    const requestId = useRef(0);
 
     useEffect(() => {
         const q = query.trim();

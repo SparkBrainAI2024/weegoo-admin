@@ -251,7 +251,7 @@ export default function StationFormPage() {
                 <Button variant="outlined" color="inherit" onClick={backToLocation} disabled={submitting}>
                     Cancel
                 </Button>
-                <Button variant="contained" color="success" onClick={handleSave} disabled={!selected || submitting || !dirty}>
+                <Button variant="contained" color="success" onClick={handleSave} disabled={!selected || submitting || resolving || !dirty}>
                     Save Bus Station
                 </Button>
             </Stack>
