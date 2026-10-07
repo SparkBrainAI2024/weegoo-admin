@@ -60,4 +60,47 @@ export const UPDATE_LOCATION: TypedDocumentNode<{ updateLocation: LocationSummar
                 status
             }
         }
-    `;
+    `; // merge with your existing imports
+
+export interface SubLocationInput {
+    address: string;
+    latitude: number;
+    longitude: number;
+    status: LocationStatus;
+}
+
+const LOCATION_WITH_STATIONS = `
+    _id
+    name
+    status
+    subLocations {
+        _id
+        address
+        latitude
+        longitude
+        status
+    }
+`;
+
+// ASSUMED signature, confirm in the playground
+export const CREATE_SUB_LOCATION: TypedDocumentNode<
+    { createSubLocation: LocationDetail },
+    { locationId: string; input: SubLocationInput }
+> = gql`
+    mutation CreateSubLocation($locationId: ID!, $input: AddSubLocationInput!) {
+        addSubLocation(locationId: $locationId, input: $input) {
+            ${LOCATION_WITH_STATIONS}
+        }
+    }
+`;
+
+export const UPDATE_SUB_LOCATION: TypedDocumentNode<
+    { updateSubLocation: LocationDetail },
+    { locationId: string; subLocationId: string; input: Omit<SubLocationInput, 'status'> }
+> = gql`
+    mutation UpdateSubLocation($locationId: ID!, $subLocationId: ID!, $input: UpdateSubLocationInput!) {
+        updateSubLocation(locationId: $locationId, subLocationId: $subLocationId, input: $input) {
+            ${LOCATION_WITH_STATIONS}
+        }
+    }
+`;
