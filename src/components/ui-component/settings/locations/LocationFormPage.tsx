@@ -11,7 +11,9 @@ import { useUpdateLocation } from 'hooks/useUpdateLocation';
 import BusStationsTable from './BusStationsTable';
 import { useLocationDetail } from 'hooks/useLocationDetail';
 import { LOCATION_ROUTES } from '../constants/routes';
-import { LocationStatus } from 'graphql/queries/locations.queries';
+import { LocationStatus, SubLocation } from 'graphql/queries/locations.queries';
+import { useState } from 'react'; // if not already imported
+import DeleteStationDialog from './DeleteStationDialog';
 
 interface FormValues {
     name: string;
@@ -23,6 +25,7 @@ export default function LocationFormPage() {
     const isEdit = Boolean(locationId);
     const navigate = useNavigate();
     const { showSuccess, showError } = useNotification();
+    const [stationToDelete, setStationToDelete] = useState<SubLocation | null>(null);
 
     const { location, loading } = useLocationDetail(locationId ?? null);
     const { createLocation } = useCreateLocation();
@@ -165,9 +168,7 @@ export default function LocationFormPage() {
                             stations={location.subLocations}
                             loading={false}
                             onEdit={(s) => navigate(LOCATION_ROUTES.editStation(location._id, s._id))}
-                            onDelete={() => {
-                                /* TODO next step: ConfirmDeleteDialog + removeSubLocation */
-                            }}
+                            onDelete={setStationToDelete}
                         />
 
                         <Alert severity="success" icon={false} sx={{ fontSize: 12 }}>
@@ -175,6 +176,9 @@ export default function LocationFormPage() {
                             stations, and customers can book rides using the same locations in the mobile app.
                         </Alert>
                     </Stack>
+                    {stationToDelete && location && (
+                        <DeleteStationDialog locationId={location._id} station={stationToDelete} onClose={() => setStationToDelete(null)} />
+                    )}
                 </Paper>
             )}
         </Stack>

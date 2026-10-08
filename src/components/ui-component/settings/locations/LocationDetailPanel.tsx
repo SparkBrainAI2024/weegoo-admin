@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import { Avatar, Button, Paper, Skeleton, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useNavigate } from 'react-router';
+
 import BusStationsTable from './BusStationsTable';
+import DeleteLocationDialog from './DeleteLocationDialog';
+import DeleteStationDialog from './DeleteStationDialog';
 import { LocationDetail, SubLocation } from 'graphql/queries/locations.queries';
 import { LOCATION_ROUTES } from '../constants/routes';
-import { useNavigate } from 'react-router';
-import DeleteLocationDialog from './DeleteLocationDialog';
-import { useState } from 'react';
 
 interface Props {
     location?: LocationDetail;
@@ -16,11 +18,11 @@ interface Props {
 }
 
 export default function LocationDetailPanel({ location, loading }: Props) {
-    // TODO: wire to dialogs + mutations
-    const noop = () => {};
     const navigate = useNavigate();
     const [deleteLocationOpen, setDeleteLocationOpen] = useState(false);
     const [stationToDelete, setStationToDelete] = useState<SubLocation | null>(null);
+    const noop = () => {};
+
     if (loading) {
         return (
             <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3 }}>
@@ -44,17 +46,10 @@ export default function LocationDetailPanel({ location, loading }: Props) {
     const count = location.subLocations.length;
 
     return (
-        <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 3 }}>
-            <Stack gap={1.5}>
+        <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3 }}>
+            <Stack gap={3}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography
-                        variant="h5"
-                        sx={{
-                            fontWeight: '500'
-                        }}
-                    >
-                        {location.name}
-                    </Typography>
+                    <Typography variant="h4">{location.name}</Typography>
                     <Stack direction="row" gap={1}>
                         <Button
                             size="small"
@@ -83,9 +78,7 @@ export default function LocationDetailPanel({ location, loading }: Props) {
                             <LocationOnIcon fontSize="small" />
                         </Avatar>
                         <Stack>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                                {location.name}
-                            </Typography>
+                            <Typography variant="subtitle1">{location.name}</Typography>
                             <Typography variant="caption" color="text.secondary">
                                 {count} bus stations
                             </Typography>
@@ -95,33 +88,36 @@ export default function LocationDetailPanel({ location, loading }: Props) {
 
                 <Stack gap={1.5}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h6" sx={{ fontWeight: '450' }}>
-                            Bus Stations ({count})
-                        </Typography>
+                        <Typography variant="h5">Bus Stations ({count})</Typography>
                         <Button
                             size="small"
                             variant="contained"
                             color="success"
                             startIcon={<AddIcon />}
-                            sx={{
-                                fontSize: '0.75rem', // 13px
-                                py: 0.5,
-                                px: 1.5
-                            }}
                             onClick={() => navigate(LOCATION_ROUTES.newStation(location._id))}
                         >
                             Add Bus Station
                         </Button>
                     </Stack>
-                    <BusStationsTable stations={location.subLocations} loading={false} onEdit={noop} onDelete={noop} />
+
+                    <BusStationsTable
+                        stations={location.subLocations}
+                        loading={false}
+                        onEdit={(s) => navigate(LOCATION_ROUTES.editStation(location._id, s._id))}
+                        onDelete={setStationToDelete}
+                    />
                 </Stack>
             </Stack>
+
             {deleteLocationOpen && (
                 <DeleteLocationDialog
                     location={location}
                     onClose={() => setDeleteLocationOpen(false)}
                     onDeleted={() => navigate(LOCATION_ROUTES.list, { replace: true })}
                 />
+            )}
+            {stationToDelete && (
+                <DeleteStationDialog locationId={location._id} station={stationToDelete} onClose={() => setStationToDelete(null)} />
             )}
         </Paper>
     );
