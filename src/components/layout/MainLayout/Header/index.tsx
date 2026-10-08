@@ -95,7 +95,9 @@ const Header = () => {
         <>
             <Stack direction="row" alignItems="center" spacing={1.5}>
                 {Icon && <Icon stroke={1.5} size="24px" />}
-                <Typography variant="pageTitle">{title}</Typography>
+                <Typography variant="pageTitle" sx={{ fontSize: '27px' }}>
+                    {title}
+                </Typography>
             </Stack>
 
             <Box sx={{ marginLeft: '12px', padding: '0 !important' }}>

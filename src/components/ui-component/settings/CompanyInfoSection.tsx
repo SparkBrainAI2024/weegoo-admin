@@ -66,7 +66,7 @@ export default function CompanyInfoSection() {
                 onClose={clearNotification}
                 severity={notification?.severity ?? 'success'}
             />
-            <Box sx={{ p: 3 }}>
+            <Box sx={{ p: 2 }}>
                 <Stack spacing={0.5} sx={{ mb: 4 }}>
                     <Typography variant="h4" fontWeight={600}>
                         Company Info
