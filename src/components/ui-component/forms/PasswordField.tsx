@@ -16,6 +16,9 @@ export const PasswordField = <T extends FormikValues>({
     const touched = formik.touched?.[name];
     const error = formik.errors?.[name];
     const [showPassword, setShowPassword] = useState(false);
+    const [shrink, setShrink] = useState(false);
+
+    const value = formik.values[name] as string;
 
     return (
         <TextField
@@ -24,24 +27,16 @@ export const PasswordField = <T extends FormikValues>({
             name={String(name)}
             label={label}
             type={showPassword ? 'text' : 'password'}
-            value={formik.values[name]}
+            value={value}
             onChange={onChange || formik.handleChange}
             onBlur={formik.handleBlur}
-            error={touched && Boolean(error)}
+            error={Boolean(touched && error)}
             helperText={touched && (error as string)}
-            // 1. Catch the autofill animation event here
-            onAnimationStart={(e) => {
-                if (e.animationName === 'mui-auto-fill') {
-                    formik.setFieldValue(String(name), (e.target as HTMLInputElement).value);
-                }
+            // This controls the floating label
+            InputLabelProps={{
+                shrink: shrink || Boolean(value)
             }}
             InputProps={{
-                // 2. Attach the animation name to the underlying native input element
-                inputProps: {
-                    style: {
-                        animationName: 'mui-auto-fill'
-                    }
-                },
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
@@ -49,6 +44,21 @@ export const PasswordField = <T extends FormikValues>({
                         </IconButton>
                     </InputAdornment>
                 )
+            }}
+            // Put the autofill detection on the native input
+            inputProps={{
+                onAnimationStart: (e: React.AnimationEvent<HTMLInputElement>) => {
+                    if (e.animationName === 'mui-auto-fill') {
+                        setShrink(true);
+                        // Also update Formik value (important)
+                        formik.setFieldValue(String(name), e.currentTarget.value);
+                    }
+                },
+                onAnimationEnd: (e: React.AnimationEvent<HTMLInputElement>) => {
+                    if (e.animationName === 'mui-auto-fill-cancel') {
+                        setShrink(false);
+                    }
+                }
             }}
         />
     );
