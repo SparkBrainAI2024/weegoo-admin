@@ -5,22 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+
 import Chip from '@mui/material/Chip';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import InputAdornment from '@mui/material/InputAdornment';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
-import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
 // third-party
@@ -30,12 +25,11 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import MainCard from 'components/ui-component/cards/MainCard';
 import Transitions from 'components/ui-component/extended/Transitions';
-import UpgradePlanCard from './UpgradePlanCard';
 import useAuth from 'hooks/useAuth';
 import User1 from 'assets/images/users/user-round.svg';
 
 // assets
-import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
+import { IconLogout, IconSettings } from '@tabler/icons-react';
 import useConfig from 'hooks/useConfig';
 
 // types
@@ -177,12 +171,11 @@ const ProfileSection = () => {
                                                 </Stack>
                                                 <Typography variant="subtitle2">Project Admin</Typography>
                                             </Stack>
-                                          
+
                                             <Divider />
                                         </Box>
                                         <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                                             <Box sx={{ p: 2, pt: 0 }}>
-                                             
                                                 <List
                                                     component="nav"
                                                     sx={{
@@ -197,7 +190,7 @@ const ProfileSection = () => {
                                                         sx={{ borderRadius: `${borderRadius}px` }}
                                                         selected={selectedIndex === 0}
                                                         onClick={(event: React.MouseEvent<HTMLDivElement>) =>
-                                                            handleListItemClick(event, 0, '/apps/user/account-profile/profile1')
+                                                            handleListItemClick(event, 0, '/profile')
                                                         }
                                                     >
                                                         <ListItemIcon>
@@ -211,7 +204,7 @@ const ProfileSection = () => {
                                                             }
                                                         />
                                                     </ListItemButton>
-                                             
+
                                                     <ListItemButton
                                                         sx={{ borderRadius: `${borderRadius}px` }}
                                                         selected={selectedIndex === 4}

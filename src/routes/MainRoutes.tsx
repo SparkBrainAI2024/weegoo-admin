@@ -15,6 +15,7 @@ import NotificationsSection from 'components/ui-component/settings/Notifications
 import LocationsSection from 'components/ui-component/settings/locations/LocationSection';
 import LocationFormPage from 'components/ui-component/settings/locations/LocationFormPage';
 import StationFormPage from 'components/ui-component/settings/locations/StationFormPage';
+import AdminProfilePage from 'views/pages/admin-profile.page';
 
 // dashboard routing
 
@@ -98,6 +99,10 @@ const MainRoutes = {
         {
             path: '/reports/:id',
             element: <IssueDetailPage />
+        },
+        {
+            path: '/profile',
+            element: <AdminProfilePage />
         },
         {
             path: '/settings',
