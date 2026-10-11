@@ -71,6 +71,7 @@ export interface SignInResponse {
     admin: {
         email: string;
         _id: string;
+        fullName: string;
     };
 }
 
