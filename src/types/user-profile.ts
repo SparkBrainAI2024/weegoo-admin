@@ -10,7 +10,8 @@ export type UserProfile = {
     id?: string;
     avatar?: string;
     image?: string;
-    full_name?: string;
+    fullName?: string;
+    name?: string;
     role?: string;
     about?: string;
     email?: string;

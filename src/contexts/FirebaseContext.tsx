@@ -50,8 +50,7 @@ export const FirebaseProvider = ({ children }: { children: React.ReactElement })
                             isLoggedIn: true,
                             user: {
                                 id: user.uid,
-                                email: user.email!,
-                                name: user.displayName || 'John Doe'
+                                email: user.email!
                             }
                         }
                     });
