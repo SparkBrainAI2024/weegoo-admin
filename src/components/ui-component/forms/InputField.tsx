@@ -1,10 +1,14 @@
 import { TextField } from '@mui/material';
 import { FormikValues, useFormikContext } from 'formik';
+import { useState } from 'react';
 
 export const InputField = <T extends FormikValues>({ name, label, type = 'text' }: { name: keyof T; label: string; type?: string }) => {
     const formik = useFormikContext<T>();
     const touched = formik.touched?.[name];
     const error = formik.errors?.[name];
+    const [shrink, setShrink] = useState(false);
+
+    const value = formik.values[name] as string;
 
     return (
         <TextField
@@ -13,22 +17,24 @@ export const InputField = <T extends FormikValues>({ name, label, type = 'text' 
             name={String(name)}
             label={label}
             type={type}
-            value={formik.values[name]}
+            value={value || ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={touched && Boolean(error)}
+            error={Boolean(touched && error)}
             helperText={touched && (error as string)}
-            // 1. Catch the autofill animation event
-            onAnimationStart={(e) => {
-                if (e.animationName === 'mui-auto-fill') {
-                    formik.setFieldValue(String(name), (e.target as HTMLInputElement).value);
-                }
+            InputLabelProps={{
+                shrink: shrink || Boolean(value)
             }}
-            InputProps={{
-                // 2. Attach the animation style to the native input element
-                inputProps: {
-                    style: {
-                        animationName: 'mui-auto-fill'
+            inputProps={{
+                onAnimationStart: (e: React.AnimationEvent<HTMLInputElement>) => {
+                    if (e.animationName === 'mui-auto-fill') {
+                        setShrink(true);
+                        formik.setFieldValue(String(name), e.currentTarget.value);
+                    }
+                },
+                onAnimationEnd: (e: React.AnimationEvent<HTMLInputElement>) => {
+                    if (e.animationName === 'mui-auto-fill-cancel') {
+                        setShrink(false);
                     }
                 }
             }}
