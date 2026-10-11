@@ -66,7 +66,7 @@ const linkList = [
                 label: 'Social Profile'
             },
             {
-                link: '/apps/user/account-profile/profile1',
+                link: '/profile',
                 label: 'Account Profile'
             },
             {

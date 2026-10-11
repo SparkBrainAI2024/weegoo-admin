@@ -86,7 +86,6 @@ export const Auth0Provider = ({ children }: { children: React.ReactElement }) =>
                         id: user?.sub,
                         avatar: user?.picture,
                         email: user?.email,
-                        name: user?.name,
                         tier: 'Premium'
                     }
                 }
