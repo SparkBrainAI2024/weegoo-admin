@@ -39,8 +39,6 @@ export const GET_LOCATION: TypedDocumentNode<GetLocationData, GetLocationVars> =
             deletedAt
             deleted
             name
-            latitude
-            longitude
             status
             subLocations {
                 _id
@@ -107,8 +105,6 @@ export const GET_LOCATIONS: TypedDocumentNode<GetLocationsData, GetLocationsVars
                 deletedAt
                 deleted
                 name
-                latitude
-                longitude
                 status
                 subLocations {
                     _id
