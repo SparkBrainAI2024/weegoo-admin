@@ -80,6 +80,7 @@ export const UPSERT_COMPANY_INFO: TypedDocumentNode<UpsertCompanyInfoResult, Ups
 
 export interface UpsertMaintenanceInfoInput {
     message: string;
+    isActive: boolean;
 }
 
 export interface UpsertMaintenanceInfoResult {
@@ -99,6 +100,7 @@ export const UPSERT_MAINTENANCE_INFO: TypedDocumentNode<UpsertMaintenanceInfoRes
             deletedAt
             deleted
             message
+            isActive
         }
     }
 `;

@@ -23,6 +23,7 @@ export interface MaintenanceInfo {
     deletedAt: string | null;
     deleted: boolean;
     message: string;
+    isActive: boolean;
 }
 
 export interface GetMaintenanceInfoResult {
@@ -38,6 +39,7 @@ export const GET_MAINTENANCE_INFO: TypedDocumentNode<GetMaintenanceInfoResult, R
             deletedAt
             deleted
             message
+            isActive
         }
     }
 `;

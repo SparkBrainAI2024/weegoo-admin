@@ -8,13 +8,15 @@ export default function MaintenanceSection() {
     const { data, loading, saving, save } = useMaintenanceStatus();
     const { showSuccess, showError, notification, clearNotification } = useNotification();
 
-    // enabled toggle is local-only for now — no backend field yet
     const [enabled, setEnabled] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState<string | undefined>();
 
     useEffect(() => {
-        if (data) setMessage(data.message);
+        if (data) {
+            setMessage(data.message);
+            setEnabled(data.isActive);
+        }
     }, [data]);
 
     const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +28,10 @@ export default function MaintenanceSection() {
     };
 
     const handleCancel = () => {
-        if (data) setMessage(data.message);
+        if (data) {
+            setMessage(data.message);
+            setEnabled(data.isActive);
+        }
         setError(undefined);
     };
 
@@ -37,7 +42,7 @@ export default function MaintenanceSection() {
         }
         setError(undefined);
         try {
-            await save({ message });
+            await save({ message, isActive: enabled });
             showSuccess('Maintenance settings updated successfully');
         } catch {
             showError('Failed to update maintenance settings');
