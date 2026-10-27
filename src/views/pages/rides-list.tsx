@@ -3,10 +3,11 @@ import { Box, Button, Icon, MenuItem, Select, TablePagination, TextField, Typogr
 import { InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
-
+import FlashOnIcon from '@mui/icons-material/FlashOn';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Column, DataTable } from 'components/ui-component/DataTable';
 import { useDebounce } from '../../hooks/useDebounce';
-import { RideStatus, RideTimeRange, useRidesList } from 'graphql/queries/rides.queries';
+import { RideStatus, RideTimeRange, RideType, useRidesList } from 'graphql/queries/rides.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
 import MainCard from 'components/ui-component/cards/MainCard';
 import { SpaciousChipContainer } from 'components/ui-component/SpaciousChipContainer';
@@ -33,6 +34,7 @@ interface RideRow {
     _id: string;
     rideUUId: string;
     rideStatus: RideStatus;
+    rideType: RideType;
     bookingTime: string;
     pickupLocation?: { address?: string };
     dropoffLocation?: { address?: string };
@@ -86,6 +88,20 @@ const RidesList = () => {
         { key: 'rideId', header: 'RIDE ID', render: (row) => row.rideUUId },
         { key: 'passeger', header: 'PASSENGER', render: (row) => row.passenger?.fullName ?? '—' },
         { key: 'driver', header: 'DRIVER', render: (row) => row.driver?.fullName ?? '—' },
+        {
+            key: 'type',
+            header: 'TYPE',
+            render: (row) => {
+                const isInstant = row.rideType === 'INSTANT';
+                return (
+                    <SpaciousChipContainer
+                        label={isInstant ? 'Instant' : 'Scheduled'}
+                        color={isInstant ? 'success' : 'secondary'}
+                        icon={isInstant ? <FlashOnIcon sx={{ fontSize: 14 }} /> : <AccessTimeIcon sx={{ fontSize: 14 }} />}
+                    />
+                );
+            }
+        },
         {
             key: 'pickup',
             header: 'PICK UP',
