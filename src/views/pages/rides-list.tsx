@@ -13,6 +13,7 @@ import { SpaciousChipContainer } from 'components/ui-component/SpaciousChipConta
 import RidePickupIcon from '../../assets/images/icons/pickup_icon.png';
 import RideDropoffIcon from '../../assets/images/icons/destination_icon.png';
 import { CustomPaginationActions } from 'components/ui-component/actionsComponent';
+import RideToggleFilter from 'components/ui-component/RideToggleFilter';
 const STATUS_COLORS: Record<RideStatus, 'warning' | 'success' | 'error' | 'default'> = {
     [RideStatus.ONGOING]: 'warning',
     [RideStatus.COMPLETED]: 'success',
@@ -209,10 +210,11 @@ const RidesList = () => {
                 }}
             >
                 {' '}
-                <Box sx={{ px: 3, pt: 3, pb: 2 }}>
+                <Box sx={{ px: 3, pt: 3, pb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Typography variant="h3" fontWeight={500}>
                         All Rides
                     </Typography>
+                    <RideToggleFilter />
                 </Box>
                 <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row._id} />
             </MainCard>
