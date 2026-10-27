@@ -94,6 +94,7 @@ export interface RidesListInput {
     page: number;
     limit: number;
     status?: RideStatus;
+    type?: RideType;
     timeRange: RideTimeRange;
     search?: string;
 }
@@ -148,12 +149,14 @@ export const buildRidesListInput = ({
     page,
     perPage,
     status,
+    type,
     timeRange,
     search
 }: {
     page?: number;
     perPage?: number;
     status?: RideStatus | '';
+    type?: RideType | '';
     timeRange?: RideTimeRange;
     search?: string;
 }): RidesListInput => {
@@ -161,6 +164,7 @@ export const buildRidesListInput = ({
         page: page ?? 1,
         limit: perPage ?? 10,
         status: status || undefined,
+        type: type || undefined,
         timeRange: timeRange ?? RideTimeRange.LAST_24_HOURS,
         search: search || undefined
     };

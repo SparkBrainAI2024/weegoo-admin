@@ -50,6 +50,7 @@ const RidesList = () => {
 
     // URL-derived filter/pagination state — single source of truth
     const status = getParam<RideStatus | ''>('status', '');
+    const type = getParam<RideType | ''>('type', '');
     const timeRange = getParam<RideTimeRange>('timeRange', RideTimeRange.LAST_24_HOURS);
     const search = getParam<string>('search', '');
     const page = getParam<number>('page', 0, Number);
@@ -71,6 +72,7 @@ const RidesList = () => {
         page,
         perPage: limit,
         status,
+        type,
         timeRange,
         search: debouncedSearch
     });
