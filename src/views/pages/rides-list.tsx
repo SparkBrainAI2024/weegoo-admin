@@ -98,8 +98,12 @@ const RidesList = () => {
                 return (
                     <SpaciousChipContainer
                         label={isInstant ? 'Instant' : 'Scheduled'}
+                        labelColor={isInstant ? '#2E9E3A' : '#6D28D9'}
                         color={isInstant ? 'success' : 'secondary'}
                         icon={isInstant ? <FlashOnIcon sx={{ fontSize: 14 }} /> : <AccessTimeIcon sx={{ fontSize: 14 }} />}
+                        iconColor={isInstant ? '#2E9E3A' : '#6D28D9'}
+                        backgroundColor={isInstant ? '#e3f9e6' : '#eae2f7'}
+                        width={144}
                     />
                 );
             }
