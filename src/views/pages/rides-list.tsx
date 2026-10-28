@@ -3,16 +3,18 @@ import { Box, Button, Icon, MenuItem, Select, TablePagination, TextField, Typogr
 import { InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
-
+import FlashOnIcon from '@mui/icons-material/FlashOn';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Column, DataTable } from 'components/ui-component/DataTable';
 import { useDebounce } from '../../hooks/useDebounce';
-import { RideStatus, RideTimeRange, useRidesList } from 'graphql/queries/rides.queries';
+import { RideStatus, RideTimeRange, RideType, useRidesList } from 'graphql/queries/rides.queries';
 import { useUrlParams } from 'hooks/useSearchParams';
 import MainCard from 'components/ui-component/cards/MainCard';
 import { SpaciousChipContainer } from 'components/ui-component/SpaciousChipContainer';
 import RidePickupIcon from '../../assets/images/icons/pickup_icon.png';
 import RideDropoffIcon from '../../assets/images/icons/destination_icon.png';
 import { CustomPaginationActions } from 'components/ui-component/actionsComponent';
+import RideToggleFilter from 'components/ui-component/RideToggleFilter';
 const STATUS_COLORS: Record<RideStatus, 'warning' | 'success' | 'error' | 'default'> = {
     [RideStatus.ONGOING]: 'warning',
     [RideStatus.COMPLETED]: 'success',
@@ -32,6 +34,7 @@ interface RideRow {
     _id: string;
     rideUUId: string;
     rideStatus: RideStatus;
+    rideType: RideType;
     bookingTime: string;
     pickupLocation?: { address?: string };
     dropoffLocation?: { address?: string };
@@ -47,6 +50,7 @@ const RidesList = () => {
 
     // URL-derived filter/pagination state — single source of truth
     const status = getParam<RideStatus | ''>('status', '');
+    const type = getParam<RideType | ''>('type', '');
     const timeRange = getParam<RideTimeRange>('timeRange', RideTimeRange.LAST_24_HOURS);
     const search = getParam<string>('search', '');
     const page = getParam<number>('page', 0, Number);
@@ -68,6 +72,7 @@ const RidesList = () => {
         page,
         perPage: limit,
         status,
+        type,
         timeRange,
         search: debouncedSearch
     });
@@ -85,6 +90,24 @@ const RidesList = () => {
         { key: 'rideId', header: 'RIDE ID', render: (row) => row.rideUUId },
         { key: 'passeger', header: 'PASSENGER', render: (row) => row.passenger?.fullName ?? '—' },
         { key: 'driver', header: 'DRIVER', render: (row) => row.driver?.fullName ?? '—' },
+        {
+            key: 'type',
+            header: 'TYPE',
+            render: (row) => {
+                const isInstant = row.rideType === 'INSTANT';
+                return (
+                    <SpaciousChipContainer
+                        label={isInstant ? 'Instant' : 'Scheduled'}
+                        labelColor={isInstant ? '#2E9E3A' : '#6D28D9'}
+                        color={isInstant ? 'success' : 'secondary'}
+                        icon={isInstant ? <FlashOnIcon sx={{ fontSize: 14 }} /> : <AccessTimeIcon sx={{ fontSize: 14 }} />}
+                        iconColor={isInstant ? '#2E9E3A' : '#6D28D9'}
+                        backgroundColor={isInstant ? '#e3f9e6' : '#eae2f7'}
+                        width={144}
+                    />
+                );
+            }
+        },
         {
             key: 'pickup',
             header: 'PICK UP',
@@ -209,10 +232,11 @@ const RidesList = () => {
                 }}
             >
                 {' '}
-                <Box sx={{ px: 3, pt: 3, pb: 2 }}>
+                <Box sx={{ px: 3, pt: 3, pb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Typography variant="h3" fontWeight={500}>
                         All Rides
                     </Typography>
+                    <RideToggleFilter />
                 </Box>
                 <DataTable columns={columns} rows={rides} loading={loading} getRowKey={(row) => row._id} />
             </MainCard>

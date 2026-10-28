@@ -79,6 +79,11 @@ export enum RideStatus {
     PENDING = 'PENDING'
 }
 
+export enum RideType {
+    INSTANT = 'INSTANT',
+    SCHEDULED = 'SCHEDULED'
+}
+
 export enum RideTimeRange {
     LAST_24_HOURS = 'LAST_24_HOURS',
     LAST_7_DAYS = 'LAST_7_DAYS',
@@ -89,6 +94,7 @@ export interface RidesListInput {
     page: number;
     limit: number;
     status?: RideStatus;
+    type?: RideType;
     timeRange: RideTimeRange;
     search?: string;
 }
@@ -103,6 +109,7 @@ export const RIDES_QUERY = gql`
                 rideUUId
                 rideStatus
                 bookingTime
+                rideType
                 pickupLocation {
                     address
                 }
@@ -142,12 +149,14 @@ export const buildRidesListInput = ({
     page,
     perPage,
     status,
+    type,
     timeRange,
     search
 }: {
     page?: number;
     perPage?: number;
     status?: RideStatus | '';
+    type?: RideType | '';
     timeRange?: RideTimeRange;
     search?: string;
 }): RidesListInput => {
@@ -155,6 +164,7 @@ export const buildRidesListInput = ({
         page: page ?? 1,
         limit: perPage ?? 10,
         status: status || undefined,
+        type: type || undefined,
         timeRange: timeRange ?? RideTimeRange.LAST_24_HOURS,
         search: search || undefined
     };
@@ -173,6 +183,7 @@ export interface RideListItem {
     _id: string;
     rideUUId: string;
     rideStatus: RideStatus;
+    rideType: RideType;
     bookingTime: string;
     pickupLocation?: { address?: string };
     dropoffLocation?: { address?: string };
