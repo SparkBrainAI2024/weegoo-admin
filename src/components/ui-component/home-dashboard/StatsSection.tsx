@@ -104,7 +104,7 @@ export function StatsSection() {
                       </Grid>
                   ))
                 : cards.map((c) => (
-                      <Grid key={c.key} item xs={12} sm={6} md={2.4}>
+                      <Grid key={c.key} item xs={12} sm={2.4} md={2.4}>
                           <StatCard
                               label={c.label}
                               value={c.key === 'revenue' ? `Rs. ${c.value.toLocaleString()}` : c.value.toLocaleString()}

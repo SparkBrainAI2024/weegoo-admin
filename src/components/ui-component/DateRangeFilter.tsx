@@ -47,9 +47,17 @@ export function DateRangeFilter({ value, onChange }: DateRangeFilterProps) {
                 color="inherit"
                 startIcon={<IconCalendar size={18} stroke={1.5} />}
                 endIcon={<IconChevronDown size={16} stroke={1.5} />}
-                sx={{ borderColor: 'divider', color: 'text.primary', fontWeight: 500, textTransform: 'none', height: '48px' }}
+                sx={{
+                    borderColor: 'divider',
+                    color: 'text.primary',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    height: '48px',
+                    minWidth: { xs: '48px', sm: 'auto' },
+                    px: { xs: 1, sm: 2 }
+                }}
             >
-                {label}
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>{label}</Box>
             </Button>
 
             <Popover
