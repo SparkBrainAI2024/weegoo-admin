@@ -53,11 +53,11 @@ export function DateRangeFilter({ value, onChange }: DateRangeFilterProps) {
                     fontWeight: 500,
                     textTransform: 'none',
                     height: '48px',
-                    minWidth: { xs: '48px', sm: 'auto' },
+                    minWidth: { xs: '48px', sm: '48px', md: 'auto' },
                     px: { xs: 1, sm: 2 }
                 }}
             >
-                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>{label}</Box>
+                <Box sx={{ display: { xs: 'none', sm: 'none', md: 'block' } }}>{label}</Box>
             </Button>
 
             <Popover
