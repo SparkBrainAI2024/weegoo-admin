@@ -24,7 +24,7 @@ export function StatCard({ label, value, percentageChange, icon, iconBg = 'grey.
                 // cursor: onClick ? 'pointer' : 'default',
                 borderColor: '#f3f2f2',
                 borderTopWidth: 8,
-
+                height: ' 100%',
                 // borderTopColor: highlighted ? 'success.main' : 'divider',
                 // transition: 'border-top-color 0.15s ease',
                 boxShadow: '0 1px 2px rgba(16,24,40,0.05)',

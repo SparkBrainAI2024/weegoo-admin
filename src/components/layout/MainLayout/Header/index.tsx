@@ -93,7 +93,7 @@ const Header = () => {
 
     return (
         <>
-            <Stack direction="row" alignItems="center" spacing={1.5}>
+            <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5 }} sx={{ minWidth: 0, flexShrink: 0 }}>
                 {Icon && <Icon stroke={1.5} size="24px" />}
                 <Typography variant="pageTitle" sx={{ fontSize: '27px' }}>
                     {title}
