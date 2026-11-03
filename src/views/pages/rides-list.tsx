@@ -179,11 +179,12 @@ const RidesList = () => {
                 }}
             >
                 {' '}
-                <Box display="grid" gridTemplateColumns="3fr 1fr 1fr 1fr" gap={2}>
+                <Box display="grid" gridTemplateColumns={{ xs: 'repeat(2, minmax(0, 1fr))', md: '3fr 1fr 1fr 1fr' }} gap={2}>
                     <TextField
                         placeholder="Search by Ride ID, Driver, Passenger name...."
                         size="small"
                         fullWidth
+                        sx={{ gridColumn: { xs: '1 / -1', md: 'auto' }, minWidth: 0 }}
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                         InputProps={{
@@ -196,7 +197,7 @@ const RidesList = () => {
                     />
 
                     {/* 1 part empty */}
-                    <Box />
+                    <Box sx={{ display: { xs: 'none', md: 'block' } }} />
 
                     <Select
                         size="small"
@@ -232,8 +233,18 @@ const RidesList = () => {
                 }}
             >
                 {' '}
-                <Box sx={{ px: 3, pt: 3, pb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Typography variant="h3" fontWeight={500}>
+                <Box
+                    sx={{
+                        px: { xs: 2, sm: 3 },
+                        pt: 3,
+                        pb: 2,
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        alignItems: { xs: 'flex-start', md: 'center' },
+                        gap: { xs: 1, md: 2 }
+                    }}
+                >
+                    <Typography variant="h3" fontWeight={500} sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem', md: undefined } }}>
                         All Rides
                     </Typography>
                     <RideToggleFilter />

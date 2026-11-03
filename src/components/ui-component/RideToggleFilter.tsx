@@ -5,8 +5,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const TABS = [
     { key: '', label: 'All', icon: null },
-    { key: 'INSTANT', label: 'Instant', icon: <FlashOnIcon sx={{ fontSize: 16, color: '#4CAF50' }} /> },
-    { key: 'SCHEDULED', label: 'Scheduled', icon: <AccessTimeIcon sx={{ fontSize: 16, color: '#6D28D9' }} /> }
+    { key: 'INSTANT', label: 'Instant', icon: <FlashOnIcon sx={{ fontSize: { xs: 14, md: 16 }, color: '#4CAF50' }} /> },
+    { key: 'SCHEDULED', label: 'Scheduled', icon: <AccessTimeIcon sx={{ fontSize: { xs: 14, md: 16 }, color: '#6D28D9' }} /> }
 ];
 
 export default function RideToggleFilter() {
@@ -26,15 +26,15 @@ export default function RideToggleFilter() {
                     textTransform: 'none',
                     padding: '8px 20px',
                     border: '5px  solid #D1D5DB',
-                    px: 2.5,
-                    py: 0.75
+                    px: { xs: 1, md: 2.5 },
+                    py: { xs: 0.5, md: 0.75 }
                 },
                 '& .MuiToggleButtonGroup-grouped': {
                     border: '1.78pxpx solid #D1D5DB !important',
                     borderRadius: '20px !important',
                     textTransform: 'none',
-                    px: 2.5,
-                    py: 0.75
+                    px: { xs: 1, md: 2.5 },
+                    py: { xs: 0.5, md: 0.75 }
                 },
                 '& .Mui-selected': {
                     bgcolor: '#3DBB1F !important',
@@ -49,7 +49,7 @@ export default function RideToggleFilter() {
                         <Typography
                             variant="subtitle2"
                             sx={{
-                                fontSize: '13px',
+                                fontSize: { xs: '12px', md: '13px' },
                                 color: type === key ? 'grey.200' : 'text.primary'
                             }}
                         >
