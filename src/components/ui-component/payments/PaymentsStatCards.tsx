@@ -26,7 +26,7 @@ export default function PaymentsStatCards() {
 
     return (
         <Grid container spacing={gridSpacing}>
-            <Grid item xs={2} sm={6} md={3} sx={{ display: 'flex' }}>
+            <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
                 <StatCard
                     title="Total Commission"
                     value={formatCurrency(summary?.totalCommission.value ?? 0)}
@@ -38,7 +38,6 @@ export default function PaymentsStatCards() {
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={3} sx={{ display: 'flex' }}>
-                {' '}
                 <StatCard
                     title="Driver Wallet Balance"
                     value={formatCurrency(summary?.driverWalletBalance.value ?? 0)}
