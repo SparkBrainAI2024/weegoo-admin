@@ -22,8 +22,7 @@ import {
     ListItemIcon,
     ListItemText,
     Skeleton,
-    useTheme,
-    useMediaQuery
+    useTheme
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -139,14 +138,13 @@ const PassengerList = () => {
         setMenuAnchor(null);
     };
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <Stack gap={2.5}>
             <Box
                 sx={{
                     display: 'grid',
-                    gridTemplateColumns: '3fr 1fr 2fr',
+                    gridTemplateColumns: { xs: '1fr', md: '3fr 1fr 2fr' },
                     alignItems: 'center',
                     gap: 2,
                     paddingTop: '24px'
@@ -171,20 +169,23 @@ const PassengerList = () => {
                     }}
                 />
 
-                {/* 1 part empty */}
-                <Box />
+                <Box sx={{ display: { xs: 'none', md: 'block' } }} />
 
                 {/* 2 parts */}
                 <ToggleButtonGroup
                     exclusive
                     value={tab}
                     onChange={handleTabChange}
-                    orientation={isMobile ? 'vertical' : 'horizontal'}
+                    orientation="horizontal"
                     fullWidth
                     sx={{
+                        display: 'flex',
+                        width: '100%',
                         '& .MuiToggleButton-root': {
+                            flex: 1, // Distribute equal space across the 2fr slot
+                            minWidth: 0, // Prevents text overflow on smaller screens
                             textTransform: 'none',
-                            padding: '8px 20px',
+                            padding: { xs: '6px 4px', sm: '8px 12px' },
                             backgroundColor: theme.palette.background.paper,
                             '&.Mui-selected': {
                                 backgroundColor: theme.palette.background.paper,
@@ -200,8 +201,9 @@ const PassengerList = () => {
                         <ToggleButton key={key} value={key}>
                             <Typography
                                 variant="subtitle2"
+                                noWrap
                                 sx={{
-                                    fontSize: '13px',
+                                    fontSize: { xs: '11px', sm: '13px' },
                                     fontWeight: 700,
                                     color: tab === key ? 'text.dark' : 'text.secondary'
                                 }}
@@ -213,11 +215,23 @@ const PassengerList = () => {
                                 <Chip
                                     size="small"
                                     label={
-                                        <Typography variant="caption" color="grey.700" fontWeight={600}>
+                                        <Typography
+                                            variant="caption"
+                                            color="grey.700"
+                                            fontWeight={600}
+                                            sx={{ fontSize: { xs: '10px', sm: '12px' } }}
+                                        >
                                             {key === 'PENDING' ? totalPending : totalBlocked}
                                         </Typography>
                                     }
-                                    sx={{ ml: 0.75, bgcolor: 'grey.100' }}
+                                    sx={{
+                                        ml: { xs: 0.5, sm: 0.75 },
+                                        bgcolor: 'grey.100',
+                                        height: { xs: '20px', sm: '24px' },
+                                        '& .MuiChip-label': {
+                                            px: { xs: 0.5, sm: 1 }
+                                        }
+                                    }}
                                 />
                             )}
                         </ToggleButton>
