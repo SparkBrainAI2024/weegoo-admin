@@ -96,3 +96,22 @@ export interface ResetPasswordResponse {
         message: string;
     };
 }
+
+export interface RefreshTokenResponse {
+    adminRefreshToken: {
+        accessToken: string;
+        refreshToken: string;
+        admin: {
+            email: string;
+            _id: string;
+            fullName: string;
+        };
+    };
+}
+
+export interface LogoutResponse {
+    adminLogout: {
+        success: boolean;
+        message: string;
+    };
+}

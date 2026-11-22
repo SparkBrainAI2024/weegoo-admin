@@ -42,3 +42,26 @@ export const RESET_PASSWORD = gql`
         }
     }
 `;
+
+export const ADMIN_REFRESH_TOKEN = gql`
+    mutation adminRefreshToken($input: AdminRefreshTokenInput!) {
+        adminRefreshToken(input: $input) {
+            accessToken
+            refreshToken
+            admin {
+                email
+                _id
+                fullName
+            }
+        }
+    }
+`;
+
+export const ADMIN_LOGOUT = gql`
+    mutation adminLogout {
+        adminLogout {
+            success
+            message
+        }
+    }
+`;

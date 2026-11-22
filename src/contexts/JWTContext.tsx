@@ -13,8 +13,8 @@ import axios from 'utils/axios';
 // types
 import { KeyedObject } from 'types';
 import { InitialLoginContextProps, JWTContextType, SignInResponse } from 'types/auth.response';
-import client from 'lib/apolloClient';
-import { SIGN_IN } from 'graphql/mutations/auth.mutations';
+import client, { refreshAdminToken } from 'lib/apolloClient';
+import { SIGN_IN, ADMIN_LOGOUT } from 'graphql/mutations/auth.mutations';
 
 // constant
 const initialState: InitialLoginContextProps = {
@@ -35,13 +35,19 @@ const verifyToken: (st: string) => { verified: boolean; id?: string } = (service
     return { verified: decoded.exp > Date.now() / 1000, id: decoded.id };
 };
 
-const setSession = (serviceToken?: string | null) => {
+const setSession = (serviceToken?: string | null, refreshToken?: string | null) => {
     if (serviceToken) {
         localStorage.setItem('serviceToken', serviceToken);
         axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
     } else {
         localStorage.removeItem('serviceToken');
         delete axios.defaults.headers.common.Authorization;
+    }
+
+    if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+    } else if (serviceToken === null || refreshToken === null) {
+        localStorage.removeItem('refreshToken');
     }
 };
 
@@ -54,11 +60,21 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     useEffect(() => {
         const init = async () => {
             const serviceToken = window.localStorage.getItem('serviceToken');
-            if (serviceToken && verifyToken(serviceToken).verified) {
-                console.log(verifyToken(serviceToken).id, 'id');
+            const refreshToken = window.localStorage.getItem('refreshToken');
 
+            if (serviceToken && verifyToken(serviceToken).verified) {
                 dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: { id: verifyToken(serviceToken).id } } });
+            } else if (refreshToken) {
+                // Access token expired/missing, but refreshToken exists: attempt refresh
+                const newAccessToken = await refreshAdminToken();
+                if (newAccessToken && verifyToken(newAccessToken).verified) {
+                    dispatch({ type: LOGIN, payload: { isLoggedIn: true, user: { id: verifyToken(newAccessToken).id } } });
+                } else {
+                    setSession(null, null);
+                    dispatch({ type: LOGOUT });
+                }
             } else {
+                setSession(null, null);
                 dispatch({ type: LOGOUT });
             }
         };
@@ -78,14 +94,9 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
             throw new Error('SignIn failed');
         }
 
-        if (data.adminSignIn.accessToken) {
-            setSession(data.adminSignIn.accessToken);
-        }
+        const { accessToken, refreshToken, admin } = data.adminSignIn;
 
-        const { accessToken, admin } = data.adminSignIn;
-        console.log(admin, 'log admin in login');
-
-        setSession(accessToken);
+        setSession(accessToken, refreshToken);
         dispatch({
             type: LOGIN,
             payload: {
@@ -95,9 +106,17 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         });
     };
 
-    const logout = () => {
-        setSession(null);
-        dispatch({ type: LOGOUT });
+    const logout = async () => {
+        try {
+            await client.mutate({
+                mutation: ADMIN_LOGOUT
+            });
+        } catch (e) {
+            console.error('Logout error:', e);
+        } finally {
+            setSession(null, null);
+            dispatch({ type: LOGOUT });
+        }
     };
 
     const resetPassword = async (email: string) => {};
